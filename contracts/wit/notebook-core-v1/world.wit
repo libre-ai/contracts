@@ -13,7 +13,10 @@ world notebook-core {
   /// Canonicalizes context-document JSON bytes and returns the canonical bytes.
   export canonicalize-context: func(document: list<u8>) -> result<list<u8>, contract-error>;
 
-  /// Verifies a notebook-backup envelope with caller-provided key material.
-  /// The core performs no storage, network, clock or key persistence.
-  export verify-backup: func(envelope: list<u8>, key-material: list<u8>) -> result<bool, contract-error>;
+  /// Seals canonical notebook bytes with Argon2id + AES-256-GCM.
+  /// Browser Web Crypto supplies fresh salt/nonce bytes; the core imports no randomness.
+  export seal-backup: func(plaintext: list<u8>, recovery-secret: list<u8>, salt: list<u8>, nonce: list<u8>, memory-kib: u32, iterations: u32, parallelism: u32) -> result<list<u8>, contract-error>;
+
+  /// Authenticates and opens a notebook-backup envelope without persisting key material.
+  export open-backup: func(envelope: list<u8>, recovery-secret: list<u8>) -> result<list<u8>, contract-error>;
 }

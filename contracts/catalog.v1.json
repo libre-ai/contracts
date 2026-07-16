@@ -52,6 +52,16 @@
       "status": "locked"
     },
     {
+      "id": "work-package-plan-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/work-package-plan.v1.schema.json",
+      "owners": ["architecture"],
+      "consumers": ["implementation-agents", "release"],
+      "compatibility": "major-versioned",
+      "classification": "public",
+      "status": "locked"
+    },
+    {
       "id": "activity-definition-v1",
       "kind": "json-schema",
       "path": "contracts/schemas/activity-definition.v1.schema.json",

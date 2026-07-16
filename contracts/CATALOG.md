@@ -4,7 +4,7 @@ Machine authority: [`catalog.v1.json`](catalog.v1.json).
 
 | Family | Count | Authority | Compatibility |
 | --- | ---: | --- | --- |
-| JSON Schema 2020-12 | 29 | `contracts/schemas/` | strict payloads; additive v1 only through coordinated producer/consumer qualification |
+| JSON Schema 2020-12 | 30 | `contracts/schemas/` | strict payloads; additive v1 only through coordinated producer/consumer qualification |
 | Retention policy | 1 | `contracts/data/` | exact ADR-0002 lifecycle projection |
 | OpenAPI 3.1 | 8 | `contracts/openapi/` | additive routes/operations; existing payloads remain strict |
 | WIT worlds | 5 | `contracts/wit/` | exact major-versioned component boundary |
@@ -14,6 +14,7 @@ The catalog records one ID, path, owner set, consumer set, classification, compa
 
 ## Shared contracts
 
+- `work-package-plan.v1`: exclusive agent paths, dependencies and human gates ;
 - `browser-session.v1`: opaque server-side browser session record ;
 - `retention-policy.v1` and `deletion-receipt.v1`: executable lifecycle and deletion evidence ;
 - `problem-details.v1`: stable HTTP refusal envelope ;

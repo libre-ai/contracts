@@ -695,6 +695,39 @@
           "remove": true
         }
       ]
+    },
+    {
+      "schema": "work-package-plan.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.work-package-plan.v1",
+        "authority": "urn:libre-ai:plan:g1-work-packages",
+        "globalConstraints": ["No infrastructure provisioning before G4."],
+        "packages": [
+          {
+            "id": "WP-G2-T01",
+            "phase": "G2",
+            "name": "Toolchain qualification",
+            "objective": "Qualify one reproducible production toolchain before implementation starts.",
+            "owners": ["toolchain"],
+            "integrator": "release",
+            "writePaths": ["toolchains/**"],
+            "readAuthorities": ["docs/toolchain/BUN-QUALIFICATION.md"],
+            "dependsOn": [],
+            "parallelGroup": "g2-0",
+            "risk": "high",
+            "humanGates": ["toolchain-production-acceptance"],
+            "acceptance": [
+              "Exact binaries and sources verify from a clean checkout.",
+              "Production prohibition is removed only by explicit evidence."
+            ],
+            "definitionStatus": "locked"
+          }
+        ]
+      },
+      "invalidMutations": [
+        { "name": "unlocked package", "path": "/packages/0/definitionStatus", "value": "draft" },
+        { "name": "unsafe write path", "path": "/packages/0/writePaths/0", "value": "../outside" }
+      ]
     }
   ]
 }
