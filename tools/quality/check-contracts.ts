@@ -128,6 +128,14 @@ function propertyAt(value: unknown, dottedPath: string): unknown {
   return current;
 }
 
+function stringMaxLength(value: unknown): number | undefined {
+  if (!isRecord(value)) return undefined;
+  if (typeof value.maxLength === "number" && Number.isInteger(value.maxLength))
+    return value.maxLength;
+  if (!Array.isArray(value.allOf)) return undefined;
+  return value.allOf.map(stringMaxLength).find((maximum) => maximum !== undefined);
+}
+
 function safeErrors(errors: ErrorObject[] | null | undefined): string {
   return (errors ?? [])
     .slice(0, 5)
@@ -368,7 +376,7 @@ const radarExportItemProperties = isRecord(radarExportItem.properties)
   : {};
 for (const field of ["id", "sourceId", "sourceUrl", "ruleSetId"]) {
   const schema = isRecord(radarExportItemProperties[field]) ? radarExportItemProperties[field] : {};
-  if (typeof schema.maxLength !== "number" || !Number.isInteger(schema.maxLength))
+  if (stringMaxLength(schema) === undefined)
     failures.push(`curated-item-export.v2.schema.json: ${field} is unbounded`);
 }
 const radarExportSourceUrl = isRecord(radarExportItemProperties.sourceUrl)

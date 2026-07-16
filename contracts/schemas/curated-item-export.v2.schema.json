@@ -8,11 +8,7 @@
   "properties": {
     "schemaVersion": { "const": "libre-ai.curated-item-export.v2" },
     "tenantId": { "$ref": "common.v1.schema.json#/$defs/tenantId" },
-    "exportedAt": {
-      "$ref": "common.v1.schema.json#/$defs/timestamp",
-      "type": "string",
-      "maxLength": 32
-    },
+    "exportedAt": { "type": "string", "format": "date-time", "maxLength": 32 },
     "items": {
       "type": "array",
       "maxItems": 10000,
@@ -32,14 +28,14 @@
         ],
         "properties": {
           "id": {
-            "$ref": "common.v1.schema.json#/$defs/urn",
             "type": "string",
-            "maxLength": 256
+            "maxLength": 256,
+            "pattern": "^urn:libre-ai:[a-z][a-z0-9-]*:[A-Za-z0-9._~-]+$"
           },
           "sourceId": {
-            "$ref": "common.v1.schema.json#/$defs/urn",
             "type": "string",
-            "maxLength": 256
+            "maxLength": 256,
+            "pattern": "^urn:libre-ai:[a-z][a-z0-9-]*:[A-Za-z0-9._~-]+$"
           },
           "sourceUrl": {
             "type": "string",
@@ -51,16 +47,12 @@
           "normalizedDigest": { "$ref": "common.v1.schema.json#/$defs/sha256" },
           "decision": { "enum": ["retain", "reject"] },
           "ruleSetId": {
-            "$ref": "common.v1.schema.json#/$defs/urn",
             "type": "string",
-            "maxLength": 256
+            "maxLength": 256,
+            "pattern": "^urn:libre-ai:[a-z][a-z0-9-]*:[A-Za-z0-9._~-]+$"
           },
           "ruleSetVersion": { "type": "integer", "minimum": 1, "maximum": 2147483647 },
-          "decidedAt": {
-            "$ref": "common.v1.schema.json#/$defs/timestamp",
-            "type": "string",
-            "maxLength": 32
-          }
+          "decidedAt": { "type": "string", "format": "date-time", "maxLength": 32 }
         }
       }
     }
