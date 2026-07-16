@@ -74,17 +74,16 @@ Validation occurs before rule evaluation, in this order:
 6. require exact equality of policy, snapshot and need `tenantId`, otherwise
    `policy.tenant_mismatch`.
 
-A failure returns `contract-error`, not a `PolicyEvaluation`. Error messages are
-constant and MUST NOT contain input values:
+A failure returns only the closed WIT `error-code`, never a `PolicyEvaluation` or free-form string. The host maps variants to the public code and optional static label below; no input value, parser diagnostic, tenant, fact, reviewer identity or library error crosses the component boundary.
 
-| code | message |
-| --- | --- |
-| `policy.input_invalid` | `input does not conform to policy-core-v2` |
-| `policy.evaluated_at_invalid` | `evaluated-at is not canonical UTC seconds` |
-| `policy.rule_id_duplicate` | `policy contains duplicate rule ids` |
-| `policy.approval_invalid` | `policy approval separation is invalid` |
-| `policy.digest_mismatch` | `input digest does not match canonical content` |
-| `policy.tenant_mismatch` | `policy, snapshot and need tenants differ` |
+| WIT variant | Public code | Optional host label |
+| --- | --- | --- |
+| `input-invalid` | `policy.input_invalid` | `input does not conform to policy-core-v2` |
+| `evaluated-at-invalid` | `policy.evaluated_at_invalid` | `evaluated-at is not canonical UTC seconds` |
+| `rule-id-duplicate` | `policy.rule_id_duplicate` | `policy contains duplicate rule ids` |
+| `approval-invalid` | `policy.approval_invalid` | `policy approval separation is invalid` |
+| `digest-mismatch` | `policy.digest_mismatch` | `input digest does not match canonical content` |
+| `tenant-mismatch` | `policy.tenant_mismatch` | `policy, snapshot and need tenants differ` |
 
 ## 3. Fact namespaces, cardinality and duplicates
 

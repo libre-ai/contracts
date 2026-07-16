@@ -1370,8 +1370,7 @@
       },
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedError": {
-        "code": "policy.tenant_mismatch",
-        "message": "policy, snapshot and need tenants differ"
+        "code": "policy.tenant_mismatch"
       }
     },
     {
@@ -1453,8 +1452,7 @@
       },
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedError": {
-        "code": "policy.input_invalid",
-        "message": "input does not conform to policy-core-v2"
+        "code": "policy.input_invalid"
       }
     },
     {
@@ -1715,7 +1713,7 @@
             "id": "fractional_score",
             "fact": "model.score",
             "operator": "at-least",
-            "value": 0.000001,
+            "value": 1e-6,
             "unknown": "indeterminate",
             "source": {
               "uri": "https://example.org/policy/method",
@@ -1745,7 +1743,7 @@
         "facts": [
           {
             "name": "model.score",
-            "value": 0.000001,
+            "value": 1e-6,
             "source": {
               "uri": "https://example.org/evidence/d",
               "retrievedAt": "2026-07-16T00:00:00Z",
@@ -1883,8 +1881,7 @@
       },
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedError": {
-        "code": "policy.rule_id_duplicate",
-        "message": "policy contains duplicate rule ids"
+        "code": "policy.rule_id_duplicate"
       }
     },
     {
@@ -2146,8 +2143,7 @@
       },
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedError": {
-        "code": "policy.approval_invalid",
-        "message": "policy approval separation is invalid"
+        "code": "policy.approval_invalid"
       }
     }
   ]
