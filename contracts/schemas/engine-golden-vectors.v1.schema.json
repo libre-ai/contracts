@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.libre-ai.fr/schemas/engine-golden-vectors.v1.schema.json",
+  "title": "Libre AI Specialized Engine Golden Vector Index v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "pattern": "^libre-ai\\.[a-z][a-z0-9.-]*golden[a-z0-9.-]*\\.v[0-9]+$"
+    },
+    "world": { "type": "string", "pattern": "^[a-z][a-z0-9-]*-v[0-9]+$" },
+    "status": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "semantics": { "type": "string", "minLength": 1, "maxLength": 512 },
+    "engineVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "digestAlgorithm": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "canonicalization": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "testMaterialWarning": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "contractFiles": true,
+    "parseCases": true,
+    "evaluationCases": true,
+    "cases": true,
+    "vectors": true,
+    "aggregationVectors": true,
+    "invalidPolicyVectors": true,
+    "golden": true,
+    "mutations": true,
+    "standards": true,
+    "reproductionEvidence": true
+  }
+}

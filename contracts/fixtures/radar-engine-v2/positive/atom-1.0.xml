@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>urn:example:feed</id>
+  <title> Atom   Radar </title>
+  <updated>2026-07-16T00:00:00Z</updated>
+  <link rel="alternate" href="https://EXAMPLE.org:443/home#fragment"/>
+  <entry>
+    <id> urn:example:entry:1 </id>
+    <title type="text"> Parsing   Atom </title>
+    <summary type="html">&lt;p&gt;Markup is ignored&lt;/p&gt;</summary>
+    <link href="https://EXAMPLE.org:443/a/./one#fragment"/>
+    <author><name> Alice </name></author>
+    <author><name>Alice</name></author>
+    <author><name> Bob </name></author>
+    <category term="zeta"/>
+    <category term="alpha"/>
+    <published>2026-07-15T09:30:45.900+01:00</published>
+    <updated>not-a-date</updated>
+    <unknown><nested>ignored</nested></unknown>
+  </entry>
+</feed>

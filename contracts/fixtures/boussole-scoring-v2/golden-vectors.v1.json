@@ -1,0 +1,132 @@
+{
+  "schemaVersion": "libre-ai.engine-golden-vectors.v1",
+  "world": "boussole-scoring-v2",
+  "status": "pending-methodology-and-privacy-review",
+  "cases": [
+    {
+      "id": "excluded-abstentions-positive-agreement",
+      "operation": "compare",
+      "dataset": {
+        "schemaVersion": "libre-ai.public-vote-dataset.v2",
+        "id": "urn:libre-ai:dataset:votes-2",
+        "version": "2.0.0",
+        "scope": "Vote public de démonstration",
+        "methodId": "urn:libre-ai:method:method-2",
+        "methodDigest": "e410573d17a409dfbfda24adf0afea0e67f6706a24d9d51b21863b6129197159",
+        "statements": [
+          {
+            "id": "statement_1",
+            "wording": "Proposition sourcée",
+            "source": {
+              "uri": "https://example.org/vote",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "licence": "Etalab-2.0"
+            },
+            "votesFor": 10,
+            "votesAgainst": 5,
+            "abstentions": 2,
+            "absent": 1
+          }
+        ],
+        "publishedAt": "2026-07-16T00:00:00Z",
+        "digest": "c0ef40cc0b8cc59ae5ee46b20ae016ba06f19c03476e542bae1e7d2a42d1d2de",
+        "approvals": [
+          {
+            "role": "methodological-review",
+            "actorKind": "human",
+            "reviewerId": "method_reviewer",
+            "approvedAt": "2026-07-16T00:00:00Z",
+            "reference": "urn:libre-ai:approval:dataset-method-2",
+            "subjectDigest": "c0ef40cc0b8cc59ae5ee46b20ae016ba06f19c03476e542bae1e7d2a42d1d2de"
+          },
+          {
+            "role": "legal-privacy-review",
+            "actorKind": "human",
+            "reviewerId": "privacy_reviewer",
+            "approvedAt": "2026-07-16T00:00:00Z",
+            "reference": "urn:libre-ai:approval:dataset-privacy-2",
+            "subjectDigest": "c0ef40cc0b8cc59ae5ee46b20ae016ba06f19c03476e542bae1e7d2a42d1d2de"
+          }
+        ]
+      },
+      "method": {
+        "schemaVersion": "libre-ai.boussole-method.v2",
+        "id": "urn:libre-ai:method:method-2",
+        "version": "2.0.0",
+        "responseScale": [-1, 0, 1],
+        "abstentionTreatment": "excluded-from-denominator",
+        "missingTreatment": "excluded-and-reported",
+        "formula": "normalized-agreement-v2",
+        "rounding": "decimal-6-half-even",
+        "approvedAt": "2026-07-16T00:00:00Z",
+        "digest": "e410573d17a409dfbfda24adf0afea0e67f6706a24d9d51b21863b6129197159",
+        "approvals": [
+          {
+            "role": "methodological-review",
+            "actorKind": "human",
+            "reviewerId": "method_reviewer",
+            "approvedAt": "2026-07-16T00:00:00Z",
+            "reference": "urn:libre-ai:approval:method-2",
+            "subjectDigest": "e410573d17a409dfbfda24adf0afea0e67f6706a24d9d51b21863b6129197159"
+          },
+          {
+            "role": "legal-privacy-review",
+            "actorKind": "human",
+            "reviewerId": "privacy_reviewer",
+            "approvedAt": "2026-07-16T00:00:00Z",
+            "reference": "urn:libre-ai:approval:privacy-2",
+            "subjectDigest": "e410573d17a409dfbfda24adf0afea0e67f6706a24d9d51b21863b6129197159"
+          }
+        ]
+      },
+      "responses": {
+        "schemaVersion": "libre-ai.boussole-response-set.v2",
+        "datasetId": "urn:libre-ai:dataset:votes-2",
+        "datasetDigest": "c0ef40cc0b8cc59ae5ee46b20ae016ba06f19c03476e542bae1e7d2a42d1d2de",
+        "methodId": "urn:libre-ai:method:method-2",
+        "methodDigest": "e410573d17a409dfbfda24adf0afea0e67f6706a24d9d51b21863b6129197159",
+        "responses": [
+          {
+            "statementId": "statement_1",
+            "kind": "answer",
+            "value": 1
+          }
+        ]
+      },
+      "computedAt": "2026-07-16T00:00:00Z",
+      "expected": {
+        "schemaVersion": "libre-ai.local-comparison.v2",
+        "datasetId": "urn:libre-ai:dataset:votes-2",
+        "datasetDigest": "c0ef40cc0b8cc59ae5ee46b20ae016ba06f19c03476e542bae1e7d2a42d1d2de",
+        "methodId": "urn:libre-ai:method:method-2",
+        "methodDigest": "e410573d17a409dfbfda24adf0afea0e67f6706a24d9d51b21863b6129197159",
+        "responseSetDigest": "bcf2763ba2119662edfee375c9b8a7433a3c3f1e4f85805400bd6e2e408d02f3",
+        "score": 0.333333,
+        "denominator": 15,
+        "omitted": 3,
+        "contributions": [
+          {
+            "statementId": "statement_1",
+            "contribution": 0.333333,
+            "votesConsidered": 15,
+            "votesOmitted": 3
+          }
+        ],
+        "computedAt": "2026-07-16T00:00:00Z"
+      }
+    },
+    {
+      "id": "reject-duplicate-reviewer",
+      "operation": "compare",
+      "mutation": "method.approvals[1].reviewerId = method.approvals[0].reviewerId",
+      "expectedError": "approval-invalid"
+    },
+    {
+      "id": "reject-zero-denominator",
+      "operation": "compare",
+      "mutation": "all statements skipped",
+      "expectedError": "denominator-zero"
+    }
+  ]
+}

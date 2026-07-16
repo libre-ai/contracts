@@ -1,0 +1,1 @@
+{"createdAt":"2026-07-16T00:00:00Z","id":"urn:libre-ai:rules:radar-golden-no-match","rules":[{"decision":"retain","explanation":"Ce titre ne correspond pas","field":"title","id":"rule_no_match","operator":"equals","value":"Titre absent"}],"schemaVersion":"libre-ai.curation-rule-set.v2","status":"retired","tenantId":"ten_1234567890abcdef","version":2}

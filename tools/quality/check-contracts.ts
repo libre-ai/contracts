@@ -10,15 +10,23 @@ type ContractKind =
   | "wit"
   | "biscuit-authority"
   | "biscuit-policy";
+type CatalogReview = {
+  state: "pending-independent-review";
+  required: string[];
+  dossier: string;
+};
 type CatalogEntry = {
   id: string;
   kind: ContractKind;
   path: string;
+  profiles?: string[];
+  vectors?: string[];
   owners: string[];
   consumers: string[];
   compatibility: "additive-v1" | "major-versioned";
   classification: "public" | "internal" | "local" | "personal" | "tenant-private" | "mixed";
-  status: "locked";
+  status: "locked" | "candidate";
+  review?: CatalogReview;
 };
 type FixtureMutation = { name: string; path: string; value?: unknown; remove?: boolean };
 type FixtureCase = { schema: string; valid: JsonRecord; invalidMutations: FixtureMutation[] };
@@ -27,6 +35,7 @@ const failures: string[] = [];
 const schemaByName = new Map<string, JsonRecord>();
 const validatorByName = new Map<string, ValidateFunction>();
 const operationIds = new Set<string>();
+const operationOwnerById = new Map<string, string>();
 const retentionExpectations: Record<string, Record<string, unknown>> = {
   "browser-session": { mode: "fixed", defaultRetention: "P1D", maximumActiveHours: 12 },
   "practices-progress": { mode: "until-delete" },
@@ -173,7 +182,7 @@ for (const [index, entry] of entries.entries()) {
     failures.push(`${label}: expected object`);
     continue;
   }
-  if (typeof entry.id !== "string" || !/^[a-z][a-z0-9-]*-v1$/.test(entry.id))
+  if (typeof entry.id !== "string" || !/^[a-z][a-z0-9-]*-v[1-9][0-9]*$/.test(entry.id))
     failures.push(`${label}: invalid id`);
   else if (ids.has(entry.id)) failures.push(`${label}: duplicate id ${entry.id}`);
   else ids.add(entry.id);
@@ -202,7 +211,65 @@ for (const [index, entry] of entries.entries()) {
     )
   )
     failures.push(`${label}: invalid classification`);
-  if (entry.status !== "locked") failures.push(`${label}: contract is not locked`);
+  if (entry.status === "locked") {
+    if (entry.review !== undefined)
+      failures.push(`${label}: locked contract carries pending review`);
+  } else if (entry.status === "candidate") {
+    const allowedReviewRoles = new Set([
+      "architecture",
+      "security",
+      "cryptography",
+      "methodology",
+      "privacy",
+    ]);
+    const requiredReviews = isRecord(entry.review) ? entry.review.required : undefined;
+    if (
+      !isRecord(entry.review) ||
+      entry.review.state !== "pending-independent-review" ||
+      !Array.isArray(requiredReviews) ||
+      requiredReviews.length < 2 ||
+      new Set(requiredReviews).size !== requiredReviews.length ||
+      !requiredReviews.includes("architecture") ||
+      !requiredReviews.includes("security") ||
+      requiredReviews.some((role) => typeof role !== "string" || !allowedReviewRoles.has(role))
+    ) {
+      failures.push(`${label}: candidate misses valid role-separated reviews`);
+    }
+    const dossier = isRecord(entry.review) ? entry.review.dossier : undefined;
+    if (
+      typeof dossier !== "string" ||
+      !dossier.startsWith("docs/reviews/") ||
+      normalize(dossier) !== dossier ||
+      dossier.includes("..") ||
+      !(await Bun.file(dossier).exists())
+    ) {
+      failures.push(`${label}: candidate review dossier is missing or unsafe`);
+    }
+  } else {
+    failures.push(`${label}: invalid contract status`);
+  }
+  for (const [field, root] of [
+    ["profiles", "contracts/wit/"],
+    ["vectors", "contracts/fixtures/"],
+  ] as const) {
+    const paths = entry[field];
+    if (paths === undefined) continue;
+    if (entry.kind !== "wit" || !Array.isArray(paths) || paths.length === 0) {
+      failures.push(`${label}: invalid ${field} adjuncts`);
+      continue;
+    }
+    for (const adjunct of paths) {
+      if (
+        typeof adjunct !== "string" ||
+        !adjunct.startsWith(root) ||
+        normalize(adjunct) !== adjunct ||
+        adjunct.includes("..") ||
+        !(await Bun.file(adjunct).exists())
+      ) {
+        failures.push(`${label}: missing or unsafe ${field} adjunct ${String(adjunct)}`);
+      }
+    }
+  }
 }
 
 const managedPaths = (
@@ -369,7 +436,9 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/open
     continue;
   }
   if (document.openapi !== "3.1.0") failures.push(`${path}: OpenAPI must be 3.1.0`);
-  if (!isRecord(document.info) || document.info.version !== "1.0.0")
+  const apiMatch = basename(path).match(/\.v([1-9][0-9]*)\.yaml$/);
+  const apiMajor = apiMatch?.[1];
+  if (!apiMajor || !isRecord(document.info) || document.info.version !== `${apiMajor}.0.0`)
     failures.push(`${path}: API major/version mismatch`);
   if (!isRecord(document.paths) || Object.keys(document.paths).length === 0)
     failures.push(`${path}: no paths`);
@@ -384,7 +453,7 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/open
     : [];
   const mappedDomainOperations = new Set<string>();
   const domainMappingCounts = new Map<string, number>();
-  const appName = basename(path, ".v1.yaml");
+  const appName = basename(path).replace(/\.v[1-9][0-9]*\.yaml$/, "");
   const allowedLocal = [...(allowedLocalOperationsByApp[appName] ?? [])].sort();
   if (JSON.stringify([...localOperations].sort()) !== JSON.stringify(allowedLocal)) {
     failures.push(`${path}: local operation boundary diverges from the accepted application model`);
@@ -411,17 +480,27 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/open
   for (const [route, rawPathItem] of Object.entries(
     (isRecord(document.paths) ? document.paths : {}) as JsonRecord,
   )) {
-    if (!route.startsWith("/v1/")) failures.push(`${path}: unversioned route ${route}`);
+    if (!apiMajor || !route.startsWith(`/v${apiMajor}/`))
+      failures.push(`${path}: route major does not match contract: ${route}`);
     if (!isRecord(rawPathItem)) continue;
     for (const method of methods) {
       const rawOperation = rawPathItem[method];
       if (!isRecord(rawOperation)) continue;
       const operationId = rawOperation.operationId;
+      const operationKey = `${basename(path)}:${String(operationId)}`;
       if (typeof operationId !== "string" || !/^[a-z][A-Za-z0-9]+$/.test(operationId))
         failures.push(`${path}:${method}:${route}: invalid operationId`);
-      else if (operationIds.has(operationId))
+      else if (operationIds.has(operationKey))
         failures.push(`${path}:${method}:${route}: duplicate operationId ${operationId}`);
-      else operationIds.add(operationId);
+      else {
+        const existingOwner = operationOwnerById.get(operationId);
+        if (existingOwner !== undefined && existingOwner !== appName)
+          failures.push(
+            `${path}:${method}:${route}: cross-API duplicate operationId ${operationId}`,
+          );
+        operationOwnerById.set(operationId, appName);
+        operationIds.add(operationKey);
+      }
       const declaredMappings = rawOperation["x-libre-ai-operations"];
       const mappings = Array.isArray(declaredMappings)
         ? stringArray(declaredMappings, `${path}:${method}:${route}: domain mappings`)
@@ -510,12 +589,20 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/open
 
 for (const path of managedPaths.filter((item) => item.startsWith("contracts/wit/"))) {
   const text = await Bun.file(path).text();
-  const expectedName = basename(dirname(path)).replace(/-v1$/, "");
-  if (!text.includes(`package libre-ai:${expectedName}@1.0.0;`))
+  const directory = basename(dirname(path));
+  const worldMatch = directory.match(/^(.+)-v([1-9][0-9]*)$/);
+  const expectedName = worldMatch?.[1];
+  const worldMajor = worldMatch?.[2];
+  if (
+    !expectedName ||
+    !worldMajor ||
+    !text.includes(`package libre-ai:${expectedName}@${worldMajor}.0.0;`)
+  )
     failures.push(`${path}: package/version mismatch`);
-  if (!text.includes(`world ${expectedName} {`)) failures.push(`${path}: world name mismatch`);
+  if (!expectedName || !text.includes(`world ${expectedName} {`))
+    failures.push(`${path}: world name mismatch`);
   const executable = text.replaceAll(/\/\/.*$/gm, "");
-  if (/\bimport\b/.test(executable)) failures.push(`${path}: host imports are forbidden in v1`);
+  if (/\bimport\b/.test(executable)) failures.push(`${path}: host imports are forbidden`);
   if (!executable.includes("export ") || !executable.includes("result<"))
     failures.push(`${path}: missing bounded result export`);
   if (/\b(?:TODO|FIXME|TBD)\b/.test(text)) failures.push(`${path}: unresolved placeholder`);

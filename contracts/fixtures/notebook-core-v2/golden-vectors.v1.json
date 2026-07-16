@@ -1,0 +1,309 @@
+{
+  "schemaVersion": "libre-ai.notebook-core-golden.v2",
+  "status": "review-candidate",
+  "testMaterialWarning": "Public deterministic test material only; forbidden for production secrets, salts, or nonces.",
+  "standards": ["RFC 9106", "NIST SP 800-38D", "RFC 4648 section 4", "RFC 8785"],
+  "golden": {
+    "request": {
+      "schemaVersion": "libre-ai.notebook-backup-seal-request.v2",
+      "id": "urn:libre-ai:backup:golden-1",
+      "createdAt": "2026-07-16T00:00:00Z",
+      "cipher": "aes-256-gcm",
+      "kdf": {
+        "algorithm": "argon2id",
+        "version": 19,
+        "memoryKiB": 65536,
+        "iterations": 3,
+        "parallelism": 1,
+        "outputLengthBytes": 32,
+        "salt": "AAECAwQFBgcICQoLDA0ODw=="
+      },
+      "nonce": "EBESExQVFhcYGRob",
+      "plaintext": "Tm90ZWJvb2sgY29yZSB2MiBkZXRlcm1pbmlzdGljIHRlc3QgcGF5bG9hZC4K"
+    },
+    "recoverySecret": {
+      "encoding": "UTF-8",
+      "value": "notebook-core-v2-public-test-secret",
+      "hex": "6e6f7465626f6f6b2d636f72652d76322d7075626c69632d746573742d736563726574",
+      "byteLength": 35,
+      "sensitive": false
+    },
+    "plaintext": {
+      "base64": "Tm90ZWJvb2sgY29yZSB2MiBkZXRlcm1pbmlzdGljIHRlc3QgcGF5bG9hZC4K",
+      "hex": "4e6f7465626f6f6b20636f72652076322064657465726d696e69737469632074657374207061796c6f61642e0a",
+      "byteLength": 45
+    },
+    "argon2id": {
+      "passwordInput": "recoverySecret bytes",
+      "saltHex": "000102030405060708090a0b0c0d0e0f",
+      "version": 19,
+      "memoryKiB": 65536,
+      "iterations": 3,
+      "parallelism": 1,
+      "outputLengthBytes": 32,
+      "optionalSecretHex": "",
+      "associatedDataHex": "",
+      "derivedKeyHex": "e6b35d4e67ec1f04cf571aa3cc441746dadec01406cd82a88ec4ea5708183e1c"
+    },
+    "aad": {
+      "domainUtf8": "libre-ai.notebook-backup.v2/aad",
+      "separatorHex": "00",
+      "canonicalMetadataJsonUtf8": "{\"cipher\":\"aes-256-gcm\",\"createdAt\":\"2026-07-16T00:00:00Z\",\"id\":\"urn:libre-ai:backup:golden-1\",\"kdf\":{\"algorithm\":\"argon2id\",\"iterations\":3,\"memoryKiB\":65536,\"outputLengthBytes\":32,\"parallelism\":1,\"salt\":\"AAECAwQFBgcICQoLDA0ODw==\",\"version\":19},\"nonce\":\"EBESExQVFhcYGRob\",\"schemaVersion\":\"libre-ai.notebook-backup.v2\"}",
+      "bytesHex": "6c696272652d61692e6e6f7465626f6f6b2d6261636b75702e76322f616164007b22636970686572223a226165732d3235362d67636d222c22637265617465644174223a22323032362d30372d31365430303a30303a30305a222c226964223a2275726e3a6c696272652d61693a6261636b75703a676f6c64656e2d31222c226b6466223a7b22616c676f726974686d223a226172676f6e326964222c22697465726174696f6e73223a332c226d656d6f72794b6942223a36353533362c226f75747075744c656e6774684279746573223a33322c22706172616c6c656c69736d223a312c2273616c74223a2241414543417751464267634943516f4c4441304f44773d3d222c2276657273696f6e223a31397d2c226e6f6e6365223a2245424553457851564668635947526f62222c22736368656d6156657273696f6e223a226c696272652d61692e6e6f7465626f6f6b2d6261636b75702e7632227d",
+      "byteLength": 350
+    },
+    "aes256Gcm": {
+      "nonceHex": "101112131415161718191a1b",
+      "tagLengthBytes": 16,
+      "encryptedContentHex": "833724730182e6810c335b29c7b47f149533b2f4a499059cd9522ea2127299920eea58c087f25f16c3f3954ae4",
+      "tagHex": "d8d6dbb866b13deb08b285d7bf436bdb",
+      "ciphertextAndTagHex": "833724730182e6810c335b29c7b47f149533b2f4a499059cd9522ea2127299920eea58c087f25f16c3f3954ae4d8d6dbb866b13deb08b285d7bf436bdb",
+      "ciphertextAndTagBase64": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrk2NbbuGaxPesIsoXXv0Nr2w==",
+      "byteLength": 61
+    },
+    "digest": {
+      "algorithm": "sha-256",
+      "domainUtf8": "libre-ai.notebook-backup.v2/digest",
+      "separatorHex": "00",
+      "canonicalEnvelopeWithoutDigestUtf8": "{\"cipher\":\"aes-256-gcm\",\"ciphertext\":\"gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrk2NbbuGaxPesIsoXXv0Nr2w==\",\"createdAt\":\"2026-07-16T00:00:00Z\",\"id\":\"urn:libre-ai:backup:golden-1\",\"kdf\":{\"algorithm\":\"argon2id\",\"iterations\":3,\"memoryKiB\":65536,\"outputLengthBytes\":32,\"parallelism\":1,\"salt\":\"AAECAwQFBgcICQoLDA0ODw==\",\"version\":19},\"nonce\":\"EBESExQVFhcYGRob\",\"schemaVersion\":\"libre-ai.notebook-backup.v2\"}",
+      "preimageHex": "6c696272652d61692e6e6f7465626f6f6b2d6261636b75702e76322f646967657374007b22636970686572223a226165732d3235362d67636d222c2263697068657274657874223a22677a636b63774743356f454d4d3173707837522f464a557a7376536b6d515763325649756f684a796d5a494f366c6a41682f4a664673507a6c55726b324e62627547617850657349736f585876304e7232773d3d222c22637265617465644174223a22323032362d30372d31365430303a30303a30305a222c226964223a2275726e3a6c696272652d61693a6261636b75703a676f6c64656e2d31222c226b6466223a7b22616c676f726974686d223a226172676f6e326964222c22697465726174696f6e73223a332c226d656d6f72794b6942223a36353533362c226f75747075744c656e6774684279746573223a33322c22706172616c6c656c69736d223a312c2273616c74223a2241414543417751464267634943516f4c4441304f44773d3d222c2276657273696f6e223a31397d2c226e6f6e6365223a2245424553457851564668635947526f62222c22736368656d6156657273696f6e223a226c696272652d61692e6e6f7465626f6f6b2d6261636b75702e7632227d",
+      "hexLower": "7163e7365e6486785ab9f1510caca7cc74a94aeede02660863f2313248904029"
+    },
+    "envelope": {
+      "schemaVersion": "libre-ai.notebook-backup.v2",
+      "id": "urn:libre-ai:backup:golden-1",
+      "createdAt": "2026-07-16T00:00:00Z",
+      "cipher": "aes-256-gcm",
+      "kdf": {
+        "algorithm": "argon2id",
+        "version": 19,
+        "memoryKiB": 65536,
+        "iterations": 3,
+        "parallelism": 1,
+        "outputLengthBytes": 32,
+        "salt": "AAECAwQFBgcICQoLDA0ODw=="
+      },
+      "nonce": "EBESExQVFhcYGRob",
+      "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrk2NbbuGaxPesIsoXXv0Nr2w==",
+      "digest": "7163e7365e6486785ab9f1510caca7cc74a94aeede02660863f2313248904029"
+    },
+    "canonicalEnvelopeUtf8": "{\"cipher\":\"aes-256-gcm\",\"ciphertext\":\"gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrk2NbbuGaxPesIsoXXv0Nr2w==\",\"createdAt\":\"2026-07-16T00:00:00Z\",\"digest\":\"7163e7365e6486785ab9f1510caca7cc74a94aeede02660863f2313248904029\",\"id\":\"urn:libre-ai:backup:golden-1\",\"kdf\":{\"algorithm\":\"argon2id\",\"iterations\":3,\"memoryKiB\":65536,\"outputLengthBytes\":32,\"parallelism\":1,\"salt\":\"AAECAwQFBgcICQoLDA0ODw==\",\"version\":19},\"nonce\":\"EBESExQVFhcYGRob\",\"schemaVersion\":\"libre-ai.notebook-backup.v2\"}",
+    "openResult": {
+      "schemaVersion": "libre-ai.notebook-backup.v2",
+      "id": "urn:libre-ai:backup:golden-1",
+      "createdAt": "2026-07-16T00:00:00Z",
+      "digest": "7163e7365e6486785ab9f1510caca7cc74a94aeede02660863f2313248904029",
+      "plaintextBase64": "Tm90ZWJvb2sgY29yZSB2MiBkZXRlcm1pbmlzdGljIHRlc3QgcGF5bG9hZC4K"
+    }
+  },
+  "mutations": [
+    {
+      "name": "wrong-recovery-secret",
+      "recoverySecretUtf8": "notebook-core-v2-public-test-secreu",
+      "digestRecomputedAfterMutation": false,
+      "envelope": {
+        "schemaVersion": "libre-ai.notebook-backup.v2",
+        "id": "urn:libre-ai:backup:golden-1",
+        "createdAt": "2026-07-16T00:00:00Z",
+        "cipher": "aes-256-gcm",
+        "kdf": {
+          "algorithm": "argon2id",
+          "version": 19,
+          "memoryKiB": 65536,
+          "iterations": 3,
+          "parallelism": 1,
+          "outputLengthBytes": 32,
+          "salt": "AAECAwQFBgcICQoLDA0ODw=="
+        },
+        "nonce": "EBESExQVFhcYGRob",
+        "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrk2NbbuGaxPesIsoXXv0Nr2w==",
+        "digest": "7163e7365e6486785ab9f1510caca7cc74a94aeede02660863f2313248904029"
+      },
+      "expected": {
+        "result": "error",
+        "code": "authentication-failed",
+        "argon2idAttempted": true,
+        "plaintextReleased": false
+      }
+    },
+    {
+      "name": "nonce-modified",
+      "recoverySecretUtf8": "notebook-core-v2-public-test-secret",
+      "digestRecomputedAfterMutation": true,
+      "envelope": {
+        "schemaVersion": "libre-ai.notebook-backup.v2",
+        "id": "urn:libre-ai:backup:golden-1",
+        "createdAt": "2026-07-16T00:00:00Z",
+        "cipher": "aes-256-gcm",
+        "kdf": {
+          "algorithm": "argon2id",
+          "version": 19,
+          "memoryKiB": 65536,
+          "iterations": 3,
+          "parallelism": 1,
+          "outputLengthBytes": 32,
+          "salt": "AAECAwQFBgcICQoLDA0ODw=="
+        },
+        "nonce": "EBESExQVFhcYGRoa",
+        "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrk2NbbuGaxPesIsoXXv0Nr2w==",
+        "digest": "437b1007bc54562540f04252bbb155732b6597aa7347f264b34b06b641909cce"
+      },
+      "expected": {
+        "result": "error",
+        "code": "authentication-failed",
+        "argon2idAttempted": true,
+        "plaintextReleased": false
+      }
+    },
+    {
+      "name": "salt-modified",
+      "recoverySecretUtf8": "notebook-core-v2-public-test-secret",
+      "digestRecomputedAfterMutation": true,
+      "envelope": {
+        "schemaVersion": "libre-ai.notebook-backup.v2",
+        "id": "urn:libre-ai:backup:golden-1",
+        "createdAt": "2026-07-16T00:00:00Z",
+        "cipher": "aes-256-gcm",
+        "kdf": {
+          "algorithm": "argon2id",
+          "version": 19,
+          "memoryKiB": 65536,
+          "iterations": 3,
+          "parallelism": 1,
+          "outputLengthBytes": 32,
+          "salt": "AAECAwQFBgcICQoLDA0ODg=="
+        },
+        "nonce": "EBESExQVFhcYGRob",
+        "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrk2NbbuGaxPesIsoXXv0Nr2w==",
+        "digest": "75d4d6cbce06049d51de5e0dbbd7d390de88e45dfec1a1caf825569d235d8d14"
+      },
+      "expected": {
+        "result": "error",
+        "code": "authentication-failed",
+        "argon2idAttempted": true,
+        "plaintextReleased": false
+      }
+    },
+    {
+      "name": "ciphertext-modified",
+      "recoverySecretUtf8": "notebook-core-v2-public-test-secret",
+      "digestRecomputedAfterMutation": true,
+      "envelope": {
+        "schemaVersion": "libre-ai.notebook-backup.v2",
+        "id": "urn:libre-ai:backup:golden-1",
+        "createdAt": "2026-07-16T00:00:00Z",
+        "cipher": "aes-256-gcm",
+        "kdf": {
+          "algorithm": "argon2id",
+          "version": 19,
+          "memoryKiB": 65536,
+          "iterations": 3,
+          "parallelism": 1,
+          "outputLengthBytes": 32,
+          "salt": "AAECAwQFBgcICQoLDA0ODw=="
+        },
+        "nonce": "EBESExQVFhcYGRob",
+        "ciphertext": "gjckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrk2NbbuGaxPesIsoXXv0Nr2w==",
+        "digest": "78b263af82b3179f5b9d0e6f46d74b055eab1c1a62e3103c332fcb815b5189b0"
+      },
+      "expected": {
+        "result": "error",
+        "code": "authentication-failed",
+        "argon2idAttempted": true,
+        "plaintextReleased": false
+      }
+    },
+    {
+      "name": "aad-modified",
+      "recoverySecretUtf8": "notebook-core-v2-public-test-secret",
+      "digestRecomputedAfterMutation": true,
+      "envelope": {
+        "schemaVersion": "libre-ai.notebook-backup.v2",
+        "id": "urn:libre-ai:backup:golden-2",
+        "createdAt": "2026-07-16T00:00:00Z",
+        "cipher": "aes-256-gcm",
+        "kdf": {
+          "algorithm": "argon2id",
+          "version": 19,
+          "memoryKiB": 65536,
+          "iterations": 3,
+          "parallelism": 1,
+          "outputLengthBytes": 32,
+          "salt": "AAECAwQFBgcICQoLDA0ODw=="
+        },
+        "nonce": "EBESExQVFhcYGRob",
+        "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrk2NbbuGaxPesIsoXXv0Nr2w==",
+        "digest": "b826cb28f3278580cf1196657c32103aed98d1b9947e50063e71aec0049c8de8"
+      },
+      "expected": {
+        "result": "error",
+        "code": "authentication-failed",
+        "argon2idAttempted": true,
+        "plaintextReleased": false
+      }
+    },
+    {
+      "name": "weak-kdf-parameters",
+      "recoverySecretUtf8": "notebook-core-v2-public-test-secret",
+      "digestRecomputedAfterMutation": true,
+      "envelope": {
+        "schemaVersion": "libre-ai.notebook-backup.v2",
+        "id": "urn:libre-ai:backup:golden-1",
+        "createdAt": "2026-07-16T00:00:00Z",
+        "cipher": "aes-256-gcm",
+        "kdf": {
+          "algorithm": "argon2id",
+          "version": 19,
+          "memoryKiB": 8192,
+          "iterations": 1,
+          "parallelism": 1,
+          "outputLengthBytes": 32,
+          "salt": "AAECAwQFBgcICQoLDA0ODw=="
+        },
+        "nonce": "EBESExQVFhcYGRob",
+        "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrk2NbbuGaxPesIsoXXv0Nr2w==",
+        "digest": "59addb4e3a82d6a2b355550d39bb92813a346ecd8f562abe805b69670807d488"
+      },
+      "expected": {
+        "result": "error",
+        "code": "invalid-envelope",
+        "argon2idAttempted": false,
+        "plaintextReleased": false
+      }
+    },
+    {
+      "name": "unsupported-version",
+      "recoverySecretUtf8": "notebook-core-v2-public-test-secreu",
+      "digestRecomputedAfterMutation": false,
+      "envelope": {
+        "schemaVersion": "libre-ai.notebook-backup.v3",
+        "id": "urn:libre-ai:backup:golden-1",
+        "createdAt": "2026-07-16T00:00:00Z",
+        "cipher": "aes-256-gcm",
+        "kdf": {
+          "algorithm": "argon2id",
+          "version": 19,
+          "memoryKiB": 65536,
+          "iterations": 3,
+          "parallelism": 1,
+          "outputLengthBytes": 32,
+          "salt": "AAECAwQFBgcICQoLDA0ODw=="
+        },
+        "nonce": "EBESExQVFhcYGRob",
+        "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrk2NbbuGaxPesIsoXXv0Nr2w==",
+        "digest": "7163e7365e6486785ab9f1510caca7cc74a94aeede02660863f2313248904029"
+      },
+      "expected": {
+        "result": "error",
+        "code": "unsupported-version",
+        "argon2idAttempted": false,
+        "plaintextReleased": false
+      }
+    }
+  ],
+  "reproductionEvidence": {
+    "argon2id": ["pyca/cryptography 49.0.0", "OpenSSL 3.6.3 EVP_KDF ARGON2ID"],
+    "aes256Gcm": ["pyca/cryptography 49.0.0 AESGCM", "Node.js 26.5.0 Web Crypto decrypt"],
+    "reviewQualification": "Cross-implementation reproduction by the author is not the required independent cryptographic review."
+  }
+}

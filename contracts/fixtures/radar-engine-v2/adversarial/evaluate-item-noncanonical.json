@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "libre-ai.radar-normalized-item.v1",
+  "id": "urn:libre-ai:radar-item:73b0d1f09b267bcecc8b32e53de76903c3ab647246307f92bd766e081ab360c6",
+  "deduplicationKey": "73b0d1f09b267bcecc8b32e53de76903c3ab647246307f92bd766e081ab360c6",
+  "externalId": "item-001",
+  "url": "https://example.org/articles/1",
+  "sourceHost": "example.org",
+  "title": "Sécurité du parsing",
+  "summary": "Résumé sûr.",
+  "authors": ["Alice"],
+  "tags": ["rust", "sécurité"],
+  "publishedAt": "2026-07-16T10:34:56Z",
+  "updatedAt": null
+}

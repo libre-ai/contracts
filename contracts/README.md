@@ -8,11 +8,13 @@ JSON Schema, OpenAPI, WIT and Biscuit policies are the only cross-module protoco
 - `schemas/` — strict JSON Schema 2020-12 payloads ;
 - `data/` — approved executable retention policy ;
 - `openapi/` — OpenAPI 3.1 HTTP surfaces and complete domain command/query inventory ;
-- `wit/` — capability-free Rust/WASM component worlds ;
+- `wit/` — capability-free Rust/WASM component worlds and their cataloged normative profiles ;
 - `authz/` — deny-by-default Biscuit authorizer policies ;
 - `fixtures/` — portable positive and explicit negative schema vectors.
 
 OpenAPI `x-libre-ai-domain` lists the complete protocol from each application specification. Only commands/queries crossing HTTP appear under `paths`; local and offline commands remain visible without becoming endpoints.
+
+A `candidate` catalog entry is machine-checkable but not locked: it carries a dossier listing at least role-separated architecture and security review, plus cryptography, methodology or privacy where required. In solo-maintainer G2 work, review agents may provide these role verdicts under `docs/reviews/AGENT-REVIEW-PROTOCOL.md`; promotion to `locked`, product implementation and release still require complete role evidence plus an explicit human control milestone. Cataloged WIT `profiles` and `vectors` are normative adjuncts to that world.
 
 ## Verification
 
