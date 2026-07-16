@@ -1,6 +1,6 @@
 package libre-ai:notebook-core@2.0.0;
 
-interface types {
+interface api {
   enum error-code {
     invalid-document,
     invalid-seal-request,
@@ -38,23 +38,23 @@ interface types {
     digest: string,
     plaintext: list<u8>,
   }
+
+  /// Canonicalizes context-document.v2 JSON bytes and returns RFC 8785 bytes.
+  canonicalize-context: func(document: list<u8>) -> result<list<u8>, error-code>;
+
+  /// Seals one explicit request under Argon2id v=19 and AES-256-GCM.
+  /// The recovery secret is a separate transient byte string and is never part
+  /// of a serializable request. The host supplies id, created-at, salt, and nonce.
+  seal-backup: func(request: seal-backup-request, recovery-secret: list<u8>) -> result<list<u8>, error-code>;
+
+  /// Authenticates digest, metadata AAD, and ciphertext before releasing plaintext.
+  /// Returned metadata is the metadata authenticated by this operation.
+  open-backup: func(envelope: list<u8>, recovery-secret: list<u8>) -> result<opened-backup, error-code>;
 }
 
 /// Capability-free deterministic notebook core.
 /// The component has no host imports: in particular no clock, randomness,
 /// network, filesystem, key/value store, environment, or logging capability.
 world notebook-core {
-  use types.{error-code, opened-backup, seal-backup-request};
-
-  /// Canonicalizes context-document.v2 JSON bytes and returns RFC 8785 bytes.
-  export canonicalize-context: func(document: list<u8>) -> result<list<u8>, error-code>;
-
-  /// Seals one explicit request under Argon2id v=19 and AES-256-GCM.
-  /// The recovery secret is a separate transient byte string and is never part
-  /// of a serializable request. The host supplies id, created-at, salt, and nonce.
-  export seal-backup: func(request: seal-backup-request, recovery-secret: list<u8>) -> result<list<u8>, error-code>;
-
-  /// Authenticates digest, metadata AAD, and ciphertext before releasing plaintext.
-  /// Returned metadata is the metadata authenticated by this operation.
-  export open-backup: func(envelope: list<u8>, recovery-secret: list<u8>) -> result<opened-backup, error-code>;
+  export api;
 }

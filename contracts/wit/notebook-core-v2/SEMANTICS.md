@@ -6,7 +6,7 @@ Les mots **DOIT**, **NE DOIT PAS** et **DEVRAIT** sont normatifs. Les standards 
 
 ## 1. Surface corrigée
 
-- `contracts/wit/notebook-core-v2/world.wit` fait entrer explicitement `id` et `created-at` dans `seal-backup` ; le cœur ne les dérive pas.
+- `contracts/wit/notebook-core-v2/world.wit` exporte une interface autonome `api`, fait entrer explicitement `id` et `created-at` dans `seal-backup` et ne dérive aucune valeur hôte. Regrouper types et fonctions dans cette interface empêche qu'un `use` inter-interface devienne un import réel dans le composant.
 - `contracts/schemas/notebook-backup-seal-request.v2.schema.json` est la projection JSON de test de la requête WIT. Le `recovery-secret` en est volontairement absent et reste un argument binaire séparé.
 - `contracts/schemas/notebook-backup.v2.schema.json` définit l'enveloppe persistable.
 - `contracts/fixtures/notebook-core-v2/golden-vectors.v1.json` fixe les octets intermédiaires et les mutations.
@@ -55,12 +55,12 @@ Toute valeur Base64 DOIT utiliser l'alphabet standard RFC 4648 §4 (`A-Z a-z 0-9
 | Valeur binaire | Minimum | Maximum |
 | --- | ---: | ---: |
 | `recovery-secret` | 16 octets | 1024 octets |
-| plaintext | 1 octet | 104 857 600 octets (100 MiB) |
-| ciphertext `C || T` | 17 octets | 104 857 616 octets |
+| plaintext | 1 octet | 16 777 216 octets (16 MiB) |
+| ciphertext `C || T` | 17 octets | 16 777 232 octets |
 | clé dérivée | 32 octets | 32 octets |
 | tag GCM | 16 octets | 16 octets |
 
-L'entrée brute `open-backup.envelope` est limitée à **139 810 687 octets**, maximum d'une enveloppe JCS conforme avec le ciphertext maximal. Les longueurs décodées sont vérifiées en plus des longueurs JSON Schema. Aucun calcul Argon2id n'a lieu avant validation de la structure, des algorithmes, des paramètres et de ces bornes publiques.
+L'entrée brute `open-backup.envelope` est limitée à **22 370 175 octets**, maximum d'une enveloppe JCS conforme avec le ciphertext maximal. Les longueurs décodées sont vérifiées en plus des longueurs JSON Schema. Aucun calcul Argon2id n'a lieu avant validation de la structure, des algorithmes, des paramètres et de ces bornes publiques.
 
 Le secret est une chaîne d'octets opaque : le cœur ne réalise ni décodage, ni trim, ni normalisation Unicode. Une UI textuelle DOIT fixer une conversion stable avant le premier scellement (UTF-8 sans BOM après NFC recommandé) et la réappliquer à l'identique à la restauration. La longueur ne prouve pas l'entropie : le produit DEVRAIT générer au moins 128 bits aléatoires ou imposer une politique équivalente côté UI, sans dictionnaire ni mesure de force dans le cœur.
 
@@ -174,7 +174,7 @@ Le cœur DOIT zéroïser avant tout retour succès/erreur, autant que le modèle
 
 Le host reste responsable de ses propres buffers d'entrée/sortie et DOIT écraser ses `Uint8Array` sensibles après l'appel ; JavaScript et les copies de mémoire WASM empêchent toute promesse d'effacement physique absolu. La Gate A examine si ces exigences sont suffisantes et implémentables. La Gate B vérifie leurs effets réels sur les chemins succès, erreur, allocation et panic ainsi que le comportement des bibliothèques retenues.
 
-`world.wit` ne déclare aucun `import`. Le composant construit DOIT avoir une liste d'imports vide : pas de WASI clocks, random, sockets, HTTP, filesystem, key/value, environment ou logging. `id`, `created-at`, sel et nonce proviennent uniquement de la requête. Le scan du composant final et le test sans WASI appartiennent à la Gate B.
+`world.wit` ne déclare aucun `import` et n'utilise aucune interface de types séparée. Le module et le composant construits DOIVENT avoir une liste d'imports vide : pas de WASI clocks, random, sockets, HTTP, filesystem, key/value, environment ou logging. `id`, `created-at`, sel et nonce proviennent uniquement de la requête. Le scan du composant final et le test sans WASI appartiennent à la Gate B.
 
 ## 9. Gate A — protocole avant implémentation
 
@@ -187,7 +187,7 @@ La promotion et l'implémentation sont refusées tant que ce reviewer n'a pas :
 3. examiné les octets AAD/digest, Base64, JCS, nonce/sel, bornes, dérivation `P/S/K/X` et migration v2 ;
 4. analysé le modèle anti-oracle, y compris secret hors bornes, digest recalculé par un attaquant et paramètres KDF invalides ;
 5. approuvé la sécurité des bornes Argon2id et défini les budgets mémoire/latence à mesurer en Gate B sur les navigateurs supportés ;
-6. confirmé que les exigences de zéroïsation, non-persistance et absence totale d'import sont vérifiables lors de la Gate B ;
+6. confirmé que l'interface exportée `api`, les exigences de zéroïsation, la non-persistance et l'absence totale d'import sont vérifiables lors de la Gate B ;
 7. lié sa décision, ses outils et ses éventuelles réserves au SHA du commit candidat.
 
 Toute modification normative après approbation invalide la Gate A et impose une nouvelle revue. Une Gate A approuvée autorise uniquement la promotion vers `contracts/` et le développement du moteur derrière les gates ; elle n'autorise ni release, ni sauvegarde utilisateur.
