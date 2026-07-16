@@ -198,17 +198,17 @@
             }
           }
         ],
-        "digest": "0835e370af4ddee1b3d70fd9210c639c8218f4a0d2281897ea60f34f57295c80",
+        "digest": "bd8fe7cc1d5b1de63ecc8e476e44ef895179d18aed758db824b709364c689fa7",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:all-operators-eligible",
-          "subjectDigest": "0835e370af4ddee1b3d70fd9210c639c8218f4a0d2281897ea60f34f57295c80",
+          "subjectDigest": "bd8fe7cc1d5b1de63ecc8e476e44ef895179d18aed758db824b709364c689fa7",
           "actorKind": "human",
-          "approverId": "policy_reviewer"
+          "approverId": "usr_policyapprover001"
         },
-        "proposedBy": "policy_author"
+        "proposedBy": "svc_policyagent00001"
       },
       "snapshot": {
         "schemaVersion": "libre-ai.model-snapshot.v2",
@@ -265,10 +265,10 @@
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedEvaluation": {
         "schemaVersion": "libre-ai.policy-evaluation.v2",
-        "id": "urn:libre-ai:evaluation:78e3df56a8adb0a7dc29720f93724716c58668ba99eface1a451f2ad641cfe9c",
+        "id": "urn:libre-ai:evaluation:3422437e2d299841e558c06e3736b2f36a2565be4b58e6a46efa09a22b74dd67",
         "tenantId": "ten_1234567890abcdef",
         "policyId": "urn:libre-ai:policy:all-operators-eligible",
-        "policyDigest": "0835e370af4ddee1b3d70fd9210c639c8218f4a0d2281897ea60f34f57295c80",
+        "policyDigest": "bd8fe7cc1d5b1de63ecc8e476e44ef895179d18aed758db824b709364c689fa7",
         "snapshotId": "urn:libre-ai:snapshot:all-operators-eligible",
         "snapshotDigest": "711464a03792caee82882e9c9f9d879ff459a22639cb07ec01cd4c5b360cd482",
         "needDigest": "05e56f3638834c368aca91b8e8b5cdb0269eb1f04da952cd2c635d35485efb8b",
@@ -347,7 +347,7 @@
           }
         ],
         "evaluatedAt": "2026-07-17T00:00:00Z",
-        "digest": "78e3df56a8adb0a7dc29720f93724716c58668ba99eface1a451f2ad641cfe9c"
+        "digest": "3422437e2d299841e558c06e3736b2f36a2565be4b58e6a46efa09a22b74dd67"
       }
     },
     {
@@ -374,17 +374,17 @@
             "maxSourceAgeDays": 1
           }
         ],
-        "digest": "70186d9430e0f8d9d9dae23ba38a12dd56ff394a6cb6ebd9cd88674d48b45d54",
+        "digest": "6d61d13e4d18775199be0ee46e4b665b1de404f46400d2e1cb58193ed8f5f974",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:stale-boundary-inclusive",
-          "subjectDigest": "70186d9430e0f8d9d9dae23ba38a12dd56ff394a6cb6ebd9cd88674d48b45d54",
+          "subjectDigest": "6d61d13e4d18775199be0ee46e4b665b1de404f46400d2e1cb58193ed8f5f974",
           "actorKind": "human",
-          "approverId": "policy_reviewer"
+          "approverId": "usr_policyapprover001"
         },
-        "proposedBy": "policy_author"
+        "proposedBy": "svc_policyagent00001"
       },
       "snapshot": {
         "schemaVersion": "libre-ai.model-snapshot.v2",
@@ -421,10 +421,10 @@
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedEvaluation": {
         "schemaVersion": "libre-ai.policy-evaluation.v2",
-        "id": "urn:libre-ai:evaluation:43b1ae89172b1d705d1ac79159889d3737e9e76062a5a82942ce561409a7c9b1",
+        "id": "urn:libre-ai:evaluation:68aacddffd00d0d0ef718b681922cb659ae208f16e60dfcc45b62f0bf7e700f6",
         "tenantId": "ten_1234567890abcdef",
         "policyId": "urn:libre-ai:policy:stale-boundary-inclusive",
-        "policyDigest": "70186d9430e0f8d9d9dae23ba38a12dd56ff394a6cb6ebd9cd88674d48b45d54",
+        "policyDigest": "6d61d13e4d18775199be0ee46e4b665b1de404f46400d2e1cb58193ed8f5f974",
         "snapshotId": "urn:libre-ai:snapshot:stale-boundary-inclusive",
         "snapshotDigest": "7d796303b6ed2667e858d88a5f82ae37383de431cc786af169a79b3852299715",
         "needDigest": "e59aaa705019c7f108eaead0cf03f1b92bda1191c6eac88d12d481fda09f3fbe",
@@ -438,7 +438,7 @@
           }
         ],
         "evaluatedAt": "2026-07-17T00:00:00Z",
-        "digest": "43b1ae89172b1d705d1ac79159889d3737e9e76062a5a82942ce561409a7c9b1"
+        "digest": "68aacddffd00d0d0ef718b681922cb659ae208f16e60dfcc45b62f0bf7e700f6"
       }
     },
     {
@@ -465,17 +465,17 @@
             "maxSourceAgeDays": 1
           }
         ],
-        "digest": "7c3946925730ccc71f0cd4cad093de20dec03749823428cb6517403d52e54db9",
+        "digest": "035a68920979556b3add5ee0a701e14cbc998d688d07a6970ce84596b00f56e1",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:stale-one-second-over",
-          "subjectDigest": "7c3946925730ccc71f0cd4cad093de20dec03749823428cb6517403d52e54db9",
+          "subjectDigest": "035a68920979556b3add5ee0a701e14cbc998d688d07a6970ce84596b00f56e1",
           "actorKind": "human",
-          "approverId": "policy_reviewer"
+          "approverId": "usr_policyapprover001"
         },
-        "proposedBy": "policy_author"
+        "proposedBy": "svc_policyagent00001"
       },
       "snapshot": {
         "schemaVersion": "libre-ai.model-snapshot.v2",
@@ -512,10 +512,10 @@
       "evaluatedAt": "2026-07-17T00:00:01Z",
       "expectedEvaluation": {
         "schemaVersion": "libre-ai.policy-evaluation.v2",
-        "id": "urn:libre-ai:evaluation:5a4807e5b7ae166b0bc60a7a9f6a626bfa7f69230cae8de6d70a08c3f90a851b",
+        "id": "urn:libre-ai:evaluation:8a81dc33f86f5b19564c787cf1970789fc292f35675966545947af6bcacad245",
         "tenantId": "ten_1234567890abcdef",
         "policyId": "urn:libre-ai:policy:stale-one-second-over",
-        "policyDigest": "7c3946925730ccc71f0cd4cad093de20dec03749823428cb6517403d52e54db9",
+        "policyDigest": "035a68920979556b3add5ee0a701e14cbc998d688d07a6970ce84596b00f56e1",
         "snapshotId": "urn:libre-ai:snapshot:stale-one-second-over",
         "snapshotDigest": "187a581aba4cc5a8df065703f204ae057e352c42d08bcbd6410b4c0c12cb90b7",
         "needDigest": "632e4508928cc3ea582a91984eea5c5824f9c2f4968f88214ac8f668a83bf0a7",
@@ -529,7 +529,7 @@
           }
         ],
         "evaluatedAt": "2026-07-17T00:00:01Z",
-        "digest": "5a4807e5b7ae166b0bc60a7a9f6a626bfa7f69230cae8de6d70a08c3f90a851b"
+        "digest": "8a81dc33f86f5b19564c787cf1970789fc292f35675966545947af6bcacad245"
       }
     },
     {
@@ -555,17 +555,17 @@
             }
           }
         ],
-        "digest": "6b9519368bf95d9dc13027992fae3db3418ee3d97042884a102a76ce57ac7180",
+        "digest": "c6387c52f7d03f3cba6a6d46249637c1bb463407af94ff93be7355a3c617c71d",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:unknown-ineligible",
-          "subjectDigest": "6b9519368bf95d9dc13027992fae3db3418ee3d97042884a102a76ce57ac7180",
+          "subjectDigest": "c6387c52f7d03f3cba6a6d46249637c1bb463407af94ff93be7355a3c617c71d",
           "actorKind": "human",
-          "approverId": "policy_reviewer"
+          "approverId": "usr_policyapprover001"
         },
-        "proposedBy": "policy_author"
+        "proposedBy": "svc_policyagent00001"
       },
       "snapshot": {
         "schemaVersion": "libre-ai.model-snapshot.v2",
@@ -602,10 +602,10 @@
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedEvaluation": {
         "schemaVersion": "libre-ai.policy-evaluation.v2",
-        "id": "urn:libre-ai:evaluation:d47353b4b41843a8ec4789ff2eb507e6f37995048bfef6dd725ca7e057cbcffa",
+        "id": "urn:libre-ai:evaluation:ac70d0a88dfe24fed7dfc5319aa68282e6dfd429f6da1a8b0ee8fb397742dc19",
         "tenantId": "ten_1234567890abcdef",
         "policyId": "urn:libre-ai:policy:unknown-ineligible",
-        "policyDigest": "6b9519368bf95d9dc13027992fae3db3418ee3d97042884a102a76ce57ac7180",
+        "policyDigest": "c6387c52f7d03f3cba6a6d46249637c1bb463407af94ff93be7355a3c617c71d",
         "snapshotId": "urn:libre-ai:snapshot:unknown-ineligible",
         "snapshotDigest": "8adc15c9da15ded007b314ce57b401f7e4f9bb77e1b4f66e96e00debc114cff0",
         "needDigest": "6f56c7cdbe810236c91c05279d53105f7a646bf5a68c5273feefd4ffa4674f3e",
@@ -619,7 +619,7 @@
           }
         ],
         "evaluatedAt": "2026-07-17T00:00:00Z",
-        "digest": "d47353b4b41843a8ec4789ff2eb507e6f37995048bfef6dd725ca7e057cbcffa"
+        "digest": "ac70d0a88dfe24fed7dfc5319aa68282e6dfd429f6da1a8b0ee8fb397742dc19"
       }
     },
     {
@@ -658,17 +658,17 @@
             }
           }
         ],
-        "digest": "48c73323bf8783d5f89a1c7b8909e441bca84ba1cbaedf6925f4f69c3fd48999",
+        "digest": "260922eb6dbddbd69336e5aeb5e4a3ae883ccd822c68a23ee615f4d26169581d",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:failed-before-unknown",
-          "subjectDigest": "48c73323bf8783d5f89a1c7b8909e441bca84ba1cbaedf6925f4f69c3fd48999",
+          "subjectDigest": "260922eb6dbddbd69336e5aeb5e4a3ae883ccd822c68a23ee615f4d26169581d",
           "actorKind": "human",
-          "approverId": "policy_reviewer"
+          "approverId": "usr_policyapprover001"
         },
-        "proposedBy": "policy_author"
+        "proposedBy": "svc_policyagent00001"
       },
       "snapshot": {
         "schemaVersion": "libre-ai.model-snapshot.v2",
@@ -705,10 +705,10 @@
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedEvaluation": {
         "schemaVersion": "libre-ai.policy-evaluation.v2",
-        "id": "urn:libre-ai:evaluation:c85eef72220419c6e8d6a8d6dbf5c00b8d7ab4315a0437a4ef8232b9c958748d",
+        "id": "urn:libre-ai:evaluation:68660dfdfd05f84a36f82f7949ae67f71778bb7000aae3d642ed201a4b7f87a1",
         "tenantId": "ten_1234567890abcdef",
         "policyId": "urn:libre-ai:policy:failed-before-unknown",
-        "policyDigest": "48c73323bf8783d5f89a1c7b8909e441bca84ba1cbaedf6925f4f69c3fd48999",
+        "policyDigest": "260922eb6dbddbd69336e5aeb5e4a3ae883ccd822c68a23ee615f4d26169581d",
         "snapshotId": "urn:libre-ai:snapshot:failed-before-unknown",
         "snapshotDigest": "82057fa6cebe28623c9b49fb2fb819fbf0454b0857559a0016802680fe2052c5",
         "needDigest": "f0d9054213824b26bd6425cf4a2b420faa956f993d10f7514203a1592154cd88",
@@ -727,7 +727,7 @@
           }
         ],
         "evaluatedAt": "2026-07-17T00:00:00Z",
-        "digest": "c85eef72220419c6e8d6a8d6dbf5c00b8d7ab4315a0437a4ef8232b9c958748d"
+        "digest": "68660dfdfd05f84a36f82f7949ae67f71778bb7000aae3d642ed201a4b7f87a1"
       }
     },
     {
@@ -753,17 +753,17 @@
             }
           }
         ],
-        "digest": "f238aa557f512d369fbc45c22b83dc0451c6483723cd84d497d3ed5ea7977741",
+        "digest": "6a0b8d681875162bd7d8d74a803efd20ac3860d0df4a77a9089a9fa187a33e9c",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:origin-is-not-jurisdiction",
-          "subjectDigest": "f238aa557f512d369fbc45c22b83dc0451c6483723cd84d497d3ed5ea7977741",
+          "subjectDigest": "6a0b8d681875162bd7d8d74a803efd20ac3860d0df4a77a9089a9fa187a33e9c",
           "actorKind": "human",
-          "approverId": "policy_reviewer"
+          "approverId": "usr_policyapprover001"
         },
-        "proposedBy": "policy_author"
+        "proposedBy": "svc_policyagent00001"
       },
       "snapshot": {
         "schemaVersion": "libre-ai.model-snapshot.v2",
@@ -800,10 +800,10 @@
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedEvaluation": {
         "schemaVersion": "libre-ai.policy-evaluation.v2",
-        "id": "urn:libre-ai:evaluation:cc7894e9362110c6030b4c967759fef52170c525a23526b5134e426d65ce9f4b",
+        "id": "urn:libre-ai:evaluation:d1b7c665cf4dcc80c0267cf5293374fc930cb29a1ea078e27b90a0ed2705d286",
         "tenantId": "ten_1234567890abcdef",
         "policyId": "urn:libre-ai:policy:origin-is-not-jurisdiction",
-        "policyDigest": "f238aa557f512d369fbc45c22b83dc0451c6483723cd84d497d3ed5ea7977741",
+        "policyDigest": "6a0b8d681875162bd7d8d74a803efd20ac3860d0df4a77a9089a9fa187a33e9c",
         "snapshotId": "urn:libre-ai:snapshot:origin-is-not-jurisdiction",
         "snapshotDigest": "eaaffb3c2473e67430932384a7c296f5e9de295b6d89152e904fd748e70d4b6e",
         "needDigest": "7cd94dcc6e3e459f2fc9f142d3c601a5fb921ed023922fc08f54f66a9a7559ec",
@@ -817,7 +817,7 @@
           }
         ],
         "evaluatedAt": "2026-07-17T00:00:00Z",
-        "digest": "cc7894e9362110c6030b4c967759fef52170c525a23526b5134e426d65ce9f4b"
+        "digest": "d1b7c665cf4dcc80c0267cf5293374fc930cb29a1ea078e27b90a0ed2705d286"
       }
     },
     {
@@ -843,17 +843,17 @@
             }
           }
         ],
-        "digest": "7482b1a062a6414db6558046800acf3021c53a724e3d9964d6a6e3ceba359f2a",
+        "digest": "1835d0e242dd855b9a0f864e4e84a263dd05f3ee2586b70c6f9938569448eb9b",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:origin-and-jurisdiction-independent",
-          "subjectDigest": "7482b1a062a6414db6558046800acf3021c53a724e3d9964d6a6e3ceba359f2a",
+          "subjectDigest": "1835d0e242dd855b9a0f864e4e84a263dd05f3ee2586b70c6f9938569448eb9b",
           "actorKind": "human",
-          "approverId": "policy_reviewer"
+          "approverId": "usr_policyapprover001"
         },
-        "proposedBy": "policy_author"
+        "proposedBy": "svc_policyagent00001"
       },
       "snapshot": {
         "schemaVersion": "libre-ai.model-snapshot.v2",
@@ -900,10 +900,10 @@
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedEvaluation": {
         "schemaVersion": "libre-ai.policy-evaluation.v2",
-        "id": "urn:libre-ai:evaluation:d7c5c12243272690b2bb6d580b34882ab1c3000053daab02513c3956952a608e",
+        "id": "urn:libre-ai:evaluation:8f0002983c539bf99a40321905b384e74d122541b683338cb6aae4832da766ae",
         "tenantId": "ten_1234567890abcdef",
         "policyId": "urn:libre-ai:policy:origin-and-jurisdiction-independent",
-        "policyDigest": "7482b1a062a6414db6558046800acf3021c53a724e3d9964d6a6e3ceba359f2a",
+        "policyDigest": "1835d0e242dd855b9a0f864e4e84a263dd05f3ee2586b70c6f9938569448eb9b",
         "snapshotId": "urn:libre-ai:snapshot:origin-and-jurisdiction-independent",
         "snapshotDigest": "70efca5574602b79fda71b3cdd7eecc450276e7697671a6bf5ee0e40187320a2",
         "needDigest": "e0c6a2acd41a08c0e4a69e080c2492c8ccc9a0a85570216beaa6ae435a106aca",
@@ -917,7 +917,7 @@
           }
         ],
         "evaluatedAt": "2026-07-17T00:00:00Z",
-        "digest": "d7c5c12243272690b2bb6d580b34882ab1c3000053daab02513c3956952a608e"
+        "digest": "8f0002983c539bf99a40321905b384e74d122541b683338cb6aae4832da766ae"
       }
     },
     {
@@ -943,17 +943,17 @@
             }
           }
         ],
-        "digest": "8b72c7fe17c08b6d16b3a2e00d3d11c769668cfb18248f209cb0511669e3e051",
+        "digest": "835e684e2986a6ec20932c2b61eedeaaefe5917a2c36acb835c9d2c4cdffa787",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:multiple-facts-failed-priority",
-          "subjectDigest": "8b72c7fe17c08b6d16b3a2e00d3d11c769668cfb18248f209cb0511669e3e051",
+          "subjectDigest": "835e684e2986a6ec20932c2b61eedeaaefe5917a2c36acb835c9d2c4cdffa787",
           "actorKind": "human",
-          "approverId": "policy_reviewer"
+          "approverId": "usr_policyapprover001"
         },
-        "proposedBy": "policy_author"
+        "proposedBy": "svc_policyagent00001"
       },
       "snapshot": {
         "schemaVersion": "libre-ai.model-snapshot.v2",
@@ -1000,10 +1000,10 @@
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedEvaluation": {
         "schemaVersion": "libre-ai.policy-evaluation.v2",
-        "id": "urn:libre-ai:evaluation:efe625b4bab93962e9ba6156921540721aa57de168c5d6879b1916f5b2be7cc5",
+        "id": "urn:libre-ai:evaluation:4f01e8db336d9228566be97afb791a34f337248a91f03670cbecd1cceb5801ab",
         "tenantId": "ten_1234567890abcdef",
         "policyId": "urn:libre-ai:policy:multiple-facts-failed-priority",
-        "policyDigest": "8b72c7fe17c08b6d16b3a2e00d3d11c769668cfb18248f209cb0511669e3e051",
+        "policyDigest": "835e684e2986a6ec20932c2b61eedeaaefe5917a2c36acb835c9d2c4cdffa787",
         "snapshotId": "urn:libre-ai:snapshot:multiple-facts-failed-priority",
         "snapshotDigest": "947e827f2c4bb19f82305eac1ce1f9d74bff860c5b08632020011c5c0f3e4f36",
         "needDigest": "794c398eb369bc95f6d08a8bb1fa9ecc5908d1389788ffb33070c68b3602541f",
@@ -1017,7 +1017,7 @@
           }
         ],
         "evaluatedAt": "2026-07-17T00:00:00Z",
-        "digest": "efe625b4bab93962e9ba6156921540721aa57de168c5d6879b1916f5b2be7cc5"
+        "digest": "4f01e8db336d9228566be97afb791a34f337248a91f03670cbecd1cceb5801ab"
       }
     },
     {
@@ -1044,17 +1044,17 @@
             "maxSourceAgeDays": 1
           }
         ],
-        "digest": "8dd7c4dcbafca6ea61565751457fa2bba13aa24fb3ba2d98097934f2e4c78f75",
+        "digest": "24e7695f1666e68e3a56687efd0c2c8b43eb0a910c001f2bab001fb9581a446b",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:multiple-sources-stale-priority",
-          "subjectDigest": "8dd7c4dcbafca6ea61565751457fa2bba13aa24fb3ba2d98097934f2e4c78f75",
+          "subjectDigest": "24e7695f1666e68e3a56687efd0c2c8b43eb0a910c001f2bab001fb9581a446b",
           "actorKind": "human",
-          "approverId": "policy_reviewer"
+          "approverId": "usr_policyapprover001"
         },
-        "proposedBy": "policy_author"
+        "proposedBy": "svc_policyagent00001"
       },
       "snapshot": {
         "schemaVersion": "libre-ai.model-snapshot.v2",
@@ -1101,10 +1101,10 @@
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedEvaluation": {
         "schemaVersion": "libre-ai.policy-evaluation.v2",
-        "id": "urn:libre-ai:evaluation:552f022c2eb4cc114a8acf617268fb7e9134d7fb19b157af7561dfa4e86d710d",
+        "id": "urn:libre-ai:evaluation:6b73e527459c39e47854d2d768e126ea44c5b0f31611016bc45dc447e7d2035f",
         "tenantId": "ten_1234567890abcdef",
         "policyId": "urn:libre-ai:policy:multiple-sources-stale-priority",
-        "policyDigest": "8dd7c4dcbafca6ea61565751457fa2bba13aa24fb3ba2d98097934f2e4c78f75",
+        "policyDigest": "24e7695f1666e68e3a56687efd0c2c8b43eb0a910c001f2bab001fb9581a446b",
         "snapshotId": "urn:libre-ai:snapshot:multiple-sources-stale-priority",
         "snapshotDigest": "f3d5170543032d110586bcddcc8d6953a9430f83f366fdd58a97a68c79e79a5f",
         "needDigest": "3562ed5ac9d23c8ef8fc57376202c44cff588af82ab5ce705c10d826d4ca037e",
@@ -1118,7 +1118,7 @@
           }
         ],
         "evaluatedAt": "2026-07-17T00:00:00Z",
-        "digest": "552f022c2eb4cc114a8acf617268fb7e9134d7fb19b157af7561dfa4e86d710d"
+        "digest": "6b73e527459c39e47854d2d768e126ea44c5b0f31611016bc45dc447e7d2035f"
       }
     },
     {
@@ -1144,17 +1144,17 @@
             }
           }
         ],
-        "digest": "39953a6e73bb145b7d251f5e4e5c4a0d89f3d33c46a8f0c897fd6fc3370f1a57",
+        "digest": "6f9bfdf872394e87e7e8b3c70b492ac8df2761501a2d69ef263e8eb2f1a8d8e8",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:source-from-future",
-          "subjectDigest": "39953a6e73bb145b7d251f5e4e5c4a0d89f3d33c46a8f0c897fd6fc3370f1a57",
+          "subjectDigest": "6f9bfdf872394e87e7e8b3c70b492ac8df2761501a2d69ef263e8eb2f1a8d8e8",
           "actorKind": "human",
-          "approverId": "policy_reviewer"
+          "approverId": "usr_policyapprover001"
         },
-        "proposedBy": "policy_author"
+        "proposedBy": "svc_policyagent00001"
       },
       "snapshot": {
         "schemaVersion": "libre-ai.model-snapshot.v2",
@@ -1191,10 +1191,10 @@
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedEvaluation": {
         "schemaVersion": "libre-ai.policy-evaluation.v2",
-        "id": "urn:libre-ai:evaluation:96f077389e82b1476b78e61827a87597269ff8d0b60fe24fbc18a4337d5ba726",
+        "id": "urn:libre-ai:evaluation:d178ccfd28abec7b2286cb4c3666c9a942cd60aac359a895a89be71201a14f82",
         "tenantId": "ten_1234567890abcdef",
         "policyId": "urn:libre-ai:policy:source-from-future",
-        "policyDigest": "39953a6e73bb145b7d251f5e4e5c4a0d89f3d33c46a8f0c897fd6fc3370f1a57",
+        "policyDigest": "6f9bfdf872394e87e7e8b3c70b492ac8df2761501a2d69ef263e8eb2f1a8d8e8",
         "snapshotId": "urn:libre-ai:snapshot:source-from-future",
         "snapshotDigest": "22ef19ed2104a05a2877527a17fe3b6866a89c376610f1b9fec7bf3867a95109",
         "needDigest": "e079579544f5e75ce7c3eed7b3d2f4bf2294974f4db195cbff36e8e1aa513041",
@@ -1208,7 +1208,7 @@
           }
         ],
         "evaluatedAt": "2026-07-17T00:00:00Z",
-        "digest": "96f077389e82b1476b78e61827a87597269ff8d0b60fe24fbc18a4337d5ba726"
+        "digest": "d178ccfd28abec7b2286cb4c3666c9a942cd60aac359a895a89be71201a14f82"
       }
     },
     {
@@ -1234,17 +1234,17 @@
             }
           }
         ],
-        "digest": "e2c77c481395feb7219bb4f7da4112f8a4d80ba58da6246109fc429fe598de8b",
+        "digest": "a645abe8984a5b481cb1206521e37e512d7352032ebfddcd6a10ab62ec3a5c9e",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:type-mismatch-unknown",
-          "subjectDigest": "e2c77c481395feb7219bb4f7da4112f8a4d80ba58da6246109fc429fe598de8b",
+          "subjectDigest": "a645abe8984a5b481cb1206521e37e512d7352032ebfddcd6a10ab62ec3a5c9e",
           "actorKind": "human",
-          "approverId": "policy_reviewer"
+          "approverId": "usr_policyapprover001"
         },
-        "proposedBy": "policy_author"
+        "proposedBy": "svc_policyagent00001"
       },
       "snapshot": {
         "schemaVersion": "libre-ai.model-snapshot.v2",
@@ -1281,10 +1281,10 @@
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedEvaluation": {
         "schemaVersion": "libre-ai.policy-evaluation.v2",
-        "id": "urn:libre-ai:evaluation:1a1dbb9f25ed796944e393715d1dfad232c81c7860b4378c2804c29ee431cf26",
+        "id": "urn:libre-ai:evaluation:df30418dd7ba1e1b929dc7bd851ba15890e3f0c76087a7e2b631e5ee0f3052c2",
         "tenantId": "ten_1234567890abcdef",
         "policyId": "urn:libre-ai:policy:type-mismatch-unknown",
-        "policyDigest": "e2c77c481395feb7219bb4f7da4112f8a4d80ba58da6246109fc429fe598de8b",
+        "policyDigest": "a645abe8984a5b481cb1206521e37e512d7352032ebfddcd6a10ab62ec3a5c9e",
         "snapshotId": "urn:libre-ai:snapshot:type-mismatch-unknown",
         "snapshotDigest": "4834ae2c5a8ff974b108efd43ce98cacf5ad29beedf3350af39c2af6ff432cfc",
         "needDigest": "95177ad632d30dbdd8c4444638183719b940e043f183974e799f8882815c76cf",
@@ -1298,7 +1298,7 @@
           }
         ],
         "evaluatedAt": "2026-07-17T00:00:00Z",
-        "digest": "1a1dbb9f25ed796944e393715d1dfad232c81c7860b4378c2804c29ee431cf26"
+        "digest": "df30418dd7ba1e1b929dc7bd851ba15890e3f0c76087a7e2b631e5ee0f3052c2"
       }
     },
     {
@@ -1324,17 +1324,17 @@
             }
           }
         ],
-        "digest": "ffdade74bb2e8cbf241d6a4be8d5988f2d46552cb268b7b27c15562a05568252",
+        "digest": "4cb6875aaf75c457adcfedb61fb9991f625079a9d0e84420793b623cc68720ea",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:tenant-mismatch",
-          "subjectDigest": "ffdade74bb2e8cbf241d6a4be8d5988f2d46552cb268b7b27c15562a05568252",
+          "subjectDigest": "4cb6875aaf75c457adcfedb61fb9991f625079a9d0e84420793b623cc68720ea",
           "actorKind": "human",
-          "approverId": "policy_reviewer"
+          "approverId": "usr_policyapprover001"
         },
-        "proposedBy": "policy_author"
+        "proposedBy": "svc_policyagent00001"
       },
       "snapshot": {
         "schemaVersion": "libre-ai.model-snapshot.v2",
@@ -1396,17 +1396,17 @@
             }
           }
         ],
-        "digest": "be99fd6cc2a1ea3ec4946ba13d07e34200f8ccf56e2ad57262244e198da36704",
+        "digest": "96aa2721ddb13cdb5ad59b9f7620845469a793d0b9062a71325932ca7001d01f",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:duplicate-fact",
-          "subjectDigest": "be99fd6cc2a1ea3ec4946ba13d07e34200f8ccf56e2ad57262244e198da36704",
+          "subjectDigest": "96aa2721ddb13cdb5ad59b9f7620845469a793d0b9062a71325932ca7001d01f",
           "actorKind": "human",
-          "approverId": "policy_reviewer"
+          "approverId": "usr_policyapprover001"
         },
-        "proposedBy": "policy_author"
+        "proposedBy": "svc_policyagent00001"
       },
       "snapshot": {
         "schemaVersion": "libre-ai.model-snapshot.v2",
@@ -1491,17 +1491,17 @@
             }
           }
         ],
-        "digest": "cd3fc6025959115d22ce40d419d417c7a20593b363c55fca33f76cc6e40241ff",
+        "digest": "e01f9fe3308dde3f246844c1c6acd3cbef326cf8d3e15bf62c0e0c88aab8319b",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:order-independent",
-          "subjectDigest": "cd3fc6025959115d22ce40d419d417c7a20593b363c55fca33f76cc6e40241ff",
+          "subjectDigest": "e01f9fe3308dde3f246844c1c6acd3cbef326cf8d3e15bf62c0e0c88aab8319b",
           "actorKind": "human",
-          "approverId": "policy_reviewer"
+          "approverId": "usr_policyapprover001"
         },
-        "proposedBy": "policy_author"
+        "proposedBy": "svc_policyagent00001"
       },
       "snapshot": {
         "schemaVersion": "libre-ai.model-snapshot.v2",
@@ -1552,10 +1552,10 @@
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedEvaluation": {
         "schemaVersion": "libre-ai.policy-evaluation.v2",
-        "id": "urn:libre-ai:evaluation:b78a434c4fcc0d1ea705b62b9c1cf0624dc1290710d8bdb9f7d93ab553b018e2",
+        "id": "urn:libre-ai:evaluation:2b7c46c556117070ec0930ef2e3d23a7d572cccef55dccdd750f49f94c1b4d3a",
         "tenantId": "ten_1234567890abcdef",
         "policyId": "urn:libre-ai:policy:order-independent",
-        "policyDigest": "cd3fc6025959115d22ce40d419d417c7a20593b363c55fca33f76cc6e40241ff",
+        "policyDigest": "e01f9fe3308dde3f246844c1c6acd3cbef326cf8d3e15bf62c0e0c88aab8319b",
         "snapshotId": "urn:libre-ai:snapshot:order-independent",
         "snapshotDigest": "c2473dcea5d41482910d9d2062af7aea375cf7e39f70c37c23ddb2e7a340aa0b",
         "needDigest": "40145b219ef9605c199f4e466c52b39007a83ae423cc70d57a84c4dbf1bf5ab1",
@@ -1574,7 +1574,7 @@
           }
         ],
         "evaluatedAt": "2026-07-17T00:00:00Z",
-        "digest": "b78a434c4fcc0d1ea705b62b9c1cf0624dc1290710d8bdb9f7d93ab553b018e2"
+        "digest": "2b7c46c556117070ec0930ef2e3d23a7d572cccef55dccdd750f49f94c1b4d3a"
       }
     },
     {
@@ -1613,17 +1613,17 @@
             }
           }
         ],
-        "digest": "cd3fc6025959115d22ce40d419d417c7a20593b363c55fca33f76cc6e40241ff",
+        "digest": "e01f9fe3308dde3f246844c1c6acd3cbef326cf8d3e15bf62c0e0c88aab8319b",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:order-independent",
-          "subjectDigest": "cd3fc6025959115d22ce40d419d417c7a20593b363c55fca33f76cc6e40241ff",
+          "subjectDigest": "e01f9fe3308dde3f246844c1c6acd3cbef326cf8d3e15bf62c0e0c88aab8319b",
           "actorKind": "human",
-          "approverId": "policy_reviewer"
+          "approverId": "usr_policyapprover001"
         },
-        "proposedBy": "policy_author"
+        "proposedBy": "svc_policyagent00001"
       },
       "snapshot": {
         "schemaVersion": "libre-ai.model-snapshot.v2",
@@ -1674,10 +1674,10 @@
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedEvaluation": {
         "schemaVersion": "libre-ai.policy-evaluation.v2",
-        "id": "urn:libre-ai:evaluation:b78a434c4fcc0d1ea705b62b9c1cf0624dc1290710d8bdb9f7d93ab553b018e2",
+        "id": "urn:libre-ai:evaluation:2b7c46c556117070ec0930ef2e3d23a7d572cccef55dccdd750f49f94c1b4d3a",
         "tenantId": "ten_1234567890abcdef",
         "policyId": "urn:libre-ai:policy:order-independent",
-        "policyDigest": "cd3fc6025959115d22ce40d419d417c7a20593b363c55fca33f76cc6e40241ff",
+        "policyDigest": "e01f9fe3308dde3f246844c1c6acd3cbef326cf8d3e15bf62c0e0c88aab8319b",
         "snapshotId": "urn:libre-ai:snapshot:order-independent",
         "snapshotDigest": "c2473dcea5d41482910d9d2062af7aea375cf7e39f70c37c23ddb2e7a340aa0b",
         "needDigest": "40145b219ef9605c199f4e466c52b39007a83ae423cc70d57a84c4dbf1bf5ab1",
@@ -1696,7 +1696,7 @@
           }
         ],
         "evaluatedAt": "2026-07-17T00:00:00Z",
-        "digest": "b78a434c4fcc0d1ea705b62b9c1cf0624dc1290710d8bdb9f7d93ab553b018e2"
+        "digest": "2b7c46c556117070ec0930ef2e3d23a7d572cccef55dccdd750f49f94c1b4d3a"
       }
     },
     {
@@ -1707,7 +1707,7 @@
         "tenantId": "ten_1234567890abcdef",
         "version": 1,
         "status": "approved",
-        "proposedBy": "policy_author",
+        "proposedBy": "svc_policyagent00001",
         "rules": [
           {
             "id": "fractional_score",
@@ -1723,15 +1723,15 @@
             }
           }
         ],
-        "digest": "3cd7113397a3fbcc314b2c726bffcd59736f200e57d0f1931d1cbb2f145f763e",
+        "digest": "ec8786e629a162f797bd2c8d8651c151b5126020248b173a5b1e116f85b1458f",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "actorKind": "human",
-          "approverId": "policy_reviewer",
+          "approverId": "usr_policyapprover001",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:fractional-number-jcs",
-          "subjectDigest": "3cd7113397a3fbcc314b2c726bffcd59736f200e57d0f1931d1cbb2f145f763e"
+          "subjectDigest": "ec8786e629a162f797bd2c8d8651c151b5126020248b173a5b1e116f85b1458f"
         }
       },
       "snapshot": {
@@ -1769,10 +1769,10 @@
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedEvaluation": {
         "schemaVersion": "libre-ai.policy-evaluation.v2",
-        "id": "urn:libre-ai:evaluation:7d5a7065d5843c658a08f35d4c4642c5d438ad7256e05bc3dd1c74029170843a",
+        "id": "urn:libre-ai:evaluation:bfac7f825551d598a10d89064d466331d5127befe5709b1f3467b60ff90cc354",
         "tenantId": "ten_1234567890abcdef",
         "policyId": "urn:libre-ai:policy:fractional-number-jcs",
-        "policyDigest": "3cd7113397a3fbcc314b2c726bffcd59736f200e57d0f1931d1cbb2f145f763e",
+        "policyDigest": "ec8786e629a162f797bd2c8d8651c151b5126020248b173a5b1e116f85b1458f",
         "snapshotId": "urn:libre-ai:snapshot:fractional-number-jcs",
         "snapshotDigest": "ae2e21cf6f5fbd086dd345ad6296924500196e50960ef91f1f361d9476214d52",
         "needDigest": "e7089b8cfd2c15dda71d487a8052978a3aa284267b813c33b26676ed74c621a7",
@@ -1786,7 +1786,7 @@
           }
         ],
         "evaluatedAt": "2026-07-17T00:00:00Z",
-        "digest": "7d5a7065d5843c658a08f35d4c4642c5d438ad7256e05bc3dd1c74029170843a"
+        "digest": "bfac7f825551d598a10d89064d466331d5127befe5709b1f3467b60ff90cc354"
       }
     },
     {
@@ -1797,7 +1797,7 @@
         "tenantId": "ten_1234567890abcdef",
         "version": 1,
         "status": "approved",
-        "proposedBy": "policy_author",
+        "proposedBy": "svc_policyagent00001",
         "rules": [
           {
             "id": "duplicate_rule",
@@ -1826,15 +1826,15 @@
             }
           }
         ],
-        "digest": "6209d9e0712d9958f2a63898255406d43f34cf30bfd6df455f18edc814e04b5a",
+        "digest": "3f66a9ccf53ac08f01e66fcbbe307cb80a477ceadea7fc8a5e814e78b0194cee",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "actorKind": "human",
-          "approverId": "policy_reviewer",
+          "approverId": "usr_policyapprover001",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:duplicate-rule-id",
-          "subjectDigest": "6209d9e0712d9958f2a63898255406d43f34cf30bfd6df455f18edc814e04b5a"
+          "subjectDigest": "3f66a9ccf53ac08f01e66fcbbe307cb80a477ceadea7fc8a5e814e78b0194cee"
         }
       },
       "snapshot": {
@@ -1892,7 +1892,7 @@
         "tenantId": "ten_1234567890abcdef",
         "version": 1,
         "status": "approved",
-        "proposedBy": "policy_author",
+        "proposedBy": "svc_policyagent00001",
         "rules": [
           {
             "id": "fractional_score",
@@ -1908,15 +1908,15 @@
             }
           }
         ],
-        "digest": "3cd7113397a3fbcc314b2c726bffcd59736f200e57d0f1931d1cbb2f145f763e",
+        "digest": "ec8786e629a162f797bd2c8d8651c151b5126020248b173a5b1e116f85b1458f",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "actorKind": "human",
-          "approverId": "policy_reviewer",
+          "approverId": "usr_policyapprover001",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:fractional-number-jcs",
-          "subjectDigest": "3cd7113397a3fbcc314b2c726bffcd59736f200e57d0f1931d1cbb2f145f763e"
+          "subjectDigest": "ec8786e629a162f797bd2c8d8651c151b5126020248b173a5b1e116f85b1458f"
         }
       },
       "snapshot": {
@@ -1964,7 +1964,7 @@
         "tenantId": "ten_1234567890abcdef",
         "version": 1,
         "status": "approved",
-        "proposedBy": "policy_author",
+        "proposedBy": "svc_policyagent00001",
         "rules": [
           {
             "id": "fractional_score",
@@ -1980,15 +1980,15 @@
             }
           }
         ],
-        "digest": "3cd7113397a3fbcc314b2c726bffcd59736f200e57d0f1931d1cbb2f145f763e",
+        "digest": "ec8786e629a162f797bd2c8d8651c151b5126020248b173a5b1e116f85b1458f",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "actorKind": "human",
-          "approverId": "policy_reviewer",
+          "approverId": "usr_policyapprover001",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:fractional-number-jcs",
-          "subjectDigest": "3cd7113397a3fbcc314b2c726bffcd59736f200e57d0f1931d1cbb2f145f763e"
+          "subjectDigest": "ec8786e629a162f797bd2c8d8651c151b5126020248b173a5b1e116f85b1458f"
         }
       },
       "snapshot": {
@@ -2221,17 +2221,17 @@
             }
           }
         ],
-        "digest": "0835e370af4ddee1b3d70fd9210c639c8218f4a0d2281897ea60f34f57295c80",
+        "digest": "7bceb76ec55fbb68402b2f6bb31a71a27435e1c089b281b8bbd2a6f4465d77e0",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:all-operators-eligible",
-          "subjectDigest": "0835e370af4ddee1b3d70fd9210c639c8218f4a0d2281897ea60f34f57295c80",
+          "subjectDigest": "7bceb76ec55fbb68402b2f6bb31a71a27435e1c089b281b8bbd2a6f4465d77e0",
           "actorKind": "human",
-          "approverId": "policy_author"
+          "approverId": "usr_selfreviewer0001"
         },
-        "proposedBy": "policy_author"
+        "proposedBy": "usr_selfreviewer0001"
       },
       "snapshot": {
         "schemaVersion": "libre-ai.model-snapshot.v2",

@@ -1441,23 +1441,38 @@
             }
           }
         ],
-        "digest": "0835e370af4ddee1b3d70fd9210c639c8218f4a0d2281897ea60f34f57295c80",
+        "digest": "bd8fe7cc1d5b1de63ecc8e476e44ef895179d18aed758db824b709364c689fa7",
         "approvedAt": "2026-01-02T00:00:00Z",
         "approval": {
           "role": "policy-approver",
           "approvedAt": "2026-01-02T00:00:00Z",
           "reference": "urn:libre-ai:approval:all-operators-eligible",
-          "subjectDigest": "0835e370af4ddee1b3d70fd9210c639c8218f4a0d2281897ea60f34f57295c80",
+          "subjectDigest": "bd8fe7cc1d5b1de63ecc8e476e44ef895179d18aed758db824b709364c689fa7",
           "actorKind": "human",
-          "approverId": "policy_reviewer"
+          "approverId": "usr_policyapprover001"
         },
-        "proposedBy": "policy_author"
+        "proposedBy": "svc_policyagent00001"
       },
       "invalidMutations": [
         {
           "name": "self actor kind",
           "path": "/approval/actorKind",
           "value": "agent"
+        },
+        {
+          "name": "non-opaque proposer id",
+          "path": "/proposedBy",
+          "value": "alice"
+        },
+        {
+          "name": "non-opaque approver id",
+          "path": "/approval/approverId",
+          "value": "private_identity_canary"
+        },
+        {
+          "name": "source URI query forbidden",
+          "path": "/rules/0/source/uri",
+          "value": "https://example.org/policy?token=private_canary"
         }
       ]
     },
@@ -1508,6 +1523,16 @@
           "name": "need fact in snapshot",
           "path": "/facts/0/name",
           "value": "need.licence"
+        },
+        {
+          "name": "source URI userinfo forbidden",
+          "path": "/facts/0/source/uri",
+          "value": "https://private-canary@example.org/evidence"
+        },
+        {
+          "name": "source URI fragment forbidden",
+          "path": "/facts/0/source/uri",
+          "value": "https://example.org/evidence#private-canary"
         }
       ]
     },

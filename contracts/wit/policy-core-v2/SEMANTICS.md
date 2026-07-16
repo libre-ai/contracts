@@ -35,7 +35,7 @@ Inputs are UTF-8 JSON objects conforming respectively to:
 2. `model-snapshot.v2.schema.json` (maximum 8 MiB);
 3. `policy-need.v2.schema.json` (maximum 8 MiB).
 
-`evaluated-at` is at most 64 UTF-8 bytes and the successful JCS output is at most 2 MiB. A larger input or output returns `policy.input_invalid` without partial output.
+`evaluated-at` is exactly 20 UTF-8 bytes when valid and the successful JCS output is at most 2 MiB. A larger input or output returns `policy.input_invalid` without partial output.
 
 Before any decode, the evaluator MUST check the byte lengths of all three JSON
 inputs and `evaluated-at`; a value above its ceiling returns `policy.input_invalid`.
@@ -63,6 +63,16 @@ as an IEEE-754 binary64 value and is schema-bounded to the inclusive safe-intege
 range `[-9007199254740991, 9007199254740991]`; fractional values in that range are
 allowed. `-0` and `0` are equal. Strings are never case-folded, trimmed or Unicode-
 normalized.
+
+Every policy and fact source URI MUST be a sanitized public HTTPS citation with
+no userinfo, query or fragment and at most 2,048 characters. It MUST NOT contain
+credentials, tokens, email addresses or other personal data. `proposedBy` is an
+opaque `usr_*` or `svc_*` principal ID; `approval.approverId` is an opaque `usr_*`
+ID and never a name, email or external account identifier. Fact names/values,
+`modelId` and need facts MUST describe models and organizational requirements only;
+they MUST NOT contain natural-person identifiers, free-form personal content,
+credentials or secrets. The authorized caller owns identity mapping, data
+minimization and source sanitization before invocation.
 
 `evaluated-at`, every snapshot `source.retrievedAt` and every emitted `evaluatedAt`
 MUST be a real Gregorian instant in the exact UTC-seconds form

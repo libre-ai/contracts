@@ -5,7 +5,7 @@
     "policyInput": 8388608,
     "snapshotInput": 8388608,
     "needInput": 8388608,
-    "evaluatedAt": 64,
+    "evaluatedAt": 20,
     "totalJsonInput": 25165824,
     "successfulOutput": 2097152
   },
@@ -79,13 +79,13 @@
     {
       "id": "evaluated-at-at-limit",
       "target": "evaluatedAt",
-      "byteLength": 64,
+      "byteLength": 20,
       "expectedPreflight": "within-limit"
     },
     {
       "id": "evaluated-at-over-limit",
       "target": "evaluatedAt",
-      "byteLength": 65,
+      "byteLength": 21,
       "expectedError": "input-invalid"
     },
     {
