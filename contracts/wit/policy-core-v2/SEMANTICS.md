@@ -14,10 +14,17 @@ one sourced model snapshot, one declared need and one explicit instant. `eligibl
 means only “all rules are satisfied for these exact inputs”. It is not a ranking,
 purchase recommendation, authorization, approval or instruction to transact.
 The evaluator MUST NOT buy, select, deploy or approve anything and MUST NOT create
-or mutate a policy approval.
+or mutate a policy approval. It verifies approval separation and subject binding,
+but the authorized caller MUST establish the authenticity and current validity of
+`approval.reference` before invocation.
 
 The world is pure. It receives no clock, network, storage, identity, authorization
 or randomness capability. The caller authorizes access before invoking it.
+
+`engineVersion` MUST be an immutable SemVer constant embedded in the qualified
+component. It MUST NOT be accepted from the caller or derived from any input. The
+reference vectors use `2.0.0`; changing the embedded version changes the evaluation
+content, ID and digest even when all policy inputs are unchanged.
 
 ## 2. Accepted values and validation order
 
