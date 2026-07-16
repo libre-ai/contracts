@@ -18,9 +18,15 @@ Le WIT transporte `plaintext`, `salt`, `nonce` et `recovery-secret` comme octets
 
 ## 1A. Canonicalisation de ContextDocument v2
 
-`canonicalize-context` accepte au plus 22 370 044 octets de JSON UTF-8 strict conforme à `context-document.v2.schema.json`, avec au plus 16 777 216 octets cumulés dans les contenus. Les clés dupliquées, BOM, champs inconnus et JSON imbriqué invalide ou à clés dupliquées sont refusés comme `invalid-document`.
+`canonicalize-context` accepte au plus 22 370 044 octets de JSON UTF-8 strict conforme à `context-document.v2.schema.json`, avec au plus 16 777 216 octets cumulés dans les contenus avant **et** après normalisation. Les clés dupliquées, BOM, champs inconnus et JSON imbriqué invalide ou à clés dupliquées sont refusés comme `invalid-document`.
 
-Les IDs de blocs sont uniques. Chaque `rootBlockId` et chaque lien désigne un bloc présent. `excludedBlockIds` est disjoint des racines, des blocs et de toutes les cibles de lien. Le cœur trie `rootBlockIds`, chaque tableau `links` et `excludedBlockIds` par ordre lexicographique croissant des octets UTF-8 de l'identifiant. Il trie `blocks` par ce même ordre appliqué au champ `id`; aucun autre champ d'un bloc ne participe au comparateur. Aucun doublon sémantique n'est accepté. Pour `application/json`, `content` est remplacé par le JCS RFC 8785 de la valeur JSON imbriquée ; les autres contenus sont conservés octet pour octet après validation UTF-8.
+Avant l'appel, le host DOIT remapper chaque ID local sélectionné vers un nouvel identifiant export-scoped `blk_` suivi de 32 hexadécimaux minuscules issus de 16 octets CSPRNG. Le même mapping est appliqué aux racines et liens ; aucun ID local, numéro de révision ou identifiant de bloc exclu ne franchit la frontière. `revision` et `excludedBlockIds` sont donc des champs inconnus refusés.
+
+Les IDs export-scoped sont uniques. Chaque `rootBlockId` et chaque lien désigne un bloc présent. Le cœur trie `rootBlockIds` et chaque tableau `links` par ordre lexicographique croissant des octets UTF-8. Il trie `blocks` par ce même ordre appliqué au champ `id`; aucun autre champ ne participe au comparateur. Aucun doublon sémantique n'est accepté.
+
+Pour `application/json`, `content` est remplacé par le JCS RFC 8785 de la valeur JSON imbriquée. Le parseur traite chaque nombre comme un IEEE 754 binary64 fini, refuse toute valeur de magnitude supérieure à `9 007 199 254 740 991`, puis applique la sérialisation numérique ECMAScript de RFC 8785. Le nombre `333333333.33333329` devient donc `333333333.3333333`; `9007199254740992` et `1e16` sont refusés. Les autres contenus sont conservés octet pour octet après validation UTF-8.
+
+Les budgets sémantiques sont cumulatifs sur le document : profondeur maximale 64 pour chaque valeur JSON imbriquée (racine à profondeur 1, chaque objet/tableau enfant ajoute 1), au plus 100 000 valeurs JSON (chaque objet, tableau ou primitive compte un nœud) et au plus 16 384 liens au total. Les bornes de schéma restent 1 000 blocs et 1 000 liens par bloc. Dépasser un budget retourne `invalid-document`, jamais un fallback ni une sortie partielle.
 
 Les valeurs d'entrée `totalBytes` et `digest` doivent satisfaire le schéma mais sont remplacées, sans comparaison avec leur valeur entrante. `totalBytes` devient la somme exacte des longueurs UTF-8 des champs `content` après normalisation. Le digest est :
 
@@ -53,7 +59,7 @@ Toute valeur Base64 DOIT utiliser l'alphabet standard RFC 4648 §4 (`A-Z a-z 0-9
 
 | Valeur binaire | Minimum | Maximum |
 | --- | ---: | ---: |
-| `recovery-secret` | 16 octets | 1024 octets |
+| `recovery-secret` | 16 octets | 16 octets |
 | plaintext | 1 octet | 16 777 216 octets (16 MiB) |
 | ciphertext `C || T` | 17 octets | 16 777 232 octets |
 | clé dérivée | 32 octets | 32 octets |
@@ -61,7 +67,7 @@ Toute valeur Base64 DOIT utiliser l'alphabet standard RFC 4648 §4 (`A-Z a-z 0-9
 
 L'entrée brute `open-backup.envelope` est limitée à **22 370 044 octets**, maximum d'une enveloppe JCS conforme avec le ciphertext maximal. Les longueurs décodées sont vérifiées en plus des longueurs JSON Schema. Aucun calcul Argon2id n'a lieu avant validation de la structure, des algorithmes, des paramètres et de ces bornes publiques.
 
-Le secret est une chaîne d'octets opaque : le cœur ne réalise ni décodage, ni trim, ni normalisation Unicode. Tout host acceptant une saisie textuelle DOIT appliquer le profil `libre-ai.recovery-secret-text.v1` avant l'appel : refuser un U+FEFF initial et toute entrée qui n'est pas une séquence de valeurs scalaires Unicode, normaliser en NFC, encoder en UTF-8 sans BOM, ne jamais trimmer, changer la casse ou normaliser les fins de ligne, puis valider la longueur binaire. Les vecteurs `recoverySecretTextProfile` sont normatifs. Un host acceptant directement des octets ne les transforme pas. Pour le mode de création initial, le produit DOIT appliquer `libre-ai.recovery-secret-code.v1` : générer exactement 16 octets par CSPRNG, afficher exactement 32 hexadécimaux minuscules sans séparateur et restaurer par décodage hexadécimal strict vers les 16 octets originaux. Toute option de secret choisi par l'utilisateur exige une politique d'entropie séparément approuvée ; la longueur seule ne prouve pas l'entropie.
+Le seul profil recovery v2 est `libre-ai.recovery-secret-code.v1` : le host génère exactement 16 octets par CSPRNG, affiche exactement 32 hexadécimaux minuscules sans séparateur et restaure par décodage hexadécimal strict vers les 16 octets originaux. Le cœur reçoit uniquement ces octets et ne réalise aucune transformation. Une saisie libre, une passphrase, Unicode, trim, casse, séparateurs ou détection heuristique de format sont interdits en v2 ; les introduire exigera un nouveau contrat major-versionné et ses propres vecteurs. La longueur fixe ne remplace pas l'exigence CSPRNG.
 
 ## 3. Argon2id vers AES-256
 
@@ -181,7 +187,7 @@ La Gate A peut et DOIT être réalisée sans moteur Notebook. Elle exige quatre 
 La promotion et l'implémentation sont refusées tant que ces passes n'ont pas :
 
 1. reproduit la clé Argon2id, les AAD, le ciphertext/tag, le digest et l'enveloppe avec une implémentation indépendante de celles consignées dans le golden vector ;
-2. exécuté le golden backup et ses dix mutations, le golden Context v2 et ses dix refus, ainsi que les vecteurs Unicode du recovery secret ; confirmé les erreurs attendues et l'absence de plaintext sur échec ;
+2. exécuté le golden backup et ses dix mutations, le golden Context v2, ses douze refus, ses cas limites ressources/nombres et l'unique recovery code ; confirmé les erreurs attendues et l'absence de plaintext sur échec ;
 3. examiné les octets AAD/digest, Base64, JCS, nonce/sel, bornes, dérivation `P/S/K/X` et migration v2 ;
 4. analysé le modèle anti-oracle, y compris secret hors bornes, digest recalculé par un attaquant et paramètres KDF invalides ;
 5. approuvé la sécurité des bornes Argon2id et défini les budgets mémoire/latence à mesurer en Gate B sur les navigateurs supportés ;
