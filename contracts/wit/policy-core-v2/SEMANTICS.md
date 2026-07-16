@@ -14,10 +14,17 @@ one sourced model snapshot, one declared need and one explicit instant. `eligibl
 means only “all rules are satisfied for these exact inputs”. It is not a ranking,
 purchase recommendation, authorization, approval or instruction to transact.
 The evaluator MUST NOT buy, select, deploy or approve anything and MUST NOT create
-or mutate a policy approval.
+or mutate a policy approval. It verifies approval separation and subject binding,
+but the authorized caller MUST establish the authenticity and current validity of
+`approval.reference` before invocation.
 
 The world is pure. It receives no clock, network, storage, identity, authorization
 or randomness capability. The caller authorizes access before invoking it.
+
+`engineVersion` MUST be an immutable SemVer constant embedded in the qualified
+component. It MUST NOT be accepted from the caller or derived from any input. The
+reference vectors use `2.0.0`; changing the embedded version changes the evaluation
+content, ID and digest even when all policy inputs are unchanged.
 
 ## 2. Accepted values and validation order
 
@@ -28,6 +35,21 @@ Inputs are UTF-8 JSON objects conforming respectively to:
 3. `policy-need.v2.schema.json` (maximum 8 MiB).
 
 `evaluated-at` is at most 64 UTF-8 bytes and the successful JCS output is at most 2 MiB. A larger input or output returns `policy.input_invalid` without partial output.
+
+Before implementation, `contracts/fixtures/policy-core-v2/resource-budgets.v1.json`
+fixes the qualification ceilings derived from these schemas. At most 1,000 rules
+and 1,000 facts in either namespace can produce 1,000,000 matched rule/occurrence
+evaluations. A policy set has at most 100 members; set lookup MUST use sorted binary
+search or an equivalent lookup with at most 7 scalar comparisons, never a linear
+100-member scan for every occurrence. Duplicate detection MUST use canonical hashes
+or ordered indexes, not pairwise deep comparison. Peak component linear memory,
+including WIT input/output copies, decoded values, indexes, canonicalization/hashing scratch and
+the result, MUST NOT exceed 256 MiB. Caller-owned buffers outside component linear
+memory are excluded. A schema-valid input within all byte/cardinality ceilings MUST
+NOT be refused merely because an implementation chose a less efficient algorithm;
+such a component fails qualification. Wall-clock and WASM fuel thresholds are set
+only in implementation Gate B against the exact component, runtime and documented
+reference hardware; they cannot alter these deterministic work ceilings.
 
 The decoder MUST reject a BOM, invalid UTF-8, duplicate JSON object member names,
 unpaired Unicode surrogates and non-JSON numbers. Every JSON number is interpreted
@@ -52,17 +74,19 @@ Validation occurs before rule evaluation, in this order:
 6. require exact equality of policy, snapshot and need `tenantId`, otherwise
    `policy.tenant_mismatch`.
 
-A failure returns `contract-error`, not a `PolicyEvaluation`. Error messages are
-constant and MUST NOT contain input values:
+A failure returns only the closed WIT `error-code`, never a `PolicyEvaluation` or
+free-form string. The host maps variants to the public code and optional static
+label below; no input value, parser diagnostic, tenant, fact, reviewer identity or
+library error crosses the component boundary.
 
-| code | message |
-| --- | --- |
-| `policy.input_invalid` | `input does not conform to policy-core-v2` |
-| `policy.evaluated_at_invalid` | `evaluated-at is not canonical UTC seconds` |
-| `policy.rule_id_duplicate` | `policy contains duplicate rule ids` |
-| `policy.approval_invalid` | `policy approval separation is invalid` |
-| `policy.digest_mismatch` | `input digest does not match canonical content` |
-| `policy.tenant_mismatch` | `policy, snapshot and need tenants differ` |
+| WIT variant | Public code | Optional host label |
+| --- | --- | --- |
+| `input-invalid` | `policy.input_invalid` | `input does not conform to policy-core-v2` |
+| `evaluated-at-invalid` | `policy.evaluated_at_invalid` | `evaluated-at is not canonical UTC seconds` |
+| `rule-id-duplicate` | `policy.rule_id_duplicate` | `policy contains duplicate rule ids` |
+| `approval-invalid` | `policy.approval_invalid` | `policy approval separation is invalid` |
+| `digest-mismatch` | `policy.digest_mismatch` | `input digest does not match canonical content` |
+| `tenant-mismatch` | `policy.tenant_mismatch` | `policy, snapshot and need tenants differ` |
 
 ## 3. Fact namespaces, cardinality and duplicates
 
@@ -240,7 +264,9 @@ ordered trace.
 - `contracts/fixtures/policy-core-v2/operators.json` is the atomic operator/type
   corpus;
 - `contracts/fixtures/policy-core-v2/golden.json` contains complete cross-runtime
-  evaluations and contract-error vectors.
+  evaluations and closed WIT `error-code` vectors;
+- `contracts/fixtures/policy-core-v2/resource-budgets.v1.json` fixes byte,
+  cardinality, semantic-work and peak-memory qualification ceilings.
 
-An implementation conforms only if every vector matches exactly. Implementations
-MUST NOT rewrite expected vectors from their own output.
+An implementation conforms only if every vector and budget matches exactly.
+Implementations MUST NOT rewrite expected vectors from their own output.

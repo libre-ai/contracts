@@ -274,7 +274,7 @@
     {
       "name": "unsupported-version",
       "recoverySecretUtf8": "notebook-core-v2-public-test-secreu",
-      "digestRecomputedAfterMutation": false,
+      "digestRecomputedAfterMutation": true,
       "envelope": {
         "schemaVersion": "libre-ai.notebook-backup.v3",
         "id": "urn:libre-ai:backup:golden-1",
@@ -291,7 +291,7 @@
         },
         "nonce": "EBESExQVFhcYGRob",
         "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrk2NbbuGaxPesIsoXXv0Nr2w==",
-        "digest": "7163e7365e6486785ab9f1510caca7cc74a94aeede02660863f2313248904029"
+        "digest": "e4415f8ef0e586f9f4879c5414176d332d3b9b9d138978615829dbf15742e057"
       },
       "expected": {
         "result": "error",

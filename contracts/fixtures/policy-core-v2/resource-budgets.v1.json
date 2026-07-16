@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "libre-ai.policy-core-resource-budgets.v1",
+  "status": "candidate-preimplementation",
+  "byteLimits": {
+    "policyInput": 8388608,
+    "snapshotInput": 8388608,
+    "needInput": 8388608,
+    "evaluatedAt": 64,
+    "totalJsonInput": 25165824,
+    "successfulOutput": 2097152
+  },
+  "cardinalityLimits": {
+    "rules": 1000,
+    "modelFacts": 1000,
+    "needFacts": 1000,
+    "setMembersPerRule": 100,
+    "setMembersAcrossPolicy": 100000
+  },
+  "cpuQualification": {
+    "ruleOccurrenceEvaluations": 1000000,
+    "setMemberComparisonsPerLookup": 7,
+    "setMemberComparisons": 7000000,
+    "setLookup": "sorted-binary-search-or-equivalent-bounded-lookup",
+    "duplicateDetection": "canonical-hash-or-ordered-index",
+    "wallClockLimit": null,
+    "wallClockRationale": "Set only against the qualified component, runtime and reference hardware; contract-level work remains deterministic."
+  },
+  "memoryQualification": {
+    "peakComponentLinearMemoryBytes": 268435456,
+    "includes": [
+      "WIT input and output copies",
+      "decoded validated values",
+      "fact and set indexes",
+      "canonicalization and hashing scratch",
+      "evaluation result"
+    ],
+    "excludes": ["caller-owned buffers outside component linear memory"]
+  }
+}

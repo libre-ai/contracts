@@ -1,0 +1,150 @@
+{
+  "schemaVersion": "libre-ai.policy-core-raw-input-vectors.v1",
+  "description": "Byte-exact decoder refusals shared by policy-core-v1 and policy-core-v2.",
+  "cases": [
+    {
+      "id": "utf8-bom",
+      "file": "utf8-bom.bin",
+      "inputSha256": "aa25e978046d680ef8740d837e6de5bc1e2a2dc6089dbda1012544b538d53f65",
+      "byteLength": 5,
+      "defect": "bom",
+      "expectedErrors": {
+        "policy-core-v1": {
+          "code": "policy.input_invalid",
+          "message": "input does not conform to policy-core-v1"
+        },
+        "policy-core-v2": {
+          "variant": "input-invalid"
+        }
+      }
+    },
+    {
+      "id": "invalid-utf8",
+      "file": "invalid-utf8.bin",
+      "inputSha256": "a452ad021237e7af393f6432d26969900a9e4047075b776dc8a4383e36ffaffd",
+      "byteLength": 14,
+      "defect": "invalid-utf8",
+      "expectedErrors": {
+        "policy-core-v1": {
+          "code": "policy.input_invalid",
+          "message": "input does not conform to policy-core-v1"
+        },
+        "policy-core-v2": {
+          "variant": "input-invalid"
+        }
+      }
+    },
+    {
+      "id": "duplicate-object-member",
+      "file": "duplicate-object-member.bin",
+      "inputSha256": "eef30767818f537ae9974973d0b89e7b5b995cc5d0cf01cc2e304513468a93b9",
+      "byteLength": 22,
+      "defect": "duplicate-member",
+      "expectedErrors": {
+        "policy-core-v1": {
+          "code": "policy.input_invalid",
+          "message": "input does not conform to policy-core-v1"
+        },
+        "policy-core-v2": {
+          "variant": "input-invalid"
+        }
+      }
+    },
+    {
+      "id": "unpaired-high-surrogate",
+      "file": "unpaired-high-surrogate.bin",
+      "inputSha256": "c3c0f6e73919dc685c0a333f2160a12cbc94663790ff525abd109f1ceedcf00b",
+      "byteLength": 18,
+      "defect": "unpaired-surrogate",
+      "expectedErrors": {
+        "policy-core-v1": {
+          "code": "policy.input_invalid",
+          "message": "input does not conform to policy-core-v1"
+        },
+        "policy-core-v2": {
+          "variant": "input-invalid"
+        }
+      }
+    },
+    {
+      "id": "unpaired-low-surrogate",
+      "file": "unpaired-low-surrogate.bin",
+      "inputSha256": "c12f9aef893dd8f4ac8e3df305685220562af5c576b9c145eeac74be2fe53160",
+      "byteLength": 18,
+      "defect": "unpaired-surrogate",
+      "expectedErrors": {
+        "policy-core-v1": {
+          "code": "policy.input_invalid",
+          "message": "input does not conform to policy-core-v1"
+        },
+        "policy-core-v2": {
+          "variant": "input-invalid"
+        }
+      }
+    },
+    {
+      "id": "invalid-number-leading-zero",
+      "file": "invalid-number-leading-zero.bin",
+      "inputSha256": "cc7c115896e02faf43b57f3f5ee079206a25ae9a00ed0170ffb1e329d4e2416a",
+      "byteLength": 12,
+      "defect": "invalid-number",
+      "expectedErrors": {
+        "policy-core-v1": {
+          "code": "policy.input_invalid",
+          "message": "input does not conform to policy-core-v1"
+        },
+        "policy-core-v2": {
+          "variant": "input-invalid"
+        }
+      }
+    },
+    {
+      "id": "invalid-number-plus-sign",
+      "file": "invalid-number-plus-sign.bin",
+      "inputSha256": "2d13d8d574884095d46cdb8f6b401983fa350a3bfac079c314570ccfd1c95e57",
+      "byteLength": 12,
+      "defect": "invalid-number",
+      "expectedErrors": {
+        "policy-core-v1": {
+          "code": "policy.input_invalid",
+          "message": "input does not conform to policy-core-v1"
+        },
+        "policy-core-v2": {
+          "variant": "input-invalid"
+        }
+      }
+    },
+    {
+      "id": "invalid-number-nan",
+      "file": "invalid-number-nan.bin",
+      "inputSha256": "159f99e03ec6dfb7edcad87bac613ac97a235493ad8b79b33cfa4002fb4477f8",
+      "byteLength": 13,
+      "defect": "invalid-number",
+      "expectedErrors": {
+        "policy-core-v1": {
+          "code": "policy.input_invalid",
+          "message": "input does not conform to policy-core-v1"
+        },
+        "policy-core-v2": {
+          "variant": "input-invalid"
+        }
+      }
+    },
+    {
+      "id": "invalid-number-trailing-decimal",
+      "file": "invalid-number-trailing-decimal.bin",
+      "inputSha256": "07860f78431ccaf010ed6a3ae44ad279807ea0eaff2bd2885ee4e0db21855409",
+      "byteLength": 12,
+      "defect": "invalid-number",
+      "expectedErrors": {
+        "policy-core-v1": {
+          "code": "policy.input_invalid",
+          "message": "input does not conform to policy-core-v1"
+        },
+        "policy-core-v2": {
+          "variant": "input-invalid"
+        }
+      }
+    }
+  ]
+}
