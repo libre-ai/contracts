@@ -579,6 +579,193 @@
         }
       ],
       "expectedError": "response-invalid"
+    },
+    {
+      "id": "zero-answer-is-not-skip",
+      "baseCase": "excluded-abstentions-positive-agreement",
+      "patches": [
+        {
+          "op": "replace",
+          "path": "/responses/responses/0/value",
+          "value": 0
+        }
+      ],
+      "expected": {
+        "schemaVersion": "libre-ai.local-comparison.v2",
+        "datasetId": "urn:libre-ai:dataset:votes-unit",
+        "datasetDigest": "1566d617f0ecf3e5037d061dd85d581fc024f22737dfd87aa77837f41a30f148",
+        "methodId": "urn:libre-ai:method:method-unit",
+        "methodDigest": "86afa940e36b8d2ff452ef6b2a7b93ae50e334b90ab9d2a7799a2f586312ee1a",
+        "responseSetDigest": "8ef928529d9dd69dbd20fbb941f47331f9e703407ba5579cde3563bec5419c59",
+        "score": 0,
+        "denominator": 15,
+        "omitted": 3,
+        "contributions": [
+          {
+            "statementId": "statement_1",
+            "contribution": 0,
+            "votesConsidered": 15,
+            "votesOmitted": 3
+          }
+        ],
+        "computedAt": "2026-07-16T00:00:00Z"
+      }
+    },
+    {
+      "id": "intermediate-scale-normalization",
+      "input": {
+        "dataset": {
+          "schemaVersion": "libre-ai.public-vote-dataset.v2",
+          "id": "urn:libre-ai:dataset:votes-intermediate-scale",
+          "version": "2.0.0",
+          "scope": "Vote public de démonstration",
+          "methodId": "urn:libre-ai:method:method-intermediate-scale",
+          "methodDigest": "69cd329368d7529132bf058eb34001906a01728e423394a865eb147f2cf8cf84",
+          "statements": [
+            {
+              "id": "statement_1",
+              "wording": "Proposition sourcée statement_1",
+              "source": {
+                "uri": "https://example.org/vote/statement_1",
+                "retrievedAt": "2026-07-16T00:00:00Z",
+                "digest": "7114a5f1ab8f072738e138c5f0770deda0f60feee640e115b6523338d5ec731c",
+                "licence": "Etalab-2.0"
+              },
+              "votesFor": 10,
+              "votesAgainst": 5,
+              "abstentions": 2,
+              "absent": 1
+            }
+          ],
+          "publishedAt": "2026-07-16T00:00:00Z",
+          "digest": "51cf7ccf8ae5555f89e4db80f471b531923c30d425c95fcfac4e47f2c3d7b063",
+          "approvals": [
+            {
+              "role": "methodological-review",
+              "actorKind": "human",
+              "reviewerId": "method_reviewer",
+              "approvedAt": "2026-07-16T00:00:00Z",
+              "reference": "urn:libre-ai:approval:dataset-intermediate-1",
+              "subjectDigest": "51cf7ccf8ae5555f89e4db80f471b531923c30d425c95fcfac4e47f2c3d7b063"
+            },
+            {
+              "role": "legal-privacy-review",
+              "actorKind": "human",
+              "reviewerId": "privacy_reviewer",
+              "approvedAt": "2026-07-16T00:00:00Z",
+              "reference": "urn:libre-ai:approval:dataset-intermediate-2",
+              "subjectDigest": "51cf7ccf8ae5555f89e4db80f471b531923c30d425c95fcfac4e47f2c3d7b063"
+            }
+          ]
+        },
+        "method": {
+          "schemaVersion": "libre-ai.boussole-method.v2",
+          "id": "urn:libre-ai:method:method-intermediate-scale",
+          "version": "2.0.0",
+          "responseScale": [-5, -2, 0, 2, 5],
+          "abstentionTreatment": "excluded-from-denominator",
+          "missingTreatment": "excluded-and-reported",
+          "formula": "normalized-agreement-v2",
+          "rounding": "decimal-6-half-even",
+          "approvedAt": "2026-07-16T00:00:00Z",
+          "digest": "69cd329368d7529132bf058eb34001906a01728e423394a865eb147f2cf8cf84",
+          "approvals": [
+            {
+              "role": "methodological-review",
+              "actorKind": "human",
+              "reviewerId": "method_reviewer",
+              "approvedAt": "2026-07-16T00:00:00Z",
+              "reference": "urn:libre-ai:approval:method-intermediate-1",
+              "subjectDigest": "69cd329368d7529132bf058eb34001906a01728e423394a865eb147f2cf8cf84"
+            },
+            {
+              "role": "legal-privacy-review",
+              "actorKind": "human",
+              "reviewerId": "privacy_reviewer",
+              "approvedAt": "2026-07-16T00:00:00Z",
+              "reference": "urn:libre-ai:approval:method-intermediate-2",
+              "subjectDigest": "69cd329368d7529132bf058eb34001906a01728e423394a865eb147f2cf8cf84"
+            }
+          ]
+        },
+        "responses": {
+          "schemaVersion": "libre-ai.boussole-response-set.v2",
+          "datasetId": "urn:libre-ai:dataset:votes-intermediate-scale",
+          "datasetDigest": "51cf7ccf8ae5555f89e4db80f471b531923c30d425c95fcfac4e47f2c3d7b063",
+          "methodId": "urn:libre-ai:method:method-intermediate-scale",
+          "methodDigest": "69cd329368d7529132bf058eb34001906a01728e423394a865eb147f2cf8cf84",
+          "responses": [
+            {
+              "statementId": "statement_1",
+              "kind": "answer",
+              "value": 2
+            }
+          ]
+        },
+        "computedAt": "2026-07-16T00:00:00Z"
+      },
+      "expected": {
+        "schemaVersion": "libre-ai.local-comparison.v2",
+        "datasetId": "urn:libre-ai:dataset:votes-intermediate-scale",
+        "datasetDigest": "51cf7ccf8ae5555f89e4db80f471b531923c30d425c95fcfac4e47f2c3d7b063",
+        "methodId": "urn:libre-ai:method:method-intermediate-scale",
+        "methodDigest": "69cd329368d7529132bf058eb34001906a01728e423394a865eb147f2cf8cf84",
+        "responseSetDigest": "cc81ceae0c999edfcaf7ef60cc7129d72ca23c54fca2c5d2f8a870e3dffe9d26",
+        "score": 0.133333,
+        "denominator": 15,
+        "omitted": 3,
+        "contributions": [
+          {
+            "statementId": "statement_1",
+            "contribution": 0.133333,
+            "votesConsidered": 15,
+            "votesOmitted": 3
+          }
+        ],
+        "computedAt": "2026-07-16T00:00:00Z"
+      }
+    },
+    {
+      "id": "negative-half-even-boundaries",
+      "baseCase": "half-even-boundaries",
+      "patches": [
+        {
+          "op": "replace",
+          "path": "/responses/responses/0/value",
+          "value": -1
+        },
+        {
+          "op": "replace",
+          "path": "/responses/responses/1/value",
+          "value": -1
+        }
+      ],
+      "expected": {
+        "schemaVersion": "libre-ai.local-comparison.v2",
+        "datasetId": "urn:libre-ai:dataset:votes-half-even",
+        "datasetDigest": "54cae0611d649b25de0c44d32f105b7d80f1339f40356db6b9c6855908f304b3",
+        "methodId": "urn:libre-ai:method:method-half-even",
+        "methodDigest": "0f271c5ba8b0d6f0d410b6a5731e27c7f80711f9f23dd8aface050973045245d",
+        "responseSetDigest": "0af285fac0a9899102d8ca8e7083feaa2a66963629e4ea94bdf65b983733c987",
+        "score": -1e-6,
+        "denominator": 8000000,
+        "omitted": 0,
+        "contributions": [
+          {
+            "statementId": "statement_even_down",
+            "contribution": 0,
+            "votesConsidered": 4000000,
+            "votesOmitted": 0
+          },
+          {
+            "statementId": "statement_odd_up",
+            "contribution": -2e-6,
+            "votesConsidered": 4000000,
+            "votesOmitted": 0
+          }
+        ],
+        "computedAt": "2026-07-16T00:00:00Z"
+      }
     }
   ]
 }
