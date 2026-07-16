@@ -4,15 +4,18 @@ Machine authority: [`catalog.v1.json`](catalog.v1.json).
 
 | Family | Count | Authority | Compatibility |
 | --- | ---: | --- | --- |
-| JSON Schema 2020-12 | 26 | `contracts/schemas/` | strict payloads; additive v1 only through coordinated producer/consumer qualification |
-| OpenAPI 3.1 | 7 | `contracts/openapi/` | additive routes/operations; existing payloads remain strict |
+| JSON Schema 2020-12 | 29 | `contracts/schemas/` | strict payloads; additive v1 only through coordinated producer/consumer qualification |
+| Retention policy | 1 | `contracts/data/` | exact ADR-0002 lifecycle projection |
+| OpenAPI 3.1 | 8 | `contracts/openapi/` | additive routes/operations; existing payloads remain strict |
 | WIT worlds | 5 | `contracts/wit/` | exact major-versioned component boundary |
-| Biscuit policies | 2 | `contracts/authz/` | exact major-versioned authorizer policy |
+| Biscuit authority/policies | 3 | `contracts/authz/` | minimal authority plus deny-by-default authorizers |
 
 The catalog records one ID, path, owner set, consumer set, classification, compatibility mode and lock status for every contract. Uncataloged files and missing authorities fail `bun run check:contracts`.
 
 ## Shared contracts
 
+- `browser-session.v1`: opaque server-side browser session record ;
+- `retention-policy.v1` and `deletion-receipt.v1`: executable lifecycle and deletion evidence ;
 - `problem-details.v1`: stable HTTP refusal envelope ;
 - `evidence-report.v1`: attributable gate results ;
 - `artifact-manifest.v1`: content-addressed release/export/evidence files ;

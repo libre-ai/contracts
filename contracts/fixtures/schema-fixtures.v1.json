@@ -593,6 +593,108 @@
           "value": "accepted"
         }
       ]
+    },
+    {
+      "schema": "browser-session.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.browser-session.v1",
+        "id": "urn:libre-ai:session:browser-1",
+        "sessionDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "userId": "usr_1234567890abcdef",
+        "tenantId": "ten_1234567890abcdef",
+        "roles": ["participant"],
+        "membershipRevision": 1,
+        "oidc": {
+          "issuer": "https://identity.example.org",
+          "subjectDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "authenticatedAt": "2026-07-16T00:00:00Z"
+        },
+        "csrfSecretDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "status": "active",
+        "createdAt": "2026-07-16T00:00:00Z",
+        "lastSeenAt": "2026-07-16T00:10:00Z",
+        "idleExpiresAt": "2026-07-16T00:40:00Z",
+        "absoluteExpiresAt": "2026-07-16T12:00:00Z",
+        "revision": 1
+      },
+      "invalidMutations": [
+        { "name": "public tenant on private session", "path": "/tenantId", "value": "public" },
+        { "name": "raw cookie persisted", "path": "/cookie", "value": "forbidden" },
+        {
+          "name": "active session carrying revocation time",
+          "path": "/revokedAt",
+          "value": "2026-07-16T00:20:00Z"
+        },
+        {
+          "name": "revoked session without revocation evidence",
+          "path": "/status",
+          "value": "revoked"
+        }
+      ]
+    },
+    {
+      "schema": "deletion-receipt.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.deletion-receipt.v1",
+        "id": "urn:libre-ai:deletion:receipt-1",
+        "tenantId": "ten_1234567890abcdef",
+        "owner": "radar",
+        "subjectDigests": ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"],
+        "requestedBy": "usr_1234567890abcdef",
+        "requestedAt": "2026-07-16T00:00:00Z",
+        "completedAt": "2026-07-16T00:00:01Z",
+        "status": "complete",
+        "stores": [{ "store": "postgresql", "outcome": "deleted" }],
+        "backupExpiresAt": "2026-08-20T00:00:00Z"
+      },
+      "invalidMutations": [
+        {
+          "name": "complete receipt with blocked store",
+          "path": "/stores/0/outcome",
+          "value": "blocked"
+        },
+        {
+          "name": "complete receipt without backup ceiling",
+          "path": "/backupExpiresAt",
+          "remove": true
+        },
+        {
+          "name": "complete receipt carrying a legal hold",
+          "path": "/legalHold",
+          "value": {
+            "reasonCode": "legal-hold.pending-case",
+            "authority": "urn:libre-ai:decision:hold-1",
+            "expiresAt": "2026-08-16T00:00:00Z"
+          }
+        }
+      ]
+    },
+    {
+      "schema": "retention-policy.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.retention-policy.v1",
+        "authority": "urn:libre-ai:decision:adr-0002-retention",
+        "approvedAt": "2026-07-16T00:00:00Z",
+        "backupExpiry": "P35D",
+        "rules": [
+          {
+            "id": "test-retention",
+            "owner": "operations",
+            "dataClass": "test-record",
+            "location": "logs",
+            "mode": "fixed",
+            "trigger": "creation",
+            "defaultRetention": "P30D"
+          }
+        ]
+      },
+      "invalidMutations": [
+        {
+          "name": "fixed rule without duration",
+          "path": "/rules/0/defaultRetention",
+          "remove": true
+        }
+      ]
     }
   ]
 }

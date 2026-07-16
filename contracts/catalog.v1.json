@@ -22,6 +22,36 @@
       "status": "locked"
     },
     {
+      "id": "browser-session-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/browser-session.v1.schema.json",
+      "owners": ["auth-web"],
+      "consumers": ["web-platform", "authz-biscuit"],
+      "compatibility": "additive-v1",
+      "classification": "internal",
+      "status": "locked"
+    },
+    {
+      "id": "deletion-receipt-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/deletion-receipt.v1.schema.json",
+      "owners": ["canonical-core"],
+      "consumers": ["tenant-applications", "proof"],
+      "compatibility": "additive-v1",
+      "classification": "tenant-private",
+      "status": "locked"
+    },
+    {
+      "id": "retention-policy-schema-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/retention-policy.v1.schema.json",
+      "owners": ["canonical-core"],
+      "consumers": ["tenant-applications", "operations"],
+      "compatibility": "additive-v1",
+      "classification": "public",
+      "status": "locked"
+    },
+    {
       "id": "activity-definition-v1",
       "kind": "json-schema",
       "path": "contracts/schemas/activity-definition.v1.schema.json",
@@ -261,7 +291,27 @@
       "classification": "internal",
       "status": "locked"
     },
+    {
+      "id": "retention-policy-v1",
+      "kind": "data-policy",
+      "path": "contracts/data/retention.v1.json",
+      "owners": ["canonical-core"],
+      "consumers": ["tenant-applications", "operations", "proof"],
+      "compatibility": "major-versioned",
+      "classification": "public",
+      "status": "locked"
+    },
 
+    {
+      "id": "auth-api-v1",
+      "kind": "openapi",
+      "path": "contracts/openapi/auth.v1.yaml",
+      "owners": ["auth-web", "authz-biscuit"],
+      "consumers": ["web-platform", "tenant-applications"],
+      "compatibility": "additive-v1",
+      "classification": "internal",
+      "status": "locked"
+    },
     {
       "id": "website-api-v1",
       "kind": "openapi",
@@ -384,6 +434,16 @@
       "status": "locked"
     },
 
+    {
+      "id": "authority-v1",
+      "kind": "biscuit-authority",
+      "path": "contracts/authz/authority-v1.datalog",
+      "owners": ["authz-biscuit"],
+      "consumers": ["auth-web", "tenant-applications"],
+      "compatibility": "major-versioned",
+      "classification": "internal",
+      "status": "locked"
+    },
     {
       "id": "sessions-authz-v1",
       "kind": "biscuit-policy",

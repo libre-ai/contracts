@@ -6,6 +6,7 @@ JSON Schema, OpenAPI, WIT and Biscuit policies are the only cross-module protoco
 
 - `catalog.v1.json` — machine-readable ownership and compatibility registry ;
 - `schemas/` — strict JSON Schema 2020-12 payloads ;
+- `data/` — approved executable retention policy ;
 - `openapi/` — OpenAPI 3.1 HTTP surfaces and complete domain command/query inventory ;
 - `wit/` — capability-free Rust/WASM component worlds ;
 - `authz/` — deny-by-default Biscuit authorizer policies ;
@@ -23,6 +24,7 @@ OpenAPI `x-libre-ai-domain` lists the complete protocol from each application sp
 - divergence between application protocols and OpenAPI inventory ;
 - unversioned routes, missing idempotency/revision/CSRF or refusal responses ;
 - WIT host imports and malformed package/world conventions ;
-- Biscuit allow rules without user, role and matching tenant, or missing final deny.
+- retention rules diverging from their schema or backup ceiling ;
+- Biscuit authority expansion, token-supplied revocation IDs, allow rules without user/role/matching tenant, or missing final deny.
 
-Cargo tests parse/resolve all WIT worlds with `wit-parser` and parse both Biscuit policy sources with `biscuit-parser`. Security behavior remains subject to end-to-end authorizer vectors when the G2 authz capability is implemented.
+Cargo tests parse/resolve all WIT worlds with `wit-parser` and parse the Biscuit authority plus policy sources with `biscuit-parser`. Security behavior remains subject to end-to-end authorizer vectors when the G2 authz capability is implemented.

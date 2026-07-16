@@ -1,0 +1,399 @@
+openapi: 3.1.0
+info:
+  title: Libre AI Identity and Authorization API
+  version: 1.0.0
+  description: Provider-neutral OIDC browser boundary and server-only Biscuit lifecycle.
+servers:
+  - url: /
+x-libre-ai-domain:
+  commands: [StartOidcLogin, CompleteOidcCallback, CreateBrowserSession, RevokeBrowserSession, IssueBiscuit, AttenuateBiscuit, RevokeBiscuit, RotateSigningKey]
+  queries: [GetBrowserSession, GetBiscuitPublicKeys, GetRevocationStatus]
+paths:
+  /v1/auth/login:
+    post:
+      operationId: startOidcLogin
+      parameters:
+        - $ref: '#/components/parameters/Origin'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [returnPath]
+              properties:
+                returnPath:
+                  type: string
+                  pattern: '^/(?!/)[A-Za-z0-9/_-]*$'
+                  maxLength: 512
+      responses:
+        '200':
+          description: Exact allowlisted authorization URL; transaction cookie is HttpOnly
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [authorizationUrl]
+                properties:
+                  authorizationUrl:
+                    type: string
+                    format: uri
+                    pattern: '^https://'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/auth/callback:
+    get:
+      operationId: completeOidcCallback
+      x-libre-ai-operations: [CompleteOidcCallback, CreateBrowserSession]
+      x-libre-ai-state-changing: true
+      parameters:
+        - name: code
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 16
+            maxLength: 4096
+        - name: state
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 32
+            maxLength: 512
+      responses:
+        '303':
+          description: Validated callback; rotates transaction into Strict application session
+          headers:
+            Location:
+              schema:
+                type: string
+                pattern: '^/(?!/)'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/auth/session:
+    get:
+      operationId: getBrowserSession
+      security:
+        - sessionCookie: []
+      responses:
+        '200':
+          description: Browser-safe session projection without cookie, CSRF or OIDC digests
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [userId, tenantId, roles, idleExpiresAt, absoluteExpiresAt, revision]
+                properties:
+                  userId:
+                    type: string
+                    pattern: '^usr_[a-z0-9]{16,64}$'
+                  tenantId:
+                    type: string
+                    pattern: '^ten_[a-z0-9]{16,64}$'
+                  roles:
+                    type: array
+                    minItems: 1
+                    maxItems: 10
+                    uniqueItems: true
+                    items:
+                      type: string
+                  idleExpiresAt:
+                    type: string
+                    format: date-time
+                  absoluteExpiresAt:
+                    type: string
+                    format: date-time
+                  revision:
+                    type: integer
+                    minimum: 0
+        default:
+          $ref: '#/components/responses/Problem'
+    delete:
+      operationId: revokeBrowserSession
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      responses:
+        '204':
+          description: Server session revoked before cookie clearing
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/internal/biscuits:
+    post:
+      operationId: issueBiscuit
+      security:
+        - internalServiceBiscuit: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [browserSessionId, resource, operations, ttlSeconds]
+              properties:
+                browserSessionId:
+                  type: string
+                  pattern: '^urn:libre-ai:session:'
+                resource:
+                  type: string
+                  minLength: 1
+                  maxLength: 512
+                operations:
+                  type: array
+                  minItems: 1
+                  maxItems: 20
+                  uniqueItems: true
+                  items:
+                    type: string
+                    pattern: '^[a-z][a-z0-9-]{1,63}$'
+                ttlSeconds:
+                  type: integer
+                  minimum: 1
+                  maximum: 900
+      responses:
+        '201':
+          description: Server-only attenuated Biscuit; response body must never be logged
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SerializedBiscuit'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/internal/biscuits/attenuations:
+    post:
+      operationId: attenuateBiscuit
+      security:
+        - internalServiceBiscuit: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [resource, operations, ttlSeconds]
+              properties:
+                resource:
+                  type: string
+                  minLength: 1
+                  maxLength: 512
+                operations:
+                  type: array
+                  minItems: 1
+                  maxItems: 20
+                  uniqueItems: true
+                  items:
+                    type: string
+                    pattern: '^[a-z][a-z0-9-]{1,63}$'
+                ttlSeconds:
+                  type: integer
+                  minimum: 1
+                  maximum: 900
+      responses:
+        '201':
+          description: Strictly attenuated server-only Biscuit
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SerializedBiscuit'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/internal/biscuits/{blockId}/revocation:
+    post:
+      operationId: revokeBiscuit
+      security:
+        - internalServiceBiscuit: []
+      parameters:
+        - $ref: '#/components/parameters/BlockId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [reasonCode, expiresAt]
+              properties:
+                reasonCode:
+                  type: string
+                  pattern: '^auth\.[a-z0-9_.-]+$'
+                expiresAt:
+                  type: string
+                  format: date-time
+      responses:
+        '204':
+          description: Verified root block revoked and local caches invalidated
+        default:
+          $ref: '#/components/responses/Problem'
+    get:
+      operationId: getRevocationStatus
+      security:
+        - internalServiceBiscuit: []
+      parameters:
+        - $ref: '#/components/parameters/BlockId'
+      responses:
+        '200':
+          description: Root block revocation status
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                required: [revoked]
+                properties:
+                  revoked:
+                    type: boolean
+                  reasonCode:
+                    type: string
+                  revokedAt:
+                    type: string
+                    format: date-time
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/internal/biscuit-keys:
+    get:
+      operationId: getBiscuitPublicKeys
+      responses:
+        '200':
+          description: Public Ed25519 verification key set
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 2
+                items:
+                  type: object
+                  additionalProperties: false
+                  required: [keyId, algorithm, publicKey, validFrom, status]
+                  properties:
+                    keyId:
+                      type: string
+                    algorithm:
+                      const: Ed25519
+                    publicKey:
+                      type: string
+                      minLength: 43
+                      maxLength: 128
+                    validFrom:
+                      type: string
+                      format: date-time
+                    validUntil:
+                      type: string
+                      format: date-time
+                    status:
+                      enum: [current, retiring]
+  /v1/internal/biscuit-keys/rotations:
+    post:
+      operationId: rotateSigningKey
+      security:
+        - internalServiceBiscuit: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [approvalReference]
+              properties:
+                approvalReference:
+                  type: string
+                  pattern: '^urn:libre-ai:approval:'
+      responses:
+        '202':
+          description: Two-key rotation started after human approval
+        default:
+          $ref: '#/components/responses/Problem'
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: __Host-libre_ai_session
+    internalServiceBiscuit:
+      type: http
+      scheme: bearer
+      bearerFormat: Biscuit
+  schemas:
+    SerializedBiscuit:
+      type: object
+      additionalProperties: false
+      required: [token, rootBlockId, expiresAt]
+      properties:
+        token:
+          type: string
+          minLength: 64
+          maxLength: 16384
+          readOnly: true
+        rootBlockId:
+          type: string
+          pattern: '^[a-f0-9]{64}$'
+        expiresAt:
+          type: string
+          format: date-time
+  parameters:
+    BlockId:
+      name: blockId
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '^[a-f0-9]{64}$'
+    Origin:
+      name: Origin
+      in: header
+      required: true
+      schema:
+        type: string
+        format: uri
+        pattern: '^https://'
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: '^idem_[a-z0-9]{16,64}$'
+    CsrfToken:
+      name: X-CSRF-Token
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 32
+        maxLength: 256
+    Revision:
+      name: If-Match
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: '^"[0-9]+"$'
+  responses:
+    Problem:
+      description: Stable refusal envelope
+      content:
+        application/problem+json:
+          schema:
+            $ref: ../schemas/problem-details.v1.schema.json

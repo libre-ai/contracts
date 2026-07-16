@@ -3,7 +3,13 @@ import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020"
 import addFormats from "ajv-formats";
 
 type JsonRecord = Record<string, unknown>;
-type ContractKind = "json-schema" | "openapi" | "wit" | "biscuit-policy";
+type ContractKind =
+  | "json-schema"
+  | "data-policy"
+  | "openapi"
+  | "wit"
+  | "biscuit-authority"
+  | "biscuit-policy";
 type CatalogEntry = {
   id: string;
   kind: ContractKind;
@@ -21,6 +27,33 @@ const failures: string[] = [];
 const schemaByName = new Map<string, JsonRecord>();
 const validatorByName = new Map<string, ValidateFunction>();
 const operationIds = new Set<string>();
+const retentionExpectations: Record<string, Record<string, unknown>> = {
+  "browser-session": { mode: "fixed", defaultRetention: "P1D", maximumActiveHours: 12 },
+  "practices-progress": { mode: "until-delete" },
+  "radar-body": { mode: "immediate" },
+  "radar-quarantine": { mode: "fixed", defaultRetention: "P7D" },
+  "radar-normalized": {
+    mode: "fixed",
+    defaultRetention: "P90D",
+    "configurable.minimum": "P7D",
+    "configurable.maximum": "P365D",
+  },
+  "notebook-content": { mode: "until-delete" },
+  "boussole-local": { mode: "until-delete" },
+  "sessions-presence": { mode: "fixed", defaultRetention: "P1D" },
+  "sessions-content": {
+    mode: "fixed",
+    defaultRetention: "P90D",
+    "configurable.minimum": "P7D",
+    "configurable.maximum": "P365D",
+  },
+  "model-snapshot": { mode: "while-referenced", postReferenceRetention: "P5Y" },
+  "spec-package": { mode: "while-referenced", postReferenceRetention: "P5Y" },
+  "mission-record": { mode: "fixed", defaultRetention: "P1Y", "configurable.maximum": "P6Y" },
+  "operational-log": { mode: "fixed", defaultRetention: "P30D" },
+  "proof-artifact": { mode: "while-referenced" },
+  "encrypted-backup": { mode: "fixed", defaultRetention: "P35D" },
+};
 const allowedLocalOperationsByApp: Record<string, string[]> = {
   website: ["CompilePublicCorpus", "PublishStaticCandidate", "InvalidateSearchProjection"],
   practices: [
@@ -50,6 +83,15 @@ function checkArrayBounds(value: unknown, authority: string, pointer = ""): void
         checkArrayBounds(item, authority, `${pointer}/${key}/${index}`);
     }
   }
+}
+
+function propertyAt(value: unknown, dottedPath: string): unknown {
+  let current = value;
+  for (const segment of dottedPath.split(".")) {
+    if (!isRecord(current)) return undefined;
+    current = current[segment];
+  }
+  return current;
 }
 
 function safeErrors(errors: ErrorObject[] | null | undefined): string {
@@ -116,7 +158,15 @@ const entries = (
 ) as CatalogEntry[];
 const ids = new Set<string>();
 const catalogPaths = new Set<string>();
-const kinds = new Set<ContractKind>(["json-schema", "openapi", "wit", "biscuit-policy"]);
+const entryByPath = new Map<string, CatalogEntry>();
+const kinds = new Set<ContractKind>([
+  "json-schema",
+  "data-policy",
+  "openapi",
+  "wit",
+  "biscuit-authority",
+  "biscuit-policy",
+]);
 for (const [index, entry] of entries.entries()) {
   const label = `contracts/catalog.v1.json#/contracts/${index}`;
   if (!isRecord(entry)) {
@@ -137,6 +187,7 @@ for (const [index, entry] of entries.entries()) {
   } else if (catalogPaths.has(entry.path)) failures.push(`${label}: duplicate path ${entry.path}`);
   else {
     catalogPaths.add(entry.path);
+    entryByPath.set(entry.path, entry);
     if (!(await Bun.file(entry.path).exists()))
       failures.push(`${label}: missing authority ${entry.path}`);
   }
@@ -157,13 +208,24 @@ for (const [index, entry] of entries.entries()) {
 const managedPaths = (
   await Promise.all([
     scan("contracts/schemas/*.json"),
+    scan("contracts/data/*.json"),
     scan("contracts/openapi/*.yaml"),
     scan("contracts/wit/*/world.wit"),
     scan("contracts/authz/*.datalog"),
   ])
 ).flat();
-for (const path of managedPaths)
+for (const path of managedPaths) {
   if (!catalogPaths.has(path)) failures.push(`${path}: missing from contract catalog`);
+  const kind = entryByPath.get(path)?.kind;
+  const validKind =
+    (path.startsWith("contracts/schemas/") && kind === "json-schema") ||
+    (path.startsWith("contracts/data/") && kind === "data-policy") ||
+    (path.startsWith("contracts/openapi/") && kind === "openapi") ||
+    (path.startsWith("contracts/wit/") && kind === "wit") ||
+    (path.startsWith("contracts/authz/") &&
+      (kind === "biscuit-authority" || kind === "biscuit-policy"));
+  if (!validKind) failures.push(`${path}: catalog kind does not match authority root`);
+}
 for (const path of catalogPaths)
   if (!managedPaths.includes(path))
     failures.push(`${path}: catalog path is outside a managed contract root`);
@@ -244,6 +306,45 @@ for (const name of schemaByName.keys()) {
     failures.push(`${name}: missing positive/negative fixture pair`);
 }
 
+const retentionValidator = validatorByName.get("retention-policy.v1.schema.json");
+for (const path of managedPaths.filter((item) => item.startsWith("contracts/data/"))) {
+  try {
+    const policy = await Bun.file(path).json();
+    if (!retentionValidator?.(policy)) {
+      failures.push(`${path}: invalid retention policy: ${safeErrors(retentionValidator?.errors)}`);
+      continue;
+    }
+    if (!isRecord(policy)) {
+      failures.push(`${path}: retention policy root must be an object`);
+      continue;
+    }
+    const rules = Array.isArray(policy.rules) ? policy.rules : [];
+    const retentionRules = rules.filter(isRecord);
+    const ruleIds = retentionRules.map((rule) => rule.id);
+    if (new Set(ruleIds).size !== ruleIds.length)
+      failures.push(`${path}: duplicate retention rule id`);
+    if (new Set(ruleIds).size !== Object.keys(retentionExpectations).length)
+      failures.push(`${path}: retention rule inventory diverges from ADR-0002`);
+    for (const [ruleId, expected] of Object.entries(retentionExpectations)) {
+      const rule = retentionRules.find((candidate) => candidate.id === ruleId);
+      if (!rule) {
+        failures.push(`${path}: missing ADR-0002 retention rule ${ruleId}`);
+        continue;
+      }
+      for (const [field, expectedValue] of Object.entries(expected)) {
+        if (propertyAt(rule, field) !== expectedValue)
+          failures.push(`${path}: ${ruleId}.${field} diverges from ADR-0002`);
+      }
+    }
+    const backupRule = rules.find((rule) => isRecord(rule) && rule.id === "encrypted-backup");
+    if (!isRecord(backupRule) || backupRule.defaultRetention !== policy.backupExpiry) {
+      failures.push(`${path}: backup rule diverges from backup expiry ceiling`);
+    }
+  } catch (error) {
+    failures.push(`${path}: invalid JSON: ${String(error)}`);
+  }
+}
+
 const appContractReferences = new Set<string>();
 for (const path of await scan("docs/apps/*.md")) {
   const text = await Bun.file(path).text();
@@ -288,7 +389,10 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/open
   if (JSON.stringify([...localOperations].sort()) !== JSON.stringify(allowedLocal)) {
     failures.push(`${path}: local operation boundary diverges from the accepted application model`);
   }
-  const appPath = `docs/apps/${appName}.md`;
+  const appPath =
+    appName === "auth"
+      ? "docs/specifications/IDENTITY-AUTHORIZATION.md"
+      : `docs/apps/${appName}.md`;
   if (await Bun.file(appPath).exists()) {
     const spec = await Bun.file(appPath).text();
     for (const [label, actual] of [
@@ -300,6 +404,8 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/open
       if (JSON.stringify([...actual].sort()) !== JSON.stringify(expected))
         failures.push(`${path}: ${label.toLowerCase()} diverge from ${appPath}`);
     }
+  } else {
+    failures.push(`${path}: missing protocol authority ${appPath}`);
   }
 
   for (const [route, rawPathItem] of Object.entries(
@@ -326,6 +432,18 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/open
         mappedDomainOperations.add(mapping);
         domainMappingCounts.set(mapping, (domainMappingCounts.get(mapping) ?? 0) + 1);
       }
+      const stateChangingGet = rawOperation["x-libre-ai-state-changing"] === true;
+      if (
+        method === "get" &&
+        mappings.some((mapping) => commands.includes(mapping)) &&
+        !stateChangingGet
+      )
+        failures.push(`${path}:${method}:${route}: command exposed as a non-state-changing GET`);
+      if (
+        stateChangingGet &&
+        !(path.endsWith("/auth.v1.yaml") && route === "/v1/auth/callback" && method === "get")
+      )
+        failures.push(`${path}:${method}:${route}: unauthorized state-changing GET exception`);
       if (!isRecord(rawOperation.responses) || Object.keys(rawOperation.responses).length === 0)
         failures.push(`${path}:${method}:${route}: no responses`);
       if (method !== "get") {
@@ -409,16 +527,32 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/auth
     .split("\n")
     .map((line) => line.trim())
     .filter((line) => line.length > 0 && !line.startsWith("//"));
-  if (executableLines.at(-1) !== "deny if true;")
-    failures.push(`${path}: final deny-by-default policy missing`);
-  for (const line of executableLines.filter((item) => item.startsWith("allow if "))) {
-    for (const fact of [
-      "user($user)",
-      "tenant($tenant)",
-      "resource_tenant($tenant)",
-      "role($user,",
+  if (entryByPath.get(path)?.kind === "biscuit-authority") {
+    for (const required of [
+      "user({user});",
+      "tenant({tenant});",
+      "role({user}, {role});",
+      "check if time($time), $time < {expires_at};",
     ]) {
-      if (!line.includes(fact)) failures.push(`${path}: allow rule misses ${fact}`);
+      if (!executableLines.includes(required))
+        failures.push(`${path}: authority template misses ${required}`);
+    }
+    if (executableLines.some((line) => /^(?:allow|deny) if /.test(line)))
+      failures.push(`${path}: authority block must not contain authorizer policies`);
+    if (text.includes("token_id"))
+      failures.push(`${path}: token-supplied revocation identifier forbidden`);
+  } else {
+    if (executableLines.at(-1) !== "deny if true;")
+      failures.push(`${path}: final deny-by-default policy missing`);
+    for (const line of executableLines.filter((item) => item.startsWith("allow if "))) {
+      for (const fact of [
+        "user($user)",
+        "tenant($tenant)",
+        "resource_tenant($tenant)",
+        "role($user,",
+      ]) {
+        if (!line.includes(fact)) failures.push(`${path}: allow rule misses ${fact}`);
+      }
     }
   }
   if (/\b(?:email|password|secret|token_value)\b/i.test(text))

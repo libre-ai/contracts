@@ -1,0 +1,142 @@
+{
+  "schemaVersion": "libre-ai.retention-policy.v1",
+  "authority": "urn:libre-ai:decision:adr-0002-retention",
+  "approvedAt": "2026-07-16T00:00:00Z",
+  "backupExpiry": "P35D",
+  "rules": [
+    {
+      "id": "browser-session",
+      "owner": "auth-web",
+      "dataClass": "browser-session-and-revocation",
+      "location": "postgresql",
+      "mode": "fixed",
+      "trigger": "expiry",
+      "defaultRetention": "P1D",
+      "maximumActiveHours": 12
+    },
+    {
+      "id": "practices-progress",
+      "owner": "practices",
+      "dataClass": "learner-progress",
+      "location": "local",
+      "mode": "until-delete",
+      "trigger": "explicit-delete"
+    },
+    {
+      "id": "radar-body",
+      "owner": "radar",
+      "dataClass": "untrusted-fetch-body",
+      "location": "memory",
+      "mode": "immediate",
+      "trigger": "normalization"
+    },
+    {
+      "id": "radar-quarantine",
+      "owner": "radar",
+      "dataClass": "failed-fetch-quarantine",
+      "location": "cellar",
+      "mode": "fixed",
+      "trigger": "failure",
+      "defaultRetention": "P7D"
+    },
+    {
+      "id": "radar-normalized",
+      "owner": "radar",
+      "dataClass": "normalized-item-and-decision",
+      "location": "postgresql",
+      "mode": "fixed",
+      "trigger": "creation",
+      "defaultRetention": "P90D",
+      "configurable": { "minimum": "P7D", "maximum": "P365D" }
+    },
+    {
+      "id": "notebook-content",
+      "owner": "notebook",
+      "dataClass": "block-link-index",
+      "location": "local",
+      "mode": "until-delete",
+      "trigger": "explicit-delete"
+    },
+    {
+      "id": "boussole-local",
+      "owner": "boussole",
+      "dataClass": "response-and-result",
+      "location": "local",
+      "mode": "until-delete",
+      "trigger": "explicit-delete"
+    },
+    {
+      "id": "sessions-presence",
+      "owner": "sessions",
+      "dataClass": "participant-presence",
+      "location": "redis",
+      "mode": "fixed",
+      "trigger": "last-seen",
+      "defaultRetention": "P1D"
+    },
+    {
+      "id": "sessions-content",
+      "owner": "sessions",
+      "dataClass": "session-content-and-outcome",
+      "location": "postgresql",
+      "mode": "fixed",
+      "trigger": "creation",
+      "defaultRetention": "P90D",
+      "configurable": { "minimum": "P7D", "maximum": "P365D" }
+    },
+    {
+      "id": "model-snapshot",
+      "owner": "model-policy",
+      "dataClass": "accepted-model-snapshot",
+      "location": "postgresql",
+      "mode": "while-referenced",
+      "trigger": "reference-release",
+      "postReferenceRetention": "P5Y"
+    },
+    {
+      "id": "spec-package",
+      "owner": "specifications",
+      "dataClass": "accepted-spec-package",
+      "location": "postgresql",
+      "mode": "while-referenced",
+      "trigger": "reference-release",
+      "postReferenceRetention": "P5Y"
+    },
+    {
+      "id": "mission-record",
+      "owner": "missions",
+      "dataClass": "mission-event-and-evidence-reference",
+      "location": "postgresql",
+      "mode": "fixed",
+      "trigger": "creation",
+      "defaultRetention": "P1Y",
+      "configurable": { "maximum": "P6Y" }
+    },
+    {
+      "id": "operational-log",
+      "owner": "operations",
+      "dataClass": "content-free-operational-log",
+      "location": "logs",
+      "mode": "fixed",
+      "trigger": "creation",
+      "defaultRetention": "P30D"
+    },
+    {
+      "id": "proof-artifact",
+      "owner": "proof-artifact",
+      "dataClass": "proof-and-artifact-manifest",
+      "location": "postgresql",
+      "mode": "while-referenced",
+      "trigger": "reference-release"
+    },
+    {
+      "id": "encrypted-backup",
+      "owner": "backup",
+      "dataClass": "encrypted-disaster-recovery-snapshot",
+      "location": "backup",
+      "mode": "fixed",
+      "trigger": "creation",
+      "defaultRetention": "P35D"
+    }
+  ]
+}

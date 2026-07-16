@@ -7,6 +7,10 @@
 - `additive-v1` permits an optional field only through a coordinated monorepo change: all consumers qualify the new schema before any producer emits the field. There is no mixed-version production rollout during the Big Bang.
 - Consumers read an older payload only through an explicit bounded adapter with fixtures and deletion criteria. Producers emit one current version.
 
+## Data policy
+
+The accepted retention policy is exact and major-versioned. A shorter tenant-selected value within an existing bound is runtime data, not a contract change. Changing a default/maximum, adding a server data class or extending retention requires ADR/privacy review and a new policy candidate with deletion/migration evidence.
+
 ## HTTP APIs
 
 A new route, operation or optional request/response field may remain in v1 if it does not alter existing semantics and follows the coordinated rule above. Every mutation keeps idempotency key, expected revision, stable refusal envelope and CSRF protection for cookie-authenticated browsers. Removing an operation or changing a refusal/authorization meaning requires v2.
