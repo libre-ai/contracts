@@ -264,7 +264,7 @@ ordered trace.
 - `contracts/fixtures/policy-core-v2/operators.json` is the atomic operator/type
   corpus;
 - `contracts/fixtures/policy-core-v2/golden.json` contains complete cross-runtime
-  evaluations and contract-error vectors;
+  evaluations and closed WIT `error-code` vectors;
 - `contracts/fixtures/policy-core-v2/resource-budgets.v1.json` fixes byte,
   cardinality, semantic-work and peak-memory qualification ceilings.
 

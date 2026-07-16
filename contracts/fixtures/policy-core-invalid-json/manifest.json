@@ -14,8 +14,7 @@
           "message": "input does not conform to policy-core-v1"
         },
         "policy-core-v2": {
-          "code": "policy.input_invalid",
-          "message": "input does not conform to policy-core-v2"
+          "variant": "input-invalid"
         }
       }
     },
@@ -31,8 +30,7 @@
           "message": "input does not conform to policy-core-v1"
         },
         "policy-core-v2": {
-          "code": "policy.input_invalid",
-          "message": "input does not conform to policy-core-v2"
+          "variant": "input-invalid"
         }
       }
     },
@@ -48,8 +46,7 @@
           "message": "input does not conform to policy-core-v1"
         },
         "policy-core-v2": {
-          "code": "policy.input_invalid",
-          "message": "input does not conform to policy-core-v2"
+          "variant": "input-invalid"
         }
       }
     },
@@ -65,8 +62,7 @@
           "message": "input does not conform to policy-core-v1"
         },
         "policy-core-v2": {
-          "code": "policy.input_invalid",
-          "message": "input does not conform to policy-core-v2"
+          "variant": "input-invalid"
         }
       }
     },
@@ -82,8 +78,7 @@
           "message": "input does not conform to policy-core-v1"
         },
         "policy-core-v2": {
-          "code": "policy.input_invalid",
-          "message": "input does not conform to policy-core-v2"
+          "variant": "input-invalid"
         }
       }
     },
@@ -99,8 +94,7 @@
           "message": "input does not conform to policy-core-v1"
         },
         "policy-core-v2": {
-          "code": "policy.input_invalid",
-          "message": "input does not conform to policy-core-v2"
+          "variant": "input-invalid"
         }
       }
     },
@@ -116,8 +110,7 @@
           "message": "input does not conform to policy-core-v1"
         },
         "policy-core-v2": {
-          "code": "policy.input_invalid",
-          "message": "input does not conform to policy-core-v2"
+          "variant": "input-invalid"
         }
       }
     },
@@ -133,8 +126,7 @@
           "message": "input does not conform to policy-core-v1"
         },
         "policy-core-v2": {
-          "code": "policy.input_invalid",
-          "message": "input does not conform to policy-core-v2"
+          "variant": "input-invalid"
         }
       }
     },
@@ -150,8 +142,7 @@
           "message": "input does not conform to policy-core-v1"
         },
         "policy-core-v2": {
-          "code": "policy.input_invalid",
-          "message": "input does not conform to policy-core-v2"
+          "variant": "input-invalid"
         }
       }
     }

@@ -1370,7 +1370,7 @@
       },
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedError": {
-        "code": "policy.tenant_mismatch"
+        "variant": "tenant-mismatch"
       }
     },
     {
@@ -1452,7 +1452,7 @@
       },
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedError": {
-        "code": "policy.input_invalid"
+        "variant": "input-invalid"
       }
     },
     {
@@ -1713,7 +1713,7 @@
             "id": "fractional_score",
             "fact": "model.score",
             "operator": "at-least",
-            "value": 1e-6,
+            "value": 0.000001,
             "unknown": "indeterminate",
             "source": {
               "uri": "https://example.org/policy/method",
@@ -1743,7 +1743,7 @@
         "facts": [
           {
             "name": "model.score",
-            "value": 1e-6,
+            "value": 0.000001,
             "source": {
               "uri": "https://example.org/evidence/d",
               "retrievedAt": "2026-07-16T00:00:00Z",
@@ -1881,7 +1881,151 @@
       },
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedError": {
-        "code": "policy.rule_id_duplicate"
+        "variant": "rule-id-duplicate"
+      }
+    },
+    {
+      "id": "evaluated-at-invalid",
+      "policy": {
+        "schemaVersion": "libre-ai.policy-definition.v2",
+        "id": "urn:libre-ai:policy:fractional-number-jcs",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "proposedBy": "policy_author",
+        "rules": [
+          {
+            "id": "fractional_score",
+            "fact": "model.score",
+            "operator": "at-least",
+            "value": 0.000001,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "3cd7113397a3fbcc314b2c726bffcd59736f200e57d0f1931d1cbb2f145f763e",
+        "approvedAt": "2026-01-02T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "actorKind": "human",
+          "approverId": "policy_reviewer",
+          "approvedAt": "2026-01-02T00:00:00Z",
+          "reference": "urn:libre-ai:approval:fractional-number-jcs",
+          "subjectDigest": "3cd7113397a3fbcc314b2c726bffcd59736f200e57d0f1931d1cbb2f145f763e"
+        }
+      },
+      "snapshot": {
+        "schemaVersion": "libre-ai.model-snapshot.v2",
+        "id": "urn:libre-ai:snapshot:fractional-number-jcs",
+        "tenantId": "ten_1234567890abcdef",
+        "modelId": "model-fractional-number-jcs",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "model.score",
+            "value": 0.000001,
+            "source": {
+              "uri": "https://example.org/evidence/d",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "ae2e21cf6f5fbd086dd345ad6296924500196e50960ef91f1f361d9476214d52"
+      },
+      "need": {
+        "schemaVersion": "libre-ai.policy-need.v2",
+        "id": "urn:libre-ai:need:fractional-number-jcs",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          {
+            "name": "need.task",
+            "value": "summary"
+          }
+        ],
+        "digest": "e7089b8cfd2c15dda71d487a8052978a3aa284267b813c33b26676ed74c621a7"
+      },
+      "evaluatedAt": "2026-02-30T00:00:00Z",
+      "expectedError": {
+        "variant": "evaluated-at-invalid"
+      }
+    },
+    {
+      "id": "digest-mismatch",
+      "policy": {
+        "schemaVersion": "libre-ai.policy-definition.v2",
+        "id": "urn:libre-ai:policy:fractional-number-jcs",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "proposedBy": "policy_author",
+        "rules": [
+          {
+            "id": "fractional_score",
+            "fact": "model.score",
+            "operator": "at-least",
+            "value": 0.000001,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "3cd7113397a3fbcc314b2c726bffcd59736f200e57d0f1931d1cbb2f145f763e",
+        "approvedAt": "2026-01-02T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "actorKind": "human",
+          "approverId": "policy_reviewer",
+          "approvedAt": "2026-01-02T00:00:00Z",
+          "reference": "urn:libre-ai:approval:fractional-number-jcs",
+          "subjectDigest": "3cd7113397a3fbcc314b2c726bffcd59736f200e57d0f1931d1cbb2f145f763e"
+        }
+      },
+      "snapshot": {
+        "schemaVersion": "libre-ai.model-snapshot.v2",
+        "id": "urn:libre-ai:snapshot:fractional-number-jcs",
+        "tenantId": "ten_1234567890abcdef",
+        "modelId": "model-fractional-number-jcs",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "model.score",
+            "value": 0.000001,
+            "source": {
+              "uri": "https://example.org/evidence/d",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "need": {
+        "schemaVersion": "libre-ai.policy-need.v2",
+        "id": "urn:libre-ai:need:fractional-number-jcs",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          {
+            "name": "need.task",
+            "value": "summary"
+          }
+        ],
+        "digest": "e7089b8cfd2c15dda71d487a8052978a3aa284267b813c33b26676ed74c621a7"
+      },
+      "evaluatedAt": "2026-07-17T00:00:00Z",
+      "expectedError": {
+        "variant": "digest-mismatch"
       }
     },
     {
@@ -2143,7 +2287,7 @@
       },
       "evaluatedAt": "2026-07-17T00:00:00Z",
       "expectedError": {
-        "code": "policy.approval_invalid"
+        "variant": "approval-invalid"
       }
     }
   ]
