@@ -1,0 +1,598 @@
+{
+  "schemaVersion": "libre-ai.schema-fixtures.v1",
+  "cases": [
+    {
+      "schema": "problem-details.v1.schema.json",
+      "valid": {
+        "error": {
+          "code": "mission.approval_required",
+          "message": "Human approval is required",
+          "requestId": "req_1234567890abcdef"
+        }
+      },
+      "invalidMutations": [
+        { "name": "unstable error code", "path": "/error/code", "value": "INVALID" }
+      ]
+    },
+    {
+      "schema": "evidence-report.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.evidence-report.v1",
+        "id": "urn:libre-ai:evidence:report-1",
+        "subject": "urn:libre-ai:artifact:subject-1",
+        "subjectDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "status": "pass",
+        "checks": [{ "id": "check-1", "status": "pass", "ruleVersion": "1.0.0" }],
+        "generatedAt": "2026-07-16T00:00:00Z",
+        "producer": { "name": "contract-test", "version": "1.0.0" }
+      },
+      "invalidMutations": [
+        { "name": "unknown check status", "path": "/checks/0/status", "value": "success" },
+        { "name": "passing report with failed check", "path": "/checks/0/status", "value": "fail" }
+      ]
+    },
+    {
+      "schema": "artifact-manifest.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.artifact-manifest.v1",
+        "id": "urn:libre-ai:artifact:release-1",
+        "artifactType": "release",
+        "createdAt": "2026-07-16T00:00:00Z",
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "files": [
+          {
+            "path": "dist/index.html",
+            "size": 42,
+            "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mediaType": "text/html"
+          }
+        ],
+        "evidenceReport": {
+          "id": "urn:libre-ai:evidence:report-1",
+          "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "mediaType": "application/json"
+        }
+      },
+      "invalidMutations": [
+        { "name": "path traversal", "path": "/files/0/path", "value": "../secret" }
+      ]
+    },
+    {
+      "schema": "agent-handoff.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.agent-handoff.v1",
+        "id": "urn:libre-ai:handoff:handoff-1",
+        "tenantId": "ten_1234567890abcdef",
+        "specPackageId": "urn:libre-ai:spec:package-1",
+        "specPackageDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "capabilities": ["plan"],
+        "acceptanceCriteria": ["criterion_1"],
+        "createdAt": "2026-07-16T00:00:00Z",
+        "expiresAt": "2026-07-17T00:00:00Z"
+      },
+      "invalidMutations": [
+        { "name": "execution capability", "path": "/capabilities/0", "value": "execute" },
+        { "name": "public tenant on private handoff", "path": "/tenantId", "value": "public" }
+      ]
+    },
+    {
+      "schema": "public-projection.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.public-projection.v1",
+        "id": "urn:libre-ai:projection:home",
+        "route": "/",
+        "locale": "fr",
+        "title": "Libre AI",
+        "summary": "Projection publique revue",
+        "sourceDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "reviewedAt": "2026-07-16T00:00:00Z",
+        "claims": [
+          {
+            "id": "claim_1",
+            "text": "Un fait sourcé",
+            "sources": [
+              {
+                "uri": "https://example.org/source",
+                "retrievedAt": "2026-07-16T00:00:00Z",
+                "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "licence": "CC-BY-4.0"
+              }
+            ]
+          }
+        ]
+      },
+      "invalidMutations": [
+        { "name": "remote route", "path": "/route", "value": "https://example.org" }
+      ]
+    },
+    {
+      "schema": "correction-record.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.correction-record.v1",
+        "id": "urn:libre-ai:correction:correction-1",
+        "projectionId": "urn:libre-ai:projection:home",
+        "previousDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "correctedDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "reason": "Source mise à jour",
+        "correctedAt": "2026-07-16T00:00:00Z",
+        "approval": {
+          "role": "editorial-review",
+          "approvedAt": "2026-07-16T00:00:00Z",
+          "reference": "urn:libre-ai:approval:review-1",
+          "subjectDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      },
+      "invalidMutations": [{ "name": "missing reason", "path": "/reason", "value": "" }]
+    },
+    {
+      "schema": "activity-definition.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.activity-definition.v1",
+        "id": "urn:libre-ai:activity:activity-1",
+        "version": "1.0.0",
+        "status": "published",
+        "title": "Évaluer une source",
+        "objective": "Identifier une provenance insuffisante",
+        "sources": [
+          {
+            "uri": "https://example.org/source",
+            "retrievedAt": "2026-07-16T00:00:00Z",
+            "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "licence": "CC-BY-4.0"
+          }
+        ],
+        "responseSchema": { "type": "string" },
+        "feedbackRules": [
+          { "id": "feedback_1", "explanation": "Vérifier la source", "sourceIndexes": [0] }
+        ],
+        "generatedContent": false,
+        "approvals": [
+          {
+            "role": "content-review",
+            "approvedAt": "2026-07-16T00:00:00Z",
+            "reference": "urn:libre-ai:approval:review-1",
+            "subjectDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ]
+      },
+      "invalidMutations": [{ "name": "unpublished state", "path": "/status", "value": "unknown" }]
+    },
+    {
+      "schema": "activity-outcome.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.activity-outcome.v1",
+        "id": "urn:libre-ai:outcome:outcome-1",
+        "activityId": "urn:libre-ai:activity:activity-1",
+        "activityVersion": "1.0.0",
+        "localSessionId": "session_1",
+        "state": "completed",
+        "responseDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "feedbackRuleIds": ["feedback_1"],
+        "recordedAt": "2026-07-16T00:00:00Z"
+      },
+      "invalidMutations": [{ "name": "universal pass state", "path": "/state", "value": "passed" }]
+    },
+    {
+      "schema": "practice-progress-export.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.practice-progress-export.v1",
+        "exportedAt": "2026-07-16T00:00:00Z",
+        "outcomes": []
+      },
+      "invalidMutations": [
+        { "name": "server tenant leakage", "path": "/tenantId", "value": "ten_1234567890abcdef" }
+      ]
+    },
+    {
+      "schema": "feed-fetch.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.feed-fetch.v1",
+        "kind": "request",
+        "tenantId": "ten_1234567890abcdef",
+        "sourceId": "urn:libre-ai:source:feed-1",
+        "fetchId": "fetch_1",
+        "scheduledAt": "2026-07-16T00:00:00Z",
+        "url": "https://example.org/feed.xml",
+        "limits": { "maxBytes": 1048576, "timeoutMs": 5000, "maxRedirects": 2 }
+      },
+      "invalidMutations": [
+        { "name": "forbidden scheme", "path": "/url", "value": "file:///etc/passwd" }
+      ]
+    },
+    {
+      "schema": "curation-rule-set.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.curation-rule-set.v1",
+        "id": "urn:libre-ai:rules:rules-1",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "active",
+        "rules": [
+          {
+            "id": "rule_1",
+            "field": "title",
+            "operator": "contains",
+            "value": "IA",
+            "decision": "retain",
+            "explanation": "Le titre correspond"
+          }
+        ],
+        "createdAt": "2026-07-16T00:00:00Z"
+      },
+      "invalidMutations": [
+        { "name": "unbounded operator", "path": "/rules/0/operator", "value": "regex" }
+      ]
+    },
+    {
+      "schema": "curated-item-export.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.curated-item-export.v1",
+        "tenantId": "ten_1234567890abcdef",
+        "exportedAt": "2026-07-16T00:00:00Z",
+        "items": []
+      },
+      "invalidMutations": [{ "name": "missing tenant", "path": "/tenantId", "remove": true }]
+    },
+    {
+      "schema": "context-document.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.context-document.v1",
+        "id": "urn:libre-ai:context:context-1",
+        "createdAt": "2026-07-16T00:00:00Z",
+        "rootBlockIds": ["block_1"],
+        "blocks": [
+          {
+            "id": "block_1",
+            "revision": 1,
+            "mediaType": "text/markdown",
+            "content": "# Note",
+            "links": []
+          }
+        ],
+        "totalBytes": 6,
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "invalidMutations": [
+        { "name": "network location", "path": "/remoteUrl", "value": "https://example.org/note" }
+      ]
+    },
+    {
+      "schema": "notebook-backup.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.notebook-backup.v1",
+        "id": "urn:libre-ai:backup:backup-1",
+        "createdAt": "2026-07-16T00:00:00Z",
+        "cipher": "aes-256-gcm",
+        "kdf": {
+          "algorithm": "argon2id",
+          "salt": "AAAAAAAAAAAAAAAAAAAAAA==",
+          "memoryKiB": 65536,
+          "iterations": 3,
+          "parallelism": 1
+        },
+        "nonce": "AAAAAAAAAAAAAAAA",
+        "ciphertext": "AAAAAAAAAAAAAAAAAAAAAAAA",
+        "ciphertextDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "invalidMutations": [{ "name": "weak KDF", "path": "/kdf/memoryKiB", "value": 1024 }]
+    },
+    {
+      "schema": "public-vote-dataset.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.public-vote-dataset.v1",
+        "id": "urn:libre-ai:dataset:votes-1",
+        "version": "1.0.0",
+        "scope": "Vote public de démonstration",
+        "methodId": "urn:libre-ai:method:method-1",
+        "methodDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "statements": [
+          {
+            "id": "statement_1",
+            "wording": "Proposition sourcée",
+            "source": {
+              "uri": "https://example.org/vote",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "licence": "Etalab-2.0"
+            },
+            "votesFor": 10,
+            "votesAgainst": 5,
+            "abstentions": 2,
+            "absent": 1
+          }
+        ],
+        "publishedAt": "2026-07-16T00:00:00Z",
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "approvals": [
+          {
+            "role": "methodological-review",
+            "approvedAt": "2026-07-16T00:00:00Z",
+            "reference": "urn:libre-ai:approval:method-1",
+            "subjectDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          {
+            "role": "legal-privacy-review",
+            "approvedAt": "2026-07-16T00:00:00Z",
+            "reference": "urn:libre-ai:approval:legal-1",
+            "subjectDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ]
+      },
+      "invalidMutations": [
+        {
+          "name": "duplicate approval authority",
+          "path": "/approvals/1/role",
+          "value": "methodological-review"
+        }
+      ]
+    },
+    {
+      "schema": "boussole-method.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.boussole-method.v1",
+        "id": "urn:libre-ai:method:method-1",
+        "version": "1.0.0",
+        "responseScale": [-1, 0, 1],
+        "abstentionTreatment": "excluded-from-denominator",
+        "missingTreatment": "excluded-and-reported",
+        "formula": "normalized-agreement-v1",
+        "approvedAt": "2026-07-16T00:00:00Z",
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "approvals": [
+          {
+            "role": "methodological-review",
+            "approvedAt": "2026-07-16T00:00:00Z",
+            "reference": "urn:libre-ai:approval:method-1",
+            "subjectDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          {
+            "role": "legal-privacy-review",
+            "approvedAt": "2026-07-16T00:00:00Z",
+            "reference": "urn:libre-ai:approval:legal-1",
+            "subjectDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ]
+      },
+      "invalidMutations": [
+        { "name": "hidden missing treatment", "path": "/missingTreatment", "value": "neutral" }
+      ]
+    },
+    {
+      "schema": "local-comparison.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.local-comparison.v1",
+        "datasetId": "urn:libre-ai:dataset:votes-1",
+        "datasetDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "methodId": "urn:libre-ai:method:method-1",
+        "methodDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "responseSetDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "score": 0.5,
+        "denominator": 15,
+        "omitted": 3,
+        "contributions": [
+          {
+            "statementId": "statement_1",
+            "contribution": 0.5,
+            "votesConsidered": 15,
+            "votesOmitted": 3
+          }
+        ],
+        "computedAt": "2026-07-16T00:00:00Z"
+      },
+      "invalidMutations": [{ "name": "score out of range", "path": "/score", "value": 2 }]
+    },
+    {
+      "schema": "policy-definition.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.policy-definition.v1",
+        "id": "urn:libre-ai:policy:policy-1",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "rules": [
+          {
+            "id": "licence_1",
+            "fact": "licence",
+            "operator": "in",
+            "value": ["MIT", "Apache-2.0"],
+            "unknown": "ineligible",
+            "source": {
+              "uri": "https://example.org/policy",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "approvedAt": "2026-07-16T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "approvedAt": "2026-07-16T00:00:00Z",
+          "reference": "urn:libre-ai:approval:policy-1",
+          "subjectDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      },
+      "invalidMutations": [
+        { "name": "unknown treated as eligible", "path": "/rules/0/unknown", "value": "eligible" }
+      ]
+    },
+    {
+      "schema": "model-snapshot.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.model-snapshot.v1",
+        "id": "urn:libre-ai:snapshot:snapshot-1",
+        "tenantId": "ten_1234567890abcdef",
+        "modelId": "model-1",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "licence",
+            "value": "MIT",
+            "source": {
+              "uri": "https://example.org/model",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "invalidMutations": [
+        { "name": "personal tenant missing", "path": "/tenantId", "remove": true }
+      ]
+    },
+    {
+      "schema": "policy-evaluation.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.policy-evaluation.v1",
+        "id": "urn:libre-ai:evaluation:evaluation-1",
+        "tenantId": "ten_1234567890abcdef",
+        "policyId": "urn:libre-ai:policy:policy-1",
+        "policyDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "snapshotId": "urn:libre-ai:snapshot:snapshot-1",
+        "snapshotDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "needDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "engineVersion": "1.0.0",
+        "verdict": "indeterminate",
+        "ruleResults": [
+          { "ruleId": "licence_1", "status": "unknown", "reasonCode": "policy.fact_unknown" }
+        ],
+        "evaluatedAt": "2026-07-16T00:00:00Z",
+        "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      },
+      "invalidMutations": [
+        { "name": "success verdict alias", "path": "/verdict", "value": "compliant" },
+        { "name": "eligible verdict with unknown rule", "path": "/verdict", "value": "eligible" }
+      ]
+    },
+    {
+      "schema": "session-event.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.session-event.v1",
+        "id": "urn:libre-ai:event:event-1",
+        "tenantId": "ten_1234567890abcdef",
+        "sessionId": "urn:libre-ai:session:session-1",
+        "sequence": 1,
+        "revision": 0,
+        "type": "session-created",
+        "actor": { "kind": "human", "id": "user_1" },
+        "occurredAt": "2026-07-16T00:00:00Z",
+        "data": {}
+      },
+      "invalidMutations": [
+        { "name": "event without tenant", "path": "/tenantId", "remove": true },
+        {
+          "name": "contribution without bounded data",
+          "path": "/type",
+          "value": "contribution-submitted"
+        }
+      ]
+    },
+    {
+      "schema": "session-export.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.session-export.v1",
+        "id": "urn:libre-ai:export:session-1",
+        "tenantId": "ten_1234567890abcdef",
+        "sessionId": "urn:libre-ai:session:session-1",
+        "audience": "session",
+        "exportedAt": "2026-07-16T00:00:00Z",
+        "sources": [],
+        "contributions": [],
+        "approvedOutcomes": [],
+        "eventCursor": 1,
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "invalidMutations": [
+        { "name": "private audience export", "path": "/audience", "value": "private" }
+      ]
+    },
+    {
+      "schema": "spec-package.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.spec-package.v1",
+        "id": "urn:libre-ai:spec:package-1",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "accepted",
+        "problem": "Problème explicite",
+        "actors": ["actor_1"],
+        "requirements": [
+          { "id": "requirement_1", "text": "Refuser sans preuve", "priority": "must" }
+        ],
+        "decisions": [{ "id": "decision_1", "status": "accepted", "decision": "Fail closed" }],
+        "contracts": ["urn:libre-ai:contract:contract-1"],
+        "risks": [{ "id": "risk_1", "severity": "high", "control": "Gate automatisée" }],
+        "acceptanceCriteria": [
+          { "id": "criterion_1", "observable": "Le refus est stable", "evidenceRule": "evidence_1" }
+        ],
+        "approvals": [
+          {
+            "role": "spec-approver",
+            "approvedAt": "2026-07-16T00:00:00Z",
+            "reference": "urn:libre-ai:approval:spec-1",
+            "subjectDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "acceptedAt": "2026-07-16T00:00:00Z",
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "invalidMutations": [
+        { "name": "open decision", "path": "/decisions/0/status", "value": "open" }
+      ]
+    },
+    {
+      "schema": "orchestrator-event.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.orchestrator-event.v1",
+        "id": "urn:libre-ai:event:orchestrator-1",
+        "tenantId": "ten_1234567890abcdef",
+        "missionId": "urn:libre-ai:mission:mission-1",
+        "orchestratorId": "orchestrator_1",
+        "sequence": 1,
+        "type": "started",
+        "occurredAt": "2026-07-16T00:00:00Z",
+        "data": { "progressPermille": 0 }
+      },
+      "invalidMutations": [
+        { "name": "claims accepted result", "path": "/type", "value": "accepted" },
+        { "name": "result without artifact evidence", "path": "/type", "value": "result-submitted" }
+      ]
+    },
+    {
+      "schema": "mission-record.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.mission-record.v1",
+        "id": "urn:libre-ai:mission:mission-1",
+        "tenantId": "ten_1234567890abcdef",
+        "revision": 1,
+        "state": "approved",
+        "handoffId": "urn:libre-ai:handoff:handoff-1",
+        "handoffDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "risk": { "level": "medium", "policyVersion": "1.0.0" },
+        "budgets": { "maxDurationSeconds": 3600, "maxToolCalls": 100, "network": "allowlisted" },
+        "acceptanceCriteria": ["criterion_1"],
+        "approvals": [
+          {
+            "role": "mission-approver",
+            "approvedAt": "2026-07-16T00:00:00Z",
+            "reference": "urn:libre-ai:approval:mission-1",
+            "subjectDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "eventCursor": 0,
+        "createdAt": "2026-07-16T00:00:00Z"
+      },
+      "invalidMutations": [
+        { "name": "agent claims success", "path": "/state", "value": "success" },
+        {
+          "name": "accepted state without result and verdict",
+          "path": "/state",
+          "value": "accepted"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,281 @@
+openapi: 3.1.0
+info:
+  title: Libre AI Specifications API
+  version: 1.0.0
+servers:
+  - url: /
+x-libre-ai-domain:
+  commands: [CreateSpecWorkspace, AddRequirement, RecordDecision, ResolveDecision, AttachContract, DefineAcceptanceCriterion, SubmitSpecForReview, ReviewSpec, AcceptSpecPackage, SupersedeSpecPackage, CreatePlanningHandoff, ExportSpecPackage]
+  queries: [GetSpecWorkspace, ListOpenDecisions, ValidateSpecPackage, DiffSpecVersions, GetAcceptedPackage, GetHandoff, GetApprovalHistory]
+paths:
+  /v1/specifications/workspaces:
+    post:
+      operationId: createSpecWorkspace
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [problem, actors]
+              properties:
+                problem:
+                  type: string
+                  minLength: 1
+                  maxLength: 5000
+                actors:
+                  type: array
+                  minItems: 1
+                  maxItems: 100
+                  uniqueItems: true
+                  items:
+                    type: string
+      responses:
+        '201':
+          description: Draft workspace created
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/specifications/workspaces/{workspaceId}:
+    get:
+      operationId: getSpecWorkspace
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+      responses:
+        '200':
+          description: Authorized draft workspace projection
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/specifications/workspaces/{workspaceId}/acceptance:
+    post:
+      operationId: acceptSpecPackage
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/spec-package.v1.schema.json
+      responses:
+        '201':
+          description: Immutable accepted package
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/spec-package.v1.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/specifications/packages/{packageId}:
+    get:
+      operationId: getAcceptedPackage
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: packageId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Immutable accepted package
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/spec-package.v1.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/specifications/packages/{packageId}/handoffs:
+    post:
+      operationId: createPlanningHandoff
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: packageId
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/agent-handoff.v1.schema.json
+      responses:
+        '201':
+          description: Planning-only handoff
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/agent-handoff.v1.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/specifications/workspaces/{workspaceId}/commands:
+    post:
+      operationId: executeSpecCommand
+      x-libre-ai-operations: [AddRequirement, RecordDecision, ResolveDecision, AttachContract, DefineAcceptanceCriterion, SubmitSpecForReview, ReviewSpec]
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [command]
+              properties:
+                command:
+                  enum: [add-requirement, record-decision, resolve-decision, attach-contract, define-acceptance, submit-review, review]
+                resourceId:
+                  type: string
+                text:
+                  type: string
+                  maxLength: 5000
+                status:
+                  enum: [accepted, rejected]
+                contractId:
+                  type: string
+                evidenceRule:
+                  type: string
+      responses:
+        '202':
+          description: Versioned specification command accepted
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/specifications/workspaces/{workspaceId}/views/{view}:
+    get:
+      operationId: getSpecView
+      x-libre-ai-operations: [ListOpenDecisions, ValidateSpecPackage, DiffSpecVersions, GetApprovalHistory]
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/WorkspaceId'
+        - name: view
+          in: path
+          required: true
+          schema:
+            enum: [open-decisions, validation, version-diff, approvals]
+      responses:
+        '200':
+          description: Authorized specification view
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/specifications/packages/{packageId}/commands:
+    post:
+      operationId: executePackageCommand
+      x-libre-ai-operations: [SupersedeSpecPackage, ExportSpecPackage]
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: packageId
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [command]
+              properties:
+                command:
+                  enum: [supersede, export]
+                successorPackageId:
+                  type: string
+      responses:
+        '202':
+          description: Immutable package command accepted
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/specifications/handoffs/{handoffId}:
+    get:
+      operationId: getHandoff
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: handoffId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Planning-only handoff
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/agent-handoff.v1.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: __Host-libre_ai_session
+  parameters:
+    WorkspaceId:
+      name: workspaceId
+      in: path
+      required: true
+      schema:
+        type: string
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: '^idem_[a-z0-9]{16,64}$'
+    CsrfToken:
+      name: X-CSRF-Token
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 32
+        maxLength: 256
+    Revision:
+      name: If-Match
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: '^"[0-9]+"$'
+  responses:
+    Problem:
+      description: Stable refusal envelope
+      content:
+        application/problem+json:
+          schema:
+            $ref: ../schemas/problem-details.v1.schema.json

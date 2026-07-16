@@ -1,0 +1,399 @@
+openapi: 3.1.0
+info:
+  title: Libre AI Radar API
+  version: 1.0.0
+servers:
+  - url: /
+x-libre-ai-domain:
+  commands: [PreviewSubscription, AddSubscription, UpdateSubscription, RemoveSubscription, CreateRuleSet, ActivateRuleSet, ScheduleFetch, RecordFetchResult, ReplayRuleSet, ExportCuration, DeleteCurationData]
+  queries: [ListSubscriptions, GetFetchEvidence, ListCuratedItems, ExplainDecision, CompareRuleReplays, GetExport]
+paths:
+  /v1/radar/subscriptions:
+    get:
+      operationId: listSubscriptions
+      security:
+        - sessionCookie: []
+      responses:
+        '200':
+          description: Tenant subscriptions
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 1000
+                items:
+                  $ref: '#/components/schemas/Subscription'
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      operationId: addSubscription
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionInput'
+      responses:
+        '201':
+          description: Subscription created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/radar/subscriptions/{subscriptionId}:
+    patch:
+      operationId: updateSubscription
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/SubscriptionId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionInput'
+      responses:
+        '200':
+          description: Subscription updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+        default:
+          $ref: '#/components/responses/Problem'
+    delete:
+      operationId: removeSubscription
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/SubscriptionId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      responses:
+        '204':
+          description: Subscription and retained source data deleted
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/radar/items:
+    get:
+      operationId: listCuratedItems
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: cursor
+          in: query
+          schema:
+            type: string
+            maxLength: 256
+      responses:
+        '200':
+          description: Curated item export page
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/curated-item-export.v1.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/radar/rule-sets:
+    post:
+      operationId: createRuleSet
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/curation-rule-set.v1.schema.json
+      responses:
+        '201':
+          description: Immutable rule set version created
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/curation-rule-set.v1.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/radar/subscription-previews:
+    post:
+      operationId: previewSubscription
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubscriptionInput'
+      responses:
+        '200':
+          description: Bounded source preview without persistence
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/radar/rule-sets/{ruleSetId}/activation:
+    post:
+      operationId: activateRuleSet
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/RuleSetId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      responses:
+        '200':
+          description: Rule set activated for future decisions
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/radar/rule-sets/{ruleSetId}/replays:
+    post:
+      operationId: replayRuleSet
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/RuleSetId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      responses:
+        '202':
+          description: Immutable replay projection scheduled
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/radar/rule-sets/{ruleSetId}/replays/{replayId}:
+    get:
+      operationId: compareRuleReplays
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/RuleSetId'
+        - name: replayId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Deterministic replay comparison
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/radar/fetch-schedules:
+    post:
+      operationId: scheduleFetch
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/feed-fetch.v1.schema.json#/$defs/request
+      responses:
+        '202':
+          description: Bounded fetch scheduled
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/radar/fetch-results:
+    post:
+      operationId: recordFetchResult
+      security:
+        - internalBiscuit: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/feed-fetch.v1.schema.json#/$defs/result
+      responses:
+        '202':
+          description: Authorized worker result recorded
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/radar/fetches/{fetchId}:
+    get:
+      operationId: getFetchEvidence
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: fetchId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Bounded fetch evidence without hostile body
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/radar/items/{itemId}/explanation:
+    get:
+      operationId: explainDecision
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Stable rule trace and source provenance
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/radar/exports:
+    post:
+      operationId: exportCuration
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      responses:
+        '202':
+          description: Portable curation export scheduled
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/radar/exports/{exportId}:
+    get:
+      operationId: getExport
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: exportId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tenant export
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/curated-item-export.v1.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/radar/data:
+    delete:
+      operationId: deleteCurationData
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      responses:
+        '204':
+          description: Active tenant curation data deleted
+        default:
+          $ref: '#/components/responses/Problem'
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: __Host-libre_ai_session
+    internalBiscuit:
+      type: http
+      scheme: bearer
+      bearerFormat: Biscuit
+  parameters:
+    RuleSetId:
+      name: ruleSetId
+      in: path
+      required: true
+      schema:
+        type: string
+    SubscriptionId:
+      name: subscriptionId
+      in: path
+      required: true
+      schema:
+        type: string
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: '^idem_[a-z0-9]{16,64}$'
+    CsrfToken:
+      name: X-CSRF-Token
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 32
+        maxLength: 256
+    Revision:
+      name: If-Match
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: '^"[0-9]+"$'
+  schemas:
+    SubscriptionInput:
+      type: object
+      additionalProperties: false
+      required: [url, schedule]
+      properties:
+        url:
+          type: string
+          format: uri
+          pattern: '^https?://'
+        schedule:
+          enum: [hourly, daily, weekly, manual]
+    Subscription:
+      type: object
+      additionalProperties: false
+      required: [id, revision, url, schedule]
+      properties:
+        id:
+          type: string
+        revision:
+          type: integer
+          minimum: 0
+        url:
+          type: string
+          format: uri
+          pattern: '^https?://'
+        schedule:
+          enum: [hourly, daily, weekly, manual]
+  responses:
+    Problem:
+      description: Stable refusal envelope
+      content:
+        application/problem+json:
+          schema:
+            $ref: ../schemas/problem-details.v1.schema.json

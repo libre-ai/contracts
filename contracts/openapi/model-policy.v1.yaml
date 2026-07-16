@@ -1,0 +1,353 @@
+openapi: 3.1.0
+info:
+  title: Libre AI Model Policy API
+  version: 1.0.0
+servers:
+  - url: /
+x-libre-ai-domain:
+  commands: [CreatePolicyDraft, AddPolicyRule, SubmitPolicyForApproval, ApprovePolicyVersion, ImportModelSnapshot, ValidateSnapshot, CreateNeed, EvaluateEligibility, ExportEvaluation, RevokeSnapshot]
+  queries: [GetPolicyVersion, DiffPolicyVersions, GetSnapshot, ListSnapshotEvidence, GetEvaluation, ExplainRuleResult, ReplayEvaluation]
+paths:
+  /v1/model-policy/policies:
+    post:
+      operationId: createPolicyDraft
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [title]
+              properties:
+                title:
+                  type: string
+                  minLength: 1
+                  maxLength: 160
+      responses:
+        '201':
+          description: Policy draft created
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/model-policy/policies/{policyId}/{version}:
+    get:
+      operationId: getPolicyVersion
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/PolicyId'
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Immutable policy version
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/policy-definition.v1.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/model-policy/snapshots:
+    post:
+      operationId: importModelSnapshot
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/model-snapshot.v1.schema.json
+      responses:
+        '201':
+          description: Snapshot imported for validation
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/model-snapshot.v1.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/model-policy/evaluations:
+    post:
+      operationId: evaluateEligibility
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [policyId, policyDigest, snapshotId, snapshotDigest, need]
+              properties:
+                policyId:
+                  type: string
+                policyDigest:
+                  type: string
+                  pattern: '^[a-f0-9]{64}$'
+                snapshotId:
+                  type: string
+                snapshotDigest:
+                  type: string
+                  pattern: '^[a-f0-9]{64}$'
+                need:
+                  type: object
+                  maxProperties: 1000
+                  propertyNames:
+                    pattern: '^[a-z][a-z0-9_.-]{1,127}$'
+                  additionalProperties:
+                    oneOf:
+                      - type: string
+                        maxLength: 5000
+                      - type: number
+                      - type: boolean
+      responses:
+        '200':
+          description: Deterministic eligibility result
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/policy-evaluation.v1.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/model-policy/policies/{policyId}/commands:
+    post:
+      operationId: executePolicyCommand
+      x-libre-ai-operations: [AddPolicyRule, SubmitPolicyForApproval, ApprovePolicyVersion]
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/PolicyId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [command]
+              properties:
+                command:
+                  enum: [add-rule, submit-for-approval, approve-version]
+                rule:
+                  $ref: ../schemas/policy-definition.v1.schema.json#/$defs/rule
+                version:
+                  type: integer
+                  minimum: 1
+      responses:
+        '202':
+          description: Policy command accepted
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/model-policy/policies/{policyId}/diff:
+    get:
+      operationId: diffPolicyVersions
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/PolicyId'
+        - name: from
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+        - name: to
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Structured policy diff
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/model-policy/snapshots/{snapshotId}/commands:
+    post:
+      operationId: executeSnapshotCommand
+      x-libre-ai-operations: [ValidateSnapshot, RevokeSnapshot]
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: snapshotId
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [command]
+              properties:
+                command:
+                  enum: [validate, revoke]
+                reasonCode:
+                  type: string
+                  pattern: '^policy\.[a-z0-9_.-]+$'
+      responses:
+        '202':
+          description: Snapshot command accepted
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/model-policy/snapshots/{snapshotId}:
+    get:
+      operationId: getSnapshot
+      x-libre-ai-operations: [GetSnapshot, ListSnapshotEvidence]
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: snapshotId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Sourced immutable snapshot and evidence projection
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/model-snapshot.v1.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/model-policy/needs:
+    post:
+      operationId: createNeed
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              maxProperties: 1000
+              propertyNames:
+                pattern: '^[a-z][a-z0-9_.-]{1,127}$'
+              additionalProperties:
+                oneOf:
+                  - type: string
+                    maxLength: 5000
+                  - type: number
+                  - type: boolean
+      responses:
+        '201':
+          description: Bounded need created
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/model-policy/evaluations/{evaluationId}:
+    get:
+      operationId: getEvaluation
+      x-libre-ai-operations: [GetEvaluation, ExplainRuleResult, ReplayEvaluation]
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: evaluationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Evaluation, rule trace and deterministic replay projection
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/policy-evaluation.v1.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/model-policy/evaluations/{evaluationId}/export:
+    post:
+      operationId: exportEvaluation
+      security:
+        - sessionCookie: []
+      parameters:
+        - name: evaluationId
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      responses:
+        '202':
+          description: Portable evaluation export scheduled
+        default:
+          $ref: '#/components/responses/Problem'
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: __Host-libre_ai_session
+  parameters:
+    PolicyId:
+      name: policyId
+      in: path
+      required: true
+      schema:
+        type: string
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: '^idem_[a-z0-9]{16,64}$'
+    CsrfToken:
+      name: X-CSRF-Token
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 32
+        maxLength: 256
+    Revision:
+      name: If-Match
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: '^"[0-9]+"$'
+  responses:
+    Problem:
+      description: Stable refusal envelope
+      content:
+        application/problem+json:
+          schema:
+            $ref: ../schemas/problem-details.v1.schema.json

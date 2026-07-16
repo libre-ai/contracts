@@ -1,0 +1,19 @@
+package libre-ai:notebook-core@1.0.0;
+
+interface types {
+  record contract-error {
+    code: string,
+    message: string,
+  }
+}
+
+world notebook-core {
+  use types.{contract-error};
+
+  /// Canonicalizes context-document JSON bytes and returns the canonical bytes.
+  export canonicalize-context: func(document: list<u8>) -> result<list<u8>, contract-error>;
+
+  /// Verifies a notebook-backup envelope with caller-provided key material.
+  /// The core performs no storage, network, clock or key persistence.
+  export verify-backup: func(envelope: list<u8>, key-material: list<u8>) -> result<bool, contract-error>;
+}

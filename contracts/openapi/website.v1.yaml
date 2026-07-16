@@ -1,0 +1,114 @@
+openapi: 3.1.0
+info:
+  title: Libre AI Website API
+  version: 1.0.0
+  description: Public read-only projection. Publication is an offline release operation.
+servers:
+  - url: /
+x-libre-ai-domain:
+  commands: [CompilePublicCorpus, PublishStaticCandidate, InvalidateSearchProjection]
+  queries: [GetPage, SearchPublicCorpus, GetFeed, GetSitemap, GetProductProjection, GetCorrectionHistory]
+x-libre-ai-local: [CompilePublicCorpus, PublishStaticCandidate, InvalidateSearchProjection]
+paths:
+  /v1/pages/{route}:
+    get:
+      operationId: getPage
+      x-libre-ai-operations: [GetPage, GetProductProjection]
+      summary: Resolve one reviewed public projection
+      parameters:
+        - name: route
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^[a-z0-9/-]*$'
+      responses:
+        '200':
+          description: Reviewed projection
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/public-projection.v1.schema.json
+        '404':
+          $ref: '#/components/responses/Problem'
+  /v1/search:
+    get:
+      operationId: searchPublicCorpus
+      summary: Search the static public index
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 200
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 20
+      responses:
+        '200':
+          description: Bounded public matches
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 50
+                items:
+                  $ref: ../schemas/public-projection.v1.schema.json
+        '400':
+          $ref: '#/components/responses/Problem'
+  /v1/feed:
+    get:
+      operationId: getFeed
+      responses:
+        '200':
+          description: Public feed generated from the selected corpus
+          content:
+            application/atom+xml:
+              schema:
+                type: string
+  /v1/sitemap:
+    get:
+      operationId: getSitemap
+      responses:
+        '200':
+          description: Public sitemap generated from the selected corpus
+          content:
+            application/xml:
+              schema:
+                type: string
+  /v1/corrections/{projectionId}:
+    get:
+      operationId: getCorrectionHistory
+      summary: Read correction history for one projection
+      parameters:
+        - name: projectionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ordered correction records
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 1000
+                items:
+                  $ref: ../schemas/correction-record.v1.schema.json
+        '404':
+          $ref: '#/components/responses/Problem'
+components:
+  responses:
+    Problem:
+      description: Stable refusal envelope
+      content:
+        application/problem+json:
+          schema:
+            $ref: ../schemas/problem-details.v1.schema.json

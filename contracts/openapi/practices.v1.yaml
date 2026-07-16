@@ -1,0 +1,144 @@
+openapi: 3.1.0
+info:
+  title: Libre AI Practices API
+  version: 1.0.0
+  description: Public activity projection and organization review/publishing. Learner answers remain local.
+servers:
+  - url: /
+x-libre-ai-domain:
+  commands: [StartPracticeSession, SubmitActivityResponse, RecordSelfAssessment, ExportProgress, DeleteProgress, SubmitActivityForReview, ApproveActivityVersion, PublishActivityVersion, WithdrawActivityVersion]
+  queries: [ListPublishedActivities, GetActivityVersion, GetLocalProgress, GetFeedbackExplanation, GetReviewEvidence]
+x-libre-ai-local: [StartPracticeSession, SubmitActivityResponse, RecordSelfAssessment, ExportProgress, DeleteProgress, GetLocalProgress, GetFeedbackExplanation]
+paths:
+  /v1/activities:
+    get:
+      operationId: listPublishedActivities
+      responses:
+        '200':
+          description: Published immutable activity versions
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 1000
+                items:
+                  $ref: ../schemas/activity-definition.v1.schema.json
+  /v1/activities/{activityId}/{version}:
+    get:
+      operationId: getActivityVersion
+      x-libre-ai-operations: [GetActivityVersion, GetReviewEvidence]
+      parameters:
+        - $ref: '#/components/parameters/ActivityId'
+        - name: version
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^[0-9]+\.[0-9]+\.[0-9]+$'
+      responses:
+        '200':
+          description: Published activity version
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/activity-definition.v1.schema.json
+        '404':
+          $ref: '#/components/responses/Problem'
+  /v1/activities/{activityId}/review:
+    post:
+      operationId: submitActivityForReview
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/ActivityId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/activity-definition.v1.schema.json
+      responses:
+        '202':
+          description: Review submission accepted
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/activities/{activityId}/publication:
+    post:
+      operationId: publishActivityVersion
+      x-libre-ai-operations: [ApproveActivityVersion, PublishActivityVersion, WithdrawActivityVersion]
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/ActivityId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [action, activityVersion, approvalReference]
+              properties:
+                action:
+                  enum: [approve, publish, withdraw]
+                activityVersion:
+                  type: string
+                approvalReference:
+                  type: string
+      responses:
+        '200':
+          description: Published immutable activity
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/activity-definition.v1.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: __Host-libre_ai_session
+  parameters:
+    ActivityId:
+      name: activityId
+      in: path
+      required: true
+      schema:
+        type: string
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: '^idem_[a-z0-9]{16,64}$'
+    CsrfToken:
+      name: X-CSRF-Token
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 32
+        maxLength: 256
+    Revision:
+      name: If-Match
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: '^"[0-9]+"$'
+  responses:
+    Problem:
+      description: Stable refusal envelope
+      content:
+        application/problem+json:
+          schema:
+            $ref: ../schemas/problem-details.v1.schema.json

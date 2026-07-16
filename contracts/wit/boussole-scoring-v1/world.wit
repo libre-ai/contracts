@@ -1,0 +1,16 @@
+package libre-ai:boussole-scoring@1.0.0;
+
+interface types {
+  record contract-error {
+    code: string,
+    message: string,
+  }
+}
+
+world boussole-scoring {
+  use types.{contract-error};
+
+  /// Computes local-comparison JSON from exact dataset, method and local response bytes.
+  /// The component imports no network, storage, clock or randomness capability.
+  export compare: func(dataset: list<u8>, method: list<u8>, responses: list<u8>, computed-at: string) -> result<list<u8>, contract-error>;
+}

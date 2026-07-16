@@ -1,0 +1,16 @@
+package libre-ai:practice-scoring@1.0.0;
+
+interface types {
+  record contract-error {
+    code: string,
+    message: string,
+  }
+}
+
+world practice-scoring {
+  use types.{contract-error};
+
+  /// Accepts canonical activity-definition and bounded response JSON bytes.
+  /// Returns canonical activity-outcome JSON bytes.
+  export score: func(activity: list<u8>, response: list<u8>) -> result<list<u8>, contract-error>;
+}

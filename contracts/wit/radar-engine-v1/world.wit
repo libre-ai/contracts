@@ -1,0 +1,24 @@
+package libre-ai:radar-engine@1.0.0;
+
+interface types {
+  record contract-error {
+    code: string,
+    message: string,
+  }
+
+  record parse-limits {
+    max-bytes: u64,
+    max-items: u32,
+    max-depth: u32,
+  }
+}
+
+world radar-engine {
+  use types.{contract-error, parse-limits};
+
+  /// Parses untrusted feed bytes with explicit budgets into canonical JSON bytes.
+  export parse-feed: func(payload: list<u8>, media-type: string, limits: parse-limits) -> result<list<u8>, contract-error>;
+
+  /// Evaluates canonical normalized-item and curation-rule-set JSON bytes.
+  export evaluate-rules: func(item: list<u8>, rules: list<u8>) -> result<list<u8>, contract-error>;
+}

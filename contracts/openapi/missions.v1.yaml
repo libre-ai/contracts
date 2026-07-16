@@ -1,0 +1,291 @@
+openapi: 3.1.0
+info:
+  title: Libre AI Missions API
+  version: 1.0.0
+servers:
+  - url: /
+x-libre-ai-domain:
+  commands: [ProposeMission, AssessMissionRisk, ApproveMission, RefuseMission, StartMission, PauseMission, ResumeMission, CancelMission, RecordOrchestratorEvent, AnswerDecisionRequest, SubmitMissionResult, AcceptMissionResult, RejectMissionResult, AbandonMission, ExportMissionRecord]
+  queries: [GetMission, ListMissions, GetMissionEvents, GetOpenDecisionRequests, GetResultEvidence, GetApprovalHistory, GetMissionExport]
+paths:
+  /v1/missions:
+    get:
+      operationId: listMissions
+      security:
+        - sessionCookie: []
+      responses:
+        '200':
+          description: Tenant mission projections
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 1000
+                items:
+                  $ref: ../schemas/mission-record.v1.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      operationId: proposeMission
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [handoffId, handoffDigest, budgets]
+              properties:
+                handoffId:
+                  type: string
+                handoffDigest:
+                  type: string
+                  pattern: '^[a-f0-9]{64}$'
+                budgets:
+                  type: object
+                  additionalProperties: false
+                  required: [maxDurationSeconds, maxToolCalls, network]
+                  properties:
+                    maxDurationSeconds:
+                      type: integer
+                      minimum: 1
+                      maximum: 604800
+                    maxToolCalls:
+                      type: integer
+                      minimum: 0
+                      maximum: 100000
+                    network:
+                      enum: [none, allowlisted]
+      responses:
+        '201':
+          description: Mission proposed, never approved implicitly
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/mission-record.v1.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/missions/{missionId}:
+    get:
+      operationId: getMission
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/MissionId'
+      responses:
+        '200':
+          description: Mission projection
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/mission-record.v1.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/missions/{missionId}/approval:
+    post:
+      operationId: approveMission
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/MissionId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      responses:
+        '200':
+          description: Human-approved mission
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/mission-record.v1.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/missions/{missionId}/events:
+    get:
+      operationId: getMissionEvents
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/MissionId'
+        - name: after
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: Ordered orchestrator events
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 1000
+                items:
+                  $ref: ../schemas/orchestrator-event.v1.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      operationId: recordOrchestratorEvent
+      x-libre-ai-operations: [RecordOrchestratorEvent, SubmitMissionResult]
+      security:
+        - internalBiscuit: []
+      parameters:
+        - $ref: '#/components/parameters/MissionId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/orchestrator-event.v1.schema.json
+      responses:
+        '202':
+          description: Authorized event accepted
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/missions/{missionId}/verdict:
+    post:
+      operationId: acceptMissionResult
+      x-libre-ai-operations: [AcceptMissionResult, RejectMissionResult, AbandonMission]
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/MissionId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [status, reasonCode]
+              properties:
+                status:
+                  enum: [accepted, rejected, abandoned]
+                reasonCode:
+                  type: string
+                  pattern: '^mission\.[a-z0-9_.-]+$'
+      responses:
+        '200':
+          description: Human verdict recorded
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/mission-record.v1.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/missions/{missionId}/commands:
+    post:
+      operationId: executeMissionCommand
+      x-libre-ai-operations: [AssessMissionRisk, RefuseMission, StartMission, PauseMission, ResumeMission, CancelMission, AnswerDecisionRequest, ExportMissionRecord]
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/MissionId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [command]
+              properties:
+                command:
+                  enum: [assess-risk, refuse, start, pause, resume, cancel, answer-decision, export]
+                resourceId:
+                  type: string
+                reasonCode:
+                  type: string
+                  pattern: '^mission\.[a-z0-9_.-]+$'
+                riskLevel:
+                  enum: [low, medium, high, critical]
+                artifactDigest:
+                  type: string
+                  pattern: '^[a-f0-9]{64}$'
+                evidenceDigest:
+                  type: string
+                  pattern: '^[a-f0-9]{64}$'
+      responses:
+        '202':
+          description: Authorized mission command accepted
+        default:
+          $ref: '#/components/responses/Problem'
+  /v1/missions/{missionId}/views/{view}:
+    get:
+      operationId: getMissionView
+      x-libre-ai-operations: [GetOpenDecisionRequests, GetResultEvidence, GetApprovalHistory, GetMissionExport]
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/MissionId'
+        - name: view
+          in: path
+          required: true
+          schema:
+            enum: [open-decisions, result-evidence, approvals, export]
+      responses:
+        '200':
+          description: Authorized mission view
+        default:
+          $ref: '#/components/responses/Problem'
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: __Host-libre_ai_session
+    internalBiscuit:
+      type: http
+      scheme: bearer
+      bearerFormat: Biscuit
+  parameters:
+    MissionId:
+      name: missionId
+      in: path
+      required: true
+      schema:
+        type: string
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: '^idem_[a-z0-9]{16,64}$'
+    CsrfToken:
+      name: X-CSRF-Token
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 32
+        maxLength: 256
+    Revision:
+      name: If-Match
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: '^"[0-9]+"$'
+  responses:
+    Problem:
+      description: Stable refusal envelope
+      content:
+        application/problem+json:
+          schema:
+            $ref: ../schemas/problem-details.v1.schema.json
