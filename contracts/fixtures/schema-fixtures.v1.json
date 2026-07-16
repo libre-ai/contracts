@@ -1173,8 +1173,7 @@
       "schema": "context-document.v2.schema.json",
       "valid": {
         "schemaVersion": "libre-ai.context-document.v2",
-        "id": "urn:libre-ai:context:context-1",
-        "createdAt": "2026-07-16T00:00:00Z",
+        "id": "urn:libre-ai:context:101112131415161718191a1b1c1d1e1f",
         "rootBlockIds": ["block_1"],
         "blocks": [
           {
@@ -1200,8 +1199,7 @@
       "schema": "notebook-backup-seal-request.v2.schema.json",
       "valid": {
         "schemaVersion": "libre-ai.notebook-backup-seal-request.v2",
-        "id": "urn:libre-ai:backup:golden-1",
-        "createdAt": "2026-07-16T00:00:00Z",
+        "id": "urn:libre-ai:backup:000102030405060708090a0b0c0d0e0f",
         "cipher": "aes-256-gcm",
         "kdf": {
           "algorithm": "argon2id",
@@ -1227,8 +1225,7 @@
       "schema": "notebook-backup.v2.schema.json",
       "valid": {
         "schemaVersion": "libre-ai.notebook-backup.v2",
-        "id": "urn:libre-ai:backup:golden-1",
-        "createdAt": "2026-07-16T00:00:00Z",
+        "id": "urn:libre-ai:backup:000102030405060708090a0b0c0d0e0f",
         "cipher": "aes-256-gcm",
         "kdf": {
           "algorithm": "argon2id",
@@ -1240,8 +1237,8 @@
           "salt": "AAECAwQFBgcICQoLDA0ODw=="
         },
         "nonce": "EBESExQVFhcYGRob",
-        "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrk2NbbuGaxPesIsoXXv0Nr2w==",
-        "digest": "7163e7365e6486785ab9f1510caca7cc74a94aeede02660863f2313248904029"
+        "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrkDIS93iOHzyoEp3xW5wUJwQ==",
+        "digest": "c3303408ff8242a243a454b5c4606d61b71001233281d0fadb9dc9890d0e85d3"
       },
       "invalidMutations": [
         {
