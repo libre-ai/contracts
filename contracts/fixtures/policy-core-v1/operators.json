@@ -1,0 +1,305 @@
+{
+  "schemaVersion": "libre-ai.policy-core-operator-vectors.v1",
+  "semantics": "contracts/wit/policy-core-v1/SEMANTICS.md#4-operator-and-type-matrix",
+  "vectors": [
+    {
+      "id": "equals-string-satisfied",
+      "operator": "equals",
+      "ruleValue": "MIT",
+      "observedValues": ["MIT"],
+      "expected": { "status": "satisfied", "reasonCode": "policy.rule_satisfied" }
+    },
+    {
+      "id": "equals-string-failed",
+      "operator": "equals",
+      "ruleValue": "MIT",
+      "observedValues": ["Apache-2.0"],
+      "expected": { "status": "failed", "reasonCode": "policy.rule_failed" }
+    },
+    {
+      "id": "equals-number-satisfied",
+      "operator": "equals",
+      "ruleValue": 1.5,
+      "observedValues": [1.5],
+      "expected": { "status": "satisfied", "reasonCode": "policy.rule_satisfied" }
+    },
+    {
+      "id": "equals-number-failed",
+      "operator": "equals",
+      "ruleValue": 1.5,
+      "observedValues": [1.5001],
+      "expected": { "status": "failed", "reasonCode": "policy.rule_failed" }
+    },
+    {
+      "id": "equals-boolean-satisfied",
+      "operator": "equals",
+      "ruleValue": true,
+      "observedValues": [true],
+      "expected": { "status": "satisfied", "reasonCode": "policy.rule_satisfied" }
+    },
+    {
+      "id": "equals-boolean-failed",
+      "operator": "equals",
+      "ruleValue": true,
+      "observedValues": [false],
+      "expected": { "status": "failed", "reasonCode": "policy.rule_failed" }
+    },
+
+    {
+      "id": "not-equals-string-satisfied",
+      "operator": "not-equals",
+      "ruleValue": "proprietary",
+      "observedValues": ["MIT"],
+      "expected": { "status": "satisfied", "reasonCode": "policy.rule_satisfied" }
+    },
+    {
+      "id": "not-equals-string-failed",
+      "operator": "not-equals",
+      "ruleValue": "MIT",
+      "observedValues": ["MIT"],
+      "expected": { "status": "failed", "reasonCode": "policy.rule_failed" }
+    },
+    {
+      "id": "not-equals-number-satisfied",
+      "operator": "not-equals",
+      "ruleValue": 1.5,
+      "observedValues": [2],
+      "expected": { "status": "satisfied", "reasonCode": "policy.rule_satisfied" }
+    },
+    {
+      "id": "not-equals-number-failed",
+      "operator": "not-equals",
+      "ruleValue": 1.5,
+      "observedValues": [1.5],
+      "expected": { "status": "failed", "reasonCode": "policy.rule_failed" }
+    },
+    {
+      "id": "not-equals-boolean-satisfied",
+      "operator": "not-equals",
+      "ruleValue": true,
+      "observedValues": [false],
+      "expected": { "status": "satisfied", "reasonCode": "policy.rule_satisfied" }
+    },
+    {
+      "id": "not-equals-boolean-failed",
+      "operator": "not-equals",
+      "ruleValue": true,
+      "observedValues": [true],
+      "expected": { "status": "failed", "reasonCode": "policy.rule_failed" }
+    },
+
+    {
+      "id": "in-string-satisfied",
+      "operator": "in",
+      "ruleValue": ["Apache-2.0", "MIT"],
+      "observedValues": ["MIT"],
+      "expected": { "status": "satisfied", "reasonCode": "policy.rule_satisfied" }
+    },
+    {
+      "id": "in-string-failed",
+      "operator": "in",
+      "ruleValue": ["Apache-2.0", "MIT"],
+      "observedValues": ["proprietary"],
+      "expected": { "status": "failed", "reasonCode": "policy.rule_failed" }
+    },
+    {
+      "id": "in-number-satisfied",
+      "operator": "in",
+      "ruleValue": [1, 2.5],
+      "observedValues": [2.5],
+      "expected": { "status": "satisfied", "reasonCode": "policy.rule_satisfied" }
+    },
+    {
+      "id": "in-number-failed",
+      "operator": "in",
+      "ruleValue": [1, 2.5],
+      "observedValues": [3],
+      "expected": { "status": "failed", "reasonCode": "policy.rule_failed" }
+    },
+    {
+      "id": "in-boolean-satisfied",
+      "operator": "in",
+      "ruleValue": [false],
+      "observedValues": [false],
+      "expected": { "status": "satisfied", "reasonCode": "policy.rule_satisfied" }
+    },
+    {
+      "id": "in-boolean-failed",
+      "operator": "in",
+      "ruleValue": [false],
+      "observedValues": [true],
+      "expected": { "status": "failed", "reasonCode": "policy.rule_failed" }
+    },
+
+    {
+      "id": "not-in-string-satisfied",
+      "operator": "not-in",
+      "ruleValue": ["AGPL-3.0", "SSPL-1.0"],
+      "observedValues": ["MIT"],
+      "expected": { "status": "satisfied", "reasonCode": "policy.rule_satisfied" }
+    },
+    {
+      "id": "not-in-string-failed",
+      "operator": "not-in",
+      "ruleValue": ["AGPL-3.0", "SSPL-1.0"],
+      "observedValues": ["AGPL-3.0"],
+      "expected": { "status": "failed", "reasonCode": "policy.rule_failed" }
+    },
+    {
+      "id": "not-in-number-satisfied",
+      "operator": "not-in",
+      "ruleValue": [0, 1],
+      "observedValues": [2],
+      "expected": { "status": "satisfied", "reasonCode": "policy.rule_satisfied" }
+    },
+    {
+      "id": "not-in-number-failed",
+      "operator": "not-in",
+      "ruleValue": [0, 1],
+      "observedValues": [1],
+      "expected": { "status": "failed", "reasonCode": "policy.rule_failed" }
+    },
+    {
+      "id": "not-in-boolean-satisfied",
+      "operator": "not-in",
+      "ruleValue": [false],
+      "observedValues": [true],
+      "expected": { "status": "satisfied", "reasonCode": "policy.rule_satisfied" }
+    },
+    {
+      "id": "not-in-boolean-failed",
+      "operator": "not-in",
+      "ruleValue": [false],
+      "observedValues": [false],
+      "expected": { "status": "failed", "reasonCode": "policy.rule_failed" }
+    },
+
+    {
+      "id": "at-least-number-satisfied",
+      "operator": "at-least",
+      "ruleValue": 7.5,
+      "observedValues": [7.5],
+      "expected": { "status": "satisfied", "reasonCode": "policy.rule_satisfied" }
+    },
+    {
+      "id": "at-least-number-failed",
+      "operator": "at-least",
+      "ruleValue": 7.5,
+      "observedValues": [7.49],
+      "expected": { "status": "failed", "reasonCode": "policy.rule_failed" }
+    },
+    {
+      "id": "at-most-number-satisfied",
+      "operator": "at-most",
+      "ruleValue": 10.25,
+      "observedValues": [10.25],
+      "expected": { "status": "satisfied", "reasonCode": "policy.rule_satisfied" }
+    },
+    {
+      "id": "at-most-number-failed",
+      "operator": "at-most",
+      "ruleValue": 10.25,
+      "observedValues": [10.251],
+      "expected": { "status": "failed", "reasonCode": "policy.rule_failed" }
+    }
+  ],
+  "aggregationVectors": [
+    {
+      "id": "absent",
+      "operator": "equals",
+      "ruleValue": "FR",
+      "observedValues": [],
+      "expected": { "status": "unknown", "reasonCode": "policy.fact_absent" }
+    },
+    {
+      "id": "multiple-all-satisfied",
+      "operator": "not-in",
+      "ruleValue": ["US", "CN"],
+      "observedValues": ["FR", "DE"],
+      "expected": { "status": "satisfied", "reasonCode": "policy.rule_satisfied" }
+    },
+    {
+      "id": "multiple-one-failed",
+      "operator": "not-in",
+      "ruleValue": ["US", "CN"],
+      "observedValues": ["FR", "US"],
+      "expected": { "status": "failed", "reasonCode": "policy.rule_failed" }
+    },
+    {
+      "id": "failed-before-type-unknown",
+      "operator": "equals",
+      "ruleValue": "FR",
+      "observedValues": ["DE", 1],
+      "expected": { "status": "failed", "reasonCode": "policy.rule_failed" }
+    },
+    {
+      "id": "type-mismatch-is-unknown",
+      "operator": "not-equals",
+      "ruleValue": "FR",
+      "observedValues": [1],
+      "expected": { "status": "unknown", "reasonCode": "policy.fact_type_mismatch" }
+    }
+  ],
+  "invalidPolicyVectors": [
+    {
+      "id": "equals-rejects-array",
+      "operator": "equals",
+      "ruleValue": ["MIT"],
+      "expectedError": "policy.input_invalid"
+    },
+    {
+      "id": "not-equals-rejects-array",
+      "operator": "not-equals",
+      "ruleValue": [true],
+      "expectedError": "policy.input_invalid"
+    },
+    {
+      "id": "in-rejects-scalar",
+      "operator": "in",
+      "ruleValue": "MIT",
+      "expectedError": "policy.input_invalid"
+    },
+    {
+      "id": "in-rejects-empty-set",
+      "operator": "in",
+      "ruleValue": [],
+      "expectedError": "policy.input_invalid"
+    },
+    {
+      "id": "in-rejects-heterogeneous-set",
+      "operator": "in",
+      "ruleValue": ["1", 1],
+      "expectedError": "policy.input_invalid"
+    },
+    {
+      "id": "not-in-rejects-scalar",
+      "operator": "not-in",
+      "ruleValue": true,
+      "expectedError": "policy.input_invalid"
+    },
+    {
+      "id": "at-least-rejects-string",
+      "operator": "at-least",
+      "ruleValue": "7",
+      "expectedError": "policy.input_invalid"
+    },
+    {
+      "id": "at-least-rejects-boolean",
+      "operator": "at-least",
+      "ruleValue": true,
+      "expectedError": "policy.input_invalid"
+    },
+    {
+      "id": "at-most-rejects-string",
+      "operator": "at-most",
+      "ruleValue": "10",
+      "expectedError": "policy.input_invalid"
+    },
+    {
+      "id": "at-most-rejects-array",
+      "operator": "at-most",
+      "ruleValue": [10],
+      "expectedError": "policy.input_invalid"
+    }
+  ]
+}

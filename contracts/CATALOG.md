@@ -4,7 +4,7 @@ Machine authority: [`catalog.v1.json`](catalog.v1.json).
 
 | Family | Count | Authority | Compatibility |
 | --- | ---: | --- | --- |
-| JSON Schema 2020-12 | 30 | `contracts/schemas/` | strict payloads; additive v1 only through coordinated producer/consumer qualification |
+| JSON Schema 2020-12 | 31 | `contracts/schemas/` | strict payloads; additive v1 only through coordinated producer/consumer qualification |
 | Retention policy | 1 | `contracts/data/` | exact ADR-0002 lifecycle projection |
 | OpenAPI 3.1 | 8 | `contracts/openapi/` | additive routes/operations; existing payloads remain strict |
 | WIT worlds | 5 | `contracts/wit/` | exact major-versioned component boundary |
@@ -30,7 +30,7 @@ The catalog records one ID, path, owner set, consumer set, classification, compa
 - Radar: bounded fetch, deterministic rule set and curation export ;
 - Notebook: context document and encrypted backup envelope ;
 - Sessions: event and audience-safe export ;
-- Model Policy: policy, sourced snapshot and deterministic evaluation ;
+- Model Policy: policy, tenant-bound need, sourced snapshot and deterministic evaluation ;
 - Boussole: reviewed dataset/method and local comparison ;
 - Specifications: immutable SpecPackage and planning handoff ;
 - Missions: orchestrator event and human-verdict MissionRecord.
