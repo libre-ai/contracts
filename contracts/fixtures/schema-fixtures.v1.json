@@ -1060,7 +1060,9 @@
     {
       "schema": "radar-normalized-item.v1.schema.json",
       "valid": {
-        "authors": ["Alice"],
+        "authors": [
+          "Alice"
+        ],
         "deduplicationKey": "3b9f05afc2635216cb25f674ff9d0058d1425751a8dba2ec0d67fc7ec6618c92",
         "externalId": "item-001",
         "id": "urn:libre-ai:radar-item:3b9f05afc2635216cb25f674ff9d0058d1425751a8dba2ec0d67fc7ec6618c92",
@@ -1069,7 +1071,10 @@
         "sourceHost": "example.org",
         "sourceId": "urn:libre-ai:source:feed-1",
         "summary": "Résumé sûr.",
-        "tags": ["rust", "sécurité"],
+        "tags": [
+          "rust",
+          "sécurité"
+        ],
         "title": "Sécurité du parsing",
         "updatedAt": null,
         "url": "https://example.org/articles/1"
@@ -1090,7 +1095,9 @@
         "homeUrl": "https://example.org/news",
         "items": [
           {
-            "authors": ["Alice"],
+            "authors": [
+              "Alice"
+            ],
             "deduplicationKey": "3b9f05afc2635216cb25f674ff9d0058d1425751a8dba2ec0d67fc7ec6618c92",
             "externalId": "item-001",
             "id": "urn:libre-ai:radar-item:3b9f05afc2635216cb25f674ff9d0058d1425751a8dba2ec0d67fc7ec6618c92",
@@ -1099,7 +1106,10 @@
             "sourceHost": "example.org",
             "sourceId": "urn:libre-ai:source:feed-1",
             "summary": "Résumé sûr.",
-            "tags": ["rust", "sécurité"],
+            "tags": [
+              "rust",
+              "sécurité"
+            ],
             "title": "Sécurité du parsing",
             "updatedAt": null,
             "url": "https://example.org/articles/1"
@@ -1175,7 +1185,9 @@
         "schemaVersion": "libre-ai.context-document.v2",
         "id": "urn:libre-ai:context:context-1",
         "createdAt": "2026-07-16T00:00:00Z",
-        "rootBlockIds": ["block_1"],
+        "rootBlockIds": [
+          "block_1"
+        ],
         "blocks": [
           {
             "id": "block_1",
@@ -1291,7 +1303,9 @@
             "id": "not_in_boolean",
             "fact": "model.open",
             "operator": "not-in",
-            "value": [false],
+            "value": [
+              false
+            ],
             "unknown": "indeterminate",
             "source": {
               "uri": "https://example.org/policy/method",
@@ -1304,7 +1318,10 @@
             "id": "not_in_number",
             "fact": "model.score",
             "operator": "not-in",
-            "value": [1, 0],
+            "value": [
+              1,
+              0
+            ],
             "unknown": "indeterminate",
             "source": {
               "uri": "https://example.org/policy/method",
@@ -1317,7 +1334,10 @@
             "id": "not_in_string",
             "fact": "model.licence",
             "operator": "not-in",
-            "value": ["SSPL-1.0", "AGPL-3.0"],
+            "value": [
+              "SSPL-1.0",
+              "AGPL-3.0"
+            ],
             "unknown": "indeterminate",
             "source": {
               "uri": "https://example.org/policy/method",
@@ -1330,7 +1350,9 @@
             "id": "in_boolean",
             "fact": "model.open",
             "operator": "in",
-            "value": [true],
+            "value": [
+              true
+            ],
             "unknown": "indeterminate",
             "source": {
               "uri": "https://example.org/policy/method",
@@ -1343,7 +1365,10 @@
             "id": "in_number",
             "fact": "model.score",
             "operator": "in",
-            "value": [8, 7],
+            "value": [
+              8,
+              7
+            ],
             "unknown": "indeterminate",
             "source": {
               "uri": "https://example.org/policy/method",
@@ -1356,7 +1381,10 @@
             "id": "in_string",
             "fact": "model.licence",
             "operator": "in",
-            "value": ["MIT", "Apache-2.0"],
+            "value": [
+              "MIT",
+              "Apache-2.0"
+            ],
             "unknown": "indeterminate",
             "source": {
               "uri": "https://example.org/policy/method",
@@ -1692,7 +1720,11 @@
         "schemaVersion": "libre-ai.boussole-method.v2",
         "id": "urn:libre-ai:method:method-2",
         "version": "2.0.0",
-        "responseScale": [-1, 0, 1],
+        "responseScale": [
+          -1,
+          0,
+          1
+        ],
         "abstentionTreatment": "excluded-from-denominator",
         "missingTreatment": "excluded-and-reported",
         "formula": "normalized-agreement-v2",
