@@ -11,7 +11,9 @@ type ContractKind =
   | "biscuit-authority"
   | "biscuit-policy";
 type CatalogReview = {
-  state: "pending-independent-review";
+  state: "pending-independent-agent-review";
+  reviewerKind: "agent";
+  separation: "different-agent-and-session";
   required: string[];
   dossier: string;
 };
@@ -225,7 +227,9 @@ for (const [index, entry] of entries.entries()) {
     const requiredReviews = isRecord(entry.review) ? entry.review.required : undefined;
     if (
       !isRecord(entry.review) ||
-      entry.review.state !== "pending-independent-review" ||
+      entry.review.state !== "pending-independent-agent-review" ||
+      entry.review.reviewerKind !== "agent" ||
+      entry.review.separation !== "different-agent-and-session" ||
       !Array.isArray(requiredReviews) ||
       requiredReviews.length < 2 ||
       new Set(requiredReviews).size !== requiredReviews.length ||
@@ -233,7 +237,7 @@ for (const [index, entry] of entries.entries()) {
       !requiredReviews.includes("security") ||
       requiredReviews.some((role) => typeof role !== "string" || !allowedReviewRoles.has(role))
     ) {
-      failures.push(`${label}: candidate misses valid role-separated reviews`);
+      failures.push(`${label}: candidate misses valid independent agent reviews`);
     }
     const dossier = isRecord(entry.review) ? entry.review.dossier : undefined;
     if (
@@ -244,6 +248,8 @@ for (const [index, entry] of entries.entries()) {
       !(await Bun.file(dossier).exists())
     ) {
       failures.push(`${label}: candidate review dossier is missing or unsafe`);
+    } else if (!(await Bun.file(dossier).text()).includes("AGENT-REVIEW-PROTOCOL.md")) {
+      failures.push(`${label}: candidate dossier does not bind the independent agent protocol`);
     }
   } else {
     failures.push(`${label}: invalid contract status`);

@@ -11,9 +11,9 @@ Machine authority: [`catalog.v1.json`](catalog.v1.json).
 | Biscuit authority/policies | 3 | `contracts/authz/` | minimal authority plus deny-by-default authorizers |
 
 The catalog records one ID, path, owner set, consumer set, classification, compatibility mode and
-`locked` or pending-independent-review `candidate` status for every contract. Candidate entries are
-not implementation or release approvals. Their dossier names every required review role; solo G2
-review agents and human control milestones follow `docs/reviews/AGENT-REVIEW-PROTOCOL.md`.
+`locked` or `pending-independent-agent-review` candidate status for every contract. Candidate entries
+are not implementation or release approvals. Their dossier names every required agent role and binds
+the reviewer to a distinct agent/session under [`AGENT-REVIEW-PROTOCOL.md`](../docs/reviews/AGENT-REVIEW-PROTOCOL.md).
 Uncataloged files and missing authorities fail `bun run check:contracts`.
 
 ## Shared contracts
