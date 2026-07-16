@@ -392,7 +392,7 @@
         "rules": [
           {
             "id": "licence_1",
-            "fact": "licence",
+            "fact": "model.licence",
             "operator": "in",
             "value": ["MIT", "Apache-2.0"],
             "unknown": "ineligible",
@@ -414,7 +414,39 @@
         }
       },
       "invalidMutations": [
-        { "name": "unknown treated as eligible", "path": "/rules/0/unknown", "value": "eligible" }
+        { "name": "unknown treated as eligible", "path": "/rules/0/unknown", "value": "eligible" },
+        {
+          "name": "numeric operator with set value",
+          "path": "/rules/0/operator",
+          "value": "at-least"
+        }
+      ]
+    },
+    {
+      "schema": "policy-need.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.policy-need.v1",
+        "id": "urn:libre-ai:need:need-1",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          { "name": "need.task", "value": "summary" },
+          { "name": "need.max_context_tokens", "value": 8192 },
+          { "name": "need.personal_data", "value": true }
+        ],
+        "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "invalidMutations": [
+        { "name": "tenant missing", "path": "/tenantId", "remove": true },
+        { "name": "model fact in need", "path": "/facts/0/name", "value": "model.task" },
+        { "name": "fact value is not scalar", "path": "/facts/0/value", "value": ["summary"] },
+        {
+          "name": "exact duplicate need fact",
+          "path": "/facts",
+          "value": [
+            { "name": "need.task", "value": "summary" },
+            { "name": "need.task", "value": "summary" }
+          ]
+        }
       ]
     },
     {
@@ -427,7 +459,7 @@
         "capturedAt": "2026-07-16T00:00:00Z",
         "facts": [
           {
-            "name": "licence",
+            "name": "model.licence",
             "value": "MIT",
             "source": {
               "uri": "https://example.org/model",
@@ -440,14 +472,42 @@
         "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
       },
       "invalidMutations": [
-        { "name": "personal tenant missing", "path": "/tenantId", "remove": true }
+        { "name": "personal tenant missing", "path": "/tenantId", "remove": true },
+        { "name": "need fact in snapshot", "path": "/facts/0/name", "value": "need.licence" },
+        { "name": "fact value is not scalar", "path": "/facts/0/value", "value": ["MIT"] },
+        {
+          "name": "exact duplicate snapshot fact",
+          "path": "/facts",
+          "value": [
+            {
+              "name": "model.licence",
+              "value": "MIT",
+              "source": {
+                "uri": "https://example.org/model",
+                "retrievedAt": "2026-07-16T00:00:00Z",
+                "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "licence": "CC-BY-4.0"
+              }
+            },
+            {
+              "name": "model.licence",
+              "value": "MIT",
+              "source": {
+                "uri": "https://example.org/model",
+                "retrievedAt": "2026-07-16T00:00:00Z",
+                "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "licence": "CC-BY-4.0"
+              }
+            }
+          ]
+        }
       ]
     },
     {
       "schema": "policy-evaluation.v1.schema.json",
       "valid": {
         "schemaVersion": "libre-ai.policy-evaluation.v1",
-        "id": "urn:libre-ai:evaluation:evaluation-1",
+        "id": "urn:libre-ai:evaluation:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
         "tenantId": "ten_1234567890abcdef",
         "policyId": "urn:libre-ai:policy:policy-1",
         "policyDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
@@ -457,7 +517,7 @@
         "engineVersion": "1.0.0",
         "verdict": "indeterminate",
         "ruleResults": [
-          { "ruleId": "licence_1", "status": "unknown", "reasonCode": "policy.fact_unknown" }
+          { "ruleId": "licence_1", "status": "unknown", "reasonCode": "policy.fact_absent" }
         ],
         "evaluatedAt": "2026-07-16T00:00:00Z",
         "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"

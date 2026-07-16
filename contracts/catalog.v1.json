@@ -192,6 +192,16 @@
       "status": "locked"
     },
     {
+      "id": "policy-need-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/policy-need.v1.schema.json",
+      "owners": ["model-policy", "canonical-core"],
+      "consumers": ["model-policy", "policy-core"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "locked"
+    },
+    {
       "id": "model-snapshot-v1",
       "kind": "json-schema",
       "path": "contracts/schemas/model-snapshot.v1.schema.json",
@@ -427,6 +437,11 @@
       "id": "policy-core-v1",
       "kind": "wit",
       "path": "contracts/wit/policy-core-v1/world.wit",
+      "profiles": ["contracts/wit/policy-core-v1/SEMANTICS.md"],
+      "vectors": [
+        "contracts/fixtures/policy-core-v1/operators.json",
+        "contracts/fixtures/policy-core-v1/golden.json"
+      ],
       "owners": ["model-policy", "specialized-rust"],
       "consumers": ["model-policy"],
       "compatibility": "major-versioned",

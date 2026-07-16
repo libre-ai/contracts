@@ -10,7 +10,8 @@ interface types {
 world policy-core {
   use types.{contract-error};
 
-  /// Evaluates canonical policy-definition, model-snapshot and need JSON bytes.
+  /// Evaluates policy-definition.v1, model-snapshot.v1 and policy-need.v1 JSON bytes.
+  /// SEMANTICS.md is normative for validation, operators, freshness, ordering and hashes.
   /// Current time is explicit input and no host capability is imported.
   export evaluate: func(policy: list<u8>, snapshot: list<u8>, need: list<u8>, evaluated-at: string) -> result<list<u8>, contract-error>;
 }

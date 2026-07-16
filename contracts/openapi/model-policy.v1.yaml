@@ -110,16 +110,7 @@ paths:
                   type: string
                   pattern: '^[a-f0-9]{64}$'
                 need:
-                  type: object
-                  maxProperties: 1000
-                  propertyNames:
-                    pattern: '^[a-z][a-z0-9_.-]{1,127}$'
-                  additionalProperties:
-                    oneOf:
-                      - type: string
-                        maxLength: 5000
-                      - type: number
-                      - type: boolean
+                  $ref: ../schemas/policy-need.v1.schema.json
       responses:
         '200':
           description: Deterministic eligibility result
@@ -254,19 +245,14 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              maxProperties: 1000
-              propertyNames:
-                pattern: '^[a-z][a-z0-9_.-]{1,127}$'
-              additionalProperties:
-                oneOf:
-                  - type: string
-                    maxLength: 5000
-                  - type: number
-                  - type: boolean
+              $ref: ../schemas/policy-need.v1.schema.json
       responses:
         '201':
           description: Bounded need created
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/policy-need.v1.schema.json
         default:
           $ref: '#/components/responses/Problem'
   /v1/model-policy/evaluations/{evaluationId}:

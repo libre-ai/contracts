@@ -1,0 +1,1840 @@
+{
+  "schemaVersion": "libre-ai.policy-core-golden-vectors.v1",
+  "engineVersion": "1.0.0",
+  "canonicalization": "RFC 8785",
+  "digestAlgorithm": "SHA-256",
+  "semantics": "contracts/wit/policy-core-v1/SEMANTICS.md",
+  "cases": [
+    {
+      "id": "all-operators-eligible",
+      "policy": {
+        "schemaVersion": "libre-ai.policy-definition.v1",
+        "id": "urn:libre-ai:policy:all-operators-eligible",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "rules": [
+          {
+            "id": "at_most_number",
+            "fact": "model.score",
+            "operator": "at-most",
+            "value": 10,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "at_least_number",
+            "fact": "model.score",
+            "operator": "at-least",
+            "value": 7,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            },
+            "maxSourceAgeDays": 365
+          },
+          {
+            "id": "not_in_boolean",
+            "fact": "model.open",
+            "operator": "not-in",
+            "value": [false],
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "not_in_number",
+            "fact": "model.score",
+            "operator": "not-in",
+            "value": [1, 0],
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "not_in_string",
+            "fact": "model.licence",
+            "operator": "not-in",
+            "value": ["SSPL-1.0", "AGPL-3.0"],
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "in_boolean",
+            "fact": "model.open",
+            "operator": "in",
+            "value": [true],
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "in_number",
+            "fact": "model.score",
+            "operator": "in",
+            "value": [8, 7],
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "in_string",
+            "fact": "model.licence",
+            "operator": "in",
+            "value": ["MIT", "Apache-2.0"],
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "not_equals_boolean",
+            "fact": "model.open",
+            "operator": "not-equals",
+            "value": false,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "not_equals_number",
+            "fact": "model.score",
+            "operator": "not-equals",
+            "value": 9,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "not_equals_string",
+            "fact": "model.licence",
+            "operator": "not-equals",
+            "value": "proprietary",
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "equals_boolean",
+            "fact": "model.open",
+            "operator": "equals",
+            "value": true,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "equals_number",
+            "fact": "model.score",
+            "operator": "equals",
+            "value": 8,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "equals_string",
+            "fact": "model.licence",
+            "operator": "equals",
+            "value": "MIT",
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "6668061d9e71f50351b82a26b8a94dc6f22060a9b9613bbeb0481468b5fc68c9",
+        "approvedAt": "2026-01-02T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "approvedAt": "2026-01-02T00:00:00Z",
+          "reference": "urn:libre-ai:approval:all-operators-eligible",
+          "subjectDigest": "6668061d9e71f50351b82a26b8a94dc6f22060a9b9613bbeb0481468b5fc68c9"
+        }
+      },
+      "snapshot": {
+        "schemaVersion": "libre-ai.model-snapshot.v1",
+        "id": "urn:libre-ai:snapshot:all-operators-eligible",
+        "tenantId": "ten_1234567890abcdef",
+        "modelId": "model-all-operators-eligible",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "model.score",
+            "value": 8,
+            "source": {
+              "uri": "https://example.org/evidence/b",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "name": "model.open",
+            "value": true,
+            "source": {
+              "uri": "https://example.org/evidence/c",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "name": "model.licence",
+            "value": "MIT",
+            "source": {
+              "uri": "https://example.org/evidence/a",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "d7e584e981b22ef931213af81e08b6cc49e8a24d5588bfa42d1f57ec74130f86"
+      },
+      "need": {
+        "schemaVersion": "libre-ai.policy-need.v1",
+        "id": "urn:libre-ai:need:all-operators-eligible",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          {
+            "name": "need.task",
+            "value": "summary"
+          }
+        ],
+        "digest": "58c167b7736da169da70b6d20d196f4e6db0098441f573ab041a2402be47702c"
+      },
+      "evaluatedAt": "2026-07-17T00:00:00Z",
+      "expectedEvaluation": {
+        "schemaVersion": "libre-ai.policy-evaluation.v1",
+        "id": "urn:libre-ai:evaluation:5b77c1350371cfcb01128021b211bb227871541217a2fb53e13934727126280a",
+        "tenantId": "ten_1234567890abcdef",
+        "policyId": "urn:libre-ai:policy:all-operators-eligible",
+        "policyDigest": "6668061d9e71f50351b82a26b8a94dc6f22060a9b9613bbeb0481468b5fc68c9",
+        "snapshotId": "urn:libre-ai:snapshot:all-operators-eligible",
+        "snapshotDigest": "d7e584e981b22ef931213af81e08b6cc49e8a24d5588bfa42d1f57ec74130f86",
+        "needDigest": "58c167b7736da169da70b6d20d196f4e6db0098441f573ab041a2402be47702c",
+        "engineVersion": "1.0.0",
+        "verdict": "eligible",
+        "ruleResults": [
+          {
+            "ruleId": "at_least_number",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "at_most_number",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "equals_boolean",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "equals_number",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "equals_string",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "in_boolean",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "in_number",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "in_string",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "not_equals_boolean",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "not_equals_number",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "not_equals_string",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "not_in_boolean",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "not_in_number",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "not_in_string",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          }
+        ],
+        "evaluatedAt": "2026-07-17T00:00:00Z",
+        "digest": "5b77c1350371cfcb01128021b211bb227871541217a2fb53e13934727126280a"
+      }
+    },
+    {
+      "id": "stale-boundary-inclusive",
+      "policy": {
+        "schemaVersion": "libre-ai.policy-definition.v1",
+        "id": "urn:libre-ai:policy:stale-boundary-inclusive",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "rules": [
+          {
+            "id": "fresh_bound",
+            "fact": "model.score",
+            "operator": "at-least",
+            "value": 7,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            },
+            "maxSourceAgeDays": 1
+          }
+        ],
+        "digest": "a41a7ba3b877f0a8e073cce79a8c295b7f766d7432d20a3d4e08616aa3da4dd5",
+        "approvedAt": "2026-01-02T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "approvedAt": "2026-01-02T00:00:00Z",
+          "reference": "urn:libre-ai:approval:stale-boundary-inclusive",
+          "subjectDigest": "a41a7ba3b877f0a8e073cce79a8c295b7f766d7432d20a3d4e08616aa3da4dd5"
+        }
+      },
+      "snapshot": {
+        "schemaVersion": "libre-ai.model-snapshot.v1",
+        "id": "urn:libre-ai:snapshot:stale-boundary-inclusive",
+        "tenantId": "ten_1234567890abcdef",
+        "modelId": "model-stale-boundary-inclusive",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "model.score",
+            "value": 8,
+            "source": {
+              "uri": "https://example.org/evidence/a",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "7e6b6cc3dfa9c5fde88b930812a4a3dec78b92b2a40b353416148a9f6052d264"
+      },
+      "need": {
+        "schemaVersion": "libre-ai.policy-need.v1",
+        "id": "urn:libre-ai:need:stale-boundary-inclusive",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          {
+            "name": "need.task",
+            "value": "summary"
+          }
+        ],
+        "digest": "8f59dc5075c7fa9ad0c94926284f0cd7fcebc95e2d7a9503e8d16ff8fe95b65b"
+      },
+      "evaluatedAt": "2026-07-17T00:00:00Z",
+      "expectedEvaluation": {
+        "schemaVersion": "libre-ai.policy-evaluation.v1",
+        "id": "urn:libre-ai:evaluation:8372c43dd2b5d2e44e93e0a80c3c1db03fe5850929b5133817c1ea6b4aa782d8",
+        "tenantId": "ten_1234567890abcdef",
+        "policyId": "urn:libre-ai:policy:stale-boundary-inclusive",
+        "policyDigest": "a41a7ba3b877f0a8e073cce79a8c295b7f766d7432d20a3d4e08616aa3da4dd5",
+        "snapshotId": "urn:libre-ai:snapshot:stale-boundary-inclusive",
+        "snapshotDigest": "7e6b6cc3dfa9c5fde88b930812a4a3dec78b92b2a40b353416148a9f6052d264",
+        "needDigest": "8f59dc5075c7fa9ad0c94926284f0cd7fcebc95e2d7a9503e8d16ff8fe95b65b",
+        "engineVersion": "1.0.0",
+        "verdict": "eligible",
+        "ruleResults": [
+          {
+            "ruleId": "fresh_bound",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          }
+        ],
+        "evaluatedAt": "2026-07-17T00:00:00Z",
+        "digest": "8372c43dd2b5d2e44e93e0a80c3c1db03fe5850929b5133817c1ea6b4aa782d8"
+      }
+    },
+    {
+      "id": "stale-one-second-over",
+      "policy": {
+        "schemaVersion": "libre-ai.policy-definition.v1",
+        "id": "urn:libre-ai:policy:stale-one-second-over",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "rules": [
+          {
+            "id": "stale_bound",
+            "fact": "model.score",
+            "operator": "at-least",
+            "value": 7,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            },
+            "maxSourceAgeDays": 1
+          }
+        ],
+        "digest": "282286d32e0b200fa65af3b9e13dec4ebebe7564e262d2b04ab6f9c29fd50af2",
+        "approvedAt": "2026-01-02T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "approvedAt": "2026-01-02T00:00:00Z",
+          "reference": "urn:libre-ai:approval:stale-one-second-over",
+          "subjectDigest": "282286d32e0b200fa65af3b9e13dec4ebebe7564e262d2b04ab6f9c29fd50af2"
+        }
+      },
+      "snapshot": {
+        "schemaVersion": "libre-ai.model-snapshot.v1",
+        "id": "urn:libre-ai:snapshot:stale-one-second-over",
+        "tenantId": "ten_1234567890abcdef",
+        "modelId": "model-stale-one-second-over",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "model.score",
+            "value": 8,
+            "source": {
+              "uri": "https://example.org/evidence/a",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "f5ffee001ad8cc58f7819aef49dc5600b9f052819380f40c65b0a071517370bc"
+      },
+      "need": {
+        "schemaVersion": "libre-ai.policy-need.v1",
+        "id": "urn:libre-ai:need:stale-one-second-over",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          {
+            "name": "need.task",
+            "value": "summary"
+          }
+        ],
+        "digest": "9b019dff8e1961e18a5fda3a768738cfd88f6c702ef208814bbf810b14de6702"
+      },
+      "evaluatedAt": "2026-07-17T00:00:01Z",
+      "expectedEvaluation": {
+        "schemaVersion": "libre-ai.policy-evaluation.v1",
+        "id": "urn:libre-ai:evaluation:9f439b5cface6db92a0d759cb196d7db9921577335b2fe9c5af639b89d702ba2",
+        "tenantId": "ten_1234567890abcdef",
+        "policyId": "urn:libre-ai:policy:stale-one-second-over",
+        "policyDigest": "282286d32e0b200fa65af3b9e13dec4ebebe7564e262d2b04ab6f9c29fd50af2",
+        "snapshotId": "urn:libre-ai:snapshot:stale-one-second-over",
+        "snapshotDigest": "f5ffee001ad8cc58f7819aef49dc5600b9f052819380f40c65b0a071517370bc",
+        "needDigest": "9b019dff8e1961e18a5fda3a768738cfd88f6c702ef208814bbf810b14de6702",
+        "engineVersion": "1.0.0",
+        "verdict": "indeterminate",
+        "ruleResults": [
+          {
+            "ruleId": "stale_bound",
+            "status": "unknown",
+            "reasonCode": "policy.snapshot_stale"
+          }
+        ],
+        "evaluatedAt": "2026-07-17T00:00:01Z",
+        "digest": "9f439b5cface6db92a0d759cb196d7db9921577335b2fe9c5af639b89d702ba2"
+      }
+    },
+    {
+      "id": "unknown-ineligible",
+      "policy": {
+        "schemaVersion": "libre-ai.policy-definition.v1",
+        "id": "urn:libre-ai:policy:unknown-ineligible",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "rules": [
+          {
+            "id": "encryption_required",
+            "fact": "model.encrypted",
+            "operator": "equals",
+            "value": true,
+            "unknown": "ineligible",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "5b9cca0bd929b6b219a679d7c619b013507f86cd5cda9bfbc25fefcc0ceaf262",
+        "approvedAt": "2026-01-02T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "approvedAt": "2026-01-02T00:00:00Z",
+          "reference": "urn:libre-ai:approval:unknown-ineligible",
+          "subjectDigest": "5b9cca0bd929b6b219a679d7c619b013507f86cd5cda9bfbc25fefcc0ceaf262"
+        }
+      },
+      "snapshot": {
+        "schemaVersion": "libre-ai.model-snapshot.v1",
+        "id": "urn:libre-ai:snapshot:unknown-ineligible",
+        "tenantId": "ten_1234567890abcdef",
+        "modelId": "model-unknown-ineligible",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "model.licence",
+            "value": "MIT",
+            "source": {
+              "uri": "https://example.org/evidence/a",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "1b1e3ec24ab1fd6804c32b7af022da2affc625f6c5f873c22275fa59d56da858"
+      },
+      "need": {
+        "schemaVersion": "libre-ai.policy-need.v1",
+        "id": "urn:libre-ai:need:unknown-ineligible",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          {
+            "name": "need.task",
+            "value": "summary"
+          }
+        ],
+        "digest": "2b8ed949010a8c6190493f0b3ca0066772fff3ab3880912ed00d01b2cfb4146f"
+      },
+      "evaluatedAt": "2026-07-17T00:00:00Z",
+      "expectedEvaluation": {
+        "schemaVersion": "libre-ai.policy-evaluation.v1",
+        "id": "urn:libre-ai:evaluation:792958252e3292538ba24f5a806a4d11944c58854b9ecc4062462bdd7b84c679",
+        "tenantId": "ten_1234567890abcdef",
+        "policyId": "urn:libre-ai:policy:unknown-ineligible",
+        "policyDigest": "5b9cca0bd929b6b219a679d7c619b013507f86cd5cda9bfbc25fefcc0ceaf262",
+        "snapshotId": "urn:libre-ai:snapshot:unknown-ineligible",
+        "snapshotDigest": "1b1e3ec24ab1fd6804c32b7af022da2affc625f6c5f873c22275fa59d56da858",
+        "needDigest": "2b8ed949010a8c6190493f0b3ca0066772fff3ab3880912ed00d01b2cfb4146f",
+        "engineVersion": "1.0.0",
+        "verdict": "ineligible",
+        "ruleResults": [
+          {
+            "ruleId": "encryption_required",
+            "status": "unknown",
+            "reasonCode": "policy.fact_absent"
+          }
+        ],
+        "evaluatedAt": "2026-07-17T00:00:00Z",
+        "digest": "792958252e3292538ba24f5a806a4d11944c58854b9ecc4062462bdd7b84c679"
+      }
+    },
+    {
+      "id": "failed-before-unknown",
+      "policy": {
+        "schemaVersion": "libre-ai.policy-definition.v1",
+        "id": "urn:libre-ai:policy:failed-before-unknown",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "rules": [
+          {
+            "id": "z_failed",
+            "fact": "model.licence",
+            "operator": "equals",
+            "value": "MIT",
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "a_unknown",
+            "fact": "model.hosting.jurisdiction",
+            "operator": "not-in",
+            "value": ["US"],
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "1badc43674100679d08358b5a16aa37d3d05d329d65ab4172a1a06dc6f8e0f31",
+        "approvedAt": "2026-01-02T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "approvedAt": "2026-01-02T00:00:00Z",
+          "reference": "urn:libre-ai:approval:failed-before-unknown",
+          "subjectDigest": "1badc43674100679d08358b5a16aa37d3d05d329d65ab4172a1a06dc6f8e0f31"
+        }
+      },
+      "snapshot": {
+        "schemaVersion": "libre-ai.model-snapshot.v1",
+        "id": "urn:libre-ai:snapshot:failed-before-unknown",
+        "tenantId": "ten_1234567890abcdef",
+        "modelId": "model-failed-before-unknown",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "model.licence",
+            "value": "proprietary",
+            "source": {
+              "uri": "https://example.org/evidence/a",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "3d88fb49550725cb482d79e8e247a4e38c62578a26c326bee3e69245b69baddb"
+      },
+      "need": {
+        "schemaVersion": "libre-ai.policy-need.v1",
+        "id": "urn:libre-ai:need:failed-before-unknown",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          {
+            "name": "need.task",
+            "value": "summary"
+          }
+        ],
+        "digest": "0b09b19748acf81534bc80d9817b67e720821b1bdfbea114af723e6a68a4b570"
+      },
+      "evaluatedAt": "2026-07-17T00:00:00Z",
+      "expectedEvaluation": {
+        "schemaVersion": "libre-ai.policy-evaluation.v1",
+        "id": "urn:libre-ai:evaluation:dff25db2273a60275858be09b7494375f2f8cfc0c058217b9f1533f28bdc6302",
+        "tenantId": "ten_1234567890abcdef",
+        "policyId": "urn:libre-ai:policy:failed-before-unknown",
+        "policyDigest": "1badc43674100679d08358b5a16aa37d3d05d329d65ab4172a1a06dc6f8e0f31",
+        "snapshotId": "urn:libre-ai:snapshot:failed-before-unknown",
+        "snapshotDigest": "3d88fb49550725cb482d79e8e247a4e38c62578a26c326bee3e69245b69baddb",
+        "needDigest": "0b09b19748acf81534bc80d9817b67e720821b1bdfbea114af723e6a68a4b570",
+        "engineVersion": "1.0.0",
+        "verdict": "ineligible",
+        "ruleResults": [
+          {
+            "ruleId": "a_unknown",
+            "status": "unknown",
+            "reasonCode": "policy.fact_absent"
+          },
+          {
+            "ruleId": "z_failed",
+            "status": "failed",
+            "reasonCode": "policy.rule_failed"
+          }
+        ],
+        "evaluatedAt": "2026-07-17T00:00:00Z",
+        "digest": "dff25db2273a60275858be09b7494375f2f8cfc0c058217b9f1533f28bdc6302"
+      }
+    },
+    {
+      "id": "origin-is-not-jurisdiction",
+      "policy": {
+        "schemaVersion": "libre-ai.policy-definition.v1",
+        "id": "urn:libre-ai:policy:origin-is-not-jurisdiction",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "rules": [
+          {
+            "id": "jurisdiction_required",
+            "fact": "model.hosting.jurisdiction",
+            "operator": "in",
+            "value": ["FR", "DE"],
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "ebdac1bd1c80a05fd790aa06c51edaf12d413b39614462d219d7a4531b0b3b22",
+        "approvedAt": "2026-01-02T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "approvedAt": "2026-01-02T00:00:00Z",
+          "reference": "urn:libre-ai:approval:origin-is-not-jurisdiction",
+          "subjectDigest": "ebdac1bd1c80a05fd790aa06c51edaf12d413b39614462d219d7a4531b0b3b22"
+        }
+      },
+      "snapshot": {
+        "schemaVersion": "libre-ai.model-snapshot.v1",
+        "id": "urn:libre-ai:snapshot:origin-is-not-jurisdiction",
+        "tenantId": "ten_1234567890abcdef",
+        "modelId": "model-origin-is-not-jurisdiction",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "model.provider.origin",
+            "value": "FR",
+            "source": {
+              "uri": "https://example.org/evidence/a",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "d84b59e375b2db09491bec2c4c08ceafec18780688f4a76186012f0c031310ba"
+      },
+      "need": {
+        "schemaVersion": "libre-ai.policy-need.v1",
+        "id": "urn:libre-ai:need:origin-is-not-jurisdiction",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          {
+            "name": "need.task",
+            "value": "summary"
+          }
+        ],
+        "digest": "1d6a477a7058102763adfec0a65f8ab38f4a1e2bf187f8c2aa4e03ba9c1a7dd5"
+      },
+      "evaluatedAt": "2026-07-17T00:00:00Z",
+      "expectedEvaluation": {
+        "schemaVersion": "libre-ai.policy-evaluation.v1",
+        "id": "urn:libre-ai:evaluation:013a06cbca372d6fdba41828ba73c57e6e7f62fb787171d29cd995254de0b12e",
+        "tenantId": "ten_1234567890abcdef",
+        "policyId": "urn:libre-ai:policy:origin-is-not-jurisdiction",
+        "policyDigest": "ebdac1bd1c80a05fd790aa06c51edaf12d413b39614462d219d7a4531b0b3b22",
+        "snapshotId": "urn:libre-ai:snapshot:origin-is-not-jurisdiction",
+        "snapshotDigest": "d84b59e375b2db09491bec2c4c08ceafec18780688f4a76186012f0c031310ba",
+        "needDigest": "1d6a477a7058102763adfec0a65f8ab38f4a1e2bf187f8c2aa4e03ba9c1a7dd5",
+        "engineVersion": "1.0.0",
+        "verdict": "indeterminate",
+        "ruleResults": [
+          {
+            "ruleId": "jurisdiction_required",
+            "status": "unknown",
+            "reasonCode": "policy.fact_absent"
+          }
+        ],
+        "evaluatedAt": "2026-07-17T00:00:00Z",
+        "digest": "013a06cbca372d6fdba41828ba73c57e6e7f62fb787171d29cd995254de0b12e"
+      }
+    },
+    {
+      "id": "origin-and-jurisdiction-independent",
+      "policy": {
+        "schemaVersion": "libre-ai.policy-definition.v1",
+        "id": "urn:libre-ai:policy:origin-and-jurisdiction-independent",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "rules": [
+          {
+            "id": "jurisdiction_required",
+            "fact": "model.hosting.jurisdiction",
+            "operator": "equals",
+            "value": "FR",
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "b9ed1d00fe931520f0ae78244fc6ea5ccad1a619b0c1f8b5aa6d7690c97f4969",
+        "approvedAt": "2026-01-02T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "approvedAt": "2026-01-02T00:00:00Z",
+          "reference": "urn:libre-ai:approval:origin-and-jurisdiction-independent",
+          "subjectDigest": "b9ed1d00fe931520f0ae78244fc6ea5ccad1a619b0c1f8b5aa6d7690c97f4969"
+        }
+      },
+      "snapshot": {
+        "schemaVersion": "libre-ai.model-snapshot.v1",
+        "id": "urn:libre-ai:snapshot:origin-and-jurisdiction-independent",
+        "tenantId": "ten_1234567890abcdef",
+        "modelId": "model-origin-and-jurisdiction-independent",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "model.provider.origin",
+            "value": "US",
+            "source": {
+              "uri": "https://example.org/evidence/b",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "name": "model.hosting.jurisdiction",
+            "value": "FR",
+            "source": {
+              "uri": "https://example.org/evidence/a",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "38615cd29503fd7a77d4a61b5d57108039554bd811b096b650d7085b0ee5e01b"
+      },
+      "need": {
+        "schemaVersion": "libre-ai.policy-need.v1",
+        "id": "urn:libre-ai:need:origin-and-jurisdiction-independent",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          {
+            "name": "need.task",
+            "value": "summary"
+          }
+        ],
+        "digest": "e75969c051944c868538d5fcb9f814c396398ca504da89e32e256f9b9891bd22"
+      },
+      "evaluatedAt": "2026-07-17T00:00:00Z",
+      "expectedEvaluation": {
+        "schemaVersion": "libre-ai.policy-evaluation.v1",
+        "id": "urn:libre-ai:evaluation:e9cea73e515be55c0705e8cbf53df28cd05860a05774df1e1a0425e370e1d024",
+        "tenantId": "ten_1234567890abcdef",
+        "policyId": "urn:libre-ai:policy:origin-and-jurisdiction-independent",
+        "policyDigest": "b9ed1d00fe931520f0ae78244fc6ea5ccad1a619b0c1f8b5aa6d7690c97f4969",
+        "snapshotId": "urn:libre-ai:snapshot:origin-and-jurisdiction-independent",
+        "snapshotDigest": "38615cd29503fd7a77d4a61b5d57108039554bd811b096b650d7085b0ee5e01b",
+        "needDigest": "e75969c051944c868538d5fcb9f814c396398ca504da89e32e256f9b9891bd22",
+        "engineVersion": "1.0.0",
+        "verdict": "eligible",
+        "ruleResults": [
+          {
+            "ruleId": "jurisdiction_required",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          }
+        ],
+        "evaluatedAt": "2026-07-17T00:00:00Z",
+        "digest": "e9cea73e515be55c0705e8cbf53df28cd05860a05774df1e1a0425e370e1d024"
+      }
+    },
+    {
+      "id": "multiple-facts-failed-priority",
+      "policy": {
+        "schemaVersion": "libre-ai.policy-definition.v1",
+        "id": "urn:libre-ai:policy:multiple-facts-failed-priority",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "rules": [
+          {
+            "id": "no_us",
+            "fact": "model.hosting.jurisdiction",
+            "operator": "not-in",
+            "value": ["US", "CN"],
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "0ce3f3f7869f752e642bc9fdfed6503f16f89895f07ad17973b2976ce99cf72f",
+        "approvedAt": "2026-01-02T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "approvedAt": "2026-01-02T00:00:00Z",
+          "reference": "urn:libre-ai:approval:multiple-facts-failed-priority",
+          "subjectDigest": "0ce3f3f7869f752e642bc9fdfed6503f16f89895f07ad17973b2976ce99cf72f"
+        }
+      },
+      "snapshot": {
+        "schemaVersion": "libre-ai.model-snapshot.v1",
+        "id": "urn:libre-ai:snapshot:multiple-facts-failed-priority",
+        "tenantId": "ten_1234567890abcdef",
+        "modelId": "model-multiple-facts-failed-priority",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "model.hosting.jurisdiction",
+            "value": "FR",
+            "source": {
+              "uri": "https://example.org/evidence/a",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "name": "model.hosting.jurisdiction",
+            "value": "US",
+            "source": {
+              "uri": "https://example.org/evidence/b",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "9dd7a61dddfa1763b7534b6d8afba5ebbb1157c2d526e46800cec2fc548a3ee3"
+      },
+      "need": {
+        "schemaVersion": "libre-ai.policy-need.v1",
+        "id": "urn:libre-ai:need:multiple-facts-failed-priority",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          {
+            "name": "need.task",
+            "value": "summary"
+          }
+        ],
+        "digest": "284ffff08ba0c18795e3be52c7f8341305ac49e1b093d55df914aadb7cddd62c"
+      },
+      "evaluatedAt": "2026-07-17T00:00:00Z",
+      "expectedEvaluation": {
+        "schemaVersion": "libre-ai.policy-evaluation.v1",
+        "id": "urn:libre-ai:evaluation:ea4fa89b8fc97678a80a7c1eb2939c716e6bd0c98e5df69223e4ee7378509578",
+        "tenantId": "ten_1234567890abcdef",
+        "policyId": "urn:libre-ai:policy:multiple-facts-failed-priority",
+        "policyDigest": "0ce3f3f7869f752e642bc9fdfed6503f16f89895f07ad17973b2976ce99cf72f",
+        "snapshotId": "urn:libre-ai:snapshot:multiple-facts-failed-priority",
+        "snapshotDigest": "9dd7a61dddfa1763b7534b6d8afba5ebbb1157c2d526e46800cec2fc548a3ee3",
+        "needDigest": "284ffff08ba0c18795e3be52c7f8341305ac49e1b093d55df914aadb7cddd62c",
+        "engineVersion": "1.0.0",
+        "verdict": "ineligible",
+        "ruleResults": [
+          {
+            "ruleId": "no_us",
+            "status": "failed",
+            "reasonCode": "policy.rule_failed"
+          }
+        ],
+        "evaluatedAt": "2026-07-17T00:00:00Z",
+        "digest": "ea4fa89b8fc97678a80a7c1eb2939c716e6bd0c98e5df69223e4ee7378509578"
+      }
+    },
+    {
+      "id": "multiple-sources-stale-priority",
+      "policy": {
+        "schemaVersion": "libre-ai.policy-definition.v1",
+        "id": "urn:libre-ai:policy:multiple-sources-stale-priority",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "rules": [
+          {
+            "id": "score_fresh",
+            "fact": "model.score",
+            "operator": "at-least",
+            "value": 7,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            },
+            "maxSourceAgeDays": 1
+          }
+        ],
+        "digest": "51341a92952c1d53bc9c8420d4b315cf52278a836f18fb9d9ba1ddd37ee19769",
+        "approvedAt": "2026-01-02T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "approvedAt": "2026-01-02T00:00:00Z",
+          "reference": "urn:libre-ai:approval:multiple-sources-stale-priority",
+          "subjectDigest": "51341a92952c1d53bc9c8420d4b315cf52278a836f18fb9d9ba1ddd37ee19769"
+        }
+      },
+      "snapshot": {
+        "schemaVersion": "libre-ai.model-snapshot.v1",
+        "id": "urn:libre-ai:snapshot:multiple-sources-stale-priority",
+        "tenantId": "ten_1234567890abcdef",
+        "modelId": "model-multiple-sources-stale-priority",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "model.score",
+            "value": 8,
+            "source": {
+              "uri": "https://example.org/evidence/a",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "name": "model.score",
+            "value": 8,
+            "source": {
+              "uri": "https://example.org/evidence/b",
+              "retrievedAt": "2026-07-15T23:59:59Z",
+              "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "c19391ebc6f737dda711eeed9d42b4870a3a6ab912bf99384c765e6527f535de"
+      },
+      "need": {
+        "schemaVersion": "libre-ai.policy-need.v1",
+        "id": "urn:libre-ai:need:multiple-sources-stale-priority",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          {
+            "name": "need.task",
+            "value": "summary"
+          }
+        ],
+        "digest": "c8385c16d047ab0801d8e753795241f5b5032f2c421c6388200e4707b13ac096"
+      },
+      "evaluatedAt": "2026-07-17T00:00:00Z",
+      "expectedEvaluation": {
+        "schemaVersion": "libre-ai.policy-evaluation.v1",
+        "id": "urn:libre-ai:evaluation:9d5d6efee036f9bc8f9c8f8a00578d83ed78149e7323b2e77a1c2802b990ed33",
+        "tenantId": "ten_1234567890abcdef",
+        "policyId": "urn:libre-ai:policy:multiple-sources-stale-priority",
+        "policyDigest": "51341a92952c1d53bc9c8420d4b315cf52278a836f18fb9d9ba1ddd37ee19769",
+        "snapshotId": "urn:libre-ai:snapshot:multiple-sources-stale-priority",
+        "snapshotDigest": "c19391ebc6f737dda711eeed9d42b4870a3a6ab912bf99384c765e6527f535de",
+        "needDigest": "c8385c16d047ab0801d8e753795241f5b5032f2c421c6388200e4707b13ac096",
+        "engineVersion": "1.0.0",
+        "verdict": "indeterminate",
+        "ruleResults": [
+          {
+            "ruleId": "score_fresh",
+            "status": "unknown",
+            "reasonCode": "policy.snapshot_stale"
+          }
+        ],
+        "evaluatedAt": "2026-07-17T00:00:00Z",
+        "digest": "9d5d6efee036f9bc8f9c8f8a00578d83ed78149e7323b2e77a1c2802b990ed33"
+      }
+    },
+    {
+      "id": "source-from-future",
+      "policy": {
+        "schemaVersion": "libre-ai.policy-definition.v1",
+        "id": "urn:libre-ai:policy:source-from-future",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "rules": [
+          {
+            "id": "future_source",
+            "fact": "model.score",
+            "operator": "at-least",
+            "value": 7,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "fc5df28bf628153eddf1bf8350e958358429c4f92e67de818dbdeb661de1e63a",
+        "approvedAt": "2026-01-02T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "approvedAt": "2026-01-02T00:00:00Z",
+          "reference": "urn:libre-ai:approval:source-from-future",
+          "subjectDigest": "fc5df28bf628153eddf1bf8350e958358429c4f92e67de818dbdeb661de1e63a"
+        }
+      },
+      "snapshot": {
+        "schemaVersion": "libre-ai.model-snapshot.v1",
+        "id": "urn:libre-ai:snapshot:source-from-future",
+        "tenantId": "ten_1234567890abcdef",
+        "modelId": "model-source-from-future",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "model.score",
+            "value": 8,
+            "source": {
+              "uri": "https://example.org/evidence/a",
+              "retrievedAt": "2026-07-17T00:00:01Z",
+              "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "08ba052c3574a8d6c445a19d2726cd1465ca8432735d982475d8e3b9d2072e34"
+      },
+      "need": {
+        "schemaVersion": "libre-ai.policy-need.v1",
+        "id": "urn:libre-ai:need:source-from-future",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          {
+            "name": "need.task",
+            "value": "summary"
+          }
+        ],
+        "digest": "dd2004de9ec5567d91ab69fbe651de4a2d04dbf360558b511594c4e5dbba87a9"
+      },
+      "evaluatedAt": "2026-07-17T00:00:00Z",
+      "expectedEvaluation": {
+        "schemaVersion": "libre-ai.policy-evaluation.v1",
+        "id": "urn:libre-ai:evaluation:4b9adf53d69a052b52dffdd47c61aa877c7eec62af79f4e68ad7098fff24b3a6",
+        "tenantId": "ten_1234567890abcdef",
+        "policyId": "urn:libre-ai:policy:source-from-future",
+        "policyDigest": "fc5df28bf628153eddf1bf8350e958358429c4f92e67de818dbdeb661de1e63a",
+        "snapshotId": "urn:libre-ai:snapshot:source-from-future",
+        "snapshotDigest": "08ba052c3574a8d6c445a19d2726cd1465ca8432735d982475d8e3b9d2072e34",
+        "needDigest": "dd2004de9ec5567d91ab69fbe651de4a2d04dbf360558b511594c4e5dbba87a9",
+        "engineVersion": "1.0.0",
+        "verdict": "indeterminate",
+        "ruleResults": [
+          {
+            "ruleId": "future_source",
+            "status": "unknown",
+            "reasonCode": "policy.source_from_future"
+          }
+        ],
+        "evaluatedAt": "2026-07-17T00:00:00Z",
+        "digest": "4b9adf53d69a052b52dffdd47c61aa877c7eec62af79f4e68ad7098fff24b3a6"
+      }
+    },
+    {
+      "id": "type-mismatch-unknown",
+      "policy": {
+        "schemaVersion": "libre-ai.policy-definition.v1",
+        "id": "urn:libre-ai:policy:type-mismatch-unknown",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "rules": [
+          {
+            "id": "numeric_score",
+            "fact": "model.score",
+            "operator": "at-least",
+            "value": 7,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "607f8ed9ae59c74dbef94fc10fd631e2ebbb5a87dd1b33d37118224216629088",
+        "approvedAt": "2026-01-02T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "approvedAt": "2026-01-02T00:00:00Z",
+          "reference": "urn:libre-ai:approval:type-mismatch-unknown",
+          "subjectDigest": "607f8ed9ae59c74dbef94fc10fd631e2ebbb5a87dd1b33d37118224216629088"
+        }
+      },
+      "snapshot": {
+        "schemaVersion": "libre-ai.model-snapshot.v1",
+        "id": "urn:libre-ai:snapshot:type-mismatch-unknown",
+        "tenantId": "ten_1234567890abcdef",
+        "modelId": "model-type-mismatch-unknown",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "model.score",
+            "value": "8",
+            "source": {
+              "uri": "https://example.org/evidence/a",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "642212df47d4087e9313a3181616c71f3723b9ef81b5bd2014b8304e3ff1aaa2"
+      },
+      "need": {
+        "schemaVersion": "libre-ai.policy-need.v1",
+        "id": "urn:libre-ai:need:type-mismatch-unknown",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          {
+            "name": "need.task",
+            "value": "summary"
+          }
+        ],
+        "digest": "4c6e8db54e55d1f3413f02e98dbb1cbe6309c6de741abcb0f2cffd36ab97762d"
+      },
+      "evaluatedAt": "2026-07-17T00:00:00Z",
+      "expectedEvaluation": {
+        "schemaVersion": "libre-ai.policy-evaluation.v1",
+        "id": "urn:libre-ai:evaluation:82be9985bfbb9766c03533cad655ed2c4f897bb2a32c9fa42b62f97001733286",
+        "tenantId": "ten_1234567890abcdef",
+        "policyId": "urn:libre-ai:policy:type-mismatch-unknown",
+        "policyDigest": "607f8ed9ae59c74dbef94fc10fd631e2ebbb5a87dd1b33d37118224216629088",
+        "snapshotId": "urn:libre-ai:snapshot:type-mismatch-unknown",
+        "snapshotDigest": "642212df47d4087e9313a3181616c71f3723b9ef81b5bd2014b8304e3ff1aaa2",
+        "needDigest": "4c6e8db54e55d1f3413f02e98dbb1cbe6309c6de741abcb0f2cffd36ab97762d",
+        "engineVersion": "1.0.0",
+        "verdict": "indeterminate",
+        "ruleResults": [
+          {
+            "ruleId": "numeric_score",
+            "status": "unknown",
+            "reasonCode": "policy.fact_type_mismatch"
+          }
+        ],
+        "evaluatedAt": "2026-07-17T00:00:00Z",
+        "digest": "82be9985bfbb9766c03533cad655ed2c4f897bb2a32c9fa42b62f97001733286"
+      }
+    },
+    {
+      "id": "tenant-mismatch",
+      "policy": {
+        "schemaVersion": "libre-ai.policy-definition.v1",
+        "id": "urn:libre-ai:policy:tenant-mismatch",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "rules": [
+          {
+            "id": "licence",
+            "fact": "model.licence",
+            "operator": "equals",
+            "value": "MIT",
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "c3fa72b9bd707dd7f17ea7a8204bbd4f51c4ddfa33e3e2d4834ae9487909ed36",
+        "approvedAt": "2026-01-02T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "approvedAt": "2026-01-02T00:00:00Z",
+          "reference": "urn:libre-ai:approval:tenant-mismatch",
+          "subjectDigest": "c3fa72b9bd707dd7f17ea7a8204bbd4f51c4ddfa33e3e2d4834ae9487909ed36"
+        }
+      },
+      "snapshot": {
+        "schemaVersion": "libre-ai.model-snapshot.v1",
+        "id": "urn:libre-ai:snapshot:tenant-mismatch",
+        "tenantId": "ten_fedcba0987654321",
+        "modelId": "model-tenant-mismatch",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "model.licence",
+            "value": "MIT",
+            "source": {
+              "uri": "https://example.org/evidence/a",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "174d994b32a479b111c2c1b4e20846b75005c6c1dca9f4a978d0ca74dab37be1"
+      },
+      "need": {
+        "schemaVersion": "libre-ai.policy-need.v1",
+        "id": "urn:libre-ai:need:tenant-mismatch",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          {
+            "name": "need.task",
+            "value": "summary"
+          }
+        ],
+        "digest": "1b178fa260713ea2007da3f49038a73393a51fee44bac14bb32bea3215668641"
+      },
+      "evaluatedAt": "2026-07-17T00:00:00Z",
+      "expectedError": {
+        "code": "policy.tenant_mismatch",
+        "message": "policy, snapshot and need tenants differ"
+      }
+    },
+    {
+      "id": "duplicate-exact-fact",
+      "policy": {
+        "schemaVersion": "libre-ai.policy-definition.v1",
+        "id": "urn:libre-ai:policy:duplicate-fact",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "rules": [
+          {
+            "id": "licence",
+            "fact": "model.licence",
+            "operator": "equals",
+            "value": "MIT",
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "db446bb2c64fce3946bb46681887f4656c7661080dcb6a737a95f85d5bb3cfef",
+        "approvedAt": "2026-01-02T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "approvedAt": "2026-01-02T00:00:00Z",
+          "reference": "urn:libre-ai:approval:duplicate-fact",
+          "subjectDigest": "db446bb2c64fce3946bb46681887f4656c7661080dcb6a737a95f85d5bb3cfef"
+        }
+      },
+      "snapshot": {
+        "schemaVersion": "libre-ai.model-snapshot.v1",
+        "id": "urn:libre-ai:snapshot:duplicate-fact",
+        "tenantId": "ten_1234567890abcdef",
+        "modelId": "model-duplicate-fact",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "model.licence",
+            "value": "MIT",
+            "source": {
+              "uri": "https://example.org/evidence/a",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "name": "model.licence",
+            "value": "MIT",
+            "source": {
+              "uri": "https://example.org/evidence/a",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "fb8dc80881b697b0975e7a5c8c5e7110f55ff32242147f95eb58c17f8e2ec6fc"
+      },
+      "need": {
+        "schemaVersion": "libre-ai.policy-need.v1",
+        "id": "urn:libre-ai:need:duplicate-fact",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          {
+            "name": "need.task",
+            "value": "summary"
+          }
+        ],
+        "digest": "899def406c24b1eb751ac1b63656fa618fa75d22a6ffef8de88a4b4889c88007"
+      },
+      "evaluatedAt": "2026-07-17T00:00:00Z",
+      "expectedError": {
+        "code": "policy.input_invalid",
+        "message": "input does not conform to policy-core-v1"
+      }
+    },
+    {
+      "id": "fractional-number-jcs",
+      "policy": {
+        "schemaVersion": "libre-ai.policy-definition.v1",
+        "id": "urn:libre-ai:policy:fractional-number-jcs",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "rules": [
+          {
+            "id": "fractional_score",
+            "fact": "model.score",
+            "operator": "at-least",
+            "value": 0.000001,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "bacaa1321268ae85bec72c80cefa1fba7747400c99b1c883d540a7ce95c1d0de",
+        "approvedAt": "2026-01-02T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "approvedAt": "2026-01-02T00:00:00Z",
+          "reference": "urn:libre-ai:approval:fractional-number-jcs",
+          "subjectDigest": "bacaa1321268ae85bec72c80cefa1fba7747400c99b1c883d540a7ce95c1d0de"
+        }
+      },
+      "snapshot": {
+        "schemaVersion": "libre-ai.model-snapshot.v1",
+        "id": "urn:libre-ai:snapshot:fractional-number-jcs",
+        "tenantId": "ten_1234567890abcdef",
+        "modelId": "model-fractional-number-jcs",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "model.score",
+            "value": 0.000001,
+            "source": {
+              "uri": "https://example.org/evidence/d",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "d5a7b9b422045524fbaf915ba01fb4b9f756630feae0aadc926dd4bb1640879e"
+      },
+      "need": {
+        "schemaVersion": "libre-ai.policy-need.v1",
+        "id": "urn:libre-ai:need:fractional-number-jcs",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          {
+            "name": "need.task",
+            "value": "summary"
+          }
+        ],
+        "digest": "b3cbff94b0d926e435f0d512abf666b627458490b7bf52d781c6e0393be53445"
+      },
+      "evaluatedAt": "2026-07-17T00:00:00Z",
+      "expectedEvaluation": {
+        "schemaVersion": "libre-ai.policy-evaluation.v1",
+        "id": "urn:libre-ai:evaluation:949ed3ff09c8d2f9aa06d1cf7be65ed3c9031cd4f096252cac42da7bafb87e16",
+        "tenantId": "ten_1234567890abcdef",
+        "policyId": "urn:libre-ai:policy:fractional-number-jcs",
+        "policyDigest": "bacaa1321268ae85bec72c80cefa1fba7747400c99b1c883d540a7ce95c1d0de",
+        "snapshotId": "urn:libre-ai:snapshot:fractional-number-jcs",
+        "snapshotDigest": "d5a7b9b422045524fbaf915ba01fb4b9f756630feae0aadc926dd4bb1640879e",
+        "needDigest": "b3cbff94b0d926e435f0d512abf666b627458490b7bf52d781c6e0393be53445",
+        "engineVersion": "1.0.0",
+        "verdict": "eligible",
+        "ruleResults": [
+          {
+            "ruleId": "fractional_score",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          }
+        ],
+        "evaluatedAt": "2026-07-17T00:00:00Z",
+        "digest": "949ed3ff09c8d2f9aa06d1cf7be65ed3c9031cd4f096252cac42da7bafb87e16"
+      }
+    },
+    {
+      "id": "duplicate-rule-id",
+      "policy": {
+        "schemaVersion": "libre-ai.policy-definition.v1",
+        "id": "urn:libre-ai:policy:duplicate-rule-id",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "rules": [
+          {
+            "id": "duplicate_rule",
+            "fact": "model.score",
+            "operator": "at-least",
+            "value": 1,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "duplicate_rule",
+            "fact": "model.licence",
+            "operator": "equals",
+            "value": "MIT",
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "f79629757dad07512e35e7a77a851e401556712b45684dfdf9033ec3fc1b4d1c",
+        "approvedAt": "2026-01-02T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "approvedAt": "2026-01-02T00:00:00Z",
+          "reference": "urn:libre-ai:approval:duplicate-rule-id",
+          "subjectDigest": "f79629757dad07512e35e7a77a851e401556712b45684dfdf9033ec3fc1b4d1c"
+        }
+      },
+      "snapshot": {
+        "schemaVersion": "libre-ai.model-snapshot.v1",
+        "id": "urn:libre-ai:snapshot:duplicate-rule-id",
+        "tenantId": "ten_1234567890abcdef",
+        "modelId": "model-duplicate-rule-id",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "model.score",
+            "value": 2,
+            "source": {
+              "uri": "https://example.org/evidence/e",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "name": "model.licence",
+            "value": "MIT",
+            "source": {
+              "uri": "https://example.org/evidence/f",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "ebf5f57e296b0c14735f3a975f221e2f8cdaa04ecc32b710f5ff8cc0d764040b"
+      },
+      "need": {
+        "schemaVersion": "libre-ai.policy-need.v1",
+        "id": "urn:libre-ai:need:duplicate-rule-id",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          {
+            "name": "need.task",
+            "value": "summary"
+          }
+        ],
+        "digest": "b22df29660eb17933000bcf7358a3cb084e191a0ac3492195bf9370ed0eb8148"
+      },
+      "evaluatedAt": "2026-07-17T00:00:00Z",
+      "expectedError": {
+        "code": "policy.rule_id_duplicate",
+        "message": "policy contains duplicate rule ids"
+      }
+    },
+    {
+      "id": "order-independence-a",
+      "policy": {
+        "schemaVersion": "libre-ai.policy-definition.v1",
+        "id": "urn:libre-ai:policy:order-independent",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "rules": [
+          {
+            "id": "b_licence",
+            "fact": "model.licence",
+            "operator": "in",
+            "value": ["Apache-2.0", "MIT"],
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "a_score",
+            "fact": "model.score",
+            "operator": "at-least",
+            "value": 7,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "3d9bc0c9ad33261af9c82ff06ffb6fb03143197bd2b2d8a1bca58611e658ba8d",
+        "approvedAt": "2026-01-02T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "approvedAt": "2026-01-02T00:00:00Z",
+          "reference": "urn:libre-ai:approval:order-independent",
+          "subjectDigest": "3d9bc0c9ad33261af9c82ff06ffb6fb03143197bd2b2d8a1bca58611e658ba8d"
+        }
+      },
+      "snapshot": {
+        "schemaVersion": "libre-ai.model-snapshot.v1",
+        "id": "urn:libre-ai:snapshot:order-independent",
+        "tenantId": "ten_1234567890abcdef",
+        "modelId": "model-order-independent",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "model.licence",
+            "value": "MIT",
+            "source": {
+              "uri": "https://example.org/evidence/a",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "name": "model.score",
+            "value": 8,
+            "source": {
+              "uri": "https://example.org/evidence/b",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "ea945068ebbe435e6ed365739185b26dcf59884ff3cb23aeedddeeb7f4fc922f"
+      },
+      "need": {
+        "schemaVersion": "libre-ai.policy-need.v1",
+        "id": "urn:libre-ai:need:order-independent",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          {
+            "name": "need.task",
+            "value": "summary"
+          },
+          {
+            "name": "need.personal_data",
+            "value": false
+          }
+        ],
+        "digest": "010fe872914d0e39c1a8ec2db47235b71b6b2274347e7de9afb243f7d0628185"
+      },
+      "evaluatedAt": "2026-07-17T00:00:00Z",
+      "expectedEvaluation": {
+        "schemaVersion": "libre-ai.policy-evaluation.v1",
+        "id": "urn:libre-ai:evaluation:b404c4f185e86974fd5de9305167fc708e8f3b354d01a1247ceb0d1f80615d24",
+        "tenantId": "ten_1234567890abcdef",
+        "policyId": "urn:libre-ai:policy:order-independent",
+        "policyDigest": "3d9bc0c9ad33261af9c82ff06ffb6fb03143197bd2b2d8a1bca58611e658ba8d",
+        "snapshotId": "urn:libre-ai:snapshot:order-independent",
+        "snapshotDigest": "ea945068ebbe435e6ed365739185b26dcf59884ff3cb23aeedddeeb7f4fc922f",
+        "needDigest": "010fe872914d0e39c1a8ec2db47235b71b6b2274347e7de9afb243f7d0628185",
+        "engineVersion": "1.0.0",
+        "verdict": "eligible",
+        "ruleResults": [
+          {
+            "ruleId": "a_score",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "b_licence",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          }
+        ],
+        "evaluatedAt": "2026-07-17T00:00:00Z",
+        "digest": "b404c4f185e86974fd5de9305167fc708e8f3b354d01a1247ceb0d1f80615d24"
+      }
+    },
+    {
+      "id": "order-independence-b",
+      "policy": {
+        "schemaVersion": "libre-ai.policy-definition.v1",
+        "id": "urn:libre-ai:policy:order-independent",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "rules": [
+          {
+            "id": "a_score",
+            "fact": "model.score",
+            "operator": "at-least",
+            "value": 7,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "b_licence",
+            "fact": "model.licence",
+            "operator": "in",
+            "value": ["Apache-2.0", "MIT"],
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "3d9bc0c9ad33261af9c82ff06ffb6fb03143197bd2b2d8a1bca58611e658ba8d",
+        "approvedAt": "2026-01-02T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "approvedAt": "2026-01-02T00:00:00Z",
+          "reference": "urn:libre-ai:approval:order-independent",
+          "subjectDigest": "3d9bc0c9ad33261af9c82ff06ffb6fb03143197bd2b2d8a1bca58611e658ba8d"
+        }
+      },
+      "snapshot": {
+        "schemaVersion": "libre-ai.model-snapshot.v1",
+        "id": "urn:libre-ai:snapshot:order-independent",
+        "tenantId": "ten_1234567890abcdef",
+        "modelId": "model-order-independent",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "model.score",
+            "value": 8,
+            "source": {
+              "uri": "https://example.org/evidence/b",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "name": "model.licence",
+            "value": "MIT",
+            "source": {
+              "uri": "https://example.org/evidence/a",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "ea945068ebbe435e6ed365739185b26dcf59884ff3cb23aeedddeeb7f4fc922f"
+      },
+      "need": {
+        "schemaVersion": "libre-ai.policy-need.v1",
+        "id": "urn:libre-ai:need:order-independent",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          {
+            "name": "need.personal_data",
+            "value": false
+          },
+          {
+            "name": "need.task",
+            "value": "summary"
+          }
+        ],
+        "digest": "010fe872914d0e39c1a8ec2db47235b71b6b2274347e7de9afb243f7d0628185"
+      },
+      "evaluatedAt": "2026-07-17T00:00:00Z",
+      "expectedEvaluation": {
+        "schemaVersion": "libre-ai.policy-evaluation.v1",
+        "id": "urn:libre-ai:evaluation:b404c4f185e86974fd5de9305167fc708e8f3b354d01a1247ceb0d1f80615d24",
+        "tenantId": "ten_1234567890abcdef",
+        "policyId": "urn:libre-ai:policy:order-independent",
+        "policyDigest": "3d9bc0c9ad33261af9c82ff06ffb6fb03143197bd2b2d8a1bca58611e658ba8d",
+        "snapshotId": "urn:libre-ai:snapshot:order-independent",
+        "snapshotDigest": "ea945068ebbe435e6ed365739185b26dcf59884ff3cb23aeedddeeb7f4fc922f",
+        "needDigest": "010fe872914d0e39c1a8ec2db47235b71b6b2274347e7de9afb243f7d0628185",
+        "engineVersion": "1.0.0",
+        "verdict": "eligible",
+        "ruleResults": [
+          {
+            "ruleId": "a_score",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "b_licence",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          }
+        ],
+        "evaluatedAt": "2026-07-17T00:00:00Z",
+        "digest": "b404c4f185e86974fd5de9305167fc708e8f3b354d01a1247ceb0d1f80615d24"
+      }
+    }
+  ]
+}
