@@ -6,6 +6,8 @@
   "sourceCommit": "57f349f6307cf89dcfb8893f003c1ef421a74589",
   "observedAt": "2026-07-16",
   "preRelease": true,
+  "localSnapshot": ".tools/snapshots/bun/1.4.0-canary.1+57f349f63",
+  "sharedCiReady": false,
   "assets": {
     "darwin-arm64": {
       "name": "bun-darwin-aarch64.zip",
@@ -16,5 +18,5 @@
       "sha256": "83144e2542c33aaae541cf16b42f8cf1c55c3b94c5395fc776417fa27e95bcbf"
     }
   },
-  "releasePolicy": "Replace with the first qualified stable Rust release before production, or archive and approve this exact pre-release binary."
+  "releasePolicy": "Replace with the first qualified stable Rust release before shared CI/production, or archive and approve this exact pre-release binary with LGPL notices and durable retrieval."
 }
