@@ -321,7 +321,6 @@
       "classification": "public",
       "status": "locked"
     },
-
     {
       "id": "auth-api-v1",
       "kind": "openapi",
@@ -402,7 +401,6 @@
       "classification": "tenant-private",
       "status": "locked"
     },
-
     {
       "id": "practice-scoring-v1",
       "kind": "wit",
@@ -458,7 +456,6 @@
       "classification": "local",
       "status": "locked"
     },
-
     {
       "id": "authority-v1",
       "kind": "biscuit-authority",
@@ -488,6 +485,362 @@
       "compatibility": "major-versioned",
       "classification": "internal",
       "status": "locked"
+    },
+    {
+      "id": "radar-normalized-item-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/radar-normalized-item.v1.schema.json",
+      "owners": ["radar", "specialized-rust"],
+      "consumers": ["radar", "radar-engine"],
+      "compatibility": "major-versioned",
+      "classification": "internal",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security"],
+        "dossier": "docs/reviews/radar-engine-v2/README.md"
+      }
+    },
+    {
+      "id": "radar-normalized-feed-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/radar-normalized-feed.v1.schema.json",
+      "owners": ["radar", "specialized-rust"],
+      "consumers": ["radar", "radar-engine"],
+      "compatibility": "major-versioned",
+      "classification": "internal",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security"],
+        "dossier": "docs/reviews/radar-engine-v2/README.md"
+      }
+    },
+    {
+      "id": "radar-rule-evaluation-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/radar-rule-evaluation.v1.schema.json",
+      "owners": ["radar", "specialized-rust"],
+      "consumers": ["radar", "radar-engine"],
+      "compatibility": "major-versioned",
+      "classification": "personal",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security"],
+        "dossier": "docs/reviews/radar-engine-v2/README.md"
+      }
+    },
+    {
+      "id": "curation-rule-set-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/curation-rule-set.v2.schema.json",
+      "owners": ["radar", "specialized-rust"],
+      "consumers": ["radar", "radar-engine"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security"],
+        "dossier": "docs/reviews/radar-engine-v2/README.md"
+      }
+    },
+    {
+      "id": "curated-item-export-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/curated-item-export.v2.schema.json",
+      "owners": ["radar", "specialized-rust"],
+      "consumers": ["radar", "radar-engine"],
+      "compatibility": "major-versioned",
+      "classification": "personal",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security"],
+        "dossier": "docs/reviews/radar-engine-v2/README.md"
+      }
+    },
+    {
+      "id": "context-document-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/context-document.v2.schema.json",
+      "owners": ["notebook", "specialized-rust"],
+      "consumers": ["notebook", "notebook-core"],
+      "compatibility": "major-versioned",
+      "classification": "local",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security", "cryptography", "privacy"],
+        "dossier": "docs/reviews/notebook-core-v2/README.md"
+      }
+    },
+    {
+      "id": "notebook-backup-seal-request-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/notebook-backup-seal-request.v2.schema.json",
+      "owners": ["notebook", "specialized-rust"],
+      "consumers": ["notebook", "notebook-core"],
+      "compatibility": "major-versioned",
+      "classification": "local",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security", "cryptography", "privacy"],
+        "dossier": "docs/reviews/notebook-core-v2/README.md"
+      }
+    },
+    {
+      "id": "notebook-backup-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/notebook-backup.v2.schema.json",
+      "owners": ["notebook", "specialized-rust"],
+      "consumers": ["notebook", "notebook-core"],
+      "compatibility": "major-versioned",
+      "classification": "local",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security", "cryptography", "privacy"],
+        "dossier": "docs/reviews/notebook-core-v2/README.md"
+      }
+    },
+    {
+      "id": "policy-definition-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/policy-definition.v2.schema.json",
+      "owners": ["model-policy", "specialized-rust"],
+      "consumers": ["model-policy", "policy-core"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security", "privacy"],
+        "dossier": "docs/reviews/policy-core-v2/README.md"
+      }
+    },
+    {
+      "id": "policy-need-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/policy-need.v2.schema.json",
+      "owners": ["model-policy", "specialized-rust"],
+      "consumers": ["model-policy", "policy-core"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security", "privacy"],
+        "dossier": "docs/reviews/policy-core-v2/README.md"
+      }
+    },
+    {
+      "id": "model-snapshot-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/model-snapshot.v2.schema.json",
+      "owners": ["model-policy", "specialized-rust"],
+      "consumers": ["model-policy", "policy-core"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security", "privacy"],
+        "dossier": "docs/reviews/policy-core-v2/README.md"
+      }
+    },
+    {
+      "id": "policy-evaluation-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/policy-evaluation.v2.schema.json",
+      "owners": ["model-policy", "specialized-rust"],
+      "consumers": ["model-policy", "policy-core"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security", "privacy"],
+        "dossier": "docs/reviews/policy-core-v2/README.md"
+      }
+    },
+    {
+      "id": "public-vote-dataset-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/public-vote-dataset.v2.schema.json",
+      "owners": ["boussole", "specialized-rust"],
+      "consumers": ["boussole", "boussole-scoring"],
+      "compatibility": "major-versioned",
+      "classification": "public",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security", "methodology", "privacy"],
+        "dossier": "docs/reviews/boussole-scoring-v2/README.md"
+      }
+    },
+    {
+      "id": "boussole-method-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/boussole-method.v2.schema.json",
+      "owners": ["boussole", "specialized-rust"],
+      "consumers": ["boussole", "boussole-scoring"],
+      "compatibility": "major-versioned",
+      "classification": "public",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security", "methodology", "privacy"],
+        "dossier": "docs/reviews/boussole-scoring-v2/README.md"
+      }
+    },
+    {
+      "id": "boussole-response-set-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/boussole-response-set.v2.schema.json",
+      "owners": ["boussole", "specialized-rust"],
+      "consumers": ["boussole", "boussole-scoring"],
+      "compatibility": "major-versioned",
+      "classification": "local",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security", "methodology", "privacy"],
+        "dossier": "docs/reviews/boussole-scoring-v2/README.md"
+      }
+    },
+    {
+      "id": "local-comparison-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/local-comparison.v2.schema.json",
+      "owners": ["boussole", "specialized-rust"],
+      "consumers": ["boussole", "boussole-scoring"],
+      "compatibility": "major-versioned",
+      "classification": "local",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security", "methodology", "privacy"],
+        "dossier": "docs/reviews/boussole-scoring-v2/README.md"
+      }
+    },
+    {
+      "id": "engine-golden-vectors-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/engine-golden-vectors.v1.schema.json",
+      "owners": ["canonical-core", "specialized-rust"],
+      "consumers": ["specialized-rust", "quality"],
+      "compatibility": "major-versioned",
+      "classification": "internal",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security"],
+        "dossier": "docs/reviews/specialized-engine-v2/README.md"
+      }
+    },
+    {
+      "id": "radar-api-v2",
+      "kind": "openapi",
+      "path": "contracts/openapi/radar.v2.yaml",
+      "owners": ["radar"],
+      "consumers": ["browser"],
+      "compatibility": "major-versioned",
+      "classification": "personal",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security"],
+        "dossier": "docs/reviews/radar-engine-v2/README.md"
+      }
+    },
+    {
+      "id": "model-policy-api-v2",
+      "kind": "openapi",
+      "path": "contracts/openapi/model-policy.v2.yaml",
+      "owners": ["model-policy"],
+      "consumers": ["browser"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security", "privacy"],
+        "dossier": "docs/reviews/policy-core-v2/README.md"
+      }
+    },
+    {
+      "id": "radar-engine-v2",
+      "kind": "wit",
+      "path": "contracts/wit/radar-engine-v2/world.wit",
+      "owners": ["radar", "specialized-rust"],
+      "consumers": ["radar"],
+      "compatibility": "major-versioned",
+      "classification": "internal",
+      "status": "candidate",
+      "profiles": ["contracts/wit/radar-engine-v2/PROFILE.md"],
+      "vectors": ["contracts/fixtures/radar-engine-v2/golden-vectors.v1.json"],
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security"],
+        "dossier": "docs/reviews/radar-engine-v2/README.md"
+      }
+    },
+    {
+      "id": "notebook-core-v2",
+      "kind": "wit",
+      "path": "contracts/wit/notebook-core-v2/world.wit",
+      "owners": ["notebook", "specialized-rust"],
+      "consumers": ["notebook"],
+      "compatibility": "major-versioned",
+      "classification": "local",
+      "status": "candidate",
+      "profiles": ["contracts/wit/notebook-core-v2/SEMANTICS.md"],
+      "vectors": ["contracts/fixtures/notebook-core-v2/golden-vectors.v1.json"],
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security", "cryptography", "privacy"],
+        "dossier": "docs/reviews/notebook-core-v2/README.md"
+      }
+    },
+    {
+      "id": "policy-core-v2",
+      "kind": "wit",
+      "path": "contracts/wit/policy-core-v2/world.wit",
+      "owners": ["model-policy", "specialized-rust"],
+      "consumers": ["model-policy"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "profiles": ["contracts/wit/policy-core-v2/SEMANTICS.md"],
+      "vectors": [
+        "contracts/fixtures/policy-core-v2/operators.json",
+        "contracts/fixtures/policy-core-v2/golden.json"
+      ],
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security", "privacy"],
+        "dossier": "docs/reviews/policy-core-v2/README.md"
+      }
+    },
+    {
+      "id": "boussole-scoring-v2",
+      "kind": "wit",
+      "path": "contracts/wit/boussole-scoring-v2/world.wit",
+      "owners": ["boussole", "specialized-rust"],
+      "consumers": ["boussole"],
+      "compatibility": "major-versioned",
+      "classification": "local",
+      "status": "candidate",
+      "profiles": ["contracts/wit/boussole-scoring-v2/SEMANTICS.md"],
+      "vectors": ["contracts/fixtures/boussole-scoring-v2/golden-vectors.v1.json"],
+      "review": {
+        "state": "pending-independent-review",
+        "required": ["architecture", "security", "methodology", "privacy"],
+        "dossier": "docs/reviews/boussole-scoring-v2/README.md"
+      }
     }
   ]
 }

@@ -1,0 +1,1 @@
+{"version":"https://jsonfeed.org/version/1","title":"JSON Feed v1","home_page_url":"https://example.org/v1","items":[{"id":"v1-item","url":"https://example.org/v1/item","title":"Version one","summary":"Summary","content_text":"ignored body","author":{"name":"Alice"},"tags":["v1"],"date_published":"2026-07-14T00:00:00Z"}]}

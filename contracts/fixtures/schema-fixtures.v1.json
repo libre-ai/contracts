@@ -11,7 +11,11 @@
         }
       },
       "invalidMutations": [
-        { "name": "unstable error code", "path": "/error/code", "value": "INVALID" }
+        {
+          "name": "unstable error code",
+          "path": "/error/code",
+          "value": "INVALID"
+        }
       ]
     },
     {
@@ -22,13 +26,30 @@
         "subject": "urn:libre-ai:artifact:subject-1",
         "subjectDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         "status": "pass",
-        "checks": [{ "id": "check-1", "status": "pass", "ruleVersion": "1.0.0" }],
+        "checks": [
+          {
+            "id": "check-1",
+            "status": "pass",
+            "ruleVersion": "1.0.0"
+          }
+        ],
         "generatedAt": "2026-07-16T00:00:00Z",
-        "producer": { "name": "contract-test", "version": "1.0.0" }
+        "producer": {
+          "name": "contract-test",
+          "version": "1.0.0"
+        }
       },
       "invalidMutations": [
-        { "name": "unknown check status", "path": "/checks/0/status", "value": "success" },
-        { "name": "passing report with failed check", "path": "/checks/0/status", "value": "fail" }
+        {
+          "name": "unknown check status",
+          "path": "/checks/0/status",
+          "value": "success"
+        },
+        {
+          "name": "passing report with failed check",
+          "path": "/checks/0/status",
+          "value": "fail"
+        }
       ]
     },
     {
@@ -54,7 +75,11 @@
         }
       },
       "invalidMutations": [
-        { "name": "path traversal", "path": "/files/0/path", "value": "../secret" }
+        {
+          "name": "path traversal",
+          "path": "/files/0/path",
+          "value": "../secret"
+        }
       ]
     },
     {
@@ -71,8 +96,16 @@
         "expiresAt": "2026-07-17T00:00:00Z"
       },
       "invalidMutations": [
-        { "name": "execution capability", "path": "/capabilities/0", "value": "execute" },
-        { "name": "public tenant on private handoff", "path": "/tenantId", "value": "public" }
+        {
+          "name": "execution capability",
+          "path": "/capabilities/0",
+          "value": "execute"
+        },
+        {
+          "name": "public tenant on private handoff",
+          "path": "/tenantId",
+          "value": "public"
+        }
       ]
     },
     {
@@ -102,7 +135,11 @@
         ]
       },
       "invalidMutations": [
-        { "name": "remote route", "path": "/route", "value": "https://example.org" }
+        {
+          "name": "remote route",
+          "path": "/route",
+          "value": "https://example.org"
+        }
       ]
     },
     {
@@ -122,7 +159,13 @@
           "subjectDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
         }
       },
-      "invalidMutations": [{ "name": "missing reason", "path": "/reason", "value": "" }]
+      "invalidMutations": [
+        {
+          "name": "missing reason",
+          "path": "/reason",
+          "value": ""
+        }
+      ]
     },
     {
       "schema": "activity-definition.v1.schema.json",
@@ -141,9 +184,15 @@
             "licence": "CC-BY-4.0"
           }
         ],
-        "responseSchema": { "type": "string" },
+        "responseSchema": {
+          "type": "string"
+        },
         "feedbackRules": [
-          { "id": "feedback_1", "explanation": "Vérifier la source", "sourceIndexes": [0] }
+          {
+            "id": "feedback_1",
+            "explanation": "Vérifier la source",
+            "sourceIndexes": [0]
+          }
         ],
         "generatedContent": false,
         "approvals": [
@@ -155,7 +204,13 @@
           }
         ]
       },
-      "invalidMutations": [{ "name": "unpublished state", "path": "/status", "value": "unknown" }]
+      "invalidMutations": [
+        {
+          "name": "unpublished state",
+          "path": "/status",
+          "value": "unknown"
+        }
+      ]
     },
     {
       "schema": "activity-outcome.v1.schema.json",
@@ -170,7 +225,13 @@
         "feedbackRuleIds": ["feedback_1"],
         "recordedAt": "2026-07-16T00:00:00Z"
       },
-      "invalidMutations": [{ "name": "universal pass state", "path": "/state", "value": "passed" }]
+      "invalidMutations": [
+        {
+          "name": "universal pass state",
+          "path": "/state",
+          "value": "passed"
+        }
+      ]
     },
     {
       "schema": "practice-progress-export.v1.schema.json",
@@ -180,7 +241,11 @@
         "outcomes": []
       },
       "invalidMutations": [
-        { "name": "server tenant leakage", "path": "/tenantId", "value": "ten_1234567890abcdef" }
+        {
+          "name": "server tenant leakage",
+          "path": "/tenantId",
+          "value": "ten_1234567890abcdef"
+        }
       ]
     },
     {
@@ -193,10 +258,18 @@
         "fetchId": "fetch_1",
         "scheduledAt": "2026-07-16T00:00:00Z",
         "url": "https://example.org/feed.xml",
-        "limits": { "maxBytes": 1048576, "timeoutMs": 5000, "maxRedirects": 2 }
+        "limits": {
+          "maxBytes": 1048576,
+          "timeoutMs": 5000,
+          "maxRedirects": 2
+        }
       },
       "invalidMutations": [
-        { "name": "forbidden scheme", "path": "/url", "value": "file:///etc/passwd" }
+        {
+          "name": "forbidden scheme",
+          "path": "/url",
+          "value": "file:///etc/passwd"
+        }
       ]
     },
     {
@@ -220,7 +293,11 @@
         "createdAt": "2026-07-16T00:00:00Z"
       },
       "invalidMutations": [
-        { "name": "unbounded operator", "path": "/rules/0/operator", "value": "regex" }
+        {
+          "name": "unbounded operator",
+          "path": "/rules/0/operator",
+          "value": "regex"
+        }
       ]
     },
     {
@@ -231,7 +308,13 @@
         "exportedAt": "2026-07-16T00:00:00Z",
         "items": []
       },
-      "invalidMutations": [{ "name": "missing tenant", "path": "/tenantId", "remove": true }]
+      "invalidMutations": [
+        {
+          "name": "missing tenant",
+          "path": "/tenantId",
+          "remove": true
+        }
+      ]
     },
     {
       "schema": "context-document.v1.schema.json",
@@ -253,7 +336,11 @@
         "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
       },
       "invalidMutations": [
-        { "name": "network location", "path": "/remoteUrl", "value": "https://example.org/note" }
+        {
+          "name": "network location",
+          "path": "/remoteUrl",
+          "value": "https://example.org/note"
+        }
       ]
     },
     {
@@ -274,7 +361,13 @@
         "ciphertext": "AAAAAAAAAAAAAAAAAAAAAAAA",
         "ciphertextDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
       },
-      "invalidMutations": [{ "name": "weak KDF", "path": "/kdf/memoryKiB", "value": 1024 }]
+      "invalidMutations": [
+        {
+          "name": "weak KDF",
+          "path": "/kdf/memoryKiB",
+          "value": 1024
+        }
+      ]
     },
     {
       "schema": "public-vote-dataset.v1.schema.json",
@@ -354,7 +447,11 @@
         ]
       },
       "invalidMutations": [
-        { "name": "hidden missing treatment", "path": "/missingTreatment", "value": "neutral" }
+        {
+          "name": "hidden missing treatment",
+          "path": "/missingTreatment",
+          "value": "neutral"
+        }
       ]
     },
     {
@@ -379,7 +476,13 @@
         ],
         "computedAt": "2026-07-16T00:00:00Z"
       },
-      "invalidMutations": [{ "name": "score out of range", "path": "/score", "value": 2 }]
+      "invalidMutations": [
+        {
+          "name": "score out of range",
+          "path": "/score",
+          "value": 2
+        }
+      ]
     },
     {
       "schema": "policy-definition.v1.schema.json",
@@ -414,7 +517,11 @@
         }
       },
       "invalidMutations": [
-        { "name": "unknown treated as eligible", "path": "/rules/0/unknown", "value": "eligible" },
+        {
+          "name": "unknown treated as eligible",
+          "path": "/rules/0/unknown",
+          "value": "eligible"
+        },
         {
           "name": "numeric operator with set value",
           "path": "/rules/0/operator",
@@ -429,22 +536,49 @@
         "id": "urn:libre-ai:need:need-1",
         "tenantId": "ten_1234567890abcdef",
         "facts": [
-          { "name": "need.task", "value": "summary" },
-          { "name": "need.max_context_tokens", "value": 8192 },
-          { "name": "need.personal_data", "value": true }
+          {
+            "name": "need.task",
+            "value": "summary"
+          },
+          {
+            "name": "need.max_context_tokens",
+            "value": 8192
+          },
+          {
+            "name": "need.personal_data",
+            "value": true
+          }
         ],
         "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
       },
       "invalidMutations": [
-        { "name": "tenant missing", "path": "/tenantId", "remove": true },
-        { "name": "model fact in need", "path": "/facts/0/name", "value": "model.task" },
-        { "name": "fact value is not scalar", "path": "/facts/0/value", "value": ["summary"] },
+        {
+          "name": "tenant missing",
+          "path": "/tenantId",
+          "remove": true
+        },
+        {
+          "name": "model fact in need",
+          "path": "/facts/0/name",
+          "value": "model.task"
+        },
+        {
+          "name": "fact value is not scalar",
+          "path": "/facts/0/value",
+          "value": ["summary"]
+        },
         {
           "name": "exact duplicate need fact",
           "path": "/facts",
           "value": [
-            { "name": "need.task", "value": "summary" },
-            { "name": "need.task", "value": "summary" }
+            {
+              "name": "need.task",
+              "value": "summary"
+            },
+            {
+              "name": "need.task",
+              "value": "summary"
+            }
           ]
         }
       ]
@@ -472,9 +606,21 @@
         "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
       },
       "invalidMutations": [
-        { "name": "personal tenant missing", "path": "/tenantId", "remove": true },
-        { "name": "need fact in snapshot", "path": "/facts/0/name", "value": "need.licence" },
-        { "name": "fact value is not scalar", "path": "/facts/0/value", "value": ["MIT"] },
+        {
+          "name": "personal tenant missing",
+          "path": "/tenantId",
+          "remove": true
+        },
+        {
+          "name": "need fact in snapshot",
+          "path": "/facts/0/name",
+          "value": "need.licence"
+        },
+        {
+          "name": "fact value is not scalar",
+          "path": "/facts/0/value",
+          "value": ["MIT"]
+        },
         {
           "name": "exact duplicate snapshot fact",
           "path": "/facts",
@@ -517,14 +663,26 @@
         "engineVersion": "1.0.0",
         "verdict": "indeterminate",
         "ruleResults": [
-          { "ruleId": "licence_1", "status": "unknown", "reasonCode": "policy.fact_absent" }
+          {
+            "ruleId": "licence_1",
+            "status": "unknown",
+            "reasonCode": "policy.fact_absent"
+          }
         ],
         "evaluatedAt": "2026-07-16T00:00:00Z",
         "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
       },
       "invalidMutations": [
-        { "name": "success verdict alias", "path": "/verdict", "value": "compliant" },
-        { "name": "eligible verdict with unknown rule", "path": "/verdict", "value": "eligible" }
+        {
+          "name": "success verdict alias",
+          "path": "/verdict",
+          "value": "compliant"
+        },
+        {
+          "name": "eligible verdict with unknown rule",
+          "path": "/verdict",
+          "value": "eligible"
+        }
       ]
     },
     {
@@ -537,12 +695,19 @@
         "sequence": 1,
         "revision": 0,
         "type": "session-created",
-        "actor": { "kind": "human", "id": "user_1" },
+        "actor": {
+          "kind": "human",
+          "id": "user_1"
+        },
         "occurredAt": "2026-07-16T00:00:00Z",
         "data": {}
       },
       "invalidMutations": [
-        { "name": "event without tenant", "path": "/tenantId", "remove": true },
+        {
+          "name": "event without tenant",
+          "path": "/tenantId",
+          "remove": true
+        },
         {
           "name": "contribution without bounded data",
           "path": "/type",
@@ -566,7 +731,11 @@
         "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
       },
       "invalidMutations": [
-        { "name": "private audience export", "path": "/audience", "value": "private" }
+        {
+          "name": "private audience export",
+          "path": "/audience",
+          "value": "private"
+        }
       ]
     },
     {
@@ -580,13 +749,33 @@
         "problem": "Problème explicite",
         "actors": ["actor_1"],
         "requirements": [
-          { "id": "requirement_1", "text": "Refuser sans preuve", "priority": "must" }
+          {
+            "id": "requirement_1",
+            "text": "Refuser sans preuve",
+            "priority": "must"
+          }
         ],
-        "decisions": [{ "id": "decision_1", "status": "accepted", "decision": "Fail closed" }],
+        "decisions": [
+          {
+            "id": "decision_1",
+            "status": "accepted",
+            "decision": "Fail closed"
+          }
+        ],
         "contracts": ["urn:libre-ai:contract:contract-1"],
-        "risks": [{ "id": "risk_1", "severity": "high", "control": "Gate automatisée" }],
+        "risks": [
+          {
+            "id": "risk_1",
+            "severity": "high",
+            "control": "Gate automatisée"
+          }
+        ],
         "acceptanceCriteria": [
-          { "id": "criterion_1", "observable": "Le refus est stable", "evidenceRule": "evidence_1" }
+          {
+            "id": "criterion_1",
+            "observable": "Le refus est stable",
+            "evidenceRule": "evidence_1"
+          }
         ],
         "approvals": [
           {
@@ -600,7 +789,11 @@
         "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
       },
       "invalidMutations": [
-        { "name": "open decision", "path": "/decisions/0/status", "value": "open" }
+        {
+          "name": "open decision",
+          "path": "/decisions/0/status",
+          "value": "open"
+        }
       ]
     },
     {
@@ -614,11 +807,21 @@
         "sequence": 1,
         "type": "started",
         "occurredAt": "2026-07-16T00:00:00Z",
-        "data": { "progressPermille": 0 }
+        "data": {
+          "progressPermille": 0
+        }
       },
       "invalidMutations": [
-        { "name": "claims accepted result", "path": "/type", "value": "accepted" },
-        { "name": "result without artifact evidence", "path": "/type", "value": "result-submitted" }
+        {
+          "name": "claims accepted result",
+          "path": "/type",
+          "value": "accepted"
+        },
+        {
+          "name": "result without artifact evidence",
+          "path": "/type",
+          "value": "result-submitted"
+        }
       ]
     },
     {
@@ -631,8 +834,15 @@
         "state": "approved",
         "handoffId": "urn:libre-ai:handoff:handoff-1",
         "handoffDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        "risk": { "level": "medium", "policyVersion": "1.0.0" },
-        "budgets": { "maxDurationSeconds": 3600, "maxToolCalls": 100, "network": "allowlisted" },
+        "risk": {
+          "level": "medium",
+          "policyVersion": "1.0.0"
+        },
+        "budgets": {
+          "maxDurationSeconds": 3600,
+          "maxToolCalls": 100,
+          "network": "allowlisted"
+        },
         "acceptanceCriteria": ["criterion_1"],
         "approvals": [
           {
@@ -646,7 +856,11 @@
         "createdAt": "2026-07-16T00:00:00Z"
       },
       "invalidMutations": [
-        { "name": "agent claims success", "path": "/state", "value": "success" },
+        {
+          "name": "agent claims success",
+          "path": "/state",
+          "value": "success"
+        },
         {
           "name": "accepted state without result and verdict",
           "path": "/state",
@@ -678,8 +892,16 @@
         "revision": 1
       },
       "invalidMutations": [
-        { "name": "public tenant on private session", "path": "/tenantId", "value": "public" },
-        { "name": "raw cookie persisted", "path": "/cookie", "value": "forbidden" },
+        {
+          "name": "public tenant on private session",
+          "path": "/tenantId",
+          "value": "public"
+        },
+        {
+          "name": "raw cookie persisted",
+          "path": "/cookie",
+          "value": "forbidden"
+        },
         {
           "name": "active session carrying revocation time",
           "path": "/revokedAt",
@@ -704,7 +926,12 @@
         "requestedAt": "2026-07-16T00:00:00Z",
         "completedAt": "2026-07-16T00:00:01Z",
         "status": "complete",
-        "stores": [{ "store": "postgresql", "outcome": "deleted" }],
+        "stores": [
+          {
+            "store": "postgresql",
+            "outcome": "deleted"
+          }
+        ],
         "backupExpiresAt": "2026-08-20T00:00:00Z"
       },
       "invalidMutations": [
@@ -785,8 +1012,788 @@
         ]
       },
       "invalidMutations": [
-        { "name": "unlocked package", "path": "/packages/0/definitionStatus", "value": "draft" },
-        { "name": "unsafe write path", "path": "/packages/0/writePaths/0", "value": "../outside" }
+        {
+          "name": "unlocked package",
+          "path": "/packages/0/definitionStatus",
+          "value": "draft"
+        },
+        {
+          "name": "unsafe write path",
+          "path": "/packages/0/writePaths/0",
+          "value": "../outside"
+        }
+      ]
+    },
+    {
+      "schema": "curation-rule-set.v2.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.curation-rule-set.v2",
+        "id": "urn:libre-ai:rules:rules-1",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "active",
+        "rules": [
+          {
+            "id": "rule_1",
+            "field": "title",
+            "operator": "contains",
+            "value": "IA",
+            "decision": "retain",
+            "explanation": "Le titre correspond"
+          }
+        ],
+        "createdAt": "2026-07-16T00:00:00Z"
+      },
+      "invalidMutations": [
+        {
+          "name": "date operator on text field",
+          "path": "/rules/0/operator",
+          "value": "before"
+        },
+        {
+          "name": "version exceeds deterministic integer range",
+          "path": "/version",
+          "value": 2147483648
+        }
+      ]
+    },
+    {
+      "schema": "radar-normalized-item.v1.schema.json",
+      "valid": {
+        "authors": ["Alice"],
+        "deduplicationKey": "3b9f05afc2635216cb25f674ff9d0058d1425751a8dba2ec0d67fc7ec6618c92",
+        "externalId": "item-001",
+        "id": "urn:libre-ai:radar-item:3b9f05afc2635216cb25f674ff9d0058d1425751a8dba2ec0d67fc7ec6618c92",
+        "publishedAt": "2026-07-16T10:34:56Z",
+        "schemaVersion": "libre-ai.radar-normalized-item.v1",
+        "sourceHost": "example.org",
+        "sourceId": "urn:libre-ai:source:feed-1",
+        "summary": "Résumé sûr.",
+        "tags": ["rust", "sécurité"],
+        "title": "Sécurité du parsing",
+        "updatedAt": null,
+        "url": "https://example.org/articles/1"
+      },
+      "invalidMutations": [
+        {
+          "name": "source missing",
+          "path": "/sourceId",
+          "remove": true
+        }
+      ]
+    },
+    {
+      "schema": "radar-normalized-feed.v1.schema.json",
+      "valid": {
+        "baseUrl": "https://example.org/feed.xml",
+        "format": "rss-2.0",
+        "homeUrl": "https://example.org/news",
+        "items": [
+          {
+            "authors": ["Alice"],
+            "deduplicationKey": "3b9f05afc2635216cb25f674ff9d0058d1425751a8dba2ec0d67fc7ec6618c92",
+            "externalId": "item-001",
+            "id": "urn:libre-ai:radar-item:3b9f05afc2635216cb25f674ff9d0058d1425751a8dba2ec0d67fc7ec6618c92",
+            "publishedAt": "2026-07-16T10:34:56Z",
+            "schemaVersion": "libre-ai.radar-normalized-item.v1",
+            "sourceHost": "example.org",
+            "sourceId": "urn:libre-ai:source:feed-1",
+            "summary": "Résumé sûr.",
+            "tags": ["rust", "sécurité"],
+            "title": "Sécurité du parsing",
+            "updatedAt": null,
+            "url": "https://example.org/articles/1"
+          }
+        ],
+        "schemaVersion": "libre-ai.radar-normalized-feed.v1",
+        "sourceId": "urn:libre-ai:source:feed-1",
+        "title": "Radar Démo"
+      },
+      "invalidMutations": [
+        {
+          "name": "base URL forbidden scheme",
+          "path": "/baseUrl",
+          "value": "file:///tmp/feed"
+        }
+      ]
+    },
+    {
+      "schema": "radar-rule-evaluation.v1.schema.json",
+      "valid": {
+        "decidingRuleId": "rule_security",
+        "decision": "retain",
+        "explanation": "Le titre mentionne la sécurité",
+        "itemDigest": "d72d187c969338e0752342c48d0a2781654ae8eb85489831b03b2704ddbe3e90",
+        "reasonCode": "radar.rule_matched",
+        "ruleResults": [
+          {
+            "matched": true,
+            "ruleId": "rule_security"
+          },
+          {
+            "matched": false,
+            "ruleId": "rule_author"
+          }
+        ],
+        "ruleSetDigest": "8628bb65023de842a3a69f50f8f887a5073e68a9c79fb917cb1d3af09271efe3",
+        "ruleSetId": "urn:libre-ai:rules:radar-golden-1",
+        "ruleSetVersion": 1,
+        "schemaVersion": "libre-ai.radar-rule-evaluation.v1"
+      },
+      "invalidMutations": [
+        {
+          "name": "decision rule missing",
+          "path": "/decidingRuleId",
+          "value": null
+        },
+        {
+          "name": "rule-set version exceeds deterministic integer range",
+          "path": "/ruleSetVersion",
+          "value": 2147483648
+        }
+      ]
+    },
+    {
+      "schema": "curated-item-export.v2.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.curated-item-export.v2",
+        "tenantId": "ten_1234567890abcdef",
+        "exportedAt": "2026-07-16T00:00:00Z",
+        "items": []
+      },
+      "invalidMutations": [
+        {
+          "name": "missing tenant",
+          "path": "/tenantId",
+          "remove": true
+        }
+      ]
+    },
+    {
+      "schema": "context-document.v2.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.context-document.v2",
+        "id": "urn:libre-ai:context:context-1",
+        "createdAt": "2026-07-16T00:00:00Z",
+        "rootBlockIds": ["block_1"],
+        "blocks": [
+          {
+            "id": "block_1",
+            "revision": 1,
+            "mediaType": "text/markdown",
+            "content": "# Note",
+            "links": []
+          }
+        ],
+        "totalBytes": 6,
+        "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "invalidMutations": [
+        {
+          "name": "network location",
+          "path": "/remoteUrl",
+          "value": "https://example.org/note"
+        }
+      ]
+    },
+    {
+      "schema": "notebook-backup-seal-request.v2.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.notebook-backup-seal-request.v2",
+        "id": "urn:libre-ai:backup:golden-1",
+        "createdAt": "2026-07-16T00:00:00Z",
+        "cipher": "aes-256-gcm",
+        "kdf": {
+          "algorithm": "argon2id",
+          "version": 19,
+          "memoryKiB": 65536,
+          "iterations": 3,
+          "parallelism": 1,
+          "outputLengthBytes": 32,
+          "salt": "AAECAwQFBgcICQoLDA0ODw=="
+        },
+        "nonce": "EBESExQVFhcYGRob",
+        "plaintext": "Tm90ZWJvb2sgY29yZSB2MiBkZXRlcm1pbmlzdGljIHRlc3QgcGF5bG9hZC4K"
+      },
+      "invalidMutations": [
+        {
+          "name": "weak KDF",
+          "path": "/kdf/memoryKiB",
+          "value": 1024
+        }
+      ]
+    },
+    {
+      "schema": "notebook-backup.v2.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.notebook-backup.v2",
+        "id": "urn:libre-ai:backup:golden-1",
+        "createdAt": "2026-07-16T00:00:00Z",
+        "cipher": "aes-256-gcm",
+        "kdf": {
+          "algorithm": "argon2id",
+          "version": 19,
+          "memoryKiB": 65536,
+          "iterations": 3,
+          "parallelism": 1,
+          "outputLengthBytes": 32,
+          "salt": "AAECAwQFBgcICQoLDA0ODw=="
+        },
+        "nonce": "EBESExQVFhcYGRob",
+        "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrk2NbbuGaxPesIsoXXv0Nr2w==",
+        "digest": "7163e7365e6486785ab9f1510caca7cc74a94aeede02660863f2313248904029"
+      },
+      "invalidMutations": [
+        {
+          "name": "nonce wrong length",
+          "path": "/nonce",
+          "value": "AAAA"
+        }
+      ]
+    },
+    {
+      "schema": "policy-definition.v2.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.policy-definition.v2",
+        "id": "urn:libre-ai:policy:all-operators-eligible",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "status": "approved",
+        "rules": [
+          {
+            "id": "at_most_number",
+            "fact": "model.score",
+            "operator": "at-most",
+            "value": 10,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "at_least_number",
+            "fact": "model.score",
+            "operator": "at-least",
+            "value": 7,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            },
+            "maxSourceAgeDays": 365
+          },
+          {
+            "id": "not_in_boolean",
+            "fact": "model.open",
+            "operator": "not-in",
+            "value": [false],
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "not_in_number",
+            "fact": "model.score",
+            "operator": "not-in",
+            "value": [1, 0],
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "not_in_string",
+            "fact": "model.licence",
+            "operator": "not-in",
+            "value": ["SSPL-1.0", "AGPL-3.0"],
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "in_boolean",
+            "fact": "model.open",
+            "operator": "in",
+            "value": [true],
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "in_number",
+            "fact": "model.score",
+            "operator": "in",
+            "value": [8, 7],
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "in_string",
+            "fact": "model.licence",
+            "operator": "in",
+            "value": ["MIT", "Apache-2.0"],
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "not_equals_boolean",
+            "fact": "model.open",
+            "operator": "not-equals",
+            "value": false,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "not_equals_number",
+            "fact": "model.score",
+            "operator": "not-equals",
+            "value": 9,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "not_equals_string",
+            "fact": "model.licence",
+            "operator": "not-equals",
+            "value": "proprietary",
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "equals_boolean",
+            "fact": "model.open",
+            "operator": "equals",
+            "value": true,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "equals_number",
+            "fact": "model.score",
+            "operator": "equals",
+            "value": 8,
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "id": "equals_string",
+            "fact": "model.licence",
+            "operator": "equals",
+            "value": "MIT",
+            "unknown": "indeterminate",
+            "source": {
+              "uri": "https://example.org/policy/method",
+              "retrievedAt": "2026-01-01T00:00:00Z",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "0835e370af4ddee1b3d70fd9210c639c8218f4a0d2281897ea60f34f57295c80",
+        "approvedAt": "2026-01-02T00:00:00Z",
+        "approval": {
+          "role": "policy-approver",
+          "approvedAt": "2026-01-02T00:00:00Z",
+          "reference": "urn:libre-ai:approval:all-operators-eligible",
+          "subjectDigest": "0835e370af4ddee1b3d70fd9210c639c8218f4a0d2281897ea60f34f57295c80",
+          "actorKind": "human",
+          "approverId": "policy_reviewer"
+        },
+        "proposedBy": "policy_author"
+      },
+      "invalidMutations": [
+        {
+          "name": "self actor kind",
+          "path": "/approval/actorKind",
+          "value": "agent"
+        }
+      ]
+    },
+    {
+      "schema": "model-snapshot.v2.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.model-snapshot.v2",
+        "id": "urn:libre-ai:snapshot:all-operators-eligible",
+        "tenantId": "ten_1234567890abcdef",
+        "modelId": "model-all-operators-eligible",
+        "capturedAt": "2026-07-16T00:00:00Z",
+        "facts": [
+          {
+            "name": "model.score",
+            "value": 8,
+            "source": {
+              "uri": "https://example.org/evidence/b",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "name": "model.open",
+            "value": true,
+            "source": {
+              "uri": "https://example.org/evidence/c",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "licence": "CC-BY-4.0"
+            }
+          },
+          {
+            "name": "model.licence",
+            "value": "MIT",
+            "source": {
+              "uri": "https://example.org/evidence/a",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "licence": "CC-BY-4.0"
+            }
+          }
+        ],
+        "digest": "711464a03792caee82882e9c9f9d879ff459a22639cb07ec01cd4c5b360cd482"
+      },
+      "invalidMutations": [
+        {
+          "name": "need fact in snapshot",
+          "path": "/facts/0/name",
+          "value": "need.licence"
+        }
+      ]
+    },
+    {
+      "schema": "policy-need.v2.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.policy-need.v2",
+        "id": "urn:libre-ai:need:all-operators-eligible",
+        "tenantId": "ten_1234567890abcdef",
+        "facts": [
+          {
+            "name": "need.task",
+            "value": "summary"
+          }
+        ],
+        "digest": "05e56f3638834c368aca91b8e8b5cdb0269eb1f04da952cd2c635d35485efb8b"
+      },
+      "invalidMutations": [
+        {
+          "name": "tenant missing",
+          "path": "/tenantId",
+          "remove": true
+        }
+      ]
+    },
+    {
+      "schema": "policy-evaluation.v2.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.policy-evaluation.v2",
+        "id": "urn:libre-ai:evaluation:78e3df56a8adb0a7dc29720f93724716c58668ba99eface1a451f2ad641cfe9c",
+        "tenantId": "ten_1234567890abcdef",
+        "policyId": "urn:libre-ai:policy:all-operators-eligible",
+        "policyDigest": "0835e370af4ddee1b3d70fd9210c639c8218f4a0d2281897ea60f34f57295c80",
+        "snapshotId": "urn:libre-ai:snapshot:all-operators-eligible",
+        "snapshotDigest": "711464a03792caee82882e9c9f9d879ff459a22639cb07ec01cd4c5b360cd482",
+        "needDigest": "05e56f3638834c368aca91b8e8b5cdb0269eb1f04da952cd2c635d35485efb8b",
+        "engineVersion": "2.0.0",
+        "verdict": "eligible",
+        "ruleResults": [
+          {
+            "ruleId": "at_least_number",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "at_most_number",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "equals_boolean",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "equals_number",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "equals_string",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "in_boolean",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "in_number",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "in_string",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "not_equals_boolean",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "not_equals_number",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "not_equals_string",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "not_in_boolean",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "not_in_number",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          },
+          {
+            "ruleId": "not_in_string",
+            "status": "satisfied",
+            "reasonCode": "policy.rule_satisfied"
+          }
+        ],
+        "evaluatedAt": "2026-07-17T00:00:00Z",
+        "digest": "78e3df56a8adb0a7dc29720f93724716c58668ba99eface1a451f2ad641cfe9c"
+      },
+      "invalidMutations": [
+        {
+          "name": "success alias",
+          "path": "/verdict",
+          "value": "compliant"
+        }
+      ]
+    },
+    {
+      "schema": "public-vote-dataset.v2.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.public-vote-dataset.v2",
+        "id": "urn:libre-ai:dataset:votes-2",
+        "version": "2.0.0",
+        "scope": "Vote public de démonstration",
+        "methodId": "urn:libre-ai:method:method-2",
+        "methodDigest": "e410573d17a409dfbfda24adf0afea0e67f6706a24d9d51b21863b6129197159",
+        "statements": [
+          {
+            "id": "statement_1",
+            "wording": "Proposition sourcée",
+            "source": {
+              "uri": "https://example.org/vote",
+              "retrievedAt": "2026-07-16T00:00:00Z",
+              "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "licence": "Etalab-2.0"
+            },
+            "votesFor": 10,
+            "votesAgainst": 5,
+            "abstentions": 2,
+            "absent": 1
+          }
+        ],
+        "publishedAt": "2026-07-16T00:00:00Z",
+        "digest": "c0ef40cc0b8cc59ae5ee46b20ae016ba06f19c03476e542bae1e7d2a42d1d2de",
+        "approvals": [
+          {
+            "role": "methodological-review",
+            "actorKind": "human",
+            "reviewerId": "method_reviewer",
+            "approvedAt": "2026-07-16T00:00:00Z",
+            "reference": "urn:libre-ai:approval:dataset-method-2",
+            "subjectDigest": "c0ef40cc0b8cc59ae5ee46b20ae016ba06f19c03476e542bae1e7d2a42d1d2de"
+          },
+          {
+            "role": "legal-privacy-review",
+            "actorKind": "human",
+            "reviewerId": "privacy_reviewer",
+            "approvedAt": "2026-07-16T00:00:00Z",
+            "reference": "urn:libre-ai:approval:dataset-privacy-2",
+            "subjectDigest": "c0ef40cc0b8cc59ae5ee46b20ae016ba06f19c03476e542bae1e7d2a42d1d2de"
+          }
+        ]
+      },
+      "invalidMutations": [
+        {
+          "name": "agent reviewer",
+          "path": "/approvals/0/actorKind",
+          "value": "agent"
+        }
+      ]
+    },
+    {
+      "schema": "boussole-method.v2.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.boussole-method.v2",
+        "id": "urn:libre-ai:method:method-2",
+        "version": "2.0.0",
+        "responseScale": [-1, 0, 1],
+        "abstentionTreatment": "excluded-from-denominator",
+        "missingTreatment": "excluded-and-reported",
+        "formula": "normalized-agreement-v2",
+        "rounding": "decimal-6-half-even",
+        "approvedAt": "2026-07-16T00:00:00Z",
+        "digest": "e410573d17a409dfbfda24adf0afea0e67f6706a24d9d51b21863b6129197159",
+        "approvals": [
+          {
+            "role": "methodological-review",
+            "actorKind": "human",
+            "reviewerId": "method_reviewer",
+            "approvedAt": "2026-07-16T00:00:00Z",
+            "reference": "urn:libre-ai:approval:method-2",
+            "subjectDigest": "e410573d17a409dfbfda24adf0afea0e67f6706a24d9d51b21863b6129197159"
+          },
+          {
+            "role": "legal-privacy-review",
+            "actorKind": "human",
+            "reviewerId": "privacy_reviewer",
+            "approvedAt": "2026-07-16T00:00:00Z",
+            "reference": "urn:libre-ai:approval:privacy-2",
+            "subjectDigest": "e410573d17a409dfbfda24adf0afea0e67f6706a24d9d51b21863b6129197159"
+          }
+        ]
+      },
+      "invalidMutations": [
+        {
+          "name": "wrong formula",
+          "path": "/formula",
+          "value": "normalized-agreement-v1"
+        }
+      ]
+    },
+    {
+      "schema": "boussole-response-set.v2.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.boussole-response-set.v2",
+        "datasetId": "urn:libre-ai:dataset:votes-2",
+        "datasetDigest": "c0ef40cc0b8cc59ae5ee46b20ae016ba06f19c03476e542bae1e7d2a42d1d2de",
+        "methodId": "urn:libre-ai:method:method-2",
+        "methodDigest": "e410573d17a409dfbfda24adf0afea0e67f6706a24d9d51b21863b6129197159",
+        "responses": [
+          {
+            "statementId": "statement_1",
+            "kind": "answer",
+            "value": 1
+          }
+        ]
+      },
+      "invalidMutations": [
+        {
+          "name": "answer outside scale bound",
+          "path": "/responses/0/value",
+          "value": 6
+        }
+      ]
+    },
+    {
+      "schema": "local-comparison.v2.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.local-comparison.v2",
+        "datasetId": "urn:libre-ai:dataset:votes-2",
+        "datasetDigest": "c0ef40cc0b8cc59ae5ee46b20ae016ba06f19c03476e542bae1e7d2a42d1d2de",
+        "methodId": "urn:libre-ai:method:method-2",
+        "methodDigest": "e410573d17a409dfbfda24adf0afea0e67f6706a24d9d51b21863b6129197159",
+        "responseSetDigest": "bcf2763ba2119662edfee375c9b8a7433a3c3f1e4f85805400bd6e2e408d02f3",
+        "score": 0.333333,
+        "denominator": 15,
+        "omitted": 3,
+        "contributions": [
+          {
+            "statementId": "statement_1",
+            "contribution": 0.333333,
+            "votesConsidered": 15,
+            "votesOmitted": 3
+          }
+        ],
+        "computedAt": "2026-07-16T00:00:00Z"
+      },
+      "invalidMutations": [
+        {
+          "name": "score out of range",
+          "path": "/score",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "schema": "engine-golden-vectors.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.engine-golden-vectors.v1",
+        "world": "boussole-scoring-v2",
+        "status": "candidate",
+        "cases": []
+      },
+      "invalidMutations": [
+        {
+          "name": "invalid world",
+          "path": "/world",
+          "value": "INVALID"
+        }
       ]
     }
   ]

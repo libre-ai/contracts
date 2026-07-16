@@ -19,6 +19,10 @@ A new route, operation or optional request/response field may remain in v1 if it
 
 WIT worlds and authorizer policies are exact major-versioned boundaries. Signature/type changes, new host imports, expanded operations or expanded role rights require a new major plus adversarial conformance vectors. An attenuation or additional denial may remain in the same major only before release; after release it is treated as a security migration with explicit rollout/rollback evidence.
 
+## Pre-implementation candidates
+
+An undefined v1 behavior is not completed in place when doing so changes a signature, accepted payload, identifier or digest meaning. A new major candidate is created and the untouched v1 remains non-targeted. When no v1 producer was released, consumers move directly to the approved major without a compatibility adapter. `candidate` means machine-checkable only: implementation waits every human role listed by the catalog review dossier.
+
 ## Evidence
 
-A contract change is incomplete until catalog, schemas/protocol source, positive and negative fixtures, generated/validated projections and every named consumer pass in the same candidate. Contract artifacts never contain secrets or production/personal fixture data.
+A contract change is incomplete until catalog, schemas/protocol source, positive and negative fixtures, generated/validated projections and every named consumer pass in the same candidate. Contract artifacts never contain secrets or production/personal fixture data. No agent or contract author may approve its own candidate.

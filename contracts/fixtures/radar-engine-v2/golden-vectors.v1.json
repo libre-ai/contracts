@@ -1,0 +1,625 @@
+{
+  "schemaVersion": "libre-ai.radar-engine-golden-vectors.v2",
+  "contractFiles": [
+    {
+      "path": "contracts/wit/radar-engine-v2/world.wit",
+      "sha256": "6540991c05f16704fa9987245db8b7f8db575dc8fbd9a7981dcf72f4a8e195ae"
+    },
+    {
+      "path": "contracts/wit/radar-engine-v2/PROFILE.md",
+      "sha256": "12ca237dee5dda12bed6e5d2af0dc1b49658a7870edaab3a146ae2884ef6b489"
+    },
+    {
+      "path": "contracts/schemas/curation-rule-set.v2.schema.json",
+      "sha256": "0a8de8db43ab4c3daffd23a7fb5f1c0d004b2e18f4c8009c0b7d1f90c9e514d8"
+    },
+    {
+      "path": "contracts/schemas/radar-normalized-feed.v1.schema.json",
+      "sha256": "dc95132e8bd79cffdd5caeedbd49876fbdd977256eaca2ef90aada0d43758e68"
+    },
+    {
+      "path": "contracts/schemas/radar-normalized-item.v1.schema.json",
+      "sha256": "644da2a61008dcc87a73eed78250596d30444c218f325c8cbb2832e722eff10b"
+    },
+    {
+      "path": "contracts/schemas/radar-rule-evaluation.v1.schema.json",
+      "sha256": "ae08eb81187c78f0616c715ac3c7fc758590b24468ac579dbe25211285da9116"
+    }
+  ],
+  "parseCases": [
+    {
+      "id": "rss-2.0-specific-media",
+      "input": "contracts/fixtures/radar-engine-v2/positive/rss-2.0.xml",
+      "inputSha256": "a59da1e05dee4f57eb088eeeb1351f9fa1ae808a59ef15d500533c33e8599d42",
+      "mediaType": "application/rss+xml; charset=\"UTF-8\"",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "success",
+        "output": "contracts/fixtures/radar-engine-v2/golden/rss-2.0.normalized.json",
+        "outputSchema": "radar-normalized-feed.v1.schema.json",
+        "sha256": "911ccfae5cd5995dcce9a1be3be8e8869e79a9ffc07eacc6c829fe1ae74a87c8"
+      },
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml"
+    },
+    {
+      "id": "rss-2.0-generic-media",
+      "input": "contracts/fixtures/radar-engine-v2/positive/rss-2.0.xml",
+      "inputSha256": "a59da1e05dee4f57eb088eeeb1351f9fa1ae808a59ef15d500533c33e8599d42",
+      "mediaType": "text/xml",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "success",
+        "output": "contracts/fixtures/radar-engine-v2/golden/rss-2.0.normalized.json",
+        "outputSchema": "radar-normalized-feed.v1.schema.json",
+        "sha256": "911ccfae5cd5995dcce9a1be3be8e8869e79a9ffc07eacc6c829fe1ae74a87c8"
+      },
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml"
+    },
+    {
+      "id": "atom-1.0-specific-media",
+      "input": "contracts/fixtures/radar-engine-v2/positive/atom-1.0.xml",
+      "inputSha256": "85458ef065b2885eea693b7b3b8a5df1cc6edc8f2e09f204818f944b2d90b60e",
+      "mediaType": "application/atom+xml",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "success",
+        "output": "contracts/fixtures/radar-engine-v2/golden/atom-1.0.normalized.json",
+        "outputSchema": "radar-normalized-feed.v1.schema.json",
+        "sha256": "53da22abf4acd56818697d84f771e2de0c01b46e8f263142a4aa164f68ad6dcc"
+      },
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml"
+    },
+    {
+      "id": "atom-1.0-generic-media",
+      "input": "contracts/fixtures/radar-engine-v2/positive/atom-1.0.xml",
+      "inputSha256": "85458ef065b2885eea693b7b3b8a5df1cc6edc8f2e09f204818f944b2d90b60e",
+      "mediaType": "application/xml; charset=utf-8",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "success",
+        "output": "contracts/fixtures/radar-engine-v2/golden/atom-1.0.normalized.json",
+        "outputSchema": "radar-normalized-feed.v1.schema.json",
+        "sha256": "53da22abf4acd56818697d84f771e2de0c01b46e8f263142a4aa164f68ad6dcc"
+      },
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml"
+    },
+    {
+      "id": "json-feed-1-specific-media",
+      "input": "contracts/fixtures/radar-engine-v2/positive/json-feed-1.json",
+      "inputSha256": "12340759001b1b65dce48c147bbc5b20b870accd909697aa5a129b7b821ed514",
+      "mediaType": "application/feed+json",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "success",
+        "output": "contracts/fixtures/radar-engine-v2/golden/json-feed-1.normalized.json",
+        "outputSchema": "radar-normalized-feed.v1.schema.json",
+        "sha256": "e8e746edcaaae262221d6ea6b1cc2d04accb036c0c6aea29f8c19ad02cd3acf6"
+      },
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml"
+    },
+    {
+      "id": "json-feed-1.1-specific-media",
+      "input": "contracts/fixtures/radar-engine-v2/positive/json-feed-1.1.json",
+      "inputSha256": "6914f1965cda5b901dba45ad4bd6dbb8d63188646f5577f56cf1476f9edccf0a",
+      "mediaType": "application/feed+json; charset=UTF-8",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "success",
+        "output": "contracts/fixtures/radar-engine-v2/golden/json-feed-1.1.normalized.json",
+        "outputSchema": "radar-normalized-feed.v1.schema.json",
+        "sha256": "867f07e11ff08236544f2d104fcf4008ad30002e5a79736489cbc021aae76bd6"
+      },
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml"
+    },
+    {
+      "id": "json-feed-1.1-generic-media",
+      "input": "contracts/fixtures/radar-engine-v2/positive/json-feed-1.1.json",
+      "inputSha256": "6914f1965cda5b901dba45ad4bd6dbb8d63188646f5577f56cf1476f9edccf0a",
+      "mediaType": "application/json",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "success",
+        "output": "contracts/fixtures/radar-engine-v2/golden/json-feed-1.1.normalized.json",
+        "outputSchema": "radar-normalized-feed.v1.schema.json",
+        "sha256": "867f07e11ff08236544f2d104fcf4008ad30002e5a79736489cbc021aae76bd6"
+      },
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml"
+    },
+    {
+      "id": "invalid-limits",
+      "input": "contracts/fixtures/radar-engine-v2/positive/rss-2.0.xml",
+      "inputSha256": "a59da1e05dee4f57eb088eeeb1351f9fa1ae808a59ef15d500533c33e8599d42",
+      "mediaType": "application/rss+xml",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 0,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "refusal",
+        "code": "invalid-limits"
+      },
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml"
+    },
+    {
+      "id": "body-too-large",
+      "input": "contracts/fixtures/radar-engine-v2/positive/rss-2.0.xml",
+      "inputSha256": "a59da1e05dee4f57eb088eeeb1351f9fa1ae808a59ef15d500533c33e8599d42",
+      "mediaType": "application/rss+xml",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 921,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "refusal",
+        "code": "body-too-large"
+      },
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml"
+    },
+    {
+      "id": "media-type-unsupported",
+      "input": "contracts/fixtures/radar-engine-v2/adversarial/html-document.html",
+      "inputSha256": "3a1e8e3bce44ca5bed70e95a310cfc3ee26521a462842df6a195ef3dec1c1bf1",
+      "mediaType": "text/html",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "refusal",
+        "code": "media-type-unsupported"
+      },
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml"
+    },
+    {
+      "id": "encoding-unsupported",
+      "input": "contracts/fixtures/radar-engine-v2/adversarial/gzip-header.bin",
+      "inputSha256": "74b3c26ca8f930a22a65257296ba31bbe2e0ec6704c4ffa20e321a47997fe7d2",
+      "mediaType": "application/rss+xml",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "refusal",
+        "code": "encoding-unsupported"
+      },
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml"
+    },
+    {
+      "id": "feed-malformed-xml",
+      "input": "contracts/fixtures/radar-engine-v2/adversarial/malformed.xml",
+      "inputSha256": "9a767cf79f744e26011fba52094e72dedc658e6ed19e62622f06341b658d787f",
+      "mediaType": "application/rss+xml",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "refusal",
+        "code": "feed-malformed"
+      },
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml"
+    },
+    {
+      "id": "feed-malformed-duplicate-json-key",
+      "input": "contracts/fixtures/radar-engine-v2/adversarial/duplicate-key.json",
+      "inputSha256": "61d1524bff4e6f7bdc05e693f3625eb4941ec4b88e6be04e5ae5e762e4354e14",
+      "mediaType": "application/feed+json",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "refusal",
+        "code": "feed-malformed"
+      },
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml"
+    },
+    {
+      "id": "feed-kind-unsupported",
+      "input": "contracts/fixtures/radar-engine-v2/adversarial/html-root.xml",
+      "inputSha256": "c911f8684fecdb97e34af960ae325f72ad6c1240c3c5546893dc4be4c2dd761e",
+      "mediaType": "application/xml",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "refusal",
+        "code": "feed-kind-unsupported"
+      },
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml"
+    },
+    {
+      "id": "xml-dtd-forbidden",
+      "input": "contracts/fixtures/radar-engine-v2/adversarial/dtd-xxe.xml",
+      "inputSha256": "e463502f45b54db791f1d58e86447f79e3c09fc3e570430e38440df65450ed7a",
+      "mediaType": "application/rss+xml",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "refusal",
+        "code": "xml-dtd-forbidden"
+      },
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml"
+    },
+    {
+      "id": "xml-entity-forbidden",
+      "input": "contracts/fixtures/radar-engine-v2/adversarial/undeclared-entity.xml",
+      "inputSha256": "9ef33f495ba8bf0fe70f5b6afb8cb94fc06e9bc2eccfc1e30ba5c01dadac8120",
+      "mediaType": "application/rss+xml",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "refusal",
+        "code": "xml-entity-forbidden"
+      },
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml"
+    },
+    {
+      "id": "max-depth-exceeded-in-unknown-field",
+      "input": "contracts/fixtures/radar-engine-v2/adversarial/deep-unknown.json",
+      "inputSha256": "1d612622f800e4176621ea67e53930066c687ca70c2c1bc7ebed820a0d30ed9b",
+      "mediaType": "application/feed+json",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 4,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "refusal",
+        "code": "max-depth-exceeded"
+      },
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml"
+    },
+    {
+      "id": "max-items-exceeded-before-deduplication",
+      "input": "contracts/fixtures/radar-engine-v2/adversarial/too-many-items.json",
+      "inputSha256": "c7b1186388b862b2dbe332be473dfdda4ab9a0c6b39a8b5e6ed2e5ace0a123e0",
+      "mediaType": "application/feed+json",
+      "limits": {
+        "maxItems": 1,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "refusal",
+        "code": "max-items-exceeded"
+      },
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml"
+    },
+    {
+      "id": "invalid-source",
+      "input": "contracts/fixtures/radar-engine-v2/positive/rss-2.0.xml",
+      "inputSha256": "a59da1e05dee4f57eb088eeeb1351f9fa1ae808a59ef15d500533c33e8599d42",
+      "mediaType": "application/rss+xml; charset=\"UTF-8\"",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "refusal",
+        "code": "invalid-source"
+      },
+      "sourceId": "invalid",
+      "baseUrl": "https://example.org/feed.xml"
+    },
+    {
+      "id": "output-too-large",
+      "input": "contracts/fixtures/radar-engine-v2/positive/rss-2.0.xml",
+      "inputSha256": "a59da1e05dee4f57eb088eeeb1351f9fa1ae808a59ef15d500533c33e8599d42",
+      "mediaType": "application/rss+xml; charset=\"UTF-8\"",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 1
+      },
+      "expect": {
+        "kind": "refusal",
+        "code": "output-too-large"
+      },
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml"
+    },
+    {
+      "id": "media-type-unknown-parameter",
+      "input": "contracts/fixtures/radar-engine-v2/positive/rss-2.0.xml",
+      "inputSha256": "a59da1e05dee4f57eb088eeeb1351f9fa1ae808a59ef15d500533c33e8599d42",
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "mediaType": "application/rss+xml; boundary=hostile",
+      "expect": {
+        "kind": "refusal",
+        "code": "media-type-unsupported"
+      }
+    },
+    {
+      "id": "media-type-family-mismatch",
+      "input": "contracts/fixtures/radar-engine-v2/positive/rss-2.0.xml",
+      "inputSha256": "a59da1e05dee4f57eb088eeeb1351f9fa1ae808a59ef15d500533c33e8599d42",
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "mediaType": "application/atom+xml",
+      "expect": {
+        "kind": "refusal",
+        "code": "feed-kind-unsupported"
+      }
+    },
+    {
+      "id": "xml-entity-expansion-forbidden",
+      "input": "contracts/fixtures/radar-engine-v2/adversarial/entity-expansion.xml",
+      "inputSha256": "5786bfea3b3e052ff8817bb076b3e1a5da11c9b80db69df284b2c60ef150f3b9",
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml",
+      "mediaType": "application/rss+xml",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "refusal",
+        "code": "xml-dtd-forbidden"
+      }
+    },
+    {
+      "id": "invalid-base-url",
+      "input": "contracts/fixtures/radar-engine-v2/positive/rss-2.0.xml",
+      "inputSha256": "a59da1e05dee4f57eb088eeeb1351f9fa1ae808a59ef15d500533c33e8599d42",
+      "mediaType": "application/rss+xml",
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "file:///etc/passwd",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "refusal",
+        "code": "invalid-source"
+      }
+    },
+    {
+      "id": "media-type-too-long",
+      "input": "contracts/fixtures/radar-engine-v2/positive/rss-2.0.xml",
+      "inputSha256": "a59da1e05dee4f57eb088eeeb1351f9fa1ae808a59ef15d500533c33e8599d42",
+      "mediaType": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/feed.xml",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "refusal",
+        "code": "media-type-unsupported"
+      }
+    },
+    {
+      "id": "source-id-too-long",
+      "input": "contracts/fixtures/radar-engine-v2/positive/rss-2.0.xml",
+      "inputSha256": "a59da1e05dee4f57eb088eeeb1351f9fa1ae808a59ef15d500533c33e8599d42",
+      "mediaType": "application/rss+xml",
+      "sourceId": "urn:libre-ai:source:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "baseUrl": "https://example.org/feed.xml",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "refusal",
+        "code": "invalid-source"
+      }
+    },
+    {
+      "id": "base-url-too-long",
+      "input": "contracts/fixtures/radar-engine-v2/positive/rss-2.0.xml",
+      "inputSha256": "a59da1e05dee4f57eb088eeeb1351f9fa1ae808a59ef15d500533c33e8599d42",
+      "mediaType": "application/rss+xml",
+      "sourceId": "urn:libre-ai:source:feed-1",
+      "baseUrl": "https://example.org/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "limits": {
+        "maxItems": 100,
+        "maxDepth": 16,
+        "maxInputBytes": 1048576,
+        "maxOutputBytes": 52428800
+      },
+      "expect": {
+        "kind": "refusal",
+        "code": "invalid-source"
+      }
+    }
+  ],
+  "evaluationCases": [
+    {
+      "id": "first-match-retains-and-all-rules-report",
+      "item": "contracts/fixtures/radar-engine-v2/positive/evaluate-item.json",
+      "itemSha256": "d72d187c969338e0752342c48d0a2781654ae8eb85489831b03b2704ddbe3e90",
+      "rules": "contracts/fixtures/radar-engine-v2/positive/evaluate-rules.json",
+      "rulesSha256": "5bc89625d79c40ce54f4396c2ceb6961710bd5707fdcf68c5d66a4a732cccc3d",
+      "expect": {
+        "kind": "success",
+        "output": "contracts/fixtures/radar-engine-v2/golden/rule-evaluation.json",
+        "outputSchema": "radar-rule-evaluation.v1.schema.json",
+        "sha256": "14b7c1d93809aec25235bd237c9ed52ae5a32fcba75327553e9f91f31f880d19"
+      }
+    },
+    {
+      "id": "json-invalid",
+      "item": "contracts/fixtures/radar-engine-v2/adversarial/evaluate-malformed.json",
+      "itemSha256": "eb6cd3ace033fb8abcd40283964cda61c20658eaba642c695d0dd8694235270c",
+      "rules": "contracts/fixtures/radar-engine-v2/positive/evaluate-rules.json",
+      "rulesSha256": "5bc89625d79c40ce54f4396c2ceb6961710bd5707fdcf68c5d66a4a732cccc3d",
+      "expect": {
+        "kind": "refusal",
+        "code": "json-invalid"
+      }
+    },
+    {
+      "id": "evaluation-body-too-large",
+      "item": "contracts/fixtures/radar-engine-v2/adversarial/evaluate-item-too-large.json",
+      "itemSha256": "8fb2f1c994e6fa113916cb8d15a418f8afb6418ff1b7080b6e8a98f36b6308e1",
+      "rules": "contracts/fixtures/radar-engine-v2/positive/evaluate-rules.json",
+      "rulesSha256": "5bc89625d79c40ce54f4396c2ceb6961710bd5707fdcf68c5d66a4a732cccc3d",
+      "expect": {
+        "kind": "refusal",
+        "code": "body-too-large"
+      }
+    },
+    {
+      "id": "evaluation-rules-too-large",
+      "item": "contracts/fixtures/radar-engine-v2/positive/evaluate-item.json",
+      "itemSha256": "d72d187c969338e0752342c48d0a2781654ae8eb85489831b03b2704ddbe3e90",
+      "rules": "contracts/fixtures/radar-engine-v2/adversarial/evaluate-rules-too-large.json",
+      "rulesSha256": "a46b8b9fc27a3e8736dfea8562e86ae18b8e29bd1eb475e6bad8859eb661ee98",
+      "expect": {
+        "kind": "refusal",
+        "code": "body-too-large"
+      }
+    },
+    {
+      "id": "json-not-canonical",
+      "item": "contracts/fixtures/radar-engine-v2/adversarial/evaluate-item-noncanonical.json",
+      "itemSha256": "afc5d92bfe03b5be56bb8bdad0e1729314e20519b22cb835267a51cb4123ac71",
+      "rules": "contracts/fixtures/radar-engine-v2/positive/evaluate-rules.json",
+      "rulesSha256": "5bc89625d79c40ce54f4396c2ceb6961710bd5707fdcf68c5d66a4a732cccc3d",
+      "expect": {
+        "kind": "refusal",
+        "code": "json-not-canonical"
+      }
+    },
+    {
+      "id": "item-invalid-unknown-member",
+      "item": "contracts/fixtures/radar-engine-v2/adversarial/evaluate-item-unknown.json",
+      "itemSha256": "94a0c79b9b7c48963566784dcce870d6a5d90a16124dc74f165c1c83a64244a6",
+      "rules": "contracts/fixtures/radar-engine-v2/positive/evaluate-rules.json",
+      "rulesSha256": "5bc89625d79c40ce54f4396c2ceb6961710bd5707fdcf68c5d66a4a732cccc3d",
+      "expect": {
+        "kind": "refusal",
+        "code": "item-invalid"
+      }
+    },
+    {
+      "id": "rule-invalid-duplicate-id",
+      "item": "contracts/fixtures/radar-engine-v2/positive/evaluate-item.json",
+      "itemSha256": "d72d187c969338e0752342c48d0a2781654ae8eb85489831b03b2704ddbe3e90",
+      "rules": "contracts/fixtures/radar-engine-v2/adversarial/evaluate-rules-duplicate-id.json",
+      "rulesSha256": "e3c811a315ba23af4b963d07a3e8ee8c741f0c3b29bfe3aafc4bb7e2cc1d06a9",
+      "expect": {
+        "kind": "refusal",
+        "code": "rule-invalid"
+      }
+    },
+    {
+      "id": "no-match-rejects-by-default",
+      "item": "contracts/fixtures/radar-engine-v2/positive/evaluate-item.json",
+      "itemSha256": "d72d187c969338e0752342c48d0a2781654ae8eb85489831b03b2704ddbe3e90",
+      "rules": "contracts/fixtures/radar-engine-v2/positive/evaluate-rules-no-match.json",
+      "rulesSha256": "5f8ccdbba2d246bbc1576e41e5dd3c3254a442f8beb2430b22ab91945d104456",
+      "expect": {
+        "kind": "success",
+        "output": "contracts/fixtures/radar-engine-v2/golden/rule-evaluation-default-reject.json",
+        "outputSchema": "radar-rule-evaluation.v1.schema.json",
+        "sha256": "0373e135f3dee5cab0910e6111b936d68b5b1578e0827bc344f2c957cf93ec37"
+      }
+    }
+  ]
+}
