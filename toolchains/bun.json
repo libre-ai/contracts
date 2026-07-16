@@ -8,6 +8,16 @@
   "preRelease": true,
   "localSnapshot": ".tools/snapshots/bun/1.4.0-canary.1+57f349f63",
   "sharedCiReady": false,
+  "durableRelease": {
+    "tag": "toolchain-bun-1.4.0-canary.1-57f349f63",
+    "url": "https://github.com/libre-ai/libre-ai/releases/tag/toolchain-bun-1.4.0-canary.1-57f349f63",
+    "status": "pending"
+  },
+  "sourceArchive": {
+    "name": "bun-source-57f349f6307cf89dcfb8893f003c1ef421a74589.tar.gz",
+    "sha256": "0ad1279ac5270a5a20d44666cc8a31c39b4fdbf94a1db3500d154e166a857d65"
+  },
+  "notice": "toolchains/notices/bun/1.4.0-canary.1+57f349f63/NOTICE.md",
   "assets": {
     "darwin-arm64": {
       "name": "bun-darwin-aarch64.zip",
@@ -18,5 +28,5 @@
       "sha256": "83144e2542c33aaae541cf16b42f8cf1c55c3b94c5395fc776417fa27e95bcbf"
     }
   },
-  "releasePolicy": "Replace with the first qualified stable Rust release before shared CI/production, or archive and approve this exact pre-release binary with LGPL notices and durable retrieval."
+  "releasePolicy": "This exact pre-release may be used for bootstrap CI only after its durable release is published and verified. Replace it with the first qualified stable Rust release at G2; production approval remains forbidden."
 }
