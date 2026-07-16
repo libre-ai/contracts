@@ -12,7 +12,9 @@ Machine authority: [`catalog.v1.json`](catalog.v1.json).
 
 The catalog records one ID, path, owner set, consumer set, classification, compatibility mode and
 `locked` or pending-independent-review `candidate` status for every contract. Candidate entries are
-not implementation or release approvals. Their dossier names every required human role. Uncataloged files and missing authorities fail `bun run check:contracts`.
+not implementation or release approvals. Their dossier names every required review role; solo G2
+review agents and human control milestones follow `docs/reviews/AGENT-REVIEW-PROTOCOL.md`.
+Uncataloged files and missing authorities fail `bun run check:contracts`.
 
 ## Shared contracts
 

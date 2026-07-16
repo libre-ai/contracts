@@ -233,7 +233,7 @@ for (const [index, entry] of entries.entries()) {
       !requiredReviews.includes("security") ||
       requiredReviews.some((role) => typeof role !== "string" || !allowedReviewRoles.has(role))
     ) {
-      failures.push(`${label}: candidate misses valid independent human reviews`);
+      failures.push(`${label}: candidate misses valid role-separated reviews`);
     }
     const dossier = isRecord(entry.review) ? entry.review.dossier : undefined;
     if (
