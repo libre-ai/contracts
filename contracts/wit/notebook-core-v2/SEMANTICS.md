@@ -28,6 +28,8 @@ Pour `application/json`, `content` est remplacé par le JCS RFC 8785 de la valeu
 
 Les budgets sémantiques sont cumulatifs sur le document : profondeur maximale 64 pour chaque valeur JSON imbriquée (racine à profondeur 1, chaque objet/tableau enfant ajoute 1), au plus 100 000 valeurs JSON (chaque objet, tableau ou primitive compte un nœud) et au plus 16 384 liens au total. Les bornes de schéma restent 1 000 blocs et 1 000 liens par bloc. Dépasser un budget retourne `invalid-document`, jamais un fallback ni une sortie partielle.
 
+Pour ces fixtures publiques uniquement, les six cas limites du golden appliquent `libre-ai.context-resource-fixture.v1`. L'ordinal du cas devient l'ID Context sur 16 octets big-endian ; les IDs de blocs sont leurs indices big-endian sur 16 octets. Un cas profondeur emboîte `value - 1` tableaux autour de `0`; un cas nœuds place `value - 1` zéros dans un tableau ; un cas liens crée exactement 1 000 blocs vides et distribue, par bloc source croissant, jusqu'à 1 000 cibles croissantes jusqu'au total demandé. L'entrée est le JCS UTF-8 sans BOM ni fin de ligne, avec `totalBytes` exact et 64 zéros comme digest entrant. Chaque cas fournit longueur et SHA-256 de cette entrée matérialisable ; les cas acceptés fournissent aussi longueur et SHA-256 de la sortie canonique. Le checker DOIT construire les documents complets, mesurer la dimension et vérifier ces empreintes : un simple contrôle des nombres déclarés ne satisfait pas le vecteur.
+
 Les valeurs d'entrée `totalBytes` et `digest` doivent satisfaire le schéma mais sont remplacées, sans comparaison avec leur valeur entrante. `totalBytes` devient la somme exacte des longueurs UTF-8 des champs `content` après normalisation. Le digest est :
 
 ```text

@@ -507,7 +507,7 @@
       },
       {
         "name": "json-depth-over-limit",
-        "documentUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:303132333435363738393a3b3c3d3e3f\",\"rootBlockIds\":[\"blk_101112131415161718191a1b1c1d1e1f\",\"blk_000102030405060708090a0b0c0d0e0f\"],\"blocks\":[{\"id\":\"blk_202122232425262728292a2b2c2d2e2f\",\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"blk_101112131415161718191a1b1c1d1e1f\",\"mediaType\":\"application/json\",\"content\":\"[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[0]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]\",\"links\":[\"blk_202122232425262728292a2b2c2d2e2f\",\"blk_000102030405060708090a0b0c0d0e0f\"]},{\"id\":\"blk_000102030405060708090a0b0c0d0e0f\",\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\"}",
+        "documentUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:303132333435363738393a3b3c3d3e3f\",\"rootBlockIds\":[\"blk_101112131415161718191a1b1c1d1e1f\",\"blk_000102030405060708090a0b0c0d0e0f\"],\"blocks\":[{\"id\":\"blk_202122232425262728292a2b2c2d2e2f\",\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"blk_101112131415161718191a1b1c1d1e1f\",\"mediaType\":\"application/json\",\"content\":\"[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[0]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]\",\"links\":[\"blk_202122232425262728292a2b2c2d2e2f\",\"blk_000102030405060708090a0b0c0d0e0f\"]},{\"id\":\"blk_000102030405060708090a0b0c0d0e0f\",\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\"}",
         "expected": {
           "result": "error",
           "code": "invalid-document"
@@ -538,42 +538,76 @@
         }
       }
     ],
+    "resourceFixtureProfile": {
+      "name": "libre-ai.context-resource-fixture.v1",
+      "serialization": "RFC 8785 JCS UTF-8 without BOM or trailing newline",
+      "contextId": "urn:libre-ai:context: followed by fixtureOrdinal encoded as 32 lowercase hexadecimal digits",
+      "blockIds": "blk_ followed by the zero-based block index encoded as 32 lowercase hexadecimal digits",
+      "jsonDepth": "One application/json block whose content is value-1 nested arrays around the primitive 0, so the root value has depth 1 and the primitive has depth value.",
+      "jsonNodes": "One application/json block whose content is one flat array containing value-1 primitive zeroes, so the array plus primitives count value nodes.",
+      "totalLinks": "Exactly 1000 empty text/plain blocks; in ascending source-block order, assign up to 1000 ascending block IDs until value links have been assigned.",
+      "inputDerivedFields": "totalBytes is the UTF-8 content sum and digest is 64 zeroes; accepted output replaces both according to SEMANTICS.md."
+    },
     "resourceCases": [
       {
         "name": "json-depth-at-limit",
         "dimension": "jsonDepth",
         "value": 64,
-        "expected": "accepted"
+        "expected": "accepted",
+        "fixtureOrdinal": 1,
+        "inputCanonicalByteLength": 497,
+        "inputCanonicalSha256": "6cca3c34b7b956977f2cacbac3ad68837d4341323d7563f05f13ec1dce288322",
+        "canonicalOutputByteLength": 497,
+        "canonicalOutputSha256": "1f87ecd9ad51afafb6d188c99496efd333b486baae35c1cc517ad8622874eac5"
       },
       {
         "name": "json-depth-over-limit",
         "dimension": "jsonDepth",
         "value": 65,
-        "expected": "invalid-document"
+        "expected": "invalid-document",
+        "fixtureOrdinal": 2,
+        "inputCanonicalByteLength": 499,
+        "inputCanonicalSha256": "e5b65c7d0a9f1a440d26e62746f9904c1095f257f4a34e0a5224038c8f687561"
       },
       {
         "name": "json-nodes-at-limit",
         "dimension": "jsonNodes",
         "value": 100000,
-        "expected": "accepted"
+        "expected": "accepted",
+        "fixtureOrdinal": 3,
+        "inputCanonicalByteLength": 200372,
+        "inputCanonicalSha256": "8b47ead18c74493c6a048a38fcbad16b70c962e9d21c6444b31fe5a2c233116f",
+        "canonicalOutputByteLength": 200372,
+        "canonicalOutputSha256": "96c21c5c096e5c280fa9892d09abbb4b1c5bc342a5fd192478a7685ea2b2e240"
       },
       {
         "name": "json-nodes-over-limit",
         "dimension": "jsonNodes",
         "value": 100001,
-        "expected": "invalid-document"
+        "expected": "invalid-document",
+        "fixtureOrdinal": 4,
+        "inputCanonicalByteLength": 200374,
+        "inputCanonicalSha256": "22a6845f9d6c9790926087c06e40e488edc3856cbe3c2f75a960aa25a0129da1"
       },
       {
         "name": "total-links-at-limit",
         "dimension": "totalLinks",
         "value": 16384,
-        "expected": "accepted"
+        "expected": "accepted",
+        "fixtureOrdinal": 5,
+        "inputCanonicalByteLength": 734226,
+        "inputCanonicalSha256": "6d7008100868888acd5e8c62cfa3024d3ebc7cf247851e251d5ba4ff43c33c95",
+        "canonicalOutputByteLength": 734226,
+        "canonicalOutputSha256": "aed2ef312bd9ac93ffbdbe9249f3bedb0ddccc4aae941daefcd47e1c1116e630"
       },
       {
         "name": "total-links-over-limit",
         "dimension": "totalLinks",
         "value": 16385,
-        "expected": "invalid-document"
+        "expected": "invalid-document",
+        "fixtureOrdinal": 6,
+        "inputCanonicalByteLength": 734265,
+        "inputCanonicalSha256": "06a713f4df6c034ffd1cb7d3f938c4058d06ea6df226966b1b732909a4c26e44"
       }
     ],
     "numericCases": [
