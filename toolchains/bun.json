@@ -11,7 +11,8 @@
   "durableRelease": {
     "tag": "toolchain-bun-1.4.0-canary.1-57f349f63",
     "url": "https://github.com/libre-ai/libre-ai/releases/tag/toolchain-bun-1.4.0-canary.1-57f349f63",
-    "status": "pending"
+    "linuxX64Asset": "https://github.com/libre-ai/libre-ai/releases/download/toolchain-bun-1.4.0-canary.1-57f349f63/bun-linux-x64.zip",
+    "status": "published-pending-ci"
   },
   "sourceArchive": {
     "name": "bun-source-57f349f6307cf89dcfb8893f003c1ef421a74589.tar.gz",
