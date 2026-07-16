@@ -1,12 +1,12 @@
 # Candidat de revue cryptographique — Notebook Core v2
 
-> **Statut : candidat catalogué — Gate A cryptographie et vie privée en attente.** Ce profil est normatif pour évaluer le candidat v2, mais n'autorise aucune implémentation ni émission de sauvegarde. La promotion `candidate → locked` exige les agents reviewers indépendants listés dans le catalogue ; la conformité du futur moteur et les gates de release resteront distinctes.
+> **Statut : candidat catalogué — Gate A architecture, sécurité, cryptographie et vie privée en attente.** Ce profil est normatif pour évaluer le candidat v2, mais n'autorise aucune implémentation ni émission de sauvegarde. La promotion `candidate → locked` exige les quatre verdicts par rôle et le jalon humain définis par `docs/reviews/AGENT-REVIEW-PROTOCOL.md` ; la conformité du futur moteur et les gates de release resteront distinctes.
 
 Les mots **DOIT**, **NE DOIT PAS** et **DEVRAIT** sont normatifs. Les standards de référence sont RFC 9106 (Argon2id), NIST SP 800-38D (GCM), RFC 4648 §4 (Base64) et RFC 8785 (JCS).
 
 ## 1. Surface corrigée
 
-- `contracts/wit/notebook-core-v2/world.wit` exporte une interface autonome `api`, fait entrer explicitement `id` et `created-at` dans `seal-backup` et ne dérive aucune valeur hôte. Regrouper types et fonctions dans cette interface empêche qu'un `use` inter-interface devienne un import réel dans le composant.
+- `contracts/wit/notebook-core-v2/world.wit` exporte une interface autonome `api` et reçoit explicitement un identifiant opaque, le sel et le nonce. Regrouper types et fonctions dans cette interface empêche qu'un `use` inter-interface devienne un import réel dans le composant.
 - `contracts/schemas/notebook-backup-seal-request.v2.schema.json` est la projection JSON de test de la requête WIT. Le `recovery-secret` en est volontairement absent et reste un argument binaire séparé.
 - `contracts/schemas/notebook-backup.v2.schema.json` définit l'enveloppe persistable.
 - `contracts/fixtures/notebook-core-v2/golden-vectors.v1.json` fixe les octets intermédiaires et les mutations.
@@ -18,29 +18,28 @@ Le WIT transporte `plaintext`, `salt`, `nonce` et `recovery-secret` comme octets
 
 ## 1A. Canonicalisation de ContextDocument v2
 
-`canonicalize-context` accepte au plus 134 217 728 octets de JSON UTF-8 strict conforme à `context-document.v2.schema.json`. Les clés dupliquées, BOM, champs inconnus et JSON imbriqué invalide sont refusés comme `invalid-document`.
+`canonicalize-context` accepte au plus 22 370 044 octets de JSON UTF-8 strict conforme à `context-document.v2.schema.json`, avec au plus 16 777 216 octets cumulés dans les contenus. Les clés dupliquées, BOM, champs inconnus et JSON imbriqué invalide ou à clés dupliquées sont refusés comme `invalid-document`.
 
-Les IDs de blocs sont uniques. Chaque `rootBlockId` et chaque lien désigne un bloc présent. `excludedBlockIds` est disjoint des racines, des blocs et de toutes les cibles de lien. Les racines, blocs, liens et exclusions sont triés par octets UTF-8 croissants ; aucun doublon sémantique n'est accepté. Pour `application/json`, `content` est remplacé par le JCS RFC 8785 de sa valeur JSON ; les autres contenus sont conservés octet pour octet après validation UTF-8.
+Les IDs de blocs sont uniques. Chaque `rootBlockId` et chaque lien désigne un bloc présent. `excludedBlockIds` est disjoint des racines, des blocs et de toutes les cibles de lien. Le cœur trie `rootBlockIds`, chaque tableau `links` et `excludedBlockIds` par ordre lexicographique croissant des octets UTF-8 de l'identifiant. Il trie `blocks` par ce même ordre appliqué au champ `id`; aucun autre champ d'un bloc ne participe au comparateur. Aucun doublon sémantique n'est accepté. Pour `application/json`, `content` est remplacé par le JCS RFC 8785 de la valeur JSON imbriquée ; les autres contenus sont conservés octet pour octet après validation UTF-8.
 
-`totalBytes` est la somme exacte des longueurs UTF-8 des seuls champs `content`. Le digest est :
+Les valeurs d'entrée `totalBytes` et `digest` doivent satisfaire le schéma mais sont remplacées, sans comparaison avec leur valeur entrante. `totalBytes` devient la somme exacte des longueurs UTF-8 des champs `content` après normalisation. Le digest est :
 
 ```text
 SHA-256(UTF8("libre-ai.context-document.v2") || 0x00 || JCS(document sans digest))
 ```
 
-L'ID du document est fourni par l'application locale et n'est pas dérivé par le cœur. La sortie est le JCS du document normalisé avec `totalBytes` et `digest` recalculés.
+L'ID du document est `urn:libre-ai:context:` suivi de 32 hexadécimaux minuscules encodant 16 octets CSPRNG neufs et sans sémantique. `createdAt` est absent du document ; un horodatage métier éventuel appartient au contenu explicitement sélectionné. La sortie est le JCS du document normalisé avec `totalBytes` et `digest` recalculés.
 
 ## 2. Validation bornée
 
-### Identité et temps
+### Identité opaque
 
 Le host DOIT fournir :
 
 - `schema-version = "libre-ai.notebook-backup-seal-request.v2"` ;
-- un `id` ASCII `urn:libre-ai:backup:` suivi de 1 à 128 caractères `[A-Za-z0-9._~-]` ;
-- `created-at` sous la forme UTC exacte `YYYY-MM-DDTHH:mm:ssZ`, date valide, sans fraction ni seconde intercalaire.
+- un nouvel `id` ASCII `urn:libre-ai:backup:` suivi d'exactement 32 caractères hexadécimaux minuscules. Le suffixe encode directement 16 octets issus d'un CSPRNG et NE DOIT PAS contenir d'identifiant utilisateur, nom, date ou autre sémantique.
 
-Le cœur n'importe aucune horloge. L'enveloppe reprend exactement `id` et `createdAt` après validation et utilise `schemaVersion = "libre-ai.notebook-backup.v2"`.
+Le cœur n'importe aucune horloge. `createdAt` n'existe pas dans l'enveloppe claire ; un produit qui en a besoin l'inclut dans le plaintext chiffré. L'enveloppe reprend exactement l'`id` après validation et utilise `schemaVersion = "libre-ai.notebook-backup.v2"`.
 
 ### Base64
 
@@ -60,9 +59,9 @@ Toute valeur Base64 DOIT utiliser l'alphabet standard RFC 4648 §4 (`A-Z a-z 0-9
 | clé dérivée | 32 octets | 32 octets |
 | tag GCM | 16 octets | 16 octets |
 
-L'entrée brute `open-backup.envelope` est limitée à **22 370 175 octets**, maximum d'une enveloppe JCS conforme avec le ciphertext maximal. Les longueurs décodées sont vérifiées en plus des longueurs JSON Schema. Aucun calcul Argon2id n'a lieu avant validation de la structure, des algorithmes, des paramètres et de ces bornes publiques.
+L'entrée brute `open-backup.envelope` est limitée à **22 370 044 octets**, maximum d'une enveloppe JCS conforme avec le ciphertext maximal. Les longueurs décodées sont vérifiées en plus des longueurs JSON Schema. Aucun calcul Argon2id n'a lieu avant validation de la structure, des algorithmes, des paramètres et de ces bornes publiques.
 
-Le secret est une chaîne d'octets opaque : le cœur ne réalise ni décodage, ni trim, ni normalisation Unicode. Une UI textuelle DOIT fixer une conversion stable avant le premier scellement (UTF-8 sans BOM après NFC recommandé) et la réappliquer à l'identique à la restauration. La longueur ne prouve pas l'entropie : le produit DEVRAIT générer au moins 128 bits aléatoires ou imposer une politique équivalente côté UI, sans dictionnaire ni mesure de force dans le cœur.
+Le secret est une chaîne d'octets opaque : le cœur ne réalise ni décodage, ni trim, ni normalisation Unicode. Tout host acceptant une saisie textuelle DOIT appliquer le profil `libre-ai.recovery-secret-text.v1` avant l'appel : refuser un U+FEFF initial et toute entrée qui n'est pas une séquence de valeurs scalaires Unicode, normaliser en NFC, encoder en UTF-8 sans BOM, ne jamais trimmer, changer la casse ou normaliser les fins de ligne, puis valider la longueur binaire. Les vecteurs `recoverySecretTextProfile` sont normatifs. Un host acceptant directement des octets ne les transforme pas. Pour le mode de création initial, le produit DOIT appliquer `libre-ai.recovery-secret-code.v1` : générer exactement 16 octets par CSPRNG, afficher exactement 32 hexadécimaux minuscules sans séparateur et restaurer par décodage hexadécimal strict vers les 16 octets originaux. Toute option de secret choisi par l'utilisateur exige une politique d'entropie séparément approuvée ; la longueur seule ne prouve pas l'entropie.
 
 ## 3. Argon2id vers AES-256
 
@@ -96,7 +95,6 @@ Soit `JCS(x)` la sérialisation RFC 8785 en UTF-8, sans BOM ni terminaison. L'ob
 {
   "schemaVersion": "libre-ai.notebook-backup.v2",
   "id": "<id>",
-  "createdAt": "<createdAt>",
   "cipher": "aes-256-gcm",
   "kdf": {
     "algorithm": "argon2id",
@@ -117,13 +115,13 @@ Les nombres montrés pour `m`, `t` et `p` sont remplacés par les valeurs valid�
 UTF8("libre-ai.notebook-backup.v2/aad") || 0x00 || JCS(metadata)
 ```
 
-Le golden vector fournit le JSON JCS et l'hexadécimal complets. `id`, `createdAt`, tous les paramètres KDF, le sel et le nonce sont donc authentifiés. Le plaintext, le ciphertext, le tag et le digest ne figurent pas dans les AAD ; GCM authentifie nativement le ciphertext, le tag et leurs longueurs.
+Le golden vector fournit le JSON JCS et l'hexadécimal complets. L'`id` opaque, tous les paramètres KDF, le sel et le nonce sont donc authentifiés. Le plaintext, le ciphertext, le tag et le digest ne figurent pas dans les AAD ; GCM authentifie nativement le ciphertext, le tag et leurs longueurs.
 
 ## 5. AES-256-GCM et enveloppe
 
 Le chiffrement est exclusivement AES-256-GCM avec : clé de 32 octets issue d'Argon2id, nonce de 12 octets, AAD ci-dessus et tag de 128 bits. Le champ binaire chiffré est `C || T`, sans nonce ni tag préfixé. Réutiliser un couple `(clé, nonce)` est interdit.
 
-Le host DOIT produire, par CSPRNG, un nouveau sel de 16 octets et un nouveau nonce de 12 octets pour chaque scellement. Les deux sont des entrées explicites parce que le composant WASM n'importe aucun aléa. Les valeurs du golden vector sont publiques, déterministes et interdites en production.
+Le host DOIT produire, par CSPRNG, un nouvel identifiant de 16 octets, un nouveau sel de 16 octets et un nouveau nonce de 12 octets pour chaque scellement. Ces trois valeurs sont des entrées explicites parce que le composant WASM n'importe aucun aléa. Les valeurs du golden vector sont publiques, déterministes et interdites en production.
 
 ## 6. Digest exact
 
@@ -136,7 +134,7 @@ SHA-256(
 )
 ```
 
-`envelope-without-digest` contient donc `schemaVersion`, `id`, `createdAt`, `cipher`, l'objet `kdf`, `nonce` et le Base64 canonique de `ciphertext`. Le champ `digest` est **le seul champ exclu**. La sortie est 64 caractères hexadécimaux minuscules. L'enveloppe finale renvoyée par `seal-backup` est `JCS(envelope-with-digest)`.
+`envelope-without-digest` contient donc `schemaVersion`, l'`id` opaque, `cipher`, l'objet `kdf`, `nonce` et le Base64 canonique de `ciphertext`. Le champ `digest` est **le seul champ exclu**. La sortie est 64 caractères hexadécimaux minuscules. L'enveloppe finale renvoyée par `seal-backup` est `JCS(envelope-with-digest)`.
 
 À l'ouverture, le digest est recalculé mais une égalité de digest n'autorise rien : le succès requiert **à la fois** comparaison en temps constant du digest et vérification du tag GCM.
 
@@ -174,23 +172,23 @@ Le cœur DOIT zéroïser avant tout retour succès/erreur, autant que le modèle
 
 Le host reste responsable de ses propres buffers d'entrée/sortie et DOIT écraser ses `Uint8Array` sensibles après l'appel ; JavaScript et les copies de mémoire WASM empêchent toute promesse d'effacement physique absolu. La Gate A examine si ces exigences sont suffisantes et implémentables. La Gate B vérifie leurs effets réels sur les chemins succès, erreur, allocation et panic ainsi que le comportement des bibliothèques retenues.
 
-`world.wit` ne déclare aucun `import` et n'utilise aucune interface de types séparée. Le module et le composant construits DOIVENT avoir une liste d'imports vide : pas de WASI clocks, random, sockets, HTTP, filesystem, key/value, environment ou logging. `id`, `created-at`, sel et nonce proviennent uniquement de la requête. Le scan du composant final et le test sans WASI appartiennent à la Gate B.
+`world.wit` ne déclare aucun `import` et n'utilise aucune interface de types séparée. Le module et le composant construits DOIVENT avoir une liste d'imports vide : pas de WASI clocks, random, sockets, HTTP, filesystem, key/value, environment ou logging. L'`id` opaque, le sel et le nonce proviennent uniquement de la requête. Le scan du composant final et le test sans WASI appartiennent à la Gate B.
 
 ## 9. Gate A — protocole avant implémentation
 
-La Gate A peut et DOIT être réalisée sans moteur Notebook. Le reviewer est un agent cryptographie indépendant qui n'a ni rédigé ce candidat, ni vocation à approuver sa propre future implémentation. Il travaille sur un commit immuable et complète [`INDEPENDENT-REVIEW.md`](INDEPENDENT-REVIEW.md).
+La Gate A peut et DOIT être réalisée sans moteur Notebook. Elle exige quatre passes review-only séparées — architecture, sécurité, cryptographie et vie privée — sur le même commit immuable, conformément au protocole agent. Chaque reviewer complète son rôle dans [`INDEPENDENT-REVIEW.md`](../../../docs/security/notebook-core-v2-review/INDEPENDENT-REVIEW.md) sans s'auto-approuver ; la passe cryptographie utilise une chaîne indépendante de la Gate S.
 
-La promotion et l'implémentation sont refusées tant que ce reviewer n'a pas :
+La promotion et l'implémentation sont refusées tant que ces passes n'ont pas :
 
 1. reproduit la clé Argon2id, les AAD, le ciphertext/tag, le digest et l'enveloppe avec une implémentation indépendante de celles consignées dans le golden vector ;
-2. exécuté le golden vector et les sept mutations, y compris la version non supportée, confirmé les erreurs attendues et l'absence de plaintext sur échec ;
+2. exécuté le golden backup et ses dix mutations, le golden Context v2 et ses dix refus, ainsi que les vecteurs Unicode du recovery secret ; confirmé les erreurs attendues et l'absence de plaintext sur échec ;
 3. examiné les octets AAD/digest, Base64, JCS, nonce/sel, bornes, dérivation `P/S/K/X` et migration v2 ;
 4. analysé le modèle anti-oracle, y compris secret hors bornes, digest recalculé par un attaquant et paramètres KDF invalides ;
 5. approuvé la sécurité des bornes Argon2id et défini les budgets mémoire/latence à mesurer en Gate B sur les navigateurs supportés ;
 6. confirmé que l'interface exportée `api`, les exigences de zéroïsation, la non-persistance et l'absence totale d'import sont vérifiables lors de la Gate B ;
 7. lié sa décision, ses outils et ses éventuelles réserves au SHA du commit candidat.
 
-Toute modification normative après approbation invalide la Gate A et impose une nouvelle revue. Une Gate A approuvée autorise uniquement la promotion vers `contracts/` et le développement du moteur derrière les gates ; elle n'autorise ni release, ni sauvegarde utilisateur.
+Toute modification normative après approbation invalide les verdicts affectés et impose leur reprise. Une Gate A approuvée et acceptée au jalon humain autorise uniquement la promotion `candidate → locked` et le développement du moteur derrière les gates ; elle n'autorise ni release, ni sauvegarde utilisateur.
 
 ## 10. Gate B — conformité du moteur avant release
 
