@@ -178,12 +178,12 @@ Le host reste responsable de ses propres buffers d'entrée/sortie et DOIT écras
 
 ## 9. Gate A — protocole avant implémentation
 
-La Gate A peut et DOIT être réalisée sans moteur Notebook. Le reviewer est un cryptographe applicatif qui n'a ni rédigé ce candidat, ni vocation à approuver sa propre future implémentation. Il travaille sur un commit immuable et complète [`INDEPENDENT-REVIEW.md`](INDEPENDENT-REVIEW.md).
+La Gate A peut et DOIT être réalisée sans moteur Notebook. Le reviewer est un agent cryptographie indépendant qui n'a ni rédigé ce candidat, ni vocation à approuver sa propre future implémentation. Il travaille sur un commit immuable et complète [`INDEPENDENT-REVIEW.md`](INDEPENDENT-REVIEW.md).
 
 La promotion et l'implémentation sont refusées tant que ce reviewer n'a pas :
 
 1. reproduit la clé Argon2id, les AAD, le ciphertext/tag, le digest et l'enveloppe avec une implémentation indépendante de celles consignées dans le golden vector ;
-2. exécuté le golden vector et les six mutations, confirmé les erreurs attendues et l'absence de plaintext sur échec ;
+2. exécuté le golden vector et les sept mutations, y compris la version non supportée, confirmé les erreurs attendues et l'absence de plaintext sur échec ;
 3. examiné les octets AAD/digest, Base64, JCS, nonce/sel, bornes, dérivation `P/S/K/X` et migration v2 ;
 4. analysé le modèle anti-oracle, y compris secret hors bornes, digest recalculé par un attaquant et paramètres KDF invalides ;
 5. approuvé la sécurité des bornes Argon2id et défini les budgets mémoire/latence à mesurer en Gate B sur les navigateurs supportés ;
