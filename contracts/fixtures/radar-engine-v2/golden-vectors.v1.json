@@ -3,11 +3,11 @@
   "contractFiles": [
     {
       "path": "contracts/wit/radar-engine-v2/world.wit",
-      "sha256": "6540991c05f16704fa9987245db8b7f8db575dc8fbd9a7981dcf72f4a8e195ae"
+      "sha256": "0fbb69be39f265e44feb77ce054fcece052cff38ff0eacd3353f9f8d50bd8073"
     },
     {
       "path": "contracts/wit/radar-engine-v2/PROFILE.md",
-      "sha256": "12ca237dee5dda12bed6e5d2af0dc1b49658a7870edaab3a146ae2884ef6b489"
+      "sha256": "95be36bf8e45219e8545c653b3ab25983a4929782ef69be6218914f455719698"
     },
     {
       "path": "contracts/schemas/curation-rule-set.v2.schema.json",

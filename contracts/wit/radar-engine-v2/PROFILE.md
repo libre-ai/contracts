@@ -178,7 +178,8 @@ an English three-letter abbreviation, year has four digits, and zone is `UT`, `G
 Accepted instants are converted to UTC, fractional seconds are discarded toward the earlier whole
 second, and output is exactly `YYYY-MM-DDTHH:MM:SSZ`. Numeric negative-zero offsets (`-00:00` and
 `-0000`) are invalid because they do not assert a known UTC offset. If UTC conversion would leave the
-date is invalid. An absent or invalid date becomes JSON `null` and does not reject the item or feed.
+inclusive year range 0001 through 9999, the date is invalid. An absent or invalid date becomes JSON
+`null` and does not reject the item or feed.
 
 ## 7. Identifiers, deduplication, ordering and canonical JSON
 
