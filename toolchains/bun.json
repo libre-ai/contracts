@@ -7,12 +7,12 @@
   "observedAt": "2026-07-16",
   "preRelease": true,
   "localSnapshot": ".tools/snapshots/bun/1.4.0-canary.1+57f349f63",
-  "sharedCiReady": false,
+  "sharedCiReady": true,
   "durableRelease": {
     "tag": "toolchain-bun-1.4.0-canary.1-57f349f63",
     "url": "https://github.com/libre-ai/libre-ai/releases/tag/toolchain-bun-1.4.0-canary.1-57f349f63",
     "linuxX64Asset": "https://github.com/libre-ai/libre-ai/releases/download/toolchain-bun-1.4.0-canary.1-57f349f63/bun-linux-x64.zip",
-    "status": "published-pending-ci"
+    "status": "qualified-bootstrap-ci"
   },
   "sourceArchive": {
     "name": "bun-source-57f349f6307cf89dcfb8893f003c1ef421a74589.tar.gz",
