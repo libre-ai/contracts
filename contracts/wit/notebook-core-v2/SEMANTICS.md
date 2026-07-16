@@ -1,6 +1,6 @@
 # Candidat de revue cryptographique — Notebook Core v2
 
-> **Statut : candidat catalogué — Gate A architecture, sécurité, cryptographie et vie privée en attente.** Ce profil est normatif pour évaluer le candidat v2, mais n'autorise aucune implémentation ni émission de sauvegarde. La promotion `candidate → locked` exige les quatre verdicts par rôle et le jalon humain définis par `docs/reviews/AGENT-REVIEW-PROTOCOL.md` ; la conformité du futur moteur et les gates de release resteront distinctes.
+> **Statut : candidat catalogué — Gate A architecture, sécurité, cryptographie et vie privée en attente.** Ce profil est normatif pour évaluer le candidat v2, mais n'autorise aucune implémentation ni émission de sauvegarde. La promotion `candidate → locked` exige les quatre verdicts agentiques par rôle puis l’autorisation de merge du propriétaire définis par `docs/reviews/AGENT-REVIEW-PROTOCOL.md` ; cette autorisation n’est pas une revue technique ; la conformité du futur moteur et les gates de release resteront distinctes.
 
 Les mots **DOIT**, **NE DOIT PAS** et **DEVRAIT** sont normatifs. Les standards de référence sont RFC 9106 (Argon2id), NIST SP 800-38D (GCM), RFC 4648 §4 (Base64) et RFC 8785 (JCS).
 
@@ -188,7 +188,7 @@ La promotion et l'implémentation sont refusées tant que ces passes n'ont pas :
 6. confirmé que l'interface exportée `api`, les exigences de zéroïsation, la non-persistance et l'absence totale d'import sont vérifiables lors de la Gate B ;
 7. lié sa décision, ses outils et ses éventuelles réserves au SHA du commit candidat.
 
-Toute modification normative après approbation invalide les verdicts affectés et impose leur reprise. Une Gate A approuvée et acceptée au jalon humain autorise uniquement la promotion `candidate → locked` et le développement du moteur derrière les gates ; elle n'autorise ni release, ni sauvegarde utilisateur.
+Toute modification normative après approbation invalide les verdicts affectés et impose leur reprise. Une Gate A approuvée par les agents requis puis autorisée au merge par le propriétaire permet uniquement la promotion `candidate → locked` et le développement du moteur derrière les gates ; elle n'autorise ni release, ni sauvegarde utilisateur.
 
 ## 10. Gate B — conformité du moteur avant release
 
