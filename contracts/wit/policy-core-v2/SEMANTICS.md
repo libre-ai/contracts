@@ -42,8 +42,8 @@ and 1,000 facts in either namespace can produce 1,000,000 matched rule/occurrenc
 evaluations. A policy set has at most 100 members; set lookup MUST use sorted binary
 search or an equivalent lookup with at most 7 scalar comparisons, never a linear
 100-member scan for every occurrence. Duplicate detection MUST use canonical hashes
-or ordered indexes, not pairwise deep comparison. Peak component linear memory, including WIT
-input/output copies, decoded values, indexes, canonicalization/hashing scratch and
+or ordered indexes, not pairwise deep comparison. Peak component linear memory,
+including WIT input/output copies, decoded values, indexes, canonicalization/hashing scratch and
 the result, MUST NOT exceed 256 MiB. Caller-owned buffers outside component linear
 memory are excluded. A schema-valid input within all byte/cardinality ceilings MUST
 NOT be refused merely because an implementation chose a less efficient algorithm;
@@ -74,7 +74,10 @@ Validation occurs before rule evaluation, in this order:
 6. require exact equality of policy, snapshot and need `tenantId`, otherwise
    `policy.tenant_mismatch`.
 
-A failure returns only the closed WIT `error-code`, never a `PolicyEvaluation` or free-form string. The host maps variants to the public code and optional static label below; no input value, parser diagnostic, tenant, fact, reviewer identity or library error crosses the component boundary.
+A failure returns only the closed WIT `error-code`, never a `PolicyEvaluation` or
+free-form string. The host maps variants to the public code and optional static
+label below; no input value, parser diagnostic, tenant, fact, reviewer identity or
+library error crosses the component boundary.
 
 | WIT variant | Public code | Optional host label |
 | --- | --- | --- |
@@ -265,5 +268,5 @@ ordered trace.
 - `contracts/fixtures/policy-core-v2/resource-budgets.v1.json` fixes byte,
   cardinality, semantic-work and peak-memory qualification ceilings.
 
-An implementation conforms only if every vector and budget matches exactly. Implementations
-MUST NOT rewrite expected vectors from their own output.
+An implementation conforms only if every vector and budget matches exactly.
+Implementations MUST NOT rewrite expected vectors from their own output.

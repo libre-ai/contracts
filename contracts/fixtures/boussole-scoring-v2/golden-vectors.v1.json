@@ -145,6 +145,18 @@
       "expectedError": "denominator-zero"
     },
     {
+      "id": "reject-invalid-computed-at",
+      "baseCase": "excluded-abstentions-positive-agreement",
+      "patches": [
+        {
+          "op": "replace",
+          "path": "/computedAt",
+          "value": "2026-02-30T00:00:00Z"
+        }
+      ],
+      "expectedError": "computed-at-invalid"
+    },
+    {
       "id": "neutral-scale-five",
       "input": {
         "dataset": {
