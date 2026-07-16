@@ -24,6 +24,14 @@
     {
       "path": "contracts/schemas/radar-rule-evaluation.v1.schema.json",
       "sha256": "ae08eb81187c78f0616c715ac3c7fc758590b24468ac579dbe25211285da9116"
+    },
+    {
+      "path": "contracts/schemas/curated-item-export.v2.schema.json",
+      "sha256": "5392c9e7afc5c379c26403abfb72157aee4daaf7dd8842210c815234ef6c4664"
+    },
+    {
+      "path": "contracts/openapi/radar.v2.yaml",
+      "sha256": "2eb98ace057c7c3a786068926371bda5ad414aa04b75e4b231a521f971806012"
     }
   ],
   "parseCases": [

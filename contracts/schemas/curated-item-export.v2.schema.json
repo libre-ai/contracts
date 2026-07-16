@@ -8,7 +8,11 @@
   "properties": {
     "schemaVersion": { "const": "libre-ai.curated-item-export.v2" },
     "tenantId": { "$ref": "common.v1.schema.json#/$defs/tenantId" },
-    "exportedAt": { "$ref": "common.v1.schema.json#/$defs/timestamp" },
+    "exportedAt": {
+      "$ref": "common.v1.schema.json#/$defs/timestamp",
+      "type": "string",
+      "maxLength": 32
+    },
     "items": {
       "type": "array",
       "maxItems": 10000,
@@ -27,15 +31,36 @@
           "decidedAt"
         ],
         "properties": {
-          "id": { "$ref": "common.v1.schema.json#/$defs/urn" },
-          "sourceId": { "$ref": "common.v1.schema.json#/$defs/urn" },
-          "sourceUrl": { "type": "string", "format": "uri", "pattern": "^https?://" },
+          "id": {
+            "$ref": "common.v1.schema.json#/$defs/urn",
+            "type": "string",
+            "maxLength": 256
+          },
+          "sourceId": {
+            "$ref": "common.v1.schema.json#/$defs/urn",
+            "type": "string",
+            "maxLength": 256
+          },
+          "sourceUrl": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 2048,
+            "pattern": "^https?://(?![^/?#]*@)"
+          },
           "title": { "type": "string", "minLength": 1, "maxLength": 1000 },
           "normalizedDigest": { "$ref": "common.v1.schema.json#/$defs/sha256" },
           "decision": { "enum": ["retain", "reject"] },
-          "ruleSetId": { "$ref": "common.v1.schema.json#/$defs/urn" },
+          "ruleSetId": {
+            "$ref": "common.v1.schema.json#/$defs/urn",
+            "type": "string",
+            "maxLength": 256
+          },
           "ruleSetVersion": { "type": "integer", "minimum": 1, "maximum": 2147483647 },
-          "decidedAt": { "$ref": "common.v1.schema.json#/$defs/timestamp" }
+          "decidedAt": {
+            "$ref": "common.v1.schema.json#/$defs/timestamp",
+            "type": "string",
+            "maxLength": 32
+          }
         }
       }
     }

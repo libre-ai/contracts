@@ -1159,13 +1159,30 @@
         "schemaVersion": "libre-ai.curated-item-export.v2",
         "tenantId": "ten_1234567890abcdef",
         "exportedAt": "2026-07-16T00:00:00Z",
-        "items": []
+        "items": [
+          {
+            "id": "urn:libre-ai:item:item-1",
+            "sourceId": "urn:libre-ai:source:feed-1",
+            "sourceUrl": "https://example.org/feed",
+            "title": "Item",
+            "normalizedDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "decision": "retain",
+            "ruleSetId": "urn:libre-ai:rules:radar-1",
+            "ruleSetVersion": 1,
+            "decidedAt": "2026-07-16T00:00:00Z"
+          }
+        ]
       },
       "invalidMutations": [
         {
           "name": "missing tenant",
           "path": "/tenantId",
           "remove": true
+        },
+        {
+          "name": "credential-bearing source URL",
+          "path": "/items/0/sourceUrl",
+          "value": "https://user:secret@example.org/feed"
         }
       ]
     },
