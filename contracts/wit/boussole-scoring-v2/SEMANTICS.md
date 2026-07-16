@@ -50,7 +50,7 @@ The global score is:
 sum(contribution_i * considered_i) / denominator
 ```
 
-All intermediate operations use exact signed integer/rational arithmetic with checked overflow. Under the schema maxima, total considered/omitted votes are at most `3 × 4,294,967,295 × 1,000 = 12,884,901,885,000`; `M × denominator` is at most `64,424,509,425,000`, and the absolute accumulated weighted numerator is at most `5 × 4,294,967,295 × 1,000 = 21,474,836,475,000`. These bounds fit exactly in a signed 64-bit integer and in the JSON safe-integer range; implementations MUST use at least signed 64-bit checked accumulators and MUST NOT use floating point before final decimal rounding. Each emitted contribution and score is rounded to six decimal places, ties-to-even; negative zero is emitted as `0`. Contributions are sorted by statement ID.
+All intermediate operations use exact signed integer/rational arithmetic with checked overflow. Under the schema maxima, total considered votes are at most `3 × 4,294,967,295 × 1,000 = 12,884,901,885,000`; total omitted votes are at most `4 × 4,294,967,295 × 1,000 = 17,179,869,180,000`; `M × denominator` is at most `64,424,509,425,000`, and the absolute accumulated weighted numerator is at most `5 × 4,294,967,295 × 1,000 = 21,474,836,475,000`. These bounds fit exactly in a signed 64-bit integer and in the JSON safe-integer range; implementations MUST use at least signed 64-bit checked accumulators and MUST NOT use floating point before final decimal rounding. Each emitted contribution and score is rounded to six decimal places, ties-to-even; negative zero is emitted as `0`. Contributions are sorted by statement ID.
 
 ## Refusal and release behavior
 

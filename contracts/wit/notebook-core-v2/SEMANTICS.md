@@ -1,6 +1,6 @@
 # Candidat de revue cryptographique — Notebook Core v2
 
-> **Statut : candidat catalogué — Gate A cryptographie et vie privée en attente.** Ce profil est normatif pour évaluer le candidat v2, mais n'autorise aucune implémentation ni émission de sauvegarde. La promotion `candidate → locked` exige les reviewers humains listés dans le catalogue ; la conformité du futur moteur et les gates de release resteront distinctes.
+> **Statut : candidat catalogué — Gate A cryptographie et vie privée en attente.** Ce profil est normatif pour évaluer le candidat v2, mais n'autorise aucune implémentation ni émission de sauvegarde. La promotion `candidate → locked` exige les agents reviewers indépendants listés dans le catalogue ; la conformité du futur moteur et les gates de release resteront distinctes.
 
 Les mots **DOIT**, **NE DOIT PAS** et **DEVRAIT** sont normatifs. Les standards de référence sont RFC 9106 (Argon2id), NIST SP 800-38D (GCM), RFC 4648 §4 (Base64) et RFC 8785 (JCS).
 

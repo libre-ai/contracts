@@ -274,7 +274,7 @@
     {
       "name": "unsupported-version",
       "recoverySecretUtf8": "notebook-core-v2-public-test-secreu",
-      "digestRecomputedAfterMutation": false,
+      "digestRecomputedAfterMutation": true,
       "envelope": {
         "schemaVersion": "libre-ai.notebook-backup.v3",
         "id": "urn:libre-ai:backup:golden-1",
