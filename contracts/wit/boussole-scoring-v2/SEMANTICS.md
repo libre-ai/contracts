@@ -10,7 +10,27 @@ Inputs are strict UTF-8 JSON without BOM or duplicate keys and conform to:
 - `boussole-method.v2.schema.json` — at most 64 KiB;
 - `boussole-response-set.v2.schema.json` — at most 256 KiB.
 
-Output is at most 512 KiB and conforms to `local-comparison.v2.schema.json`. All success bytes use RFC 8785 JCS. `computed-at` is an exact valid UTC-seconds timestamp. There are no capabilities, identifiers of a person, account, cookie, telemetry or network transfer.
+Output is at most 512 KiB and conforms to `local-comparison.v2.schema.json`. All success bytes use RFC 8785 JCS. `computed-at` is an exact valid Gregorian UTC-seconds timestamp. There are no capabilities, identifiers of a person, account, cookie, telemetry or network transfer.
+
+The resolved WIT world exports one `api` interface and MUST have zero imports. Input
+byte limits are checked before decoding; any input or successful output above its
+limit returns `resource-limit-exceeded`. The decoder rejects BOM, invalid UTF-8,
+duplicate object member names, unpaired surrogates, nesting deeper than 64 values
+and non-JSON numbers. Validation
+and refusal precedence is:
+
+1. resource preflight → `resource-limit-exceeded`;
+2. strict JSON and schema validation → `input-invalid`;
+3. exact real Gregorian `computed-at` → `computed-at-invalid`;
+4. symmetric supported scale/formula/rounding → `method-unsupported`;
+5. IDs and content digests → `digest-mismatch`;
+6. hash-bound distinct human approvals → `approval-invalid`;
+7. statement/response uniqueness and references → `response-invalid`;
+8. non-zero final denominator → `denominator-zero`;
+9. output byte preflight → `resource-limit-exceeded`.
+
+No refusal crosses the component boundary with a response value, source text,
+`reviewerId`, JSON/parser path or implementation diagnostic.
 
 ## Structural invariants
 
@@ -50,8 +70,11 @@ The global score is:
 sum(contribution_i * considered_i) / denominator
 ```
 
-All intermediate operations use exact signed integer/rational arithmetic with checked overflow. Each emitted contribution and score is rounded to six decimal places, ties-to-even; negative zero is emitted as `0`. Contributions are sorted by statement ID.
+All intermediate operations use exact signed integer/rational arithmetic with checked overflow. Under schema maxima, total considered votes are at most `12,884,901,885,000`, total omitted votes `17,179,869,180,000`, the absolute weighted numerator `21,474,836,475,000`, and `M × denominator` `64,424,509,425,000`. Six-decimal scaling can reach `21,474,836,475,000,000,000`, above unsigned 64-bit; the representation MUST accommodate that exact value (signed 128-bit or an equivalent checked rational representation). Each emitted contribution and score is rounded to six decimal places, ties-to-even; negative zero is emitted as `0`. Contributions are sorted by statement ID.
 
 ## Refusal and release behavior
 
-Errors expose only the closed WIT enum and no response, political position, source text, reviewer identity or implementation diagnostic. A method/dataset without valid independent approvals returns `approval-invalid`. This runtime check does not replace the release feature gate: code and vectors MAY be built, but public scoring MUST remain disabled until both human approvals are recorded against the exact candidate hashes.
+`contracts/fixtures/boussole-scoring-v2/security-vectors.v1.json` is the normative
+bounded security corpus for raw decoding, refusal coverage, byte ceilings,
+redaction and maximum arithmetic. Errors expose only the closed WIT enum and no
+response, political position, source text, reviewer identity or implementation diagnostic. A method/dataset without valid independent approvals returns `approval-invalid`. This runtime check does not replace the release feature gate: code and vectors MAY be built, but public scoring MUST remain disabled until both human approvals are recorded against the exact candidate hashes.
