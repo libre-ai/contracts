@@ -36,6 +36,21 @@ Inputs are UTF-8 JSON objects conforming respectively to:
 
 `evaluated-at` is at most 64 UTF-8 bytes and the successful JCS output is at most 2 MiB. A larger input or output returns `policy.input_invalid` without partial output.
 
+Before implementation, `contracts/fixtures/policy-core-v2/resource-budgets.v1.json`
+fixes the qualification ceilings derived from these schemas. At most 1,000 rules
+and 1,000 facts in either namespace can produce 1,000,000 matched rule/occurrence
+evaluations. A policy set has at most 100 members; set lookup MUST use sorted binary
+search or an equivalent lookup with at most 7 scalar comparisons, never a linear
+100-member scan for every occurrence. Duplicate detection MUST use canonical hashes
+or ordered indexes, not pairwise deep comparison. Peak component linear memory, including WIT
+input/output copies, decoded values, indexes, canonicalization/hashing scratch and
+the result, MUST NOT exceed 256 MiB. Caller-owned buffers outside component linear
+memory are excluded. A schema-valid input within all byte/cardinality ceilings MUST
+NOT be refused merely because an implementation chose a less efficient algorithm;
+such a component fails qualification. Wall-clock and WASM fuel thresholds are set
+only in implementation Gate B against the exact component, runtime and documented
+reference hardware; they cannot alter these deterministic work ceilings.
+
 The decoder MUST reject a BOM, invalid UTF-8, duplicate JSON object member names,
 unpaired Unicode surrogates and non-JSON numbers. Every JSON number is interpreted
 as an IEEE-754 binary64 value and is schema-bounded to the inclusive safe-integer
@@ -247,7 +262,9 @@ ordered trace.
 - `contracts/fixtures/policy-core-v2/operators.json` is the atomic operator/type
   corpus;
 - `contracts/fixtures/policy-core-v2/golden.json` contains complete cross-runtime
-  evaluations and contract-error vectors.
+  evaluations and contract-error vectors;
+- `contracts/fixtures/policy-core-v2/resource-budgets.v1.json` fixes byte,
+  cardinality, semantic-work and peak-memory qualification ceilings.
 
-An implementation conforms only if every vector matches exactly. Implementations
+An implementation conforms only if every vector and budget matches exactly. Implementations
 MUST NOT rewrite expected vectors from their own output.
