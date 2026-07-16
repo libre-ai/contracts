@@ -35,5 +35,70 @@
       "evaluation result"
     ],
     "excludes": ["caller-owned buffers outside component linear memory"]
-  }
+  },
+  "decoderQualification": {
+    "maximumJsonDepth": 64
+  },
+  "byteBoundaryCases": [
+    {
+      "id": "policy-at-limit",
+      "target": "policyInput",
+      "byteLength": 8388608,
+      "expectedPreflight": "within-limit"
+    },
+    {
+      "id": "policy-over-limit",
+      "target": "policyInput",
+      "byteLength": 8388609,
+      "expectedError": "input-invalid"
+    },
+    {
+      "id": "snapshot-at-limit",
+      "target": "snapshotInput",
+      "byteLength": 8388608,
+      "expectedPreflight": "within-limit"
+    },
+    {
+      "id": "snapshot-over-limit",
+      "target": "snapshotInput",
+      "byteLength": 8388609,
+      "expectedError": "input-invalid"
+    },
+    {
+      "id": "need-at-limit",
+      "target": "needInput",
+      "byteLength": 8388608,
+      "expectedPreflight": "within-limit"
+    },
+    {
+      "id": "need-over-limit",
+      "target": "needInput",
+      "byteLength": 8388609,
+      "expectedError": "input-invalid"
+    },
+    {
+      "id": "evaluated-at-at-limit",
+      "target": "evaluatedAt",
+      "byteLength": 64,
+      "expectedPreflight": "within-limit"
+    },
+    {
+      "id": "evaluated-at-over-limit",
+      "target": "evaluatedAt",
+      "byteLength": 65,
+      "expectedError": "input-invalid"
+    },
+    {
+      "id": "output-at-limit",
+      "target": "successfulOutput",
+      "byteLength": 2097152,
+      "expectedPreflight": "within-limit"
+    },
+    {
+      "id": "output-over-limit",
+      "target": "successfulOutput",
+      "byteLength": 2097153,
+      "expectedError": "input-invalid"
+    }
+  ]
 }
