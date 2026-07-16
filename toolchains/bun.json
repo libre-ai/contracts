@@ -1,0 +1,20 @@
+{
+  "$schema": "https://libre-ai.fr/schemas/toolchain-bun.v1.json",
+  "channel": "canary",
+  "version": "1.4.0",
+  "revision": "1.4.0-canary.1+57f349f63",
+  "sourceCommit": "57f349f6307cf89dcfb8893f003c1ef421a74589",
+  "observedAt": "2026-07-16",
+  "preRelease": true,
+  "assets": {
+    "darwin-arm64": {
+      "name": "bun-darwin-aarch64.zip",
+      "sha256": "4d4bdb8e3ca1b41dede0ce423871b3804424bd785c6435e43c625a60a49f2f02"
+    },
+    "linux-x64": {
+      "name": "bun-linux-x64.zip",
+      "sha256": "83144e2542c33aaae541cf16b42f8cf1c55c3b94c5395fc776417fa27e95bcbf"
+    }
+  },
+  "releasePolicy": "Replace with the first qualified stable Rust release before production, or archive and approve this exact pre-release binary."
+}
