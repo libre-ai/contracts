@@ -98,9 +98,9 @@ A protected human gate remains an additional prerequisite for canonical contract
 
 Control commands are idempotent by `(tenantId, missionId, idempotencyKey)`; non-start controls additionally bind the exact `runId`. A `start` control never preselects a run ID: the orchestrator creates it only after plan, authorization, token, quorum and harness preflight verification. `start`, `pause` and `resume` reject stale revisions. An authorized `cancel` targeting the exact run, plan and authorization remains monotone even when `expectedRevision` is stale; it cannot target another run.
 
-For event sequence 1, `previousEventDigest` is null. For every later event it equals the accepted prior event digest. Duplicate event ID or sequence is idempotent only when all canonical bytes match; any divergence quarantines the event and cannot project success.
+For event sequence 1, `previousEventDigest` is null. For every later event it equals the accepted prior event digest. Duplicate event ID or sequence is idempotent only when the previously verified canonical digest matches; any divergence quarantines the event and cannot project success. Tenant, mission, run, orchestrator, plan and authorization identities remain byte-identical across the chain. Sequence increments by exactly one and the predecessor digest equals the accepted prior event; causal-store outage fails closed.
 
-Every budget total is component-wise greater than or equal to the prior accepted total. Delta plus prior total equals current total. Retry, pause, resume and worker replacement never decrement totals.
+Before projection, the TypeScript/Rust event-chain validator checks these identities and component-wise budget arithmetic against accepted state. Every budget total is component-wise greater than or equal to the prior accepted total. Delta plus prior total equals current total. Retry, pause, resume and worker replacement never decrement totals.
 
 ## Privacy and evidence
 
