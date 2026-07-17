@@ -14,7 +14,7 @@ JSON Schema, OpenAPI, WIT and Biscuit policies are the only cross-module protoco
 
 OpenAPI `x-libre-ai-domain` lists the complete protocol from each application specification. Only commands/queries crossing HTTP appear under `paths`; local and offline commands remain visible without becoming endpoints.
 
-A `candidate` catalog entry is machine-checkable but not approved: it carries a dossier listing at least independent architecture and security agent review, plus cryptography, methodology or privacy where required. The reviewer agent and session must differ from the author under [`AGENT-REVIEW-PROTOCOL.md`](../docs/reviews/AGENT-REVIEW-PROTOCOL.md). The authoring agent cannot promote its own candidate; promotion requires all attributable verdicts and a separate integrator. Cataloged WIT `profiles` and `vectors` are normative adjuncts to that world.
+A `candidate` catalog entry is machine-checkable but not approved: it carries a dossier listing at least role-separated architecture and security review, plus cryptography, methodology or privacy where required. In solo work, the same agent/session may perform serial authoring and dedicated review-only passes under [`AGENT-REVIEW-PROTOCOL.md`](../docs/reviews/AGENT-REVIEW-PROTOCOL.md). Promotion requires every attributable role verdict, a separate promotion pass and the human control milestone. Cataloged WIT `profiles` and `vectors` are normative adjuncts to that world.
 
 ## Verification
 

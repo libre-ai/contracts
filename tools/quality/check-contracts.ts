@@ -13,7 +13,7 @@ type ContractKind =
 type CatalogReview = {
   state: "pending-independent-agent-review";
   reviewerKind: "agent";
-  separation: "different-agent-and-session";
+  separation: "role-scoped-review-pass";
   required: string[];
   dossier: string;
 };
@@ -260,7 +260,7 @@ for (const [index, entry] of entries.entries()) {
       !isRecord(entry.review) ||
       entry.review.state !== "pending-independent-agent-review" ||
       entry.review.reviewerKind !== "agent" ||
-      entry.review.separation !== "different-agent-and-session" ||
+      entry.review.separation !== "role-scoped-review-pass" ||
       !Array.isArray(requiredReviews) ||
       requiredReviews.length < 2 ||
       new Set(requiredReviews).size !== requiredReviews.length ||
