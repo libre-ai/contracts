@@ -31,9 +31,13 @@ describe("specialized-vector public-source scanner", () => {
       `a@${"a.".repeat(32_760)}1`,
       `${"a".repeat(65_520)}"@example.org`,
       `${"&amp;".repeat(13_000)}text`,
+      `${"(".repeat(32_760)}release@2${")".repeat(32_760)}`,
     ];
     const started = Bun.nanoseconds();
     for (const value of cases) expect(containsSensitivePublicMarker(value)).toBe(false);
+    expect(
+      containsSensitivePublicMarker(`${"(".repeat(32_750)}alice@example.org${")".repeat(32_750)}`),
+    ).toBe(true);
     expect((Bun.nanoseconds() - started) / 1e6).toBeLessThan(2_000);
   });
 });
