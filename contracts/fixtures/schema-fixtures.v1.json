@@ -2032,6 +2032,20 @@
           }
         },
         {
+          "name": "userinfo canary with private suffix",
+          "path": "/reproductionEvidence",
+          "value": {
+            "url": "https://user:secret@example.org/feed.xml alice@example.org"
+          }
+        },
+        {
+          "name": "private property name",
+          "path": "/reproductionEvidence",
+          "value": {
+            "alice@example.org": "safe"
+          }
+        },
+        {
           "name": "unbounded public string",
           "path": "/status",
           "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
