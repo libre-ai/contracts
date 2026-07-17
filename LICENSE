@@ -1,6 +1,14 @@
-Libre AI source code is licensed under either of:
+Libre AI is a multi-licence project.
 
-- Apache License, Version 2.0 (`LICENSE-APACHE`)
-- MIT License (`LICENSE-MIT`)
+The licence for each file is declared through SPDX metadata and REUSE.toml:
 
-at your option, unless a path or artifact explicitly declares another compatible license. Documentation, datasets, media and imported materials must declare their own license before publication.
+- EUPL-1.2: first-party applications, services and strategic runtime code;
+- Apache-2.0: SDKs, interoperability contracts, templates and adoption tooling;
+- CC-BY-4.0: editorial documentation and first-party project records;
+- upstream terms: third-party and vendored material.
+
+See LICENSING.md for scope, precedence, historical grants, data and contribution
+rules. Full licence texts are stored in LICENSES/.
+
+Historical revisions previously published under MIT OR Apache-2.0 remain
+available under those terms. No previous licence grant is withdrawn.

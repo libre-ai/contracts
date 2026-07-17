@@ -794,14 +794,7 @@
       "consumers": ["specialized-rust", "quality"],
       "compatibility": "major-versioned",
       "classification": "internal",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security"],
-        "dossier": "docs/reviews/specialized-engine-v2/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "radar-api-v2",

@@ -1,0 +1,92 @@
+version = 1
+
+# First-party software in known canonical locations is EUPL by default. New
+# top-level artefact classes deliberately remain uncovered until reviewed.
+# More permissive boundaries are declared below; the last matching annotation
+# wins within this file.
+[[annotations]]
+path = [
+  ".cargo/**",
+  ".github/**",
+  ".gitignore",
+  "Cargo.lock",
+  "Cargo.toml",
+  "apps/**",
+  "biome.json",
+  "bun.lock",
+  "bunfig.toml",
+  "crates/**",
+  "deny.toml",
+  "distribution/**",
+  "ecosystem/**",
+  "infrastructure/**",
+  "package.json",
+  "packages/**",
+  "prompts/**",
+  "rust-toolchain.toml",
+  "tsconfig.json",
+  "verification/**",
+]
+precedence = "closest"
+SPDX-FileCopyrightText = "2026 Libre AI contributors"
+SPDX-License-Identifier = "EUPL-1.2"
+
+# Editorial documentation and first-party project/ecosystem records.
+[[annotations]]
+path = ["*.md", "**/*.md", "docs/**", "ecosystem/LEGACY-MANIFEST.yaml", "ecosystem/objects/**", "ecosystem/projections/**"]
+precedence = "closest"
+SPDX-FileCopyrightText = "2026 Libre AI contributors"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+# Interoperability contracts, generated boundary types, adoption packages,
+# templates, qualification harnesses, and generic project tooling.
+[[annotations]]
+path = [
+  "contracts/**",
+  "crates/contract-types/**",
+  "distribution/templates/**",
+  "docs/security/notebook-core-v2-review/*.json",
+  "docs/security/notebook-core-v2-review/*.wit",
+  "ecosystem/schemas/**",
+  "packages/contracts/**",
+  "packages/design-system/**",
+  "packages/web-platform/**",
+  "toolchains/*.json",
+  "tools/**",
+]
+precedence = "closest"
+SPDX-FileCopyrightText = "2026 Libre AI contributors"
+SPDX-License-Identifier = "Apache-2.0"
+
+# Executable runtime policies and operational prompts remain reciprocal.
+[[annotations]]
+path = ["contracts/authz/**", "contracts/data/**", "prompts/**"]
+precedence = "closest"
+SPDX-FileCopyrightText = "2026 Libre AI contributors"
+SPDX-License-Identifier = "EUPL-1.2"
+
+# Vendored RustCrypto sources retain their upstream dual licence. Libre AI's
+# local patch is distributed on the same terms.
+[[annotations]]
+path = "third_party/rustcrypto-aes-0.8.4/**"
+precedence = "closest"
+SPDX-FileCopyrightText = [
+  "2018 Artyom Pavlov",
+  "RustCrypto Developers",
+  "2026 Libre AI contributors",
+]
+SPDX-License-Identifier = "MIT OR Apache-2.0"
+
+# First-party checksum evidence accompanying the reviewed toolchain notice.
+[[annotations]]
+path = "toolchains/notices/bun/1.4.0-canary.1+57f349f63/SHA256SUMS"
+precedence = "closest"
+SPDX-FileCopyrightText = "2026 Libre AI contributors"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+# This file aggregates upstream notices with several independent licences.
+[[annotations]]
+path = "toolchains/notices/bun/1.4.0-canary.1+57f349f63/BUN-LICENSE.md"
+precedence = "override"
+SPDX-FileCopyrightText = "NOASSERTION"
+SPDX-License-Identifier = "LicenseRef-ThirdParty-Notices"
