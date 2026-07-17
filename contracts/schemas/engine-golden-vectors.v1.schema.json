@@ -75,8 +75,10 @@
       "allOf": [{ "$ref": "#/$defs/metadataString" }, { "type": "string", "maxLength": 128 }]
     },
     "metadataString": {
+      "$comment": "ASCII-only metadata makes the file/traversal and credential exclusions closed under Unicode normalization; engine payload strings remain Unicode-capable and opaque.",
       "type": "string",
       "maxLength": 65536,
+      "pattern": "^[\\t\\n\\r\\x20-\\x7E]*$",
       "allOf": [
         {
           "not": {
