@@ -1,6 +1,7 @@
 {
   "$schema": "https://libre-ai.fr/schemas/toolchain-bun.v1.json",
   "channel": "canary",
+  "minimumVersion": "1.4.0",
   "version": "1.4.0",
   "revision": "1.4.0-canary.1+57f349f63",
   "sourceCommit": "57f349f6307cf89dcfb8893f003c1ef421a74589",
