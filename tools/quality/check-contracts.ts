@@ -224,7 +224,7 @@ function inspectSpecializedVectorBounds(
 
 const credentialMarker =
   /(?:sk_live_[A-Za-z0-9_-]{8,}|sk-(?:proj|svcacct)-[A-Za-z0-9_-]{16,}|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----)/;
-const emailIdentifier = /[\p{L}\p{N}!#$%&'*+/=?^_`{|}~.-]+@[\p{L}\p{N}.-]+\.[\p{L}]{2,}/u;
+const emailLocalCharacter = /^[\p{L}\p{N}!#$%&'*+/=?^_`{|}~.-]$/u;
 const radarUserinfoCanary = "https://user:secret@example.org/feed.xml";
 const radarVectorPath = "contracts/fixtures/radar-engine-v2/golden-vectors.v1.json";
 
@@ -251,7 +251,6 @@ const namedEmailEntityCharacters: Readonly<Record<string, string>> = {
   amp: "&",
   apos: "'",
   ast: "*",
-  at: "@",
   commat: "@",
   diacriticalgrave: "`",
   dollar: "$",
@@ -314,9 +313,32 @@ function decodeSensitiveMarkers(input: string): string {
   return current;
 }
 
+function previousCodePointStart(value: string, end: number): number {
+  const previous = end - 1;
+  const low = value.charCodeAt(previous);
+  if (low >= 0xdc00 && low <= 0xdfff && previous > 0) {
+    const high = value.charCodeAt(previous - 1);
+    if (high >= 0xd800 && high <= 0xdbff) return previous - 1;
+  }
+  return previous;
+}
+
+function containsEmailIdentifier(value: string): boolean {
+  for (const match of value.matchAll(/@[\p{L}\p{N}.-]+\.[\p{L}]{2,}/gu)) {
+    let cursor = match.index;
+    while (cursor > 0) {
+      const start = previousCodePointStart(value, cursor);
+      if (!emailLocalCharacter.test(value.slice(start, cursor))) break;
+      cursor = start;
+    }
+    if (cursor < match.index) return true;
+  }
+  return false;
+}
+
 function containsSensitivePublicMarker(value: string): boolean {
   const decoded = decodeSensitiveMarkers(value);
-  return credentialMarker.test(decoded) || emailIdentifier.test(decoded);
+  return credentialMarker.test(decoded) || containsEmailIdentifier(decoded);
 }
 
 function isApprovedSyntheticSensitiveVectorValue(value: string, path: string): boolean {
@@ -686,6 +708,8 @@ for (const [label, value, expectedSensitive] of [
   ["credential", "sk_live_example_secret", true],
   ["Radar userinfo detector", radarUserinfoCanary, true],
   ["legitimate machine handle", "release@2", false],
+  ["non-HTML5 at entity", "alice&at;example&period;org", false],
+  ["maximum public non-email", "a".repeat(65_536), false],
   ["legitimate ampersand", "R&D", false],
   ["legitimate amp prefix", "R&amplitude", false],
   ["literal unresolved markers", "policy &#fragment, &alpha; and %not-encoding", false],
