@@ -2025,6 +2025,13 @@
           }
         },
         {
+          "name": "unapproved synthetic userinfo canary",
+          "path": "/reproductionEvidence",
+          "value": {
+            "url": "https://alpha:beta@example.org/feed"
+          }
+        },
+        {
           "name": "unbounded public string",
           "path": "/status",
           "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
