@@ -155,12 +155,20 @@ function skipWhitespaceForward(value: string, start: number): number {
   return cursor;
 }
 
+function hasValidProseQuotePrefix(value: string, quote: number): boolean {
+  if (quote === 0) return true;
+  const previous = previousCodePointStart(value, quote);
+  const character = value.slice(previous, quote);
+  if (isWhitespaceAt(value, previous, quote) || "(<[{".includes(character)) return true;
+  return character === ":" && hasEmailContextLabel(value, previous);
+}
+
 function findOpeningQuoteBoundaries(value: string): ReadonlySet<number> {
   const openings = new Set<number>();
   let quoted = false;
   for (let cursor = 0; cursor < value.length; cursor += 1) {
     if (!isUnescapedQuote(value, cursor)) continue;
-    if (!quoted) openings.add(cursor);
+    if (!quoted && hasValidProseQuotePrefix(value, cursor)) openings.add(cursor);
     quoted = !quoted;
   }
   return openings;
@@ -414,6 +422,8 @@ export const publicSourceScannerSelfTests: ReadonlyArray<
   ["parenthesized email", "Contact (alice@example.org).", true],
   ["double-quoted prose email", '"alice@example.org"', true],
   ["encoded double-quoted prose email", "&quot;alice&commat;example&period;org&quot;", true],
+  ["labelled quoted prose email", 'contact:"alice@example.org"', true],
+  ["later valid quoted prose email", 'foo"bar" "alice@example.org"', true],
   ["contact-labelled email", "contact:alice@example.org", true],
   ["email-labelled email", "Email:alice@example.org", true],
   ["courriel-labelled email", "courriel:alice@example.org", true],
@@ -491,6 +501,7 @@ export const publicSourceScannerSelfTests: ReadonlyArray<
   ["trailing-dot local", "alice.@example.org", false],
   ["double-dot local", "alice..ops@example.org", false],
   ["overlong local", `${"a".repeat(65)}@example.org`, false],
+  ["internal prose quote", `foo"alice@example.org"`, false],
   ["prefixed quoted local", `x"alice"@example.org`, false],
   ["suffixed quoted local", `"alice"x@example.org`, false],
   ["leading-hyphen domain", "alice@-example.org", false],
