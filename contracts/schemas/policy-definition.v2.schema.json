@@ -160,7 +160,10 @@
   ],
   "properties": {
     "schemaVersion": { "const": "libre-ai.policy-definition.v2" },
-    "id": { "$ref": "common.v1.schema.json#/$defs/urn" },
+    "id": {
+      "type": "string",
+      "pattern": "^urn:libre-ai:policy:[A-Za-z0-9._~-]+$"
+    },
     "tenantId": { "$ref": "common.v1.schema.json#/$defs/tenantId" },
     "version": { "type": "integer", "minimum": 1 },
     "status": { "const": "approved" },

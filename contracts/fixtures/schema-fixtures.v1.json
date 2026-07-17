@@ -1494,6 +1494,11 @@
           "name": "localhost source forbidden",
           "path": "/rules/0/source/uri",
           "value": "https://localhost/evidence"
+        },
+        {
+          "name": "cross-kind policy id",
+          "path": "/id",
+          "value": "urn:libre-ai:snapshot:wrong-kind"
         }
       ]
     },
@@ -1569,6 +1574,11 @@
           "name": "free-form model fact forbidden",
           "path": "/facts/0/value",
           "value": "private person@example.invalid"
+        },
+        {
+          "name": "cross-kind snapshot id",
+          "path": "/id",
+          "value": "urn:libre-ai:evaluation:wrong-kind"
         }
       ]
     },
@@ -1596,6 +1606,11 @@
           "name": "free-form need fact forbidden",
           "path": "/facts/0/value",
           "value": "private person@example.invalid"
+        },
+        {
+          "name": "cross-kind need id",
+          "path": "/id",
+          "value": "urn:libre-ai:policy:wrong-kind"
         }
       ]
     },
@@ -1603,12 +1618,12 @@
       "schema": "policy-evaluation.v2.schema.json",
       "valid": {
         "schemaVersion": "libre-ai.policy-evaluation.v2",
-        "id": "urn:libre-ai:evaluation:78e3df56a8adb0a7dc29720f93724716c58668ba99eface1a451f2ad641cfe9c",
+        "id": "urn:libre-ai:evaluation:3cf95d1c6c867dd7ba70be4c00063395b6758ced02f8093c45e671f6b647a1e3",
         "tenantId": "ten_1234567890abcdef",
         "policyId": "urn:libre-ai:policy:all-operators-eligible",
-        "policyDigest": "0835e370af4ddee1b3d70fd9210c639c8218f4a0d2281897ea60f34f57295c80",
+        "policyDigest": "bd8fe7cc1d5b1de63ecc8e476e44ef895179d18aed758db824b709364c689fa7",
         "snapshotId": "urn:libre-ai:snapshot:all-operators-eligible",
-        "snapshotDigest": "711464a03792caee82882e9c9f9d879ff459a22639cb07ec01cd4c5b360cd482",
+        "snapshotDigest": "fbe6d3b87d7657686e6dd2363f58b6394470361415aafe892aff355f0220f150",
         "needDigest": "05e56f3638834c368aca91b8e8b5cdb0269eb1f04da952cd2c635d35485efb8b",
         "engineVersion": "2.0.0",
         "verdict": "eligible",
@@ -1685,13 +1700,23 @@
           }
         ],
         "evaluatedAt": "2026-07-17T00:00:00Z",
-        "digest": "78e3df56a8adb0a7dc29720f93724716c58668ba99eface1a451f2ad641cfe9c"
+        "digest": "3cf95d1c6c867dd7ba70be4c00063395b6758ced02f8093c45e671f6b647a1e3"
       },
       "invalidMutations": [
         {
           "name": "success alias",
           "path": "/verdict",
           "value": "compliant"
+        },
+        {
+          "name": "cross-kind policy reference",
+          "path": "/policyId",
+          "value": "urn:libre-ai:snapshot:wrong-kind"
+        },
+        {
+          "name": "cross-kind snapshot reference",
+          "path": "/snapshotId",
+          "value": "urn:libre-ai:policy:wrong-kind"
         }
       ]
     },

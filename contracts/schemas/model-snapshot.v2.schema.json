@@ -45,7 +45,10 @@
   "required": ["schemaVersion", "id", "tenantId", "modelId", "capturedAt", "facts", "digest"],
   "properties": {
     "schemaVersion": { "const": "libre-ai.model-snapshot.v2" },
-    "id": { "$ref": "common.v1.schema.json#/$defs/urn" },
+    "id": {
+      "type": "string",
+      "pattern": "^urn:libre-ai:snapshot:[A-Za-z0-9._~-]+$"
+    },
     "tenantId": { "$ref": "common.v1.schema.json#/$defs/tenantId" },
     "modelId": {
       "type": "string",

@@ -108,6 +108,10 @@ library error crosses the component boundary.
 | `digest-mismatch` | `policy.digest_mismatch` | `input digest does not match canonical content` |
 | `tenant-mismatch` | `policy.tenant_mismatch` | `policy, snapshot and need tenants differ` |
 
+The v2 HTTP boundary exposes only a stable `error.code` and opaque `requestId`.
+It MUST NOT serialize the optional host label or any free-form message. A UI MAY
+map the code to a local static translation after receiving the refusal.
+
 ## 3. Fact namespaces, cardinality and duplicates
 
 A rule resolves its `fact` by exact name only:

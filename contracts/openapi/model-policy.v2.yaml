@@ -175,7 +175,11 @@ paths:
             minimum: 1
       responses:
         '200':
-          description: Structured policy diff
+          description: Structured rule-ID diff between two immutable policy versions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyDiff'
         default:
           $ref: '#/components/responses/Problem'
   /v2/model-policy/snapshots/{snapshotId}/commands:
@@ -228,7 +232,7 @@ paths:
             pattern: '^urn:libre-ai:snapshot:[A-Za-z0-9._~-]+$'
       responses:
         '200':
-          description: Sourced immutable snapshot and evidence projection
+          description: Sourced immutable snapshot with fact-level provenance
           content:
             application/json:
               schema:
@@ -274,7 +278,7 @@ paths:
             pattern: '^urn:libre-ai:evaluation:[a-f0-9]{64}$'
       responses:
         '200':
-          description: Evaluation, rule trace and deterministic replay projection
+          description: Minimized evaluation with ordered rule results and replay-binding digests
           content:
             application/json:
               schema:
@@ -302,6 +306,58 @@ paths:
         default:
           $ref: '#/components/responses/Problem'
 components:
+  schemas:
+    PolicyDiff:
+      type: object
+      additionalProperties: false
+      required: [policyId, fromVersion, toVersion, addedRuleIds, removedRuleIds, changedRuleIds]
+      properties:
+        policyId:
+          type: string
+          pattern: '^urn:libre-ai:policy:[A-Za-z0-9._~-]+$'
+        fromVersion:
+          type: integer
+          minimum: 1
+        toVersion:
+          type: integer
+          minimum: 1
+        addedRuleIds:
+          type: array
+          maxItems: 1000
+          uniqueItems: true
+          items:
+            type: string
+            pattern: '^[a-z][a-z0-9_-]{2,127}$'
+        removedRuleIds:
+          type: array
+          maxItems: 1000
+          uniqueItems: true
+          items:
+            type: string
+            pattern: '^[a-z][a-z0-9_-]{2,127}$'
+        changedRuleIds:
+          type: array
+          maxItems: 1000
+          uniqueItems: true
+          items:
+            type: string
+            pattern: '^[a-z][a-z0-9_-]{2,127}$'
+    PolicyProblem:
+      type: object
+      additionalProperties: false
+      required: [error]
+      properties:
+        error:
+          type: object
+          additionalProperties: false
+          required: [code, requestId]
+          properties:
+            code:
+              type: string
+              pattern: '^(?:auth|http|policy)\\.[a-z0-9_.-]+$'
+            requestId:
+              type: string
+              pattern: '^req_[a-z0-9]{16,64}$'
   securitySchemes:
     sessionCookie:
       type: apiKey
@@ -343,4 +399,4 @@ components:
       content:
         application/problem+json:
           schema:
-            $ref: ../schemas/problem-details.v1.schema.json
+            $ref: '#/components/schemas/PolicyProblem'
