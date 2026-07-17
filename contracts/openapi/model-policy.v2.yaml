@@ -354,7 +354,7 @@ components:
           properties:
             code:
               type: string
-              pattern: '^(?:auth|http|policy)\\.[a-z0-9_.-]+$'
+              pattern: '^(?:auth|http|policy)\.[a-z0-9_.-]+$'
             requestId:
               type: string
               pattern: '^req_[a-z0-9]{16,64}$'
