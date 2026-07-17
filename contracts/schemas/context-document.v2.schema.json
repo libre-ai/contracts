@@ -4,6 +4,14 @@
   "title": "Libre AI Context Document v2",
   "type": "object",
   "additionalProperties": false,
+  "$defs": {
+    "exportBlockId": {
+      "type": "string",
+      "pattern": "^blk_[a-f0-9]{32}$",
+      "minLength": 36,
+      "maxLength": 36
+    }
+  },
   "required": ["schemaVersion", "id", "rootBlockIds", "blocks", "totalBytes", "digest"],
   "properties": {
     "schemaVersion": { "const": "libre-ai.context-document.v2" },
@@ -18,7 +26,7 @@
       "minItems": 1,
       "maxItems": 1000,
       "uniqueItems": true,
-      "items": { "$ref": "common.v1.schema.json#/$defs/identifier" }
+      "items": { "$ref": "#/$defs/exportBlockId" }
     },
     "blocks": {
       "type": "array",
@@ -27,28 +35,21 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "revision", "mediaType", "content", "links"],
+        "required": ["id", "mediaType", "content", "links"],
         "properties": {
-          "id": { "$ref": "common.v1.schema.json#/$defs/identifier" },
-          "revision": { "type": "integer", "minimum": 1 },
+          "id": { "$ref": "#/$defs/exportBlockId" },
           "mediaType": { "enum": ["text/plain", "text/markdown", "application/json"] },
           "content": { "type": "string", "maxLength": 262144 },
           "links": {
             "type": "array",
             "uniqueItems": true,
             "maxItems": 1000,
-            "items": { "$ref": "common.v1.schema.json#/$defs/identifier" }
+            "items": { "$ref": "#/$defs/exportBlockId" }
           }
         }
       }
     },
     "totalBytes": { "type": "integer", "minimum": 0, "maximum": 16777216 },
-    "excludedBlockIds": {
-      "type": "array",
-      "maxItems": 1000,
-      "uniqueItems": true,
-      "items": { "$ref": "common.v1.schema.json#/$defs/identifier" }
-    },
     "digest": { "$ref": "common.v1.schema.json#/$defs/sha256" }
   }
 }
