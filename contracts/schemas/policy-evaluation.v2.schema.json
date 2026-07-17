@@ -26,9 +26,15 @@
       "pattern": "^urn:libre-ai:evaluation:[a-f0-9]{64}$"
     },
     "tenantId": { "$ref": "common.v1.schema.json#/$defs/tenantId" },
-    "policyId": { "$ref": "common.v1.schema.json#/$defs/urn" },
+    "policyId": {
+      "type": "string",
+      "pattern": "^urn:libre-ai:policy:[A-Za-z0-9._~-]+$"
+    },
     "policyDigest": { "$ref": "common.v1.schema.json#/$defs/sha256" },
-    "snapshotId": { "$ref": "common.v1.schema.json#/$defs/urn" },
+    "snapshotId": {
+      "type": "string",
+      "pattern": "^urn:libre-ai:snapshot:[A-Za-z0-9._~-]+$"
+    },
     "snapshotDigest": { "$ref": "common.v1.schema.json#/$defs/sha256" },
     "needDigest": { "$ref": "common.v1.schema.json#/$defs/sha256" },
     "engineVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },

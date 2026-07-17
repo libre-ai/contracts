@@ -19,7 +19,8 @@ but the authorized caller MUST establish the authenticity and current validity o
 `approval.reference` before invocation.
 
 The world is pure. It receives no clock, network, storage, identity, authorization
-or randomness capability. The caller authorizes access before invoking it.
+or randomness capability. The caller authorizes access before invoking it. The
+resolved WIT world exports one `api` interface and MUST have zero imports.
 
 `engineVersion` MUST be an immutable SemVer constant embedded in the qualified
 component. It MUST NOT be accepted from the caller or derived from any input. The
@@ -34,10 +35,15 @@ Inputs are UTF-8 JSON objects conforming respectively to:
 2. `model-snapshot.v2.schema.json` (maximum 8 MiB);
 3. `policy-need.v2.schema.json` (maximum 8 MiB).
 
-`evaluated-at` is at most 64 UTF-8 bytes and the successful JCS output is at most 2 MiB. A larger input or output returns `policy.input_invalid` without partial output.
+`evaluated-at` is exactly 20 UTF-8 bytes when valid and the successful JCS output is at most 2 MiB. A larger input or output returns `policy.input_invalid` without partial output.
+
+Before any decode, the evaluator MUST check the byte lengths of all three JSON
+inputs and `evaluated-at`; a value above its ceiling returns `policy.input_invalid`.
+After producing successful JCS bytes, the evaluator MUST apply the output ceiling
+before returning them, with the same refusal. Exact-ceiling values pass preflight.
 
 Before implementation, `contracts/fixtures/policy-core-v2/resource-budgets.v1.json`
-fixes the qualification ceilings derived from these schemas. At most 1,000 rules
+fixes the qualification ceilings and exact/+1 boundary cases derived from these schemas. At most 1,000 rules
 and 1,000 facts in either namespace can produce 1,000,000 matched rule/occurrence
 evaluations. A policy set has at most 100 members; set lookup MUST use sorted binary
 search or an equivalent lookup with at most 7 scalar comparisons, never a linear
@@ -52,11 +58,24 @@ only in implementation Gate B against the exact component, runtime and documente
 reference hardware; they cannot alter these deterministic work ceilings.
 
 The decoder MUST reject a BOM, invalid UTF-8, duplicate JSON object member names,
-unpaired Unicode surrogates and non-JSON numbers. Every JSON number is interpreted
+unpaired Unicode surrogates, nesting deeper than 64 values and non-JSON numbers. Every JSON number is interpreted
 as an IEEE-754 binary64 value and is schema-bounded to the inclusive safe-integer
 range `[-9007199254740991, 9007199254740991]`; fractional values in that range are
 allowed. `-0` and `0` are equal. Strings are never case-folded, trimmed or Unicode-
 normalized.
+
+Every policy and fact source URI MUST be a sanitized public HTTPS citation with
+a DNS-shaped host containing a public-style alphabetic top-level label, no IP
+literal, `localhost`, userinfo, query, fragment or percent encoding, and at most
+2,048 characters. It MUST NOT contain
+credentials, tokens, email addresses or other personal data. `proposedBy` is an
+opaque `usr_*` or `svc_*` principal ID; `approval.approverId` is an opaque `usr_*`
+ID and never a name, email or external account identifier. `modelId` is an opaque
+`mdl_*` identifier. String facts are bounded machine tokens without whitespace or
+`@`; fact names/values and need facts MUST describe models and organizational
+requirements only. They MUST NOT contain natural-person identifiers, free-form
+personal content, credentials or secrets. The authorized caller owns identity mapping, data
+minimization and source sanitization before invocation.
 
 `evaluated-at`, every snapshot `source.retrievedAt` and every emitted `evaluatedAt`
 MUST be a real Gregorian instant in the exact UTC-seconds form
@@ -64,14 +83,15 @@ MUST be a real Gregorian instant in the exact UTC-seconds form
 
 Validation occurs before rule evaluation, in this order:
 
-1. decode and validate all three schemas, otherwise `policy.input_invalid`;
-2. validate `evaluated-at`, otherwise `policy.evaluated_at_invalid`;
-3. reject repeated rule IDs, otherwise `policy.rule_id_duplicate`;
-4. require `approval.actorKind = human` and `approval.approverId != proposedBy`, otherwise
+1. apply input byte preflight, otherwise `policy.input_invalid`;
+2. decode with depth at most 64 and validate all three schemas, otherwise `policy.input_invalid`;
+3. validate `evaluated-at`, otherwise `policy.evaluated_at_invalid`;
+4. reject repeated rule IDs, otherwise `policy.rule_id_duplicate`;
+5. require `approval.actorKind = human` and `approval.approverId != proposedBy`, otherwise
    `policy.approval_invalid`;
-5. verify the three input digests and `approval.subjectDigest`, otherwise
+6. verify the three input digests and `approval.subjectDigest`, otherwise
    `policy.digest_mismatch`;
-6. require exact equality of policy, snapshot and need `tenantId`, otherwise
+7. require exact equality of policy, snapshot and need `tenantId`, otherwise
    `policy.tenant_mismatch`.
 
 A failure returns only the closed WIT `error-code`, never a `PolicyEvaluation` or
@@ -87,6 +107,10 @@ library error crosses the component boundary.
 | `approval-invalid` | `policy.approval_invalid` | `policy approval separation is invalid` |
 | `digest-mismatch` | `policy.digest_mismatch` | `input digest does not match canonical content` |
 | `tenant-mismatch` | `policy.tenant_mismatch` | `policy, snapshot and need tenants differ` |
+
+The v2 HTTP boundary exposes only a stable `error.code` and opaque `requestId`.
+It MUST NOT serialize the optional host label or any free-form message. A UI MAY
+map the code to a local static translation after receiving the refusal.
 
 ## 3. Fact namespaces, cardinality and duplicates
 

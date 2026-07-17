@@ -862,7 +862,9 @@
       "profiles": ["contracts/wit/policy-core-v2/SEMANTICS.md"],
       "vectors": [
         "contracts/fixtures/policy-core-v2/operators.json",
-        "contracts/fixtures/policy-core-v2/golden.json"
+        "contracts/fixtures/policy-core-v2/golden.json",
+        "contracts/fixtures/policy-core-v2/resource-budgets.v1.json",
+        "contracts/fixtures/policy-core-invalid-json/manifest.json"
       ],
       "review": {
         "state": "pending-independent-agent-review",

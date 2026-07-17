@@ -1,6 +1,6 @@
 package libre-ai:policy-core@2.0.0;
 
-interface types {
+interface api {
   enum error-code {
     input-invalid,
     evaluated-at-invalid,
@@ -9,13 +9,19 @@ interface types {
     digest-mismatch,
     tenant-mismatch,
   }
-}
-
-world policy-core {
-  use types.{error-code};
 
   /// Evaluates policy-definition.v2, model-snapshot.v2 and policy-need.v2 JSON bytes.
   /// SEMANTICS.md is normative for validation, operators, freshness, ordering and hashes.
   /// Current time is explicit input and no host capability is imported.
-  export evaluate: func(policy: list<u8>, snapshot: list<u8>, need: list<u8>, evaluated-at: string) -> result<list<u8>, error-code>;
+  evaluate: func(
+    policy: list<u8>,
+    snapshot: list<u8>,
+    need: list<u8>,
+    evaluated-at: string,
+  ) -> result<list<u8>, error-code>;
+}
+
+/// Pure advisory policy evaluator. SEMANTICS.md is normative.
+world policy-core {
+  export api;
 }

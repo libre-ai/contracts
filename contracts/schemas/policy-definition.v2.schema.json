@@ -3,9 +3,22 @@
   "$id": "https://contracts.libre-ai.fr/schemas/policy-definition.v2.schema.json",
   "title": "Libre AI Policy Definition v2",
   "$defs": {
+    "opaquePrincipalId": {
+      "type": "string",
+      "pattern": "^(?:usr|svc)_[a-z0-9]{16,64}$"
+    },
+    "opaqueUserId": {
+      "type": "string",
+      "pattern": "^usr_[a-z0-9]{16,64}$"
+    },
     "factScalar": {
       "oneOf": [
-        { "type": "string", "maxLength": 5000 },
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/+~-]{0,255}$"
+        },
         {
           "type": "number",
           "minimum": -9007199254740991,
@@ -21,7 +34,12 @@
           "minItems": 1,
           "maxItems": 100,
           "uniqueItems": true,
-          "items": { "type": "string", "maxLength": 5000 }
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 256,
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/+~-]{0,255}$"
+          }
         },
         {
           "type": "array",
@@ -48,7 +66,12 @@
       "additionalProperties": false,
       "required": ["uri", "retrievedAt", "digest", "licence"],
       "properties": {
-        "uri": { "type": "string", "format": "uri" },
+        "uri": {
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048,
+          "pattern": "^https://(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\\.)+[A-Za-z]{2,63}(?::[0-9]{1,5})?(?:/[A-Za-z0-9._~/-]*)?$"
+        },
         "retrievedAt": {
           "type": "string",
           "format": "date-time",
@@ -137,11 +160,14 @@
   ],
   "properties": {
     "schemaVersion": { "const": "libre-ai.policy-definition.v2" },
-    "id": { "$ref": "common.v1.schema.json#/$defs/urn" },
+    "id": {
+      "type": "string",
+      "pattern": "^urn:libre-ai:policy:[A-Za-z0-9._~-]+$"
+    },
     "tenantId": { "$ref": "common.v1.schema.json#/$defs/tenantId" },
     "version": { "type": "integer", "minimum": 1 },
     "status": { "const": "approved" },
-    "proposedBy": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+    "proposedBy": { "$ref": "#/$defs/opaquePrincipalId" },
     "rules": {
       "type": "array",
       "minItems": 1,
@@ -158,7 +184,7 @@
       "properties": {
         "role": { "const": "policy-approver" },
         "actorKind": { "const": "human" },
-        "approverId": { "$ref": "common.v1.schema.json#/$defs/identifier" },
+        "approverId": { "$ref": "#/$defs/opaqueUserId" },
         "approvedAt": {
           "type": "string",
           "format": "date-time",
