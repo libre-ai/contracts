@@ -253,21 +253,28 @@ const namedEmailEntityCharacters: Readonly<Record<string, string>> = {
   ast: "*",
   at: "@",
   commat: "@",
+  diacriticalgrave: "`",
   dollar: "$",
   equals: "=",
   excl: "!",
   grave: "`",
   hat: "^",
+  lbrace: "{",
   lcub: "{",
   lowbar: "_",
+  midast: "*",
   num: "#",
   percnt: "%",
   period: ".",
   plus: "+",
   quest: "?",
+  rbrace: "}",
   rcub: "}",
   sol: "/",
+  underbar: "_",
   verbar: "|",
+  vert: "|",
+  verticalline: "|",
 };
 
 function decodeNamedEmailEntities(input: string): string {
@@ -640,6 +647,16 @@ if (
   )
 ) {
   failures.push("specialized vector Radar canary scope self-test failed");
+}
+for (const [name, character] of Object.entries(namedEmailEntityCharacters)) {
+  const encoded =
+    character === "@"
+      ? `alice&${name};example&period;org`
+      : character === "."
+        ? `alice&commat;example&${name};org`
+        : `alice&${name};&commat;example&period;org`;
+  if (!containsSensitivePublicMarker(encoded))
+    failures.push(`specialized vector named email entity self-test failed: ${name}`);
 }
 for (const [label, value, expectedSensitive] of [
   ["direct email", "alice@example.org", true],
