@@ -240,17 +240,12 @@ function decodePercentRuns(value: string): string {
   });
 }
 
-function collapseSensitiveEncodingNesting(input: string): string {
-  return input
-    .replace(/%(?:25)+/gi, "%")
-    .replace(/&(?:(?:amp(?:;|(?=#))|#0*38;?|#[xX]0*26;?))+(?=(?:#|[A-Za-z]))/gi, "&");
-}
-
 // HTML named entities whose decoded scalar participates in RFC atext or email separators.
 const namedEmailEntityCharacters: Readonly<Record<string, string>> = {
   amp: "&",
   apos: "'",
   ast: "*",
+  colon: ":",
   commat: "@",
   diacriticalgrave: "`",
   dollar: "$",
@@ -259,22 +254,41 @@ const namedEmailEntityCharacters: Readonly<Record<string, string>> = {
   grave: "`",
   hat: "^",
   lbrace: "{",
+  lbrack: "[",
   lcub: "{",
   lowbar: "_",
+  lsqb: "[",
   midast: "*",
   num: "#",
   percnt: "%",
   period: ".",
   plus: "+",
   quest: "?",
+  quot: '"',
   rbrace: "}",
+  rbrack: "]",
   rcub: "}",
+  rsqb: "]",
   sol: "/",
   underbar: "_",
   verbar: "|",
   vert: "|",
   verticalline: "|",
 };
+const namedEmailEntityAlternation = Object.keys(namedEmailEntityCharacters)
+  .sort((left, right) => right.length - left.length)
+  .join("|");
+const nestedAmpBeforeNamedEmailEntity = new RegExp(
+  `&(?:amp;?)+(?=(?:${namedEmailEntityAlternation});)`,
+  "gi",
+);
+
+function collapseSensitiveEncodingNesting(input: string): string {
+  return input
+    .replace(/%(?:25)+/gi, "%")
+    .replace(nestedAmpBeforeNamedEmailEntity, "&")
+    .replace(/&(?:(?:amp(?:;|(?=#))|#0*38;?|#[xX]0*26;?))+(?=(?:#|[A-Za-z]))/gi, "&");
+}
 
 function decodeNamedEmailEntities(input: string): string {
   return input.replace(
@@ -323,15 +337,62 @@ function previousCodePointStart(value: string, end: number): number {
   return previous;
 }
 
+function isUnescapedQuote(value: string, index: number): boolean {
+  if (value.charCodeAt(index) !== 0x22) return false;
+  let backslashCount = 0;
+  for (let cursor = index - 1; cursor >= 0 && value.charCodeAt(cursor) === 0x5c; cursor -= 1)
+    backslashCount += 1;
+  return backslashCount % 2 === 0;
+}
+
+function isQuotedEmailLocalPart(value: string, atIndex: number): boolean {
+  const closingQuote = atIndex - 1;
+  if (!isUnescapedQuote(value, closingQuote)) return false;
+  for (let openingQuote = closingQuote - 1; openingQuote >= 0; openingQuote -= 1) {
+    if (!isUnescapedQuote(value, openingQuote)) continue;
+    for (let cursor = openingQuote + 1; cursor < closingQuote; cursor += 1) {
+      const codePoint = value.codePointAt(cursor);
+      if (codePoint === undefined) return false;
+      if (codePoint === 0x5c) {
+        cursor += 1;
+        const escaped = value.codePointAt(cursor);
+        if (
+          escaped === undefined ||
+          !(escaped === 0x09 || (escaped >= 0x20 && escaped <= 0x7e) || escaped >= 0x80)
+        )
+          return false;
+        if (escaped > 0xffff) cursor += 1;
+        continue;
+      }
+      if (
+        !(
+          codePoint === 0x09 ||
+          codePoint === 0x20 ||
+          codePoint === 0x21 ||
+          (codePoint >= 0x23 && codePoint <= 0x5b) ||
+          (codePoint >= 0x5d && codePoint <= 0x7e) ||
+          codePoint >= 0x80
+        )
+      )
+        return false;
+      if (codePoint > 0xffff) cursor += 1;
+    }
+    return true;
+  }
+  return false;
+}
+
 function containsEmailIdentifier(value: string): boolean {
-  for (const match of value.matchAll(/@[\p{L}\p{N}.-]+\.[\p{L}]{2,}/gu)) {
+  const domain =
+    /@(?:[\p{L}\p{N}.-]+\.(?:[\p{L}]{2,}|xn--[A-Za-z0-9-]{2,59})|\[(?:IPv6:)?[0-9A-Fa-f:.]{2,64}\])/giu;
+  for (const match of value.matchAll(domain)) {
     let cursor = match.index;
     while (cursor > 0) {
       const start = previousCodePointStart(value, cursor);
       if (!emailLocalCharacter.test(value.slice(start, cursor))) break;
       cursor = start;
     }
-    if (cursor < match.index) return true;
+    if (cursor < match.index || isQuotedEmailLocalPart(value, match.index)) return true;
   }
   return false;
 }
@@ -670,15 +731,22 @@ if (
 ) {
   failures.push("specialized vector Radar canary scope self-test failed");
 }
+function namedEntityEmailProbe(name: string, character: string, nested: boolean): string {
+  const entity = `${nested ? "&amp" : "&"}${name};`;
+  if (character === "@") return `alice${entity}example&period;org`;
+  if (character === ".") return `alice&commat;example${entity}org`;
+  if (character === '"') return `${entity}alice${entity}&commat;example&period;org`;
+  if (character === "[") return `alice&commat;${entity}127&period;0&period;0&period;1&rsqb;`;
+  if (character === "]") return `alice&commat;&lbrack;127&period;0&period;0&period;1${entity}`;
+  if (character === ":") return `alice&commat;&lbrack;IPv6${entity}${entity}1&rsqb;`;
+  return `alice${entity}&commat;example&period;org`;
+}
+
 for (const [name, character] of Object.entries(namedEmailEntityCharacters)) {
-  const encoded =
-    character === "@"
-      ? `alice&${name};example&period;org`
-      : character === "."
-        ? `alice&commat;example&${name};org`
-        : `alice&${name};&commat;example&period;org`;
-  if (!containsSensitivePublicMarker(encoded))
+  if (!containsSensitivePublicMarker(namedEntityEmailProbe(name, character, false)))
     failures.push(`specialized vector named email entity self-test failed: ${name}`);
+  if (!containsSensitivePublicMarker(namedEntityEmailProbe(name, character, true)))
+    failures.push(`specialized vector nested amp entity self-test failed: ${name}`);
 }
 for (const [label, value, expectedSensitive] of [
   ["direct email", "alice@example.org", true],
@@ -695,6 +763,20 @@ for (const [label, value, expectedSensitive] of [
   ["over-nested HTML email", "alice&amp;amp;amp;amp;commat;example.org", true],
   ["over-nested semicolonless HTML email", "alice&amp#38#38#38#64example.org", true],
   ["RFC local-part ampersand", "alice&ops@example.org", true],
+  ["quoted local-part email", '"alice"@example.org', true],
+  ["quoted escaped local-part email", '"ali\\\\ce"@example.org', true],
+  ["quoted Unicode local-part email", '"álîçé"@example.org', true],
+  ["percent quoted local-part email", "%22alice%22%40example.org", true],
+  ["numeric quoted local-part email", "&#34;alice&#34;&#64;example.org", true],
+  ["named quoted local-part email", "&quot;alice&quot;&commat;example&period;org", true],
+  ["punycode-domain email", "alice@example.xn--p1ai", true],
+  ["IPv4-domain-literal email", "alice@[127.0.0.1]", true],
+  ["IPv6-domain-literal email", "alice@[IPv6:2001:db8::1]", true],
+  [
+    "named IPv6-domain-literal email",
+    "alice&commat;&lbrack;IPv6&colon;2001&colon;db8&colon;&colon;1&rsqb;",
+    true,
+  ],
   ["mixed amp numeric email", "alice&amp;&#64example.org", true],
   ["mixed numeric named email", "alice&#38;&commat;example.org", true],
   ["mixed amp numeric chain email", "alice&amp;&#38;&#64example.org", true],
@@ -708,6 +790,9 @@ for (const [label, value, expectedSensitive] of [
   ["credential", "sk_live_example_secret", true],
   ["Radar userinfo detector", radarUserinfoCanary, true],
   ["legitimate machine handle", "release@2", false],
+  ["quoted machine handle", '"release"@2', false],
+  ["unterminated quoted text", 'policy says "alice"@release', false],
+  ["maximum unterminated quoted local-part", `${"a".repeat(65_520)}"@example.org`, false],
   ["non-HTML5 at entity", "alice&at;example&period;org", false],
   ["maximum public non-email", "a".repeat(65_536), false],
   ["legitimate ampersand", "R&D", false],
