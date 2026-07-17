@@ -1998,6 +1998,29 @@
           "name": "invalid world",
           "path": "/world",
           "value": "INVALID"
+        },
+        {
+          "name": "contract path traversal",
+          "path": "/contractFiles",
+          "value": [
+            {
+              "path": "contracts/../secrets.txt",
+              "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+          ]
+        },
+        {
+          "name": "private payload",
+          "path": "/reproductionEvidence",
+          "value": {
+            "contact": "alice@example.org",
+            "credential": "sk_live_example_secret"
+          }
+        },
+        {
+          "name": "unbounded public string",
+          "path": "/status",
+          "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
         }
       ]
     }
