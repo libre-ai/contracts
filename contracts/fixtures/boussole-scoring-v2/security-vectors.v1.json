@@ -159,6 +159,17 @@
       "expectedError": "approval-invalid"
     },
     {
+      "id": "person-targeting-declaration",
+      "mutation": "person-targeting-declared",
+      "expectedError": "input-invalid"
+    },
+    {
+      "id": "wording-change-requires-privacy-reapproval",
+      "mutation": "person-target-wording-with-stale-approval",
+      "expectedError": "approval-invalid",
+      "forbiddenDiagnosticValues": ["named_person_target_canary"]
+    },
+    {
       "id": "redacted-approval",
       "mutation": "duplicate-private-reviewer-canary",
       "expectedError": "approval-invalid",
