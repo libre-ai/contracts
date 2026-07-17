@@ -240,10 +240,19 @@ function decodePercentRuns(value: string): string {
   });
 }
 
+function collapseSensitiveEncodingNesting(input: string): string {
+  return input
+    .replace(/%(?:25)+/gi, "%")
+    .replace(
+      /&(?:(?:amp(?:;|(?=(?:#|commat|at|percnt)))|#0*38;?|#[xX]0*26;?))+(?=(?:#|commat|at|percnt))/gi,
+      "&",
+    );
+}
+
 function decodeSensitiveMarkers(input: string): string {
   let current = input.normalize("NFKC").replace(/\p{Default_Ignorable_Code_Point}/gu, "");
   for (let pass = 0; pass < 4; pass += 1) {
-    const decoded = decodePercentRuns(current)
+    const decoded = decodePercentRuns(collapseSensitiveEncodingNesting(current))
       .replace(/%u([0-9A-Fa-f]{4})/g, (encoded, hexadecimal: string) => {
         const codePoint = Number.parseInt(hexadecimal, 16);
         return codePoint <= 0x10ffff ? String.fromCodePoint(codePoint) : encoded;
@@ -274,13 +283,7 @@ function decodeSensitiveMarkers(input: string): string {
 
 function containsSensitivePublicMarker(value: string): boolean {
   const decoded = decodeSensitiveMarkers(value);
-  const unresolvedEncoding =
-    /(?:%[uU]?[0-9A-Fa-f]{2,8}|&(?:#|amp(?:;|(?=[^A-Za-z0-9]))|(?:commat|at|percnt)(?:;|(?=[^A-Za-z0-9]))))/i;
-  return (
-    credentialMarker.test(decoded) ||
-    emailIdentifier.test(decoded) ||
-    unresolvedEncoding.test(decoded)
-  );
+  return credentialMarker.test(decoded) || emailIdentifier.test(decoded);
 }
 
 function isApprovedSyntheticSensitiveVectorValue(value: string, path: string): boolean {
@@ -624,6 +627,8 @@ for (const [label, value, expectedSensitive] of [
   ["named percent entity email", "alice&percnt;40example.org", true],
   ["nested named percent email", "alice&amp;percnt;40example.org", true],
   ["over-nested percent email", "alice%2525252540example.org", true],
+  ["over-nested HTML email", "alice&amp;amp;amp;amp;commat;example.org", true],
+  ["over-nested semicolonless HTML email", "alice&amp#38#38#38#64example.org", true],
   ["mixed nested encoding", "alice&#37;2540example.org", true],
   ["Unicode at-sign email", "alice＠example.org", true],
   ["percent-encoded Unicode at-sign email", "alice%EF%BC%A0example.org", true],
@@ -634,6 +639,7 @@ for (const [label, value, expectedSensitive] of [
   ["legitimate machine handle", "release@2", false],
   ["legitimate ampersand", "R&D", false],
   ["legitimate amp prefix", "R&amplitude", false],
+  ["literal unresolved markers", "policy &#fragment and %not-encoding", false],
   ["legitimate percentage", "50%", false],
   ["legitimate encoded URL", "https://example.org/a%2Fb", false],
   ["inert traversal payload", "../../secrets.txt", false],
