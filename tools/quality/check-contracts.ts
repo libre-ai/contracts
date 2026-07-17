@@ -243,16 +243,44 @@ function decodePercentRuns(value: string): string {
 function collapseSensitiveEncodingNesting(input: string): string {
   return input
     .replace(/%(?:25)+/gi, "%")
-    .replace(
-      /&(?:(?:amp(?:;|(?=(?:#|commat|at|percnt)))|#0*38;?|#[xX]0*26;?))+(?=(?:#|commat|at|percnt))/gi,
-      "&",
-    );
+    .replace(/&(?:(?:amp(?:;|(?=#))|#0*38;?|#[xX]0*26;?))+(?=(?:#|[A-Za-z]))/gi, "&");
+}
+
+// HTML named entities whose decoded scalar participates in RFC atext or email separators.
+const namedEmailEntityCharacters: Readonly<Record<string, string>> = {
+  amp: "&",
+  apos: "'",
+  ast: "*",
+  at: "@",
+  commat: "@",
+  dollar: "$",
+  equals: "=",
+  excl: "!",
+  grave: "`",
+  hat: "^",
+  lcub: "{",
+  lowbar: "_",
+  num: "#",
+  percnt: "%",
+  period: ".",
+  plus: "+",
+  quest: "?",
+  rcub: "}",
+  sol: "/",
+  verbar: "|",
+};
+
+function decodeNamedEmailEntities(input: string): string {
+  return input.replace(
+    /&([A-Za-z][A-Za-z0-9]*)(?:;|(?=[^A-Za-z0-9]))/g,
+    (encoded, name: string) => namedEmailEntityCharacters[name.toLowerCase()] ?? encoded,
+  );
 }
 
 function decodeSensitiveMarkers(input: string): string {
   let current = input.normalize("NFKC").replace(/\p{Default_Ignorable_Code_Point}/gu, "");
   for (let pass = 0; pass < 4; pass += 1) {
-    const decoded = decodePercentRuns(collapseSensitiveEncodingNesting(current))
+    const numericDecoded = decodePercentRuns(collapseSensitiveEncodingNesting(current))
       .replace(/%u([0-9A-Fa-f]{4})/g, (encoded, hexadecimal: string) => {
         const codePoint = Number.parseInt(hexadecimal, 16);
         return codePoint <= 0x10ffff ? String.fromCodePoint(codePoint) : encoded;
@@ -269,10 +297,8 @@ function decodeSensitiveMarkers(input: string): string {
             ? String.fromCodePoint(codePoint)
             : encoded;
         },
-      )
-      .replace(/&(?:commat|at)(?:;|(?=[^A-Za-z0-9]))/gi, "@")
-      .replace(/&percnt(?:;|(?=[^A-Za-z0-9]))/gi, "%")
-      .replace(/&amp(?:;|(?=[^A-Za-z0-9]))/gi, "&")
+      );
+    const decoded = decodeNamedEmailEntities(numericDecoded)
       .normalize("NFKC")
       .replace(/\p{Default_Ignorable_Code_Point}/gu, "");
     if (decoded === current) break;
@@ -633,6 +659,8 @@ for (const [label, value, expectedSensitive] of [
   ["mixed amp numeric email", "alice&amp;&#64example.org", true],
   ["mixed numeric named email", "alice&#38;&commat;example.org", true],
   ["mixed amp numeric chain email", "alice&amp;&#38;&#64example.org", true],
+  ["named period email", "alice&commat;example&period;org", true],
+  ["mixed amp named period email", "alice&amp;&#64example&period;org", true],
   ["mixed nested encoding", "alice&#37;2540example.org", true],
   ["Unicode at-sign email", "alice＠example.org", true],
   ["percent-encoded Unicode at-sign email", "alice%EF%BC%A0example.org", true],
@@ -643,7 +671,7 @@ for (const [label, value, expectedSensitive] of [
   ["legitimate machine handle", "release@2", false],
   ["legitimate ampersand", "R&D", false],
   ["legitimate amp prefix", "R&amplitude", false],
-  ["literal unresolved markers", "policy &#fragment and %not-encoding", false],
+  ["literal unresolved markers", "policy &#fragment, &alpha; and %not-encoding", false],
   ["legitimate percentage", "50%", false],
   ["legitimate encoded URL", "https://example.org/a%2Fb", false],
   ["inert traversal payload", "../../secrets.txt", false],
