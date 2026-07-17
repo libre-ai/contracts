@@ -261,8 +261,9 @@ function decodeSensitiveMarkers(input: string): string {
             : encoded;
         },
       )
-      .replace(/&(?:commat|at);?/gi, "@")
-      .replace(/&amp;?/gi, "&")
+      .replace(/&(?:commat|at)(?:;|(?=[^A-Za-z0-9]))/gi, "@")
+      .replace(/&percnt(?:;|(?=[^A-Za-z0-9]))/gi, "%")
+      .replace(/&amp(?:;|(?=[^A-Za-z0-9]))/gi, "&")
       .normalize("NFKC")
       .replace(/\p{Default_Ignorable_Code_Point}/gu, "");
     if (decoded === current) break;
@@ -273,7 +274,13 @@ function decodeSensitiveMarkers(input: string): string {
 
 function containsSensitivePublicMarker(value: string): boolean {
   const decoded = decodeSensitiveMarkers(value);
-  return credentialMarker.test(decoded) || emailIdentifier.test(decoded);
+  const unresolvedEncoding =
+    /(?:%[uU]?[0-9A-Fa-f]{2,8}|&(?:#|amp(?:;|(?=[^A-Za-z0-9]))|(?:commat|at|percnt)(?:;|(?=[^A-Za-z0-9]))))/i;
+  return (
+    credentialMarker.test(decoded) ||
+    emailIdentifier.test(decoded) ||
+    unresolvedEncoding.test(decoded)
+  );
 }
 
 function isApprovedSyntheticSensitiveVectorValue(value: string, path: string): boolean {
@@ -614,6 +621,9 @@ for (const [label, value, expectedSensitive] of [
   ["HTML entity email", "alice&#x40;example.org", true],
   ["unterminated HTML entity email", "alice&#64example.org", true],
   ["nested HTML entity email", "alice&amp;#64;example.org", true],
+  ["named percent entity email", "alice&percnt;40example.org", true],
+  ["nested named percent email", "alice&amp;percnt;40example.org", true],
+  ["over-nested percent email", "alice%2525252540example.org", true],
   ["mixed nested encoding", "alice&#37;2540example.org", true],
   ["Unicode at-sign email", "alice＠example.org", true],
   ["percent-encoded Unicode at-sign email", "alice%EF%BC%A0example.org", true],
@@ -623,6 +633,7 @@ for (const [label, value, expectedSensitive] of [
   ["Radar userinfo detector", radarUserinfoCanary, true],
   ["legitimate machine handle", "release@2", false],
   ["legitimate ampersand", "R&D", false],
+  ["legitimate amp prefix", "R&amplitude", false],
   ["legitimate percentage", "50%", false],
   ["legitimate encoded URL", "https://example.org/a%2Fb", false],
   ["inert traversal payload", "../../secrets.txt", false],
