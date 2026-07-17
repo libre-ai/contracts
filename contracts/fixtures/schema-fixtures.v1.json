@@ -2046,6 +2046,90 @@
           }
         },
         {
+          "name": "unicode-confusable canary host",
+          "path": "/reproductionEvidence",
+          "value": {
+            "url": "https://user:secret@examplｅ.org/feed.xml"
+          }
+        },
+        {
+          "name": "fullwidth at-sign private payload",
+          "path": "/reproductionEvidence",
+          "value": {
+            "contact": "alice＠example.org"
+          }
+        },
+        {
+          "name": "small-form at-sign private payload",
+          "path": "/reproductionEvidence",
+          "value": {
+            "contact": "alice﹫example.org"
+          }
+        },
+        {
+          "name": "percent-encoded at-sign private payload",
+          "path": "/reproductionEvidence",
+          "value": {
+            "contact": "alice%40example.org"
+          }
+        },
+        {
+          "name": "fullwidth percent-encoded private payload",
+          "path": "/reproductionEvidence",
+          "value": {
+            "contact": "alice％４０example.org"
+          }
+        },
+        {
+          "name": "semicolonless HTML entity private payload",
+          "path": "/reproductionEvidence",
+          "value": {
+            "contact": "alice&#64example.org"
+          }
+        },
+        {
+          "name": "named HTML entity private payload",
+          "path": "/reproductionEvidence",
+          "value": {
+            "contact": "alice&commat;example.org"
+          }
+        },
+        {
+          "name": "fullwidth ampersand private payload",
+          "path": "/reproductionEvidence",
+          "value": {
+            "contact": "alice＆#64;example.org"
+          }
+        },
+        {
+          "name": "recursive path traversal payload",
+          "path": "/reproductionEvidence",
+          "value": {
+            "note": "read ../../secrets.txt"
+          }
+        },
+        {
+          "name": "unapproved local file URI payload",
+          "path": "/reproductionEvidence",
+          "value": {
+            "url": "file:///var/private/data"
+          }
+        },
+        {
+          "name": "uppercase local file URI payload",
+          "path": "/reproductionEvidence",
+          "value": {
+            "url": "FILE:///var/private/data"
+          }
+        },
+        {
+          "name": "mixed-case local file URI payload",
+          "path": "/reproductionEvidence",
+          "value": {
+            "url": "FiLe:///tmp/x"
+          }
+        },
+        {
           "name": "unbounded public string",
           "path": "/status",
           "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"

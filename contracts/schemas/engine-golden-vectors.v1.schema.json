@@ -85,10 +85,14 @@
         },
         {
           "anyOf": [
-            { "not": { "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}" } },
-            {
-              "pattern": "^https://user:secret@example\\.org/feed\\.xml$"
-            }
+            { "not": { "pattern": "[@＠﹫%％﹪&＆﹠]" } },
+            { "pattern": "^https://user:secret@example\\.org/feed\\.xml$" }
+          ]
+        },
+        {
+          "anyOf": [
+            { "not": { "pattern": "(?:[Ff][Ii][Ll][Ee]:|\\.\\.[/\\\\])" } },
+            { "pattern": "^file:///etc/passwd$" }
           ]
         }
       ]
