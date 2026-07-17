@@ -4,8 +4,10 @@ import { domainToASCII } from "node:url";
 import { DecodingMode, decodeHTML } from "entities";
 
 const credentialMarker =
-  /(?:sk_live_[A-Za-z0-9_-]{8,}|sk-(?:proj|svcacct)-[A-Za-z0-9_-]{16,}|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----)/;
+  /(?:sk_live_[A-Za-z0-9_-]{8,}|sk-(?:proj|svcacct)-[A-Za-z0-9_-]{16,}|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (?:(?:(?:RSA|DSA|EC|OPENSSH|ENCRYPTED) )?PRIVATE KEY|PGP PRIVATE KEY BLOCK)-----)/;
 const asciiAtext = /^[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]$/;
+const asciiLetter = /^[A-Za-z]$/;
+const uriSchemeCharacter = /^[A-Za-z0-9+.-]$/;
 const whitespace = /^[\t\n\r ]$/;
 const domainCodePoint = /^[\p{L}\p{M}\p{N}.-]$/u;
 const domainBoundaryContinuation = /^[\p{L}\p{M}\p{N}_.-]$/u;
@@ -373,8 +375,16 @@ function normalizePreservingNonAsciiCfws(value: string): string {
 }
 
 function containsUrlUserinfo(value: string): boolean {
-  for (const match of value.matchAll(/(?:https?|ftp):\/\//giu)) {
-    const start = match.index + match[0].length;
+  for (
+    let separator = value.indexOf("://");
+    separator >= 0;
+    separator = value.indexOf("://", separator + 3)
+  ) {
+    let schemeStart = separator;
+    while (schemeStart > 0 && uriSchemeCharacter.test(value[schemeStart - 1] ?? ""))
+      schemeStart -= 1;
+    if (!asciiLetter.test(value[schemeStart] ?? "")) continue;
+    const start = separator + 3;
     let end = start;
     while (end < value.length) {
       const next = nextCodePointEnd(value, end);
@@ -431,6 +441,10 @@ export const publicSourceScannerSelfTests: ReadonlyArray<
   ["HTML parenthesized email", "&lpar;alice&commat;example&period;org&rpar;", true],
   ["mailto email", "mailto:alice@example.org", true],
   ["URL userinfo identifier", "https://user:secret@example.org/feed.xml", true],
+  ["SSH userinfo identifier", "ssh://user:secret@example.org/repo.git", true],
+  ["Git userinfo identifier", "git://git@example.org/repo.git", true],
+  ["custom-scheme userinfo identifier", "custom+v1://user@example.org/resource", true],
+  ["encoded SSH userinfo identifier", "%73%73%68%3A%2F%2Fuser%40example.org/repo", true],
   ["percent email", "alice%40example.org", true],
   ["double-percent email", "alice%2540example.org", true],
   ["JavaScript escape email", "alice%u0040example.org", true],
@@ -477,6 +491,14 @@ export const publicSourceScannerSelfTests: ReadonlyArray<
     true,
   ],
   ["credential", "sk_live_example_secret", true],
+  ["DSA private-key marker", "-----BEGIN DSA PRIVATE KEY-----", true],
+  ["OpenPGP private-key marker", "-----BEGIN PGP PRIVATE KEY BLOCK-----", true],
+  ["encrypted private-key marker", "-----BEGIN ENCRYPTED PRIVATE KEY-----", true],
+  [
+    "encoded DSA private-key marker",
+    "%2D%2D%2D%2D%2DBEGIN%20DSA%20PRIVATE%20KEY%2D%2D%2D%2D%2D",
+    true,
+  ],
   ["default-ignorable credential", "sk_li\u200bve_example_secret", true],
   ["machine handle", "release@2", false],
   ["quoted machine handle", '"release"@2', false],
