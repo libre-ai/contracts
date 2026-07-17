@@ -1,6 +1,6 @@
 package libre-ai:radar-engine@2.0.0;
 
-interface types {
+interface api {
   /// Closed refusal set. A refusal contains no payload excerpt, URL, identifier,
   /// rule value, tenant value, parser diagnostic or implementation detail.
   enum refusal-code {
@@ -33,18 +33,11 @@ interface types {
     max-items: u32,
     max-depth: u32,
   }
-}
-
-/// Pure, capability-free Radar parser and rule evaluator.
-/// PROFILE.md in this package is normative for accepted feed dialects,
-/// normalization, ordering, deduplication, refusal precedence and RFC 8785 output.
-world radar-engine {
-  use types.{contract-error, parse-limits};
 
   /// Accepts only the media types and feed dialects in PROFILE.md section 2.
   /// On success returns RFC 8785 canonical JSON conforming exactly to
   /// contracts/schemas/radar-normalized-feed.v1.schema.json.
-  export parse-feed: func(
+  parse-feed: func(
     payload: list<u8>,
     media-type: string,
     source-id: string,
@@ -57,5 +50,12 @@ world radar-engine {
   /// canonical radar-rule-evaluation.v1 JSON. PROFILE.md section 8 defines fixed
   /// input-byte ceilings plus complete matching, precedence and default-decision
   /// semantics.
-  export evaluate-rules: func(item: list<u8>, rules: list<u8>) -> result<list<u8>, contract-error>;
+  evaluate-rules: func(item: list<u8>, rules: list<u8>) -> result<list<u8>, contract-error>;
+}
+
+/// Pure, capability-free Radar parser and rule evaluator.
+/// PROFILE.md in this package is normative for accepted feed dialects,
+/// normalization, ordering, deduplication, refusal precedence and RFC 8785 output.
+world radar-engine {
+  export api;
 }

@@ -77,6 +77,29 @@ const allowedLocalOperationsByApp: Record<string, string[]> = {
     "GetFeedbackExplanation",
   ],
 };
+const radarReasonCodes = [
+  "radar.url_scheme_forbidden",
+  "radar.destination_forbidden",
+  "radar.redirect_forbidden",
+  "radar.invalid_limits",
+  "radar.invalid_source",
+  "radar.body_too_large",
+  "radar.output_too_large",
+  "radar.media_type_unsupported",
+  "radar.encoding_unsupported",
+  "radar.feed_malformed",
+  "radar.feed_kind_unsupported",
+  "radar.xml_dtd_forbidden",
+  "radar.xml_entity_forbidden",
+  "radar.max_depth_exceeded",
+  "radar.max_items_exceeded",
+  "radar.json_invalid",
+  "radar.json_not_canonical",
+  "radar.item_invalid",
+  "radar.rule_invalid",
+  "radar.tenant_mismatch",
+  "radar.revision_stale",
+] as const;
 
 function isRecord(value: unknown): value is JsonRecord {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -103,6 +126,14 @@ function propertyAt(value: unknown, dottedPath: string): unknown {
     current = current[segment];
   }
   return current;
+}
+
+function stringMaxLength(value: unknown): number | undefined {
+  if (!isRecord(value)) return undefined;
+  if (typeof value.maxLength === "number" && Number.isInteger(value.maxLength))
+    return value.maxLength;
+  if (!Array.isArray(value.allOf)) return undefined;
+  return value.allOf.map(stringMaxLength).find((maximum) => maximum !== undefined);
 }
 
 function safeErrors(errors: ErrorObject[] | null | undefined): string {
@@ -336,6 +367,24 @@ for (const [name, schema] of schemaByName) {
   }
 }
 
+const radarExport = schemaByName.get("curated-item-export.v2.schema.json");
+const radarExportProperties = isRecord(radarExport?.properties) ? radarExport.properties : {};
+const radarExportItems = isRecord(radarExportProperties.items) ? radarExportProperties.items : {};
+const radarExportItem = isRecord(radarExportItems.items) ? radarExportItems.items : {};
+const radarExportItemProperties = isRecord(radarExportItem.properties)
+  ? radarExportItem.properties
+  : {};
+for (const field of ["id", "sourceId", "sourceUrl", "ruleSetId"]) {
+  const schema = isRecord(radarExportItemProperties[field]) ? radarExportItemProperties[field] : {};
+  if (stringMaxLength(schema) === undefined)
+    failures.push(`curated-item-export.v2.schema.json: ${field} is unbounded`);
+}
+const radarExportSourceUrl = isRecord(radarExportItemProperties.sourceUrl)
+  ? radarExportItemProperties.sourceUrl
+  : {};
+if (radarExportSourceUrl.pattern !== "^https?://(?![^/?#]*@)")
+  failures.push("curated-item-export.v2.schema.json: sourceUrl permits userinfo");
+
 const rawFixtures = await Bun.file("contracts/fixtures/schema-fixtures.v1.json").json();
 const fixtureCases = (
   isRecord(rawFixtures) &&
@@ -531,6 +580,17 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/open
         failures.push(`${path}:${method}:${route}: unauthorized state-changing GET exception`);
       if (!isRecord(rawOperation.responses) || Object.keys(rawOperation.responses).length === 0)
         failures.push(`${path}:${method}:${route}: no responses`);
+      if (path === "contracts/openapi/radar.v2.yaml" && isRecord(rawOperation.responses)) {
+        for (const [status, response] of Object.entries(rawOperation.responses)) {
+          if (!/^2[0-9]{2}$/.test(status) || status === "204") continue;
+          const content = isRecord(response) ? response.content : undefined;
+          const hasSchema =
+            isRecord(content) &&
+            Object.values(content).some((media) => isRecord(media) && isRecord(media.schema));
+          if (!hasSchema)
+            failures.push(`${path}:${method}:${route}: success ${status} has no schema`);
+        }
+      }
       if (method !== "get") {
         const parameterRefs = (
           Array.isArray(rawOperation.parameters) ? rawOperation.parameters : []
@@ -552,6 +612,67 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/open
           failures.push(`${path}:${method}:${route}: missing refusal response`);
       }
     }
+  }
+
+  if (path === "contracts/openapi/radar.v2.yaml") {
+    const components = isRecord(document.components) ? document.components : {};
+    const parameters = isRecord(components.parameters) ? components.parameters : {};
+    for (const [name, parameter] of Object.entries(parameters)) {
+      if (!isRecord(parameter) || parameter.in !== "path") continue;
+      const schema = isRecord(parameter.schema) ? parameter.schema : {};
+      if (
+        typeof schema.maxLength !== "number" ||
+        !Number.isInteger(schema.maxLength) ||
+        schema.maxLength < 1 ||
+        typeof schema.pattern !== "string"
+      ) {
+        failures.push(`${path}: path parameter ${name} is not finitely constrained`);
+      }
+    }
+    const componentSchemas = isRecord(components.schemas) ? components.schemas : {};
+    const subscriptionInput = isRecord(componentSchemas.SubscriptionInput)
+      ? componentSchemas.SubscriptionInput
+      : {};
+    const subscriptionProperties = isRecord(subscriptionInput.properties)
+      ? subscriptionInput.properties
+      : {};
+    const subscriptionUrl = isRecord(subscriptionProperties.url) ? subscriptionProperties.url : {};
+    if (
+      subscriptionUrl.maxLength !== 2048 ||
+      subscriptionUrl.pattern !== "^https?://(?![^/?#]*@)"
+    ) {
+      failures.push(`${path}: subscription URL is not bounded and userinfo-free`);
+    }
+    for (const commandName of ["RuleSetInput", "FetchScheduleInput"]) {
+      const command = isRecord(componentSchemas[commandName]) ? componentSchemas[commandName] : {};
+      const properties = isRecord(command.properties) ? command.properties : {};
+      if ("tenantId" in properties || "createdAt" in properties || "status" in properties) {
+        failures.push(`${path}: ${commandName} accepts server-owned fields`);
+      }
+    }
+    const radarProblem = isRecord(componentSchemas.RadarProblem)
+      ? componentSchemas.RadarProblem
+      : {};
+    const problemProperties = isRecord(radarProblem.properties) ? radarProblem.properties : {};
+    const error = isRecord(problemProperties.error) ? problemProperties.error : {};
+    const errorProperties = isRecord(error.properties) ? error.properties : {};
+    const code = isRecord(errorProperties.code) ? errorProperties.code : {};
+    const message = isRecord(errorProperties.message) ? errorProperties.message : {};
+    if (
+      JSON.stringify(code.enum) !== JSON.stringify(radarReasonCodes) ||
+      message.const !== "Request refused"
+    ) {
+      failures.push(`${path}: public refusal is not closed and content-free`);
+    }
+    const responses = isRecord(components.responses) ? components.responses : {};
+    const problem = isRecord(responses.Problem) ? responses.Problem : {};
+    const content = isRecord(problem.content) ? problem.content : {};
+    const media = isRecord(content["application/problem+json"])
+      ? content["application/problem+json"]
+      : {};
+    const problemSchema = isRecord(media.schema) ? media.schema : {};
+    if (problemSchema.$ref !== "#/components/schemas/RadarProblem")
+      failures.push(`${path}: default problem does not use RadarProblem`);
   }
 
   for (const [mapping, count] of domainMappingCounts) {

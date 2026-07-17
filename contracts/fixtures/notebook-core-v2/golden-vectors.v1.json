@@ -1,8 +1,8 @@
 {
   "schemaVersion": "libre-ai.notebook-core-golden.v2",
   "status": "review-candidate",
-  "testMaterialWarning": "Public deterministic test material only; forbidden for production secrets, salts, nonces, or backup identifiers.",
-  "standards": ["RFC 9106", "NIST SP 800-38D", "RFC 4648 section 4", "RFC 8785", "Unicode NFC"],
+  "testMaterialWarning": "Public deterministic test material only; forbidden for production secrets, salts, nonces, or identifiers.",
+  "standards": ["RFC 9106", "NIST SP 800-38D", "RFC 4648 section 4", "RFC 8785"],
   "golden": {
     "request": {
       "schemaVersion": "libre-ai.notebook-backup-seal-request.v2",
@@ -21,10 +21,9 @@
       "plaintext": "Tm90ZWJvb2sgY29yZSB2MiBkZXRlcm1pbmlzdGljIHRlc3QgcGF5bG9hZC4K"
     },
     "recoverySecret": {
-      "encoding": "UTF-8 after Unicode NFC text profile v1",
-      "value": "notebook-core-v2-public-test-secret",
-      "hex": "6e6f7465626f6f6b2d636f72652d76322d7075626c69632d746573742d736563726574",
-      "byteLength": 35,
+      "encoding": "raw bytes decoded from libre-ai.recovery-secret-code.v1",
+      "hex": "202122232425262728292a2b2c2d2e2f",
+      "byteLength": 16,
       "sensitive": false
     },
     "plaintext": {
@@ -42,7 +41,7 @@
       "outputLengthBytes": 32,
       "optionalSecretHex": "",
       "associatedDataHex": "",
-      "derivedKeyHex": "e6b35d4e67ec1f04cf571aa3cc441746dadec01406cd82a88ec4ea5708183e1c"
+      "derivedKeyHex": "d1c64b3e330a7ac9164db94b4f31eb6b2b1dc3d4864886ca5e873b34eda0f5ff"
     },
     "aad": {
       "domainUtf8": "libre-ai.notebook-backup.v2/aad",
@@ -54,19 +53,19 @@
     "aes256Gcm": {
       "nonceHex": "101112131415161718191a1b",
       "tagLengthBytes": 16,
-      "encryptedContentHex": "833724730182e6810c335b29c7b47f149533b2f4a499059cd9522ea2127299920eea58c087f25f16c3f3954ae4",
-      "tagHex": "0c84bdde2387cf2a04a77c56e70509c1",
-      "ciphertextAndTagHex": "833724730182e6810c335b29c7b47f149533b2f4a499059cd9522ea2127299920eea58c087f25f16c3f3954ae40c84bdde2387cf2a04a77c56e70509c1",
-      "ciphertextAndTagBase64": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrkDIS93iOHzyoEp3xW5wUJwQ==",
+      "encryptedContentHex": "e0f03554dc0f3cd06e1e7712db0a5ac0cf55f4901a275c61ee92f7765de838d8e693c444b239ed3b441cde8a91",
+      "tagHex": "18dc9abc6d3bb3cc73d8f4d322f19a3b",
+      "ciphertextAndTagHex": "e0f03554dc0f3cd06e1e7712db0a5ac0cf55f4901a275c61ee92f7765de838d8e693c444b239ed3b441cde8a9118dc9abc6d3bb3cc73d8f4d322f19a3b",
+      "ciphertextAndTagBase64": "4PA1VNwPPNBuHncS2wpawM9V9JAaJ1xh7pL3dl3oONjmk8REsjntO0Qc3oqRGNyavG07s8xz2PTTIvGaOw==",
       "byteLength": 61
     },
     "digest": {
       "algorithm": "sha-256",
       "domainUtf8": "libre-ai.notebook-backup.v2/digest",
       "separatorHex": "00",
-      "canonicalEnvelopeWithoutDigestUtf8": "{\"cipher\":\"aes-256-gcm\",\"ciphertext\":\"gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrkDIS93iOHzyoEp3xW5wUJwQ==\",\"id\":\"urn:libre-ai:backup:000102030405060708090a0b0c0d0e0f\",\"kdf\":{\"algorithm\":\"argon2id\",\"iterations\":3,\"memoryKiB\":65536,\"outputLengthBytes\":32,\"parallelism\":1,\"salt\":\"AAECAwQFBgcICQoLDA0ODw==\",\"version\":19},\"nonce\":\"EBESExQVFhcYGRob\",\"schemaVersion\":\"libre-ai.notebook-backup.v2\"}",
-      "preimageHex": "6c696272652d61692e6e6f7465626f6f6b2d6261636b75702e76322f646967657374007b22636970686572223a226165732d3235362d67636d222c2263697068657274657874223a22677a636b63774743356f454d4d3173707837522f464a557a7376536b6d515763325649756f684a796d5a494f366c6a41682f4a664673507a6c55726b4449533933694f487a796f45703378573577554a77513d3d222c226964223a2275726e3a6c696272652d61693a6261636b75703a3030303130323033303430353036303730383039306130623063306430653066222c226b6466223a7b22616c676f726974686d223a226172676f6e326964222c22697465726174696f6e73223a332c226d656d6f72794b6942223a36353533362c226f75747075744c656e6774684279746573223a33322c22706172616c6c656c69736d223a312c2273616c74223a2241414543417751464267634943516f4c4441304f44773d3d222c2276657273696f6e223a31397d2c226e6f6e6365223a2245424553457851564668635947526f62222c22736368656d6156657273696f6e223a226c696272652d61692e6e6f7465626f6f6b2d6261636b75702e7632227d",
-      "hexLower": "c3303408ff8242a243a454b5c4606d61b71001233281d0fadb9dc9890d0e85d3"
+      "canonicalEnvelopeWithoutDigestUtf8": "{\"cipher\":\"aes-256-gcm\",\"ciphertext\":\"4PA1VNwPPNBuHncS2wpawM9V9JAaJ1xh7pL3dl3oONjmk8REsjntO0Qc3oqRGNyavG07s8xz2PTTIvGaOw==\",\"id\":\"urn:libre-ai:backup:000102030405060708090a0b0c0d0e0f\",\"kdf\":{\"algorithm\":\"argon2id\",\"iterations\":3,\"memoryKiB\":65536,\"outputLengthBytes\":32,\"parallelism\":1,\"salt\":\"AAECAwQFBgcICQoLDA0ODw==\",\"version\":19},\"nonce\":\"EBESExQVFhcYGRob\",\"schemaVersion\":\"libre-ai.notebook-backup.v2\"}",
+      "preimageHex": "6c696272652d61692e6e6f7465626f6f6b2d6261636b75702e76322f646967657374007b22636970686572223a226165732d3235362d67636d222c2263697068657274657874223a2234504131564e7750504e4275486e635332777061774d3956394a41614a31786837704c33646c336f4f4e6a6d6b385245736a6e744f305163336f7152474e7961764730377338787a32505454497647614f773d3d222c226964223a2275726e3a6c696272652d61693a6261636b75703a3030303130323033303430353036303730383039306130623063306430653066222c226b6466223a7b22616c676f726974686d223a226172676f6e326964222c22697465726174696f6e73223a332c226d656d6f72794b6942223a36353533362c226f75747075744c656e6774684279746573223a33322c22706172616c6c656c69736d223a312c2273616c74223a2241414543417751464267634943516f4c4441304f44773d3d222c2276657273696f6e223a31397d2c226e6f6e6365223a2245424553457851564668635947526f62222c22736368656d6156657273696f6e223a226c696272652d61692e6e6f7465626f6f6b2d6261636b75702e7632227d",
+      "hexLower": "ddefc877172074fed3709ec46a804a2b76857f37e6eec586ce38a5f0011092ec"
     },
     "envelope": {
       "schemaVersion": "libre-ai.notebook-backup.v2",
@@ -82,21 +81,21 @@
         "salt": "AAECAwQFBgcICQoLDA0ODw=="
       },
       "nonce": "EBESExQVFhcYGRob",
-      "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrkDIS93iOHzyoEp3xW5wUJwQ==",
-      "digest": "c3303408ff8242a243a454b5c4606d61b71001233281d0fadb9dc9890d0e85d3"
+      "ciphertext": "4PA1VNwPPNBuHncS2wpawM9V9JAaJ1xh7pL3dl3oONjmk8REsjntO0Qc3oqRGNyavG07s8xz2PTTIvGaOw==",
+      "digest": "ddefc877172074fed3709ec46a804a2b76857f37e6eec586ce38a5f0011092ec"
     },
-    "canonicalEnvelopeUtf8": "{\"cipher\":\"aes-256-gcm\",\"ciphertext\":\"gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrkDIS93iOHzyoEp3xW5wUJwQ==\",\"digest\":\"c3303408ff8242a243a454b5c4606d61b71001233281d0fadb9dc9890d0e85d3\",\"id\":\"urn:libre-ai:backup:000102030405060708090a0b0c0d0e0f\",\"kdf\":{\"algorithm\":\"argon2id\",\"iterations\":3,\"memoryKiB\":65536,\"outputLengthBytes\":32,\"parallelism\":1,\"salt\":\"AAECAwQFBgcICQoLDA0ODw==\",\"version\":19},\"nonce\":\"EBESExQVFhcYGRob\",\"schemaVersion\":\"libre-ai.notebook-backup.v2\"}",
+    "canonicalEnvelopeUtf8": "{\"cipher\":\"aes-256-gcm\",\"ciphertext\":\"4PA1VNwPPNBuHncS2wpawM9V9JAaJ1xh7pL3dl3oONjmk8REsjntO0Qc3oqRGNyavG07s8xz2PTTIvGaOw==\",\"digest\":\"ddefc877172074fed3709ec46a804a2b76857f37e6eec586ce38a5f0011092ec\",\"id\":\"urn:libre-ai:backup:000102030405060708090a0b0c0d0e0f\",\"kdf\":{\"algorithm\":\"argon2id\",\"iterations\":3,\"memoryKiB\":65536,\"outputLengthBytes\":32,\"parallelism\":1,\"salt\":\"AAECAwQFBgcICQoLDA0ODw==\",\"version\":19},\"nonce\":\"EBESExQVFhcYGRob\",\"schemaVersion\":\"libre-ai.notebook-backup.v2\"}",
     "openResult": {
       "schemaVersion": "libre-ai.notebook-backup.v2",
       "id": "urn:libre-ai:backup:000102030405060708090a0b0c0d0e0f",
-      "digest": "c3303408ff8242a243a454b5c4606d61b71001233281d0fadb9dc9890d0e85d3",
+      "digest": "ddefc877172074fed3709ec46a804a2b76857f37e6eec586ce38a5f0011092ec",
       "plaintextBase64": "Tm90ZWJvb2sgY29yZSB2MiBkZXRlcm1pbmlzdGljIHRlc3QgcGF5bG9hZC4K"
     }
   },
   "mutations": [
     {
       "name": "wrong-recovery-secret",
-      "recoverySecretUtf8": "notebook-core-v2-public-test-secreu",
+      "recoverySecretHex": "202122232425262728292a2b2c2d2e2e",
       "digestRecomputedAfterMutation": false,
       "envelope": {
         "schemaVersion": "libre-ai.notebook-backup.v2",
@@ -112,8 +111,8 @@
           "salt": "AAECAwQFBgcICQoLDA0ODw=="
         },
         "nonce": "EBESExQVFhcYGRob",
-        "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrkDIS93iOHzyoEp3xW5wUJwQ==",
-        "digest": "c3303408ff8242a243a454b5c4606d61b71001233281d0fadb9dc9890d0e85d3"
+        "ciphertext": "4PA1VNwPPNBuHncS2wpawM9V9JAaJ1xh7pL3dl3oONjmk8REsjntO0Qc3oqRGNyavG07s8xz2PTTIvGaOw==",
+        "digest": "ddefc877172074fed3709ec46a804a2b76857f37e6eec586ce38a5f0011092ec"
       },
       "expected": {
         "result": "error",
@@ -125,7 +124,7 @@
     },
     {
       "name": "recovery-secret-too-short",
-      "recoverySecretUtf8": "123456789012345",
+      "recoverySecretHex": "202122232425262728292a2b2c2d2e",
       "digestRecomputedAfterMutation": false,
       "envelope": {
         "schemaVersion": "libre-ai.notebook-backup.v2",
@@ -141,8 +140,8 @@
           "salt": "AAECAwQFBgcICQoLDA0ODw=="
         },
         "nonce": "EBESExQVFhcYGRob",
-        "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrkDIS93iOHzyoEp3xW5wUJwQ==",
-        "digest": "c3303408ff8242a243a454b5c4606d61b71001233281d0fadb9dc9890d0e85d3"
+        "ciphertext": "4PA1VNwPPNBuHncS2wpawM9V9JAaJ1xh7pL3dl3oONjmk8REsjntO0Qc3oqRGNyavG07s8xz2PTTIvGaOw==",
+        "digest": "ddefc877172074fed3709ec46a804a2b76857f37e6eec586ce38a5f0011092ec"
       },
       "expected": {
         "result": "error",
@@ -154,7 +153,7 @@
     },
     {
       "name": "recovery-secret-too-long",
-      "recoverySecretUtf8": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "recoverySecretHex": "202122232425262728292a2b2c2d2e2f30",
       "digestRecomputedAfterMutation": false,
       "envelope": {
         "schemaVersion": "libre-ai.notebook-backup.v2",
@@ -170,8 +169,8 @@
           "salt": "AAECAwQFBgcICQoLDA0ODw=="
         },
         "nonce": "EBESExQVFhcYGRob",
-        "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrkDIS93iOHzyoEp3xW5wUJwQ==",
-        "digest": "c3303408ff8242a243a454b5c4606d61b71001233281d0fadb9dc9890d0e85d3"
+        "ciphertext": "4PA1VNwPPNBuHncS2wpawM9V9JAaJ1xh7pL3dl3oONjmk8REsjntO0Qc3oqRGNyavG07s8xz2PTTIvGaOw==",
+        "digest": "ddefc877172074fed3709ec46a804a2b76857f37e6eec586ce38a5f0011092ec"
       },
       "expected": {
         "result": "error",
@@ -183,7 +182,7 @@
     },
     {
       "name": "nonce-modified",
-      "recoverySecretUtf8": "notebook-core-v2-public-test-secret",
+      "recoverySecretHex": "202122232425262728292a2b2c2d2e2f",
       "digestRecomputedAfterMutation": true,
       "envelope": {
         "schemaVersion": "libre-ai.notebook-backup.v2",
@@ -199,8 +198,8 @@
           "salt": "AAECAwQFBgcICQoLDA0ODw=="
         },
         "nonce": "EBESExQVFhcYGRoa",
-        "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrkDIS93iOHzyoEp3xW5wUJwQ==",
-        "digest": "d714d584d80d50162bd120f5664604d2121d9665888918fde60aefaeed1c1dc3"
+        "ciphertext": "4PA1VNwPPNBuHncS2wpawM9V9JAaJ1xh7pL3dl3oONjmk8REsjntO0Qc3oqRGNyavG07s8xz2PTTIvGaOw==",
+        "digest": "d09f8d21328868bd8a8f7f898444df99ea12a1abd5e6dd32903f5a50e1745711"
       },
       "expected": {
         "result": "error",
@@ -212,7 +211,7 @@
     },
     {
       "name": "salt-modified",
-      "recoverySecretUtf8": "notebook-core-v2-public-test-secret",
+      "recoverySecretHex": "202122232425262728292a2b2c2d2e2f",
       "digestRecomputedAfterMutation": true,
       "envelope": {
         "schemaVersion": "libre-ai.notebook-backup.v2",
@@ -228,8 +227,8 @@
           "salt": "AAECAwQFBgcICQoLDA0ODg=="
         },
         "nonce": "EBESExQVFhcYGRob",
-        "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrkDIS93iOHzyoEp3xW5wUJwQ==",
-        "digest": "19291b14c159e8996057684627895fb715701889ffe6680d0ebc771c0a0d3491"
+        "ciphertext": "4PA1VNwPPNBuHncS2wpawM9V9JAaJ1xh7pL3dl3oONjmk8REsjntO0Qc3oqRGNyavG07s8xz2PTTIvGaOw==",
+        "digest": "1b272f53047657232358a0f33a99815157be63a59922b33bfe2971abd77c5d44"
       },
       "expected": {
         "result": "error",
@@ -241,7 +240,7 @@
     },
     {
       "name": "ciphertext-modified",
-      "recoverySecretUtf8": "notebook-core-v2-public-test-secret",
+      "recoverySecretHex": "202122232425262728292a2b2c2d2e2f",
       "digestRecomputedAfterMutation": true,
       "envelope": {
         "schemaVersion": "libre-ai.notebook-backup.v2",
@@ -257,8 +256,8 @@
           "salt": "AAECAwQFBgcICQoLDA0ODw=="
         },
         "nonce": "EBESExQVFhcYGRob",
-        "ciphertext": "gjckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrkDIS93iOHzyoEp3xW5wUJwQ==",
-        "digest": "f3d34223eaaadea8e7781c360995882d7420bb51757384a2f30710200cd4000a"
+        "ciphertext": "4fA1VNwPPNBuHncS2wpawM9V9JAaJ1xh7pL3dl3oONjmk8REsjntO0Qc3oqRGNyavG07s8xz2PTTIvGaOw==",
+        "digest": "03bc9608458553996471c7a4fb25a9814fde01c4e0e55f546592756f34d988d5"
       },
       "expected": {
         "result": "error",
@@ -270,7 +269,7 @@
     },
     {
       "name": "aad-modified",
-      "recoverySecretUtf8": "notebook-core-v2-public-test-secret",
+      "recoverySecretHex": "202122232425262728292a2b2c2d2e2f",
       "digestRecomputedAfterMutation": true,
       "envelope": {
         "schemaVersion": "libre-ai.notebook-backup.v2",
@@ -286,8 +285,8 @@
           "salt": "AAECAwQFBgcICQoLDA0ODw=="
         },
         "nonce": "EBESExQVFhcYGRob",
-        "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrkDIS93iOHzyoEp3xW5wUJwQ==",
-        "digest": "91e74f73dcc0c7a99af5e408224f9fcbf5e1e95c90b331ed52a56b5888cdfec9"
+        "ciphertext": "4PA1VNwPPNBuHncS2wpawM9V9JAaJ1xh7pL3dl3oONjmk8REsjntO0Qc3oqRGNyavG07s8xz2PTTIvGaOw==",
+        "digest": "2d223d97ce115b173a65024fa02ceede52da38f9b715b752564fe7f01c756008"
       },
       "expected": {
         "result": "error",
@@ -299,7 +298,7 @@
     },
     {
       "name": "digest-modified",
-      "recoverySecretUtf8": "notebook-core-v2-public-test-secret",
+      "recoverySecretHex": "202122232425262728292a2b2c2d2e2f",
       "digestRecomputedAfterMutation": false,
       "envelope": {
         "schemaVersion": "libre-ai.notebook-backup.v2",
@@ -315,8 +314,8 @@
           "salt": "AAECAwQFBgcICQoLDA0ODw=="
         },
         "nonce": "EBESExQVFhcYGRob",
-        "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrkDIS93iOHzyoEp3xW5wUJwQ==",
-        "digest": "03303408ff8242a243a454b5c4606d61b71001233281d0fadb9dc9890d0e85d3"
+        "ciphertext": "4PA1VNwPPNBuHncS2wpawM9V9JAaJ1xh7pL3dl3oONjmk8REsjntO0Qc3oqRGNyavG07s8xz2PTTIvGaOw==",
+        "digest": "0defc877172074fed3709ec46a804a2b76857f37e6eec586ce38a5f0011092ec"
       },
       "expected": {
         "result": "error",
@@ -328,7 +327,7 @@
     },
     {
       "name": "weak-kdf-parameters",
-      "recoverySecretUtf8": "notebook-core-v2-public-test-secret",
+      "recoverySecretHex": "202122232425262728292a2b2c2d2e2f",
       "digestRecomputedAfterMutation": true,
       "envelope": {
         "schemaVersion": "libre-ai.notebook-backup.v2",
@@ -344,8 +343,8 @@
           "salt": "AAECAwQFBgcICQoLDA0ODw=="
         },
         "nonce": "EBESExQVFhcYGRob",
-        "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrkDIS93iOHzyoEp3xW5wUJwQ==",
-        "digest": "786b49f013326cc30f59cb8c9c0a503dce2798c30e012a76f36c4b431b3d2548"
+        "ciphertext": "4PA1VNwPPNBuHncS2wpawM9V9JAaJ1xh7pL3dl3oONjmk8REsjntO0Qc3oqRGNyavG07s8xz2PTTIvGaOw==",
+        "digest": "ebf355239cad6b7f898ffed7b8c7d958fdf2e71da87991504ecdda32b55651bf"
       },
       "expected": {
         "result": "error",
@@ -357,7 +356,7 @@
     },
     {
       "name": "unsupported-version",
-      "recoverySecretUtf8": "notebook-core-v2-public-test-secret",
+      "recoverySecretHex": "202122232425262728292a2b2c2d2e2f",
       "digestRecomputedAfterMutation": false,
       "envelope": {
         "schemaVersion": "libre-ai.notebook-backup.v3",
@@ -373,8 +372,8 @@
           "salt": "AAECAwQFBgcICQoLDA0ODw=="
         },
         "nonce": "EBESExQVFhcYGRob",
-        "ciphertext": "gzckcwGC5oEMM1spx7R/FJUzsvSkmQWc2VIuohJymZIO6ljAh/JfFsPzlUrkDIS93iOHzyoEp3xW5wUJwQ==",
-        "digest": "c3303408ff8242a243a454b5c4606d61b71001233281d0fadb9dc9890d0e85d3"
+        "ciphertext": "4PA1VNwPPNBuHncS2wpawM9V9JAaJ1xh7pL3dl3oONjmk8REsjntO0Qc3oqRGNyavG07s8xz2PTTIvGaOw==",
+        "digest": "ddefc877172074fed3709ec46a804a2b76857f37e6eec586ce38a5f0011092ec"
       },
       "expected": {
         "result": "error",
@@ -387,52 +386,64 @@
   ],
   "contextCanonicalization": {
     "golden": {
-      "inputUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:101112131415161718191a1b1c1d1e1f\",\"rootBlockIds\":[\"bbb_json\",\"aaa_root\"],\"blocks\":[{\"id\":\"ccc_leaf\",\"revision\":1,\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"bbb_json\",\"revision\":2,\"mediaType\":\"application/json\",\"content\":\"{\\\"z\\\":1,\\\"n\\\":333333333.33333329,\\\"a\\\":[3,2,1]}\",\"links\":[\"ccc_leaf\",\"aaa_root\"]},{\"id\":\"aaa_root\",\"revision\":3,\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"excludedBlockIds\":[\"zzz_old\",\"yyy_old\"],\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\"}",
+      "inputUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:303132333435363738393a3b3c3d3e3f\",\"rootBlockIds\":[\"blk_101112131415161718191a1b1c1d1e1f\",\"blk_000102030405060708090a0b0c0d0e0f\"],\"blocks\":[{\"id\":\"blk_202122232425262728292a2b2c2d2e2f\",\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"blk_101112131415161718191a1b1c1d1e1f\",\"mediaType\":\"application/json\",\"content\":\"{\\\"z\\\":1,\\\"n\\\":333333333.33333329,\\\"a\\\":[3,2,1]}\",\"links\":[\"blk_202122232425262728292a2b2c2d2e2f\",\"blk_000102030405060708090a0b0c0d0e0f\"]},{\"id\":\"blk_000102030405060708090a0b0c0d0e0f\",\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\"}",
       "normalized": {
         "schemaVersion": "libre-ai.context-document.v2",
-        "id": "urn:libre-ai:context:101112131415161718191a1b1c1d1e1f",
-        "rootBlockIds": ["aaa_root", "bbb_json"],
+        "id": "urn:libre-ai:context:303132333435363738393a3b3c3d3e3f",
+        "rootBlockIds": [
+          "blk_000102030405060708090a0b0c0d0e0f",
+          "blk_101112131415161718191a1b1c1d1e1f"
+        ],
         "blocks": [
           {
-            "id": "aaa_root",
-            "revision": 3,
+            "id": "blk_000102030405060708090a0b0c0d0e0f",
             "mediaType": "text/markdown",
             "content": "Café\n",
             "links": []
           },
           {
-            "id": "bbb_json",
-            "revision": 2,
+            "id": "blk_101112131415161718191a1b1c1d1e1f",
             "mediaType": "application/json",
             "content": "{\"a\":[3,2,1],\"n\":333333333.3333333,\"z\":1}",
-            "links": ["aaa_root", "ccc_leaf"]
+            "links": [
+              "blk_000102030405060708090a0b0c0d0e0f",
+              "blk_202122232425262728292a2b2c2d2e2f"
+            ]
           },
           {
-            "id": "ccc_leaf",
-            "revision": 1,
+            "id": "blk_202122232425262728292a2b2c2d2e2f",
             "mediaType": "text/plain",
             "content": "alpha",
             "links": []
           }
         ],
         "totalBytes": 52,
-        "excludedBlockIds": ["yyy_old", "zzz_old"],
-        "digest": "c9766d5af505c8945655bd1defb554167e02cc66b8a1e807334d74fb2f466c6a"
+        "digest": "a61760a034015ac8bfea1da72487be13dd31d2574653b991626d69891d7f0575"
       },
       "digest": {
         "domainUtf8": "libre-ai.context-document.v2",
         "separatorHex": "00",
-        "canonicalDocumentWithoutDigestUtf8": "{\"blocks\":[{\"content\":\"Café\\n\",\"id\":\"aaa_root\",\"links\":[],\"mediaType\":\"text/markdown\",\"revision\":3},{\"content\":\"{\\\"a\\\":[3,2,1],\\\"n\\\":333333333.3333333,\\\"z\\\":1}\",\"id\":\"bbb_json\",\"links\":[\"aaa_root\",\"ccc_leaf\"],\"mediaType\":\"application/json\",\"revision\":2},{\"content\":\"alpha\",\"id\":\"ccc_leaf\",\"links\":[],\"mediaType\":\"text/plain\",\"revision\":1}],\"excludedBlockIds\":[\"yyy_old\",\"zzz_old\"],\"id\":\"urn:libre-ai:context:101112131415161718191a1b1c1d1e1f\",\"rootBlockIds\":[\"aaa_root\",\"bbb_json\"],\"schemaVersion\":\"libre-ai.context-document.v2\",\"totalBytes\":52}",
-        "preimageHex": "6c696272652d61692e636f6e746578742d646f63756d656e742e7632007b22626c6f636b73223a5b7b22636f6e74656e74223a22436166c3a95c6e222c226964223a226161615f726f6f74222c226c696e6b73223a5b5d2c226d6564696154797065223a22746578742f6d61726b646f776e222c227265766973696f6e223a337d2c7b22636f6e74656e74223a227b5c22615c223a5b332c322c315d2c5c226e5c223a3333333333333333332e333333333333332c5c227a5c223a317d222c226964223a226262625f6a736f6e222c226c696e6b73223a5b226161615f726f6f74222c226363635f6c656166225d2c226d6564696154797065223a226170706c69636174696f6e2f6a736f6e222c227265766973696f6e223a327d2c7b22636f6e74656e74223a22616c706861222c226964223a226363635f6c656166222c226c696e6b73223a5b5d2c226d6564696154797065223a22746578742f706c61696e222c227265766973696f6e223a317d5d2c226578636c75646564426c6f636b496473223a5b227979795f6f6c64222c227a7a7a5f6f6c64225d2c226964223a2275726e3a6c696272652d61693a636f6e746578743a3130313131323133313431353136313731383139316131623163316431653166222c22726f6f74426c6f636b496473223a5b226161615f726f6f74222c226262625f6a736f6e225d2c22736368656d6156657273696f6e223a226c696272652d61692e636f6e746578742d646f63756d656e742e7632222c22746f74616c4279746573223a35327d",
-        "hexLower": "c9766d5af505c8945655bd1defb554167e02cc66b8a1e807334d74fb2f466c6a"
+        "canonicalDocumentWithoutDigestUtf8": "{\"blocks\":[{\"content\":\"Café\\n\",\"id\":\"blk_000102030405060708090a0b0c0d0e0f\",\"links\":[],\"mediaType\":\"text/markdown\"},{\"content\":\"{\\\"a\\\":[3,2,1],\\\"n\\\":333333333.3333333,\\\"z\\\":1}\",\"id\":\"blk_101112131415161718191a1b1c1d1e1f\",\"links\":[\"blk_000102030405060708090a0b0c0d0e0f\",\"blk_202122232425262728292a2b2c2d2e2f\"],\"mediaType\":\"application/json\"},{\"content\":\"alpha\",\"id\":\"blk_202122232425262728292a2b2c2d2e2f\",\"links\":[],\"mediaType\":\"text/plain\"}],\"id\":\"urn:libre-ai:context:303132333435363738393a3b3c3d3e3f\",\"rootBlockIds\":[\"blk_000102030405060708090a0b0c0d0e0f\",\"blk_101112131415161718191a1b1c1d1e1f\"],\"schemaVersion\":\"libre-ai.context-document.v2\",\"totalBytes\":52}",
+        "preimageHex": "6c696272652d61692e636f6e746578742d646f63756d656e742e7632007b22626c6f636b73223a5b7b22636f6e74656e74223a22436166c3a95c6e222c226964223a22626c6b5f3030303130323033303430353036303730383039306130623063306430653066222c226c696e6b73223a5b5d2c226d6564696154797065223a22746578742f6d61726b646f776e227d2c7b22636f6e74656e74223a227b5c22615c223a5b332c322c315d2c5c226e5c223a3333333333333333332e333333333333332c5c227a5c223a317d222c226964223a22626c6b5f3130313131323133313431353136313731383139316131623163316431653166222c226c696e6b73223a5b22626c6b5f3030303130323033303430353036303730383039306130623063306430653066222c22626c6b5f3230323132323233323432353236323732383239326132623263326432653266225d2c226d6564696154797065223a226170706c69636174696f6e2f6a736f6e227d2c7b22636f6e74656e74223a22616c706861222c226964223a22626c6b5f3230323132323233323432353236323732383239326132623263326432653266222c226c696e6b73223a5b5d2c226d6564696154797065223a22746578742f706c61696e227d5d2c226964223a2275726e3a6c696272652d61693a636f6e746578743a3330333133323333333433353336333733383339336133623363336433653366222c22726f6f74426c6f636b496473223a5b22626c6b5f3030303130323033303430353036303730383039306130623063306430653066222c22626c6b5f3130313131323133313431353136313731383139316131623163316431653166225d2c22736368656d6156657273696f6e223a226c696272652d61692e636f6e746578742d646f63756d656e742e7632222c22746f74616c4279746573223a35327d",
+        "hexLower": "a61760a034015ac8bfea1da72487be13dd31d2574653b991626d69891d7f0575"
       },
-      "canonicalOutputUtf8": "{\"blocks\":[{\"content\":\"Café\\n\",\"id\":\"aaa_root\",\"links\":[],\"mediaType\":\"text/markdown\",\"revision\":3},{\"content\":\"{\\\"a\\\":[3,2,1],\\\"n\\\":333333333.3333333,\\\"z\\\":1}\",\"id\":\"bbb_json\",\"links\":[\"aaa_root\",\"ccc_leaf\"],\"mediaType\":\"application/json\",\"revision\":2},{\"content\":\"alpha\",\"id\":\"ccc_leaf\",\"links\":[],\"mediaType\":\"text/plain\",\"revision\":1}],\"digest\":\"c9766d5af505c8945655bd1defb554167e02cc66b8a1e807334d74fb2f466c6a\",\"excludedBlockIds\":[\"yyy_old\",\"zzz_old\"],\"id\":\"urn:libre-ai:context:101112131415161718191a1b1c1d1e1f\",\"rootBlockIds\":[\"aaa_root\",\"bbb_json\"],\"schemaVersion\":\"libre-ai.context-document.v2\",\"totalBytes\":52}",
-      "outputByteLength": 621
+      "canonicalOutputUtf8": "{\"blocks\":[{\"content\":\"Café\\n\",\"id\":\"blk_000102030405060708090a0b0c0d0e0f\",\"links\":[],\"mediaType\":\"text/markdown\"},{\"content\":\"{\\\"a\\\":[3,2,1],\\\"n\\\":333333333.3333333,\\\"z\\\":1}\",\"id\":\"blk_101112131415161718191a1b1c1d1e1f\",\"links\":[\"blk_000102030405060708090a0b0c0d0e0f\",\"blk_202122232425262728292a2b2c2d2e2f\"],\"mediaType\":\"application/json\"},{\"content\":\"alpha\",\"id\":\"blk_202122232425262728292a2b2c2d2e2f\",\"links\":[],\"mediaType\":\"text/plain\"}],\"digest\":\"a61760a034015ac8bfea1da72487be13dd31d2574653b991626d69891d7f0575\",\"id\":\"urn:libre-ai:context:303132333435363738393a3b3c3d3e3f\",\"rootBlockIds\":[\"blk_000102030405060708090a0b0c0d0e0f\",\"blk_101112131415161718191a1b1c1d1e1f\"],\"schemaVersion\":\"libre-ai.context-document.v2\",\"totalBytes\":52}",
+      "outputByteLength": 737
+    },
+    "limits": {
+      "maxInputBytes": 22370044,
+      "maxContentBytes": 16777216,
+      "maxJsonDepth": 64,
+      "maxJsonNodes": 100000,
+      "maxBlocks": 1000,
+      "maxLinksPerBlock": 1000,
+      "maxTotalLinks": 16384,
+      "maxNumberMagnitude": 9007199254740991
     },
     "mutations": [
       {
         "name": "bom-prefixed",
-        "documentUtf8": "﻿{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:101112131415161718191a1b1c1d1e1f\",\"rootBlockIds\":[\"bbb_json\",\"aaa_root\"],\"blocks\":[{\"id\":\"ccc_leaf\",\"revision\":1,\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"bbb_json\",\"revision\":2,\"mediaType\":\"application/json\",\"content\":\"{\\\"z\\\":1,\\\"n\\\":333333333.33333329,\\\"a\\\":[3,2,1]}\",\"links\":[\"ccc_leaf\",\"aaa_root\"]},{\"id\":\"aaa_root\",\"revision\":3,\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"excludedBlockIds\":[\"zzz_old\",\"yyy_old\"],\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\"}",
+        "documentUtf8": "﻿{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:303132333435363738393a3b3c3d3e3f\",\"rootBlockIds\":[\"blk_101112131415161718191a1b1c1d1e1f\",\"blk_000102030405060708090a0b0c0d0e0f\"],\"blocks\":[{\"id\":\"blk_202122232425262728292a2b2c2d2e2f\",\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"blk_101112131415161718191a1b1c1d1e1f\",\"mediaType\":\"application/json\",\"content\":\"{\\\"z\\\":1,\\\"n\\\":333333333.33333329,\\\"a\\\":[3,2,1]}\",\"links\":[\"blk_202122232425262728292a2b2c2d2e2f\",\"blk_000102030405060708090a0b0c0d0e0f\"]},{\"id\":\"blk_000102030405060708090a0b0c0d0e0f\",\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\"}",
         "expected": {
           "result": "error",
           "code": "invalid-document"
@@ -448,7 +459,7 @@
       },
       {
         "name": "duplicate-top-level-key",
-        "documentUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:101112131415161718191a1b1c1d1e1f\",\"rootBlockIds\":[\"bbb_json\",\"aaa_root\"],\"blocks\":[{\"id\":\"ccc_leaf\",\"revision\":1,\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"bbb_json\",\"revision\":2,\"mediaType\":\"application/json\",\"content\":\"{\\\"z\\\":1,\\\"n\\\":333333333.33333329,\\\"a\\\":[3,2,1]}\",\"links\":[\"ccc_leaf\",\"aaa_root\"]},{\"id\":\"aaa_root\",\"revision\":3,\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"excludedBlockIds\":[\"zzz_old\",\"yyy_old\"],\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"id\":\"urn:libre-ai:context:f01112131415161718191a1b1c1d1e1f\"}",
+        "documentUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:303132333435363738393a3b3c3d3e3f\",\"rootBlockIds\":[\"blk_101112131415161718191a1b1c1d1e1f\",\"blk_000102030405060708090a0b0c0d0e0f\"],\"blocks\":[{\"id\":\"blk_202122232425262728292a2b2c2d2e2f\",\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"blk_101112131415161718191a1b1c1d1e1f\",\"mediaType\":\"application/json\",\"content\":\"{\\\"z\\\":1,\\\"n\\\":333333333.33333329,\\\"a\\\":[3,2,1]}\",\"links\":[\"blk_202122232425262728292a2b2c2d2e2f\",\"blk_000102030405060708090a0b0c0d0e0f\"]},{\"id\":\"blk_000102030405060708090a0b0c0d0e0f\",\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"id\":\"urn:libre-ai:context:f03132333435363738393a3b3c3d3e3f\"}",
         "expected": {
           "result": "error",
           "code": "invalid-document"
@@ -456,7 +467,7 @@
       },
       {
         "name": "unknown-field",
-        "documentUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:101112131415161718191a1b1c1d1e1f\",\"rootBlockIds\":[\"bbb_json\",\"aaa_root\"],\"blocks\":[{\"id\":\"ccc_leaf\",\"revision\":1,\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"bbb_json\",\"revision\":2,\"mediaType\":\"application/json\",\"content\":\"{\\\"z\\\":1,\\\"n\\\":333333333.33333329,\\\"a\\\":[3,2,1]}\",\"links\":[\"ccc_leaf\",\"aaa_root\"]},{\"id\":\"aaa_root\",\"revision\":3,\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"excludedBlockIds\":[\"zzz_old\",\"yyy_old\"],\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"unknown\":true}",
+        "documentUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:303132333435363738393a3b3c3d3e3f\",\"rootBlockIds\":[\"blk_101112131415161718191a1b1c1d1e1f\",\"blk_000102030405060708090a0b0c0d0e0f\"],\"blocks\":[{\"id\":\"blk_202122232425262728292a2b2c2d2e2f\",\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"blk_101112131415161718191a1b1c1d1e1f\",\"mediaType\":\"application/json\",\"content\":\"{\\\"z\\\":1,\\\"n\\\":333333333.33333329,\\\"a\\\":[3,2,1]}\",\"links\":[\"blk_202122232425262728292a2b2c2d2e2f\",\"blk_000102030405060708090a0b0c0d0e0f\"]},{\"id\":\"blk_000102030405060708090a0b0c0d0e0f\",\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"unknown\":true}",
         "expected": {
           "result": "error",
           "code": "invalid-document"
@@ -464,7 +475,7 @@
       },
       {
         "name": "duplicate-block-id",
-        "documentUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:101112131415161718191a1b1c1d1e1f\",\"rootBlockIds\":[\"bbb_json\",\"aaa_root\"],\"blocks\":[{\"id\":\"ccc_leaf\",\"revision\":1,\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"bbb_json\",\"revision\":2,\"mediaType\":\"application/json\",\"content\":\"{\\\"z\\\":1,\\\"n\\\":333333333.33333329,\\\"a\\\":[3,2,1]}\",\"links\":[\"ccc_leaf\",\"aaa_root\"]},{\"id\":\"bbb_json\",\"revision\":3,\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"excludedBlockIds\":[\"zzz_old\",\"yyy_old\"],\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\"}",
+        "documentUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:303132333435363738393a3b3c3d3e3f\",\"rootBlockIds\":[\"blk_101112131415161718191a1b1c1d1e1f\",\"blk_000102030405060708090a0b0c0d0e0f\"],\"blocks\":[{\"id\":\"blk_202122232425262728292a2b2c2d2e2f\",\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"blk_101112131415161718191a1b1c1d1e1f\",\"mediaType\":\"application/json\",\"content\":\"{\\\"z\\\":1,\\\"n\\\":333333333.33333329,\\\"a\\\":[3,2,1]}\",\"links\":[\"blk_202122232425262728292a2b2c2d2e2f\",\"blk_000102030405060708090a0b0c0d0e0f\"]},{\"id\":\"blk_101112131415161718191a1b1c1d1e1f\",\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\"}",
         "expected": {
           "result": "error",
           "code": "invalid-document"
@@ -472,7 +483,7 @@
       },
       {
         "name": "missing-root-target",
-        "documentUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:101112131415161718191a1b1c1d1e1f\",\"rootBlockIds\":[\"missing_block\",\"aaa_root\"],\"blocks\":[{\"id\":\"ccc_leaf\",\"revision\":1,\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"bbb_json\",\"revision\":2,\"mediaType\":\"application/json\",\"content\":\"{\\\"z\\\":1,\\\"n\\\":333333333.33333329,\\\"a\\\":[3,2,1]}\",\"links\":[\"ccc_leaf\",\"aaa_root\"]},{\"id\":\"aaa_root\",\"revision\":3,\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"excludedBlockIds\":[\"zzz_old\",\"yyy_old\"],\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\"}",
+        "documentUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:303132333435363738393a3b3c3d3e3f\",\"rootBlockIds\":[\"blk_ffffffffffffffffffffffffffffffff\",\"blk_000102030405060708090a0b0c0d0e0f\"],\"blocks\":[{\"id\":\"blk_202122232425262728292a2b2c2d2e2f\",\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"blk_101112131415161718191a1b1c1d1e1f\",\"mediaType\":\"application/json\",\"content\":\"{\\\"z\\\":1,\\\"n\\\":333333333.33333329,\\\"a\\\":[3,2,1]}\",\"links\":[\"blk_202122232425262728292a2b2c2d2e2f\",\"blk_000102030405060708090a0b0c0d0e0f\"]},{\"id\":\"blk_000102030405060708090a0b0c0d0e0f\",\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\"}",
         "expected": {
           "result": "error",
           "code": "invalid-document"
@@ -480,15 +491,31 @@
       },
       {
         "name": "missing-link-target",
-        "documentUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:101112131415161718191a1b1c1d1e1f\",\"rootBlockIds\":[\"bbb_json\",\"aaa_root\"],\"blocks\":[{\"id\":\"ccc_leaf\",\"revision\":1,\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"bbb_json\",\"revision\":2,\"mediaType\":\"application/json\",\"content\":\"{\\\"z\\\":1,\\\"n\\\":333333333.33333329,\\\"a\\\":[3,2,1]}\",\"links\":[\"ccc_leaf\",\"aaa_root\",\"missing_block\"]},{\"id\":\"aaa_root\",\"revision\":3,\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"excludedBlockIds\":[\"zzz_old\",\"yyy_old\"],\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\"}",
+        "documentUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:303132333435363738393a3b3c3d3e3f\",\"rootBlockIds\":[\"blk_101112131415161718191a1b1c1d1e1f\",\"blk_000102030405060708090a0b0c0d0e0f\"],\"blocks\":[{\"id\":\"blk_202122232425262728292a2b2c2d2e2f\",\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"blk_101112131415161718191a1b1c1d1e1f\",\"mediaType\":\"application/json\",\"content\":\"{\\\"z\\\":1,\\\"n\\\":333333333.33333329,\\\"a\\\":[3,2,1]}\",\"links\":[\"blk_202122232425262728292a2b2c2d2e2f\",\"blk_000102030405060708090a0b0c0d0e0f\",\"blk_ffffffffffffffffffffffffffffffff\"]},{\"id\":\"blk_000102030405060708090a0b0c0d0e0f\",\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\"}",
         "expected": {
           "result": "error",
           "code": "invalid-document"
         }
       },
       {
-        "name": "excluded-overlap",
-        "documentUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:101112131415161718191a1b1c1d1e1f\",\"rootBlockIds\":[\"bbb_json\",\"aaa_root\"],\"blocks\":[{\"id\":\"ccc_leaf\",\"revision\":1,\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"bbb_json\",\"revision\":2,\"mediaType\":\"application/json\",\"content\":\"{\\\"z\\\":1,\\\"n\\\":333333333.33333329,\\\"a\\\":[3,2,1]}\",\"links\":[\"ccc_leaf\",\"aaa_root\"]},{\"id\":\"aaa_root\",\"revision\":3,\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"excludedBlockIds\":[\"zzz_old\",\"yyy_old\",\"aaa_root\"],\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\"}",
+        "name": "semantic-block-id",
+        "documentUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:303132333435363738393a3b3c3d3e3f\",\"rootBlockIds\":[\"blk_101112131415161718191a1b1c1d1e1f\",\"blk_000102030405060708090a0b0c0d0e0f\"],\"blocks\":[{\"id\":\"blk_202122232425262728292a2b2c2d2e2f\",\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"blk_101112131415161718191a1b1c1d1e1f\",\"mediaType\":\"application/json\",\"content\":\"{\\\"z\\\":1,\\\"n\\\":333333333.33333329,\\\"a\\\":[3,2,1]}\",\"links\":[\"blk_202122232425262728292a2b2c2d2e2f\",\"blk_000102030405060708090a0b0c0d0e0f\"]},{\"id\":\"local_semantic_note\",\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\"}",
+        "expected": {
+          "result": "error",
+          "code": "invalid-document"
+        }
+      },
+      {
+        "name": "json-depth-over-limit",
+        "documentUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:303132333435363738393a3b3c3d3e3f\",\"rootBlockIds\":[\"blk_101112131415161718191a1b1c1d1e1f\",\"blk_000102030405060708090a0b0c0d0e0f\"],\"blocks\":[{\"id\":\"blk_202122232425262728292a2b2c2d2e2f\",\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"blk_101112131415161718191a1b1c1d1e1f\",\"mediaType\":\"application/json\",\"content\":\"[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[0]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]\",\"links\":[\"blk_202122232425262728292a2b2c2d2e2f\",\"blk_000102030405060708090a0b0c0d0e0f\"]},{\"id\":\"blk_000102030405060708090a0b0c0d0e0f\",\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\"}",
+        "expected": {
+          "result": "error",
+          "code": "invalid-document"
+        }
+      },
+      {
+        "name": "numeric-over-limit",
+        "documentUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:303132333435363738393a3b3c3d3e3f\",\"rootBlockIds\":[\"blk_101112131415161718191a1b1c1d1e1f\",\"blk_000102030405060708090a0b0c0d0e0f\"],\"blocks\":[{\"id\":\"blk_202122232425262728292a2b2c2d2e2f\",\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"blk_101112131415161718191a1b1c1d1e1f\",\"mediaType\":\"application/json\",\"content\":\"{\\\"value\\\":9007199254740992}\",\"links\":[\"blk_202122232425262728292a2b2c2d2e2f\",\"blk_000102030405060708090a0b0c0d0e0f\"]},{\"id\":\"blk_000102030405060708090a0b0c0d0e0f\",\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\"}",
         "expected": {
           "result": "error",
           "code": "invalid-document"
@@ -496,7 +523,7 @@
       },
       {
         "name": "invalid-nested-json",
-        "documentUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:101112131415161718191a1b1c1d1e1f\",\"rootBlockIds\":[\"bbb_json\",\"aaa_root\"],\"blocks\":[{\"id\":\"ccc_leaf\",\"revision\":1,\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"bbb_json\",\"revision\":2,\"mediaType\":\"application/json\",\"content\":\"{\",\"links\":[\"ccc_leaf\",\"aaa_root\"]},{\"id\":\"aaa_root\",\"revision\":3,\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"excludedBlockIds\":[\"zzz_old\",\"yyy_old\"],\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\"}",
+        "documentUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:303132333435363738393a3b3c3d3e3f\",\"rootBlockIds\":[\"blk_101112131415161718191a1b1c1d1e1f\",\"blk_000102030405060708090a0b0c0d0e0f\"],\"blocks\":[{\"id\":\"blk_202122232425262728292a2b2c2d2e2f\",\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"blk_101112131415161718191a1b1c1d1e1f\",\"mediaType\":\"application/json\",\"content\":\"{\",\"links\":[\"blk_202122232425262728292a2b2c2d2e2f\",\"blk_000102030405060708090a0b0c0d0e0f\"]},{\"id\":\"blk_000102030405060708090a0b0c0d0e0f\",\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\"}",
         "expected": {
           "result": "error",
           "code": "invalid-document"
@@ -504,11 +531,130 @@
       },
       {
         "name": "duplicate-nested-json-key",
-        "documentUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:101112131415161718191a1b1c1d1e1f\",\"rootBlockIds\":[\"bbb_json\",\"aaa_root\"],\"blocks\":[{\"id\":\"ccc_leaf\",\"revision\":1,\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"bbb_json\",\"revision\":2,\"mediaType\":\"application/json\",\"content\":\"{\\\"a\\\":1,\\\"a\\\":2}\",\"links\":[\"ccc_leaf\",\"aaa_root\"]},{\"id\":\"aaa_root\",\"revision\":3,\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"excludedBlockIds\":[\"zzz_old\",\"yyy_old\"],\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\"}",
+        "documentUtf8": "{\"schemaVersion\":\"libre-ai.context-document.v2\",\"id\":\"urn:libre-ai:context:303132333435363738393a3b3c3d3e3f\",\"rootBlockIds\":[\"blk_101112131415161718191a1b1c1d1e1f\",\"blk_000102030405060708090a0b0c0d0e0f\"],\"blocks\":[{\"id\":\"blk_202122232425262728292a2b2c2d2e2f\",\"mediaType\":\"text/plain\",\"content\":\"alpha\",\"links\":[]},{\"id\":\"blk_101112131415161718191a1b1c1d1e1f\",\"mediaType\":\"application/json\",\"content\":\"{\\\"a\\\":1,\\\"a\\\":2}\",\"links\":[\"blk_202122232425262728292a2b2c2d2e2f\",\"blk_000102030405060708090a0b0c0d0e0f\"]},{\"id\":\"blk_000102030405060708090a0b0c0d0e0f\",\"mediaType\":\"text/markdown\",\"content\":\"Café\\n\",\"links\":[]}],\"totalBytes\":0,\"digest\":\"0000000000000000000000000000000000000000000000000000000000000000\"}",
         "expected": {
           "result": "error",
           "code": "invalid-document"
         }
+      }
+    ],
+    "resourceFixtureProfile": {
+      "name": "libre-ai.context-resource-fixture.v1",
+      "serialization": "RFC 8785 JCS UTF-8 without BOM or trailing newline",
+      "contextId": "urn:libre-ai:context: followed by fixtureOrdinal encoded as 32 lowercase hexadecimal digits",
+      "blockIds": "blk_ followed by the zero-based block index encoded as 32 lowercase hexadecimal digits",
+      "jsonDepth": "One application/json block whose content is value-1 nested arrays around the primitive 0, so the root value has depth 1 and the primitive has depth value.",
+      "jsonNodes": "One application/json block whose content is one flat array containing value-1 primitive zeroes, so the array plus primitives count value nodes.",
+      "totalLinks": "Exactly 1000 empty text/plain blocks; in ascending source-block order, assign up to 1000 ascending block IDs until value links have been assigned.",
+      "inputDerivedFields": "totalBytes is the UTF-8 content sum and digest is 64 zeroes; accepted output replaces both according to SEMANTICS.md."
+    },
+    "resourceCases": [
+      {
+        "name": "json-depth-at-limit",
+        "dimension": "jsonDepth",
+        "value": 64,
+        "expected": "accepted",
+        "fixtureOrdinal": 1,
+        "inputCanonicalByteLength": 497,
+        "inputCanonicalSha256": "6cca3c34b7b956977f2cacbac3ad68837d4341323d7563f05f13ec1dce288322",
+        "canonicalOutputByteLength": 497,
+        "canonicalOutputSha256": "1f87ecd9ad51afafb6d188c99496efd333b486baae35c1cc517ad8622874eac5"
+      },
+      {
+        "name": "json-depth-over-limit",
+        "dimension": "jsonDepth",
+        "value": 65,
+        "expected": "invalid-document",
+        "fixtureOrdinal": 2,
+        "inputCanonicalByteLength": 499,
+        "inputCanonicalSha256": "e5b65c7d0a9f1a440d26e62746f9904c1095f257f4a34e0a5224038c8f687561"
+      },
+      {
+        "name": "json-nodes-at-limit",
+        "dimension": "jsonNodes",
+        "value": 100000,
+        "expected": "accepted",
+        "fixtureOrdinal": 3,
+        "inputCanonicalByteLength": 200372,
+        "inputCanonicalSha256": "8b47ead18c74493c6a048a38fcbad16b70c962e9d21c6444b31fe5a2c233116f",
+        "canonicalOutputByteLength": 200372,
+        "canonicalOutputSha256": "96c21c5c096e5c280fa9892d09abbb4b1c5bc342a5fd192478a7685ea2b2e240"
+      },
+      {
+        "name": "json-nodes-over-limit",
+        "dimension": "jsonNodes",
+        "value": 100001,
+        "expected": "invalid-document",
+        "fixtureOrdinal": 4,
+        "inputCanonicalByteLength": 200374,
+        "inputCanonicalSha256": "22a6845f9d6c9790926087c06e40e488edc3856cbe3c2f75a960aa25a0129da1"
+      },
+      {
+        "name": "total-links-at-limit",
+        "dimension": "totalLinks",
+        "value": 16384,
+        "expected": "accepted",
+        "fixtureOrdinal": 5,
+        "inputCanonicalByteLength": 734226,
+        "inputCanonicalSha256": "6d7008100868888acd5e8c62cfa3024d3ebc7cf247851e251d5ba4ff43c33c95",
+        "canonicalOutputByteLength": 734226,
+        "canonicalOutputSha256": "aed2ef312bd9ac93ffbdbe9249f3bedb0ddccc4aae941daefcd47e1c1116e630"
+      },
+      {
+        "name": "total-links-over-limit",
+        "dimension": "totalLinks",
+        "value": 16385,
+        "expected": "invalid-document",
+        "fixtureOrdinal": 6,
+        "inputCanonicalByteLength": 734265,
+        "inputCanonicalSha256": "06a713f4df6c034ffd1cb7d3f938c4058d06ea6df226966b1b732909a4c26e44"
+      }
+    ],
+    "numericCases": [
+      {
+        "name": "max-safe-integer",
+        "inputUtf8": "{\"value\":9007199254740991}",
+        "canonicalUtf8": "{\"value\":9007199254740991}",
+        "expected": "accepted"
+      },
+      {
+        "name": "min-safe-integer",
+        "inputUtf8": "{\"value\":-9007199254740991}",
+        "canonicalUtf8": "{\"value\":-9007199254740991}",
+        "expected": "accepted"
+      },
+      {
+        "name": "binary64-rounding",
+        "inputUtf8": "{\"value\":333333333.33333329}",
+        "canonicalUtf8": "{\"value\":333333333.3333333}",
+        "expected": "accepted"
+      },
+      {
+        "name": "negative-zero",
+        "inputUtf8": "{\"value\":-0}",
+        "canonicalUtf8": "{\"value\":0}",
+        "expected": "accepted"
+      },
+      {
+        "name": "small-exponent",
+        "inputUtf8": "{\"value\":1e-7}",
+        "canonicalUtf8": "{\"value\":1e-7}",
+        "expected": "accepted"
+      },
+      {
+        "name": "integer-over-limit",
+        "inputUtf8": "{\"value\":9007199254740992}",
+        "expected": "invalid-document"
+      },
+      {
+        "name": "negative-integer-over-limit",
+        "inputUtf8": "{\"value\":-9007199254740992}",
+        "expected": "invalid-document"
+      },
+      {
+        "name": "exponent-over-limit",
+        "inputUtf8": "{\"value\":1e16}",
+        "expected": "invalid-document"
       }
     ]
   },
@@ -520,54 +666,6 @@
       "display": "202122232425262728292a2b2c2d2e2f",
       "byteLength": 16
     }
-  },
-  "recoverySecretTextProfile": {
-    "name": "libre-ai.recovery-secret-text.v1",
-    "algorithm": "Reject leading U+FEFF; normalize Unicode scalar values to NFC; encode UTF-8 without BOM; do not trim, case-fold, or normalize line endings; validate byte length after encoding.",
-    "cases": [
-      {
-        "input": "notebook-core-v2-public-test-secret",
-        "normalized": "notebook-core-v2-public-test-secret",
-        "utf8Hex": "6e6f7465626f6f6b2d636f72652d76322d7075626c69632d746573742d736563726574",
-        "byteLength": 35
-      },
-      {
-        "input": "Café🔐-recovery-secret",
-        "normalized": "Café🔐-recovery-secret",
-        "utf8Hex": "436166c3a9f09f94902d7265636f766572792d736563726574",
-        "byteLength": 25
-      },
-      {
-        "input": "Café🔐-recovery-secret",
-        "normalized": "Café🔐-recovery-secret",
-        "utf8Hex": "436166c3a9f09f94902d7265636f766572792d736563726574",
-        "byteLength": 25
-      },
-      {
-        "input": "  secret spaces are preserved  ",
-        "normalized": "  secret spaces are preserved  ",
-        "utf8Hex": "20207365637265742073706163657320617265207072657365727665642020",
-        "byteLength": 31
-      },
-      {
-        "input": "line1\r\nline2-recovery-secret",
-        "normalized": "line1\r\nline2-recovery-secret",
-        "utf8Hex": "6c696e65310d0a6c696e65322d7265636f766572792d736563726574",
-        "byteLength": 28
-      }
-    ],
-    "rejections": [
-      {
-        "name": "leading-bom",
-        "input": "﻿notebook-core-v2-public-test-secret",
-        "expected": "host-validation-failed"
-      },
-      {
-        "name": "non-scalar-surrogate",
-        "inputEscaped": "\\uD800",
-        "expected": "host-validation-failed"
-      }
-    ]
   },
   "reproductionEvidence": {
     "argon2id": ["pyca/cryptography 49.0.0", "OpenSSL 3.6.3 EVP_KDF ARGON2ID"],

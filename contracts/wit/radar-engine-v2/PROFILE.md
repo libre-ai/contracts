@@ -178,7 +178,8 @@ an English three-letter abbreviation, year has four digits, and zone is `UT`, `G
 Accepted instants are converted to UTC, fractional seconds are discarded toward the earlier whole
 second, and output is exactly `YYYY-MM-DDTHH:MM:SSZ`. Numeric negative-zero offsets (`-00:00` and
 `-0000`) are invalid because they do not assert a known UTC offset. If UTC conversion would leave the
-date is invalid. An absent or invalid date becomes JSON `null` and does not reject the item or feed.
+inclusive year range 0001 through 9999, the date is invalid. An absent or invalid date becomes JSON
+`null` and does not reject the item or feed.
 
 ## 7. Identifiers, deduplication, ordering and canonical JSON
 
@@ -264,9 +265,11 @@ value is returned with a refusal.
 
 ## 10. Golden vectors
 
-`contracts/fixtures/radar-engine-v2/golden-vectors.v1.json` is the executable corpus index. Paths are
-repository-relative, input hashes cover raw fixture bytes, and success hashes cover exact JCS output
-bytes. The vectors include all accepted dialects, unknown fields, invalid dates, deduplication, HTML
-suppression, DTD/entity attacks, depth/item/byte limits, malformed input, unsupported media/encoding,
-and rule-evaluation failures. The review recipe is in
-`docs/reviews/radar-engine-v2/README.md`.
+`contracts/fixtures/radar-engine-v2/golden-vectors.v1.json` and
+`contracts/fixtures/radar-engine-v2/security-vectors.v1.json` are the executable corpus indexes. Paths
+are repository-relative, input hashes cover raw fixture bytes, and success hashes cover exact JCS
+output bytes. The vectors include every accepted dialect, unknown fields, UTC year rollover,
+deduplication/content identity, HTML suppression, DTD/entity/reference attacks, BOM/UTF-8 and
+JSON-duplicate failures, exact and over depth/item/byte limits, composite refusal precedence, every
+rule operator and every closed refusal. Generated boundary cases avoid committing duplicate
+multi-megabyte blobs. The review recipe is in `docs/reviews/radar-engine-v2/README.md`.

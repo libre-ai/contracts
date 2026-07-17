@@ -121,7 +121,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ../schemas/curation-rule-set.v2.schema.json
+              $ref: '#/components/schemas/RuleSetInput'
       responses:
         '201':
           description: Immutable rule set version created
@@ -149,6 +149,10 @@ paths:
       responses:
         '200':
           description: Bounded source preview without persistence
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/radar-normalized-feed.v1.schema.json
         default:
           $ref: '#/components/responses/Problem'
   /v2/radar/rule-sets/{ruleSetId}/activation:
@@ -164,6 +168,10 @@ paths:
       responses:
         '200':
           description: Rule set activated for future decisions
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/curation-rule-set.v2.schema.json
         default:
           $ref: '#/components/responses/Problem'
   /v2/radar/rule-sets/{ruleSetId}/replays:
@@ -179,6 +187,10 @@ paths:
       responses:
         '202':
           description: Immutable replay projection scheduled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationReceipt'
         default:
           $ref: '#/components/responses/Problem'
   /v2/radar/rule-sets/{ruleSetId}/replays/{replayId}:
@@ -188,14 +200,14 @@ paths:
         - sessionCookie: []
       parameters:
         - $ref: '#/components/parameters/RuleSetId'
-        - name: replayId
-          in: path
-          required: true
-          schema:
-            type: string
+        - $ref: '#/components/parameters/ReplayId'
       responses:
         '200':
           description: Deterministic replay comparison
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReplayComparison'
         default:
           $ref: '#/components/responses/Problem'
   /v2/radar/fetch-schedules:
@@ -212,10 +224,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: ../schemas/feed-fetch.v1.schema.json#/$defs/request
+              $ref: '#/components/schemas/FetchScheduleInput'
       responses:
         '202':
           description: Bounded fetch scheduled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationReceipt'
         default:
           $ref: '#/components/responses/Problem'
   /v2/radar/fetch-results:
@@ -235,6 +251,10 @@ paths:
       responses:
         '202':
           description: Authorized worker result recorded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationReceipt'
         default:
           $ref: '#/components/responses/Problem'
   /v2/radar/fetches/{fetchId}:
@@ -243,14 +263,14 @@ paths:
       security:
         - sessionCookie: []
       parameters:
-        - name: fetchId
-          in: path
-          required: true
-          schema:
-            type: string
+        - $ref: '#/components/parameters/FetchId'
       responses:
         '200':
           description: Bounded fetch evidence without hostile body
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/feed-fetch.v1.schema.json#/$defs/result
         default:
           $ref: '#/components/responses/Problem'
   /v2/radar/items/{itemId}/explanation:
@@ -259,14 +279,14 @@ paths:
       security:
         - sessionCookie: []
       parameters:
-        - name: itemId
-          in: path
-          required: true
-          schema:
-            type: string
+        - $ref: '#/components/parameters/ItemId'
       responses:
         '200':
           description: Stable rule trace and source provenance
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/radar-rule-evaluation.v1.schema.json
         default:
           $ref: '#/components/responses/Problem'
   /v2/radar/exports:
@@ -281,6 +301,10 @@ paths:
       responses:
         '202':
           description: Portable curation export scheduled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationReceipt'
         default:
           $ref: '#/components/responses/Problem'
   /v2/radar/exports/{exportId}:
@@ -289,11 +313,7 @@ paths:
       security:
         - sessionCookie: []
       parameters:
-        - name: exportId
-          in: path
-          required: true
-          schema:
-            type: string
+        - $ref: '#/components/parameters/ExportId'
       responses:
         '200':
           description: Tenant export
@@ -334,12 +354,48 @@ components:
       required: true
       schema:
         type: string
+        maxLength: 256
+        pattern: '^urn:libre-ai:[a-z][a-z0-9-]*:[A-Za-z0-9._~-]+$'
     SubscriptionId:
       name: subscriptionId
       in: path
       required: true
       schema:
         type: string
+        maxLength: 128
+        pattern: '^[a-z][a-z0-9_-]{2,127}$'
+    ReplayId:
+      name: replayId
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 128
+        pattern: '^[a-z][a-z0-9_-]{2,127}$'
+    FetchId:
+      name: fetchId
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 128
+        pattern: '^[a-z][a-z0-9_-]{2,127}$'
+    ItemId:
+      name: itemId
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 89
+        pattern: '^urn:libre-ai:radar-item:[a-f0-9]{64}$'
+    ExportId:
+      name: exportId
+      in: path
+      required: true
+      schema:
+        type: string
+        maxLength: 128
+        pattern: '^[a-z][a-z0-9_-]{2,127}$'
     IdempotencyKey:
       name: Idempotency-Key
       in: header
@@ -361,6 +417,7 @@ components:
       required: true
       schema:
         type: string
+        maxLength: 22
         pattern: '^"[0-9]+"$'
   schemas:
     SubscriptionInput:
@@ -371,7 +428,8 @@ components:
         url:
           type: string
           format: uri
-          pattern: '^https?://'
+          maxLength: 2048
+          pattern: '^https?://(?![^/?#]*@)'
         schedule:
           enum: [hourly, daily, weekly, manual]
     Subscription:
@@ -381,19 +439,109 @@ components:
       properties:
         id:
           type: string
+          maxLength: 128
+          pattern: '^[a-z][a-z0-9_-]{2,127}$'
         revision:
           type: integer
           minimum: 0
+          maximum: 2147483647
         url:
           type: string
           format: uri
-          pattern: '^https?://'
+          maxLength: 2048
+          pattern: '^https?://(?![^/?#]*@)'
         schedule:
           enum: [hourly, daily, weekly, manual]
+    RuleSetInput:
+      type: object
+      additionalProperties: false
+      required: [schemaVersion, rules]
+      properties:
+        schemaVersion:
+          const: libre-ai.curation-rule-set-input.v2
+        rules:
+          $ref: ../schemas/curation-rule-set.v2.schema.json#/properties/rules
+    FetchScheduleInput:
+      type: object
+      additionalProperties: false
+      required: [schemaVersion, sourceId]
+      properties:
+        schemaVersion:
+          const: libre-ai.radar-fetch-schedule-input.v2
+        sourceId:
+          type: string
+          maxLength: 256
+          pattern: '^urn:libre-ai:[a-z][a-z0-9-]*:[A-Za-z0-9._~-]+$'
+    OperationReceipt:
+      type: object
+      additionalProperties: false
+      required: [schemaVersion, operationId, status]
+      properties:
+        schemaVersion:
+          const: libre-ai.radar-operation-receipt.v2
+        operationId:
+          type: string
+          maxLength: 128
+          pattern: '^[a-z][a-z0-9_-]{2,127}$'
+        status:
+          const: accepted
+    ReplayComparison:
+      type: object
+      additionalProperties: false
+      required: [schemaVersion, itemId, baseline, current]
+      properties:
+        schemaVersion:
+          const: libre-ai.radar-replay-comparison.v2
+        itemId:
+          type: string
+          maxLength: 89
+          pattern: '^urn:libre-ai:radar-item:[a-f0-9]{64}$'
+        baseline:
+          $ref: ../schemas/radar-rule-evaluation.v1.schema.json
+        current:
+          $ref: ../schemas/radar-rule-evaluation.v1.schema.json
+    RadarProblem:
+      type: object
+      additionalProperties: false
+      required: [error]
+      properties:
+        error:
+          type: object
+          additionalProperties: false
+          required: [code, message, requestId]
+          properties:
+            code:
+              enum:
+                - radar.url_scheme_forbidden
+                - radar.destination_forbidden
+                - radar.redirect_forbidden
+                - radar.invalid_limits
+                - radar.invalid_source
+                - radar.body_too_large
+                - radar.output_too_large
+                - radar.media_type_unsupported
+                - radar.encoding_unsupported
+                - radar.feed_malformed
+                - radar.feed_kind_unsupported
+                - radar.xml_dtd_forbidden
+                - radar.xml_entity_forbidden
+                - radar.max_depth_exceeded
+                - radar.max_items_exceeded
+                - radar.json_invalid
+                - radar.json_not_canonical
+                - radar.item_invalid
+                - radar.rule_invalid
+                - radar.tenant_mismatch
+                - radar.revision_stale
+            message:
+              const: Request refused
+            requestId:
+              type: string
+              pattern: '^req_[a-z0-9]{16,64}$'
   responses:
     Problem:
-      description: Stable refusal envelope
+      description: Stable content-free refusal envelope
       content:
         application/problem+json:
           schema:
-            $ref: ../schemas/problem-details.v1.schema.json
+            $ref: '#/components/schemas/RadarProblem'

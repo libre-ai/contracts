@@ -819,7 +819,10 @@
       "classification": "internal",
       "status": "candidate",
       "profiles": ["contracts/wit/radar-engine-v2/PROFILE.md"],
-      "vectors": ["contracts/fixtures/radar-engine-v2/golden-vectors.v1.json"],
+      "vectors": [
+        "contracts/fixtures/radar-engine-v2/golden-vectors.v1.json",
+        "contracts/fixtures/radar-engine-v2/security-vectors.v1.json"
+      ],
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
