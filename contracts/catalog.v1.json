@@ -544,14 +544,7 @@
       "consumers": ["notebook", "notebook-core"],
       "compatibility": "major-versioned",
       "classification": "local",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "cryptography", "privacy"],
-        "dossier": "docs/reviews/notebook-core-v2/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "notebook-backup-seal-request-v2",
@@ -561,14 +554,7 @@
       "consumers": ["notebook", "notebook-core"],
       "compatibility": "major-versioned",
       "classification": "local",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "cryptography", "privacy"],
-        "dossier": "docs/reviews/notebook-core-v2/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "notebook-backup-v2",
@@ -578,14 +564,7 @@
       "consumers": ["notebook", "notebook-core"],
       "compatibility": "major-versioned",
       "classification": "local",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "cryptography", "privacy"],
-        "dossier": "docs/reviews/notebook-core-v2/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "policy-definition-v2",
@@ -790,16 +769,9 @@
       "consumers": ["notebook"],
       "compatibility": "major-versioned",
       "classification": "local",
-      "status": "candidate",
+      "status": "locked",
       "profiles": ["contracts/wit/notebook-core-v2/SEMANTICS.md"],
-      "vectors": ["contracts/fixtures/notebook-core-v2/golden-vectors.v1.json"],
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "cryptography", "privacy"],
-        "dossier": "docs/reviews/notebook-core-v2/README.md"
-      }
+      "vectors": ["contracts/fixtures/notebook-core-v2/golden-vectors.v1.json"]
     },
     {
       "id": "policy-core-v2",
