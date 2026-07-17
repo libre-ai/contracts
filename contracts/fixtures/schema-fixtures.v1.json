@@ -1991,7 +1991,16 @@
         "schemaVersion": "libre-ai.engine-golden-vectors.v1",
         "world": "boussole-scoring-v2",
         "status": "candidate",
-        "cases": []
+        "cases": [
+          {
+            "id": "engine-specific-payload-remains-opaque",
+            "input": {
+              "wording": "R&D: 50%",
+              "encodedUrl": "https://example.org/a%20b?x=1&y=2",
+              "machineHandle": "release@2"
+            }
+          }
+        ]
       },
       "invalidMutations": [
         {
@@ -2043,6 +2052,13 @@
           "path": "/reproductionEvidence",
           "value": {
             "alice@example.org": "safe"
+          }
+        },
+        {
+          "name": "credential marker in evidence property name",
+          "path": "/reproductionEvidence",
+          "value": {
+            "sk_live_ABCDEFGH": "safe"
           }
         },
         {

@@ -13,17 +13,17 @@
       "maxLength": 128
     },
     "world": { "type": "string", "pattern": "^[a-z][a-z0-9-]*-v[0-9]+$", "maxLength": 128 },
-    "status": { "$ref": "#/$defs/shortPublicString" },
+    "status": { "$ref": "#/$defs/shortMetadataString" },
     "semantics": { "$ref": "#/$defs/contractPath" },
     "engineVersion": {
       "type": "string",
       "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
       "maxLength": 64
     },
-    "digestAlgorithm": { "$ref": "#/$defs/shortPublicString" },
-    "canonicalization": { "$ref": "#/$defs/shortPublicString" },
+    "digestAlgorithm": { "$ref": "#/$defs/shortMetadataString" },
+    "canonicalization": { "$ref": "#/$defs/shortMetadataString" },
     "testMaterialWarning": {
-      "allOf": [{ "$ref": "#/$defs/publicString" }, { "type": "string", "maxLength": 1000 }]
+      "allOf": [{ "$ref": "#/$defs/metadataString" }, { "type": "string", "maxLength": 1000 }]
     },
     "contractFiles": {
       "type": "array",
@@ -38,17 +38,17 @@
     "vectors": { "$ref": "#/$defs/vectorList" },
     "aggregationVectors": { "$ref": "#/$defs/vectorList" },
     "invalidPolicyVectors": { "$ref": "#/$defs/vectorList" },
-    "golden": { "$ref": "#/$defs/publicValue" },
+    "golden": { "$ref": "#/$defs/payloadValue" },
     "mutations": { "$ref": "#/$defs/vectorList" },
     "standards": {
       "type": "array",
       "maxItems": 128,
       "uniqueItems": true,
-      "items": { "$ref": "#/$defs/publicString" }
+      "items": { "$ref": "#/$defs/metadataString" }
     },
-    "reproductionEvidence": { "$ref": "#/$defs/publicValue" },
-    "contextCanonicalization": { "$ref": "#/$defs/publicValue" },
-    "recoverySecretCodeProfile": { "$ref": "#/$defs/publicValue" }
+    "reproductionEvidence": { "$ref": "#/$defs/metadataValue" },
+    "contextCanonicalization": { "$ref": "#/$defs/payloadValue" },
+    "recoverySecretCodeProfile": { "$ref": "#/$defs/payloadValue" }
   },
   "allOf": [
     {
@@ -64,17 +64,17 @@
             "pattern": "^[a-z][a-z0-9-]*-v[0-9]+$",
             "maxLength": 128
           },
-          "status": { "$ref": "#/$defs/shortPublicString" },
+          "status": { "$ref": "#/$defs/shortMetadataString" },
           "cases": { "$ref": "#/$defs/vectorList" }
         }
       }
     }
   ],
   "$defs": {
-    "shortPublicString": {
-      "allOf": [{ "$ref": "#/$defs/publicString" }, { "type": "string", "maxLength": 128 }]
+    "shortMetadataString": {
+      "allOf": [{ "$ref": "#/$defs/metadataString" }, { "type": "string", "maxLength": 128 }]
     },
-    "publicString": {
+    "metadataString": {
       "type": "string",
       "maxLength": 65536,
       "allOf": [
@@ -83,24 +83,19 @@
             "pattern": "[\\s\\S]*(?:sk_live_[A-Za-z0-9_-]{8,}|sk-(?:proj|svcacct)-[A-Za-z0-9_-]{16,}|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----)[\\s\\S]*"
           }
         },
-        {
-          "anyOf": [
-            { "not": { "pattern": "[@＠﹫%％﹪&＆﹠]" } },
-            { "pattern": "^https://user:secret@example\\.org/feed\\.xml$" }
-          ]
-        },
-        {
-          "anyOf": [
-            { "not": { "pattern": "(?:[Ff][Ii][Ll][Ee]:|\\.\\.[/\\\\])" } },
-            { "pattern": "^file:///etc/passwd$" }
-          ]
-        }
+        { "not": { "pattern": "[@＠﹫%％﹪&＆﹠]" } },
+        { "not": { "pattern": "(?:[Ff][Ii][Ll][Ee]:|\\.\\.[/\\\\])" } }
       ]
     },
-    "publicPropertyName": {
+    "payloadString": { "type": "string", "maxLength": 65536 },
+    "metadataPropertyName": {
       "type": "string",
-      "pattern": "^[A-Za-z_$][A-Za-z0-9_$.-]{0,127}$"
+      "pattern": "^[A-Za-z_$][A-Za-z0-9_$.-]{0,127}$",
+      "not": {
+        "pattern": "(?:sk_live_[A-Za-z0-9_-]{8,}|sk-(?:proj|svcacct)-[A-Za-z0-9_-]{16,}|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,})"
+      }
     },
+    "payloadPropertyName": { "type": "string", "minLength": 1, "maxLength": 128 },
     "contractPath": {
       "type": "string",
       "minLength": 11,
@@ -119,25 +114,45 @@
     "vectorList": {
       "type": "array",
       "maxItems": 4096,
-      "items": { "$ref": "#/$defs/publicValue" }
+      "items": { "$ref": "#/$defs/payloadValue" }
     },
-    "publicValue": {
+    "metadataValue": {
       "$comment": "libre-ai-static-projection-recursion=opaque",
       "oneOf": [
         { "type": "null" },
         { "type": "boolean" },
         { "type": "number" },
-        { "$ref": "#/$defs/publicString" },
+        { "$ref": "#/$defs/metadataString" },
         {
           "type": "array",
           "maxItems": 4096,
-          "items": { "$ref": "#/$defs/publicValue" }
+          "items": { "$ref": "#/$defs/metadataValue" }
         },
         {
           "type": "object",
           "maxProperties": 512,
-          "propertyNames": { "$ref": "#/$defs/publicPropertyName" },
-          "additionalProperties": { "$ref": "#/$defs/publicValue" }
+          "propertyNames": { "$ref": "#/$defs/metadataPropertyName" },
+          "additionalProperties": { "$ref": "#/$defs/metadataValue" }
+        }
+      ]
+    },
+    "payloadValue": {
+      "$comment": "libre-ai-static-projection-recursion=opaque",
+      "oneOf": [
+        { "type": "null" },
+        { "type": "boolean" },
+        { "type": "number" },
+        { "$ref": "#/$defs/payloadString" },
+        {
+          "type": "array",
+          "maxItems": 4096,
+          "items": { "$ref": "#/$defs/payloadValue" }
+        },
+        {
+          "type": "object",
+          "maxProperties": 512,
+          "propertyNames": { "$ref": "#/$defs/payloadPropertyName" },
+          "additionalProperties": { "$ref": "#/$defs/payloadValue" }
         }
       ]
     }
