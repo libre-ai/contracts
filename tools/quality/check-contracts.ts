@@ -166,27 +166,33 @@ function stringArray(value: unknown, label: string): string[] {
 function inspectSpecializedVectorBounds(
   value: unknown,
   path: string,
-  state = { nodes: 0, overflowReported: false },
+  state = { nodes: 0, overflowReported: false, depthReported: false },
   depth = 0,
-): void {
+): boolean {
   state.nodes += 1;
   if (depth > 64) {
-    failures.push(`${path}: specialized vector depth exceeds 64`);
-    return;
+    if (!state.depthReported) {
+      failures.push(`${path}: specialized vector depth exceeds 64`);
+      state.depthReported = true;
+    }
+    return false;
   }
   if (state.nodes > 200_000) {
     if (!state.overflowReported) {
       failures.push(`${path}: specialized vector node count exceeds 200000`);
       state.overflowReported = true;
     }
-    return;
+    return false;
   }
+  let bounded = true;
   if (Array.isArray(value)) {
-    for (const item of value) inspectSpecializedVectorBounds(item, path, state, depth + 1);
+    for (const item of value)
+      if (!inspectSpecializedVectorBounds(item, path, state, depth + 1)) bounded = false;
   } else if (isRecord(value)) {
     for (const item of Object.values(value))
-      inspectSpecializedVectorBounds(item, path, state, depth + 1);
+      if (!inspectSpecializedVectorBounds(item, path, state, depth + 1)) bounded = false;
   }
+  return bounded;
 }
 
 async function containsSymbolicLink(path: string): Promise<boolean> {
@@ -480,13 +486,13 @@ for (const path of specializedVectorPaths) {
     continue;
   }
   const document: unknown = await file.json();
+  if (!inspectSpecializedVectorBounds(document, path)) continue;
   if (!specializedVectorValidator?.(document)) {
     failures.push(
       `${path}: shared vector envelope rejected: ${safeErrors(specializedVectorValidator?.errors)}`,
     );
     continue;
   }
-  inspectSpecializedVectorBounds(document, path);
   if (!isRecord(document) || !Array.isArray(document.contractFiles)) continue;
   const contractFilePaths = new Set<string>();
   for (const [index, contractFile] of document.contractFiles.entries()) {
