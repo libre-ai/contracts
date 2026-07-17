@@ -240,7 +240,7 @@ function decodePercentRuns(value: string): string {
   });
 }
 
-// HTML named entities whose decoded scalar participates in RFC atext or email separators.
+// HTML named entities whose exact scalar participates in the supported RFC email syntax.
 const namedEmailEntityCharacters: Readonly<Record<string, string>> = {
   amp: "&",
   apos: "'",
@@ -292,7 +292,7 @@ function collapseSensitiveEncodingNesting(input: string): string {
 
 function decodeNamedEmailEntities(input: string): string {
   return input.replace(
-    /&([A-Za-z][A-Za-z0-9]*)(?:;|(?=[^A-Za-z0-9]))/g,
+    /&([A-Za-z][A-Za-z0-9]*);/g,
     (encoded, name: string) => namedEmailEntityCharacters[name.toLowerCase()] ?? encoded,
   );
 }
@@ -794,6 +794,8 @@ for (const [label, value, expectedSensitive] of [
   ["unterminated quoted text", 'policy says "alice"@release', false],
   ["maximum unterminated quoted local-part", `${"a".repeat(65_520)}"@example.org`, false],
   ["non-HTML5 at entity", "alice&at;example&period;org", false],
+  ["semicolonless named at text", "alice&commat.example&period;org", false],
+  ["semicolonless named domain literal", "alice&commat[127&period;0&period;0&period;1]", false],
   ["maximum public non-email", "a".repeat(65_536), false],
   ["legitimate ampersand", "R&D", false],
   ["legitimate amp prefix", "R&amplitude", false],
