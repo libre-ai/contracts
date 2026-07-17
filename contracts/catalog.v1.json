@@ -299,14 +299,7 @@
       "consumers": ["missions", "agent-harness"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/agent-orchestration-contracts-v1/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "agent-contributor-lineage-v1",
@@ -316,14 +309,7 @@
       "consumers": ["missions", "proof"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/agent-orchestration-contracts-v1/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "agent-review-v1",
@@ -333,14 +319,7 @@
       "consumers": ["missions", "proof"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/agent-orchestration-contracts-v1/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "agent-review-session-attestation-v1",
@@ -350,14 +329,7 @@
       "consumers": ["missions", "proof"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/agent-orchestration-contracts-v1/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "agent-review-quorum-v1",
@@ -367,14 +339,7 @@
       "consumers": ["missions", "agent-orchestrator"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/agent-orchestration-contracts-v1/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "agent-review-quorum-view-v1",
@@ -384,14 +349,7 @@
       "consumers": ["browser", "proof"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/agent-orchestration-contracts-v1/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "execution-authorization-v1",
@@ -401,14 +359,7 @@
       "consumers": ["agent-orchestrator", "authz-biscuit"],
       "compatibility": "major-versioned",
       "classification": "internal",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/agent-orchestration-contracts-v1/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "orchestrator-control-v1",
@@ -418,14 +369,7 @@
       "consumers": ["missions", "agent-harness"],
       "compatibility": "major-versioned",
       "classification": "internal",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/agent-orchestration-contracts-v1/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "orchestrator-event-v2",
@@ -435,14 +379,7 @@
       "consumers": ["missions", "proof"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/agent-orchestration-contracts-v1/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "harness-profile-v1",
@@ -452,14 +389,7 @@
       "consumers": ["agent-orchestrator", "proof"],
       "compatibility": "major-versioned",
       "classification": "internal",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/agent-orchestration-contracts-v1/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "harness-attestation-v1",
@@ -469,14 +399,7 @@
       "consumers": ["missions", "agent-orchestrator", "proof"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/agent-orchestration-contracts-v1/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "mission-record-v2",
@@ -486,14 +409,7 @@
       "consumers": ["missions", "agent-orchestrator"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/agent-orchestration-contracts-v1/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "missions-api-v2",
@@ -503,14 +419,7 @@
       "consumers": ["browser", "agent-orchestrator", "agent-harness"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/agent-orchestration-contracts-v1/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "agent-runs-authz-v1",
@@ -520,14 +429,7 @@
       "consumers": ["missions", "agent-orchestrator", "agent-harness"],
       "compatibility": "major-versioned",
       "classification": "internal",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/agent-orchestration-contracts-v1/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "evidence-report-v1",

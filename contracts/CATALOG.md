@@ -37,7 +37,7 @@ Uncataloged files and missing authorities fail `bun run check:contracts`.
 - Model Policy: locked v1 and v2 policy/need/snapshot/evaluation boundaries with human approval separation ;
 - Boussole: locked v1 and v2 reviewed dataset/method/responses/comparison boundaries, with public scoring disabled ;
 - Specifications: immutable SpecPackage and planning handoff ;
-- Missions: locked v1 human-verdict baseline plus candidate v2 two-agent plan/result quorums ;
-- Agent Orchestrator/Harness: candidate immutable plan, separate authorization, causal events, monotone budgets and signed fail-closed isolation profile/attestation.
+- Missions: locked v1 human-verdict baseline plus locked, unimplemented v2 two-agent plan/result quorums ;
+- Agent Orchestrator/Harness: locked, unimplemented immutable plan, separate authorization, causal events, monotone budgets and signed fail-closed isolation profile/attestation.
 
 See [`COMPATIBILITY.md`](COMPATIBILITY.md) for evolution rules and [`fixtures/schema-fixtures.v1.json`](fixtures/schema-fixtures.v1.json) for executable positive/negative vectors.
