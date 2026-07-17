@@ -11,6 +11,10 @@ Inputs are strict UTF-8 JSON without BOM or duplicate keys and conform to:
 - `boussole-response-set.v2.schema.json` — at most 256 KiB.
 
 Output is at most 512 KiB and conforms to `local-comparison.v2.schema.json`. All success bytes use RFC 8785 JCS. `computed-at` is an exact valid Gregorian UTC-seconds timestamp. There are no capabilities, identifiers of a person, account, cookie, telemetry or network transfer.
+Method IDs use `urn:libre-ai:method:*`; dataset IDs use `urn:libre-ai:dataset:*`.
+Reviewers are represented only by opaque `rev_*` identifiers. Their separately hosted professional
+attestations are public HTTPS citations bound by SHA-256, explicit publication consent and a
+professional-only identity boundary; the component never resolves those citations.
 
 The resolved WIT world exports one `api` interface and MUST have zero imports. Input
 byte limits are checked before decoding; any input or successful output above its
@@ -20,11 +24,11 @@ and non-JSON numbers. Validation
 and refusal precedence is:
 
 1. resource preflight → `resource-limit-exceeded`;
-2. strict JSON and schema validation → `input-invalid`;
+2. strict JSON, schema and aggregate-publication policy validation → `input-invalid`;
 3. exact real Gregorian `computed-at` → `computed-at-invalid`;
 4. symmetric supported scale/formula/rounding → `method-unsupported`;
 5. IDs and content digests → `digest-mismatch`;
-6. hash-bound distinct human approvals → `approval-invalid`;
+6. hash-bound distinct human approvals and unexpired publication review → `approval-invalid`;
 7. statement/response uniqueness and references → `response-invalid`;
 8. non-zero final denominator → `denominator-zero`;
 9. output byte preflight → `resource-limit-exceeded`.
@@ -34,7 +38,15 @@ No refusal crosses the component boundary with a response value, source text,
 
 ## Structural invariants
 
-Statement IDs and response statement IDs are each unique. Every response refers to exactly one dataset statement. The response set binds the exact dataset/method IDs and digests. The dataset binds the exact method ID/digest. Unknown, duplicate or mismatched references return `response-invalid` or `digest-mismatch`.
+Statement IDs and response statement IDs are each unique. Every response refers to exactly one dataset statement. The response set binds the exact dataset/method IDs and digests. The dataset binds the exact method ID/digest. Cross-kind, unknown, duplicate or mismatched references fail closed as `input-invalid`, `response-invalid` or `digest-mismatch` according to the precedence above.
+
+Every dataset carries a hash-bound aggregate publication policy. `minimumGroupSize` is at least 5,
+and each included statement MUST have `votesFor + votesAgainst + abstentions + absent >= minimumGroupSize`.
+Smaller groups are excluded before publication, individual identity fields are prohibited, and a
+roll-call source may be represented only as an identity-free aggregate. Statement wording MUST
+concern a public proposal or issue and MUST NOT identify or profile a natural person. The publication
+review has an exact UTC-seconds expiry; comparison after that instant returns `approval-invalid`.
+A real dataset review MAY require a higher threshold or reject a source, but never a lower threshold.
 
 `responseScale` is strictly ascending, symmetric (`x` implies `-x`) and has a non-zero maximum absolute value `M`. An answer is one exact scale member. A skip carries no value. Review approvals have distinct `reviewerId` values, `actorKind=human`, the two required roles, and `subjectDigest` equal to the object digest.
 
@@ -77,4 +89,8 @@ All intermediate operations use exact signed integer/rational arithmetic with ch
 `contracts/fixtures/boussole-scoring-v2/security-vectors.v1.json` is the normative
 bounded security corpus for raw decoding, refusal coverage, byte ceilings,
 redaction and maximum arithmetic. Errors expose only the closed WIT enum and no
-response, political position, source text, reviewer identity or implementation diagnostic. A method/dataset without valid independent approvals returns `approval-invalid`. This runtime check does not replace the release feature gate: code and vectors MAY be built, but public scoring MUST remain disabled until both human approvals are recorded against the exact candidate hashes.
+response, political position, source text, reviewer identity or implementation diagnostic. A method/dataset without valid independent approvals returns `approval-invalid`. The release caller
+verifies each attestation URI, digest, professional capacity and explicit publication consent before
+admitting the object; network resolution is deliberately outside the pure component. This runtime
+check does not replace the release feature gate: code and vectors MAY be built, but public scoring
+MUST remain disabled until both human approvals are recorded against the exact candidate hashes.

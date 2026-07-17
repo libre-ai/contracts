@@ -835,7 +835,10 @@
       "classification": "local",
       "status": "candidate",
       "profiles": ["contracts/wit/boussole-scoring-v2/SEMANTICS.md"],
-      "vectors": ["contracts/fixtures/boussole-scoring-v2/golden-vectors.v1.json"],
+      "vectors": [
+        "contracts/fixtures/boussole-scoring-v2/golden-vectors.v1.json",
+        "contracts/fixtures/boussole-scoring-v2/security-vectors.v1.json"
+      ],
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
