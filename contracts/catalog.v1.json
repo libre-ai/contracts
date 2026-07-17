@@ -642,14 +642,7 @@
       "consumers": ["boussole", "boussole-scoring"],
       "compatibility": "major-versioned",
       "classification": "public",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "methodology", "privacy"],
-        "dossier": "docs/reviews/boussole-scoring-v2/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "boussole-method-v2",
@@ -659,14 +652,7 @@
       "consumers": ["boussole", "boussole-scoring"],
       "compatibility": "major-versioned",
       "classification": "public",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "methodology", "privacy"],
-        "dossier": "docs/reviews/boussole-scoring-v2/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "boussole-response-set-v2",
@@ -676,14 +662,7 @@
       "consumers": ["boussole", "boussole-scoring"],
       "compatibility": "major-versioned",
       "classification": "local",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "methodology", "privacy"],
-        "dossier": "docs/reviews/boussole-scoring-v2/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "local-comparison-v2",
@@ -693,14 +672,7 @@
       "consumers": ["boussole", "boussole-scoring"],
       "compatibility": "major-versioned",
       "classification": "local",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "methodology", "privacy"],
-        "dossier": "docs/reviews/boussole-scoring-v2/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "engine-golden-vectors-v1",
@@ -805,19 +777,12 @@
       "consumers": ["boussole"],
       "compatibility": "major-versioned",
       "classification": "local",
-      "status": "candidate",
+      "status": "locked",
       "profiles": ["contracts/wit/boussole-scoring-v2/SEMANTICS.md"],
       "vectors": [
         "contracts/fixtures/boussole-scoring-v2/golden-vectors.v1.json",
         "contracts/fixtures/boussole-scoring-v2/security-vectors.v1.json"
-      ],
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "methodology", "privacy"],
-        "dossier": "docs/reviews/boussole-scoring-v2/README.md"
-      }
+      ]
     }
   ]
 }
