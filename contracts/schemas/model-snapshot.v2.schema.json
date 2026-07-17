@@ -5,7 +5,12 @@
   "$defs": {
     "factScalar": {
       "oneOf": [
-        { "type": "string", "maxLength": 5000 },
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/+~-]{0,255}$"
+        },
         {
           "type": "number",
           "minimum": -9007199254740991,
@@ -23,7 +28,7 @@
           "type": "string",
           "format": "uri",
           "maxLength": 2048,
-          "pattern": "^https://[A-Za-z0-9.-]+(?::[0-9]{1,5})?(?:/[A-Za-z0-9._~/-]*)?$"
+          "pattern": "^https://(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\\.)+[A-Za-z]{2,63}(?::[0-9]{1,5})?(?:/[A-Za-z0-9._~/-]*)?$"
         },
         "retrievedAt": {
           "type": "string",
@@ -42,7 +47,10 @@
     "schemaVersion": { "const": "libre-ai.model-snapshot.v2" },
     "id": { "$ref": "common.v1.schema.json#/$defs/urn" },
     "tenantId": { "$ref": "common.v1.schema.json#/$defs/tenantId" },
-    "modelId": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "modelId": {
+      "type": "string",
+      "pattern": "^mdl_[a-z0-9]{16,64}$"
+    },
     "capturedAt": {
       "type": "string",
       "format": "date-time",

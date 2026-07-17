@@ -1473,6 +1473,11 @@
           "name": "source URI query forbidden",
           "path": "/rules/0/source/uri",
           "value": "https://example.org/policy?token=private_canary"
+        },
+        {
+          "name": "localhost source forbidden",
+          "path": "/rules/0/source/uri",
+          "value": "https://localhost/evidence"
         }
       ]
     },
@@ -1482,7 +1487,7 @@
         "schemaVersion": "libre-ai.model-snapshot.v2",
         "id": "urn:libre-ai:snapshot:all-operators-eligible",
         "tenantId": "ten_1234567890abcdef",
-        "modelId": "model-all-operators-eligible",
+        "modelId": "mdl_83518dfdb0f34791",
         "capturedAt": "2026-07-16T00:00:00Z",
         "facts": [
           {
@@ -1516,7 +1521,7 @@
             }
           }
         ],
-        "digest": "711464a03792caee82882e9c9f9d879ff459a22639cb07ec01cd4c5b360cd482"
+        "digest": "fbe6d3b87d7657686e6dd2363f58b6394470361415aafe892aff355f0220f150"
       },
       "invalidMutations": [
         {
@@ -1533,6 +1538,21 @@
           "name": "source URI fragment forbidden",
           "path": "/facts/0/source/uri",
           "value": "https://example.org/evidence#private-canary"
+        },
+        {
+          "name": "private IP source forbidden",
+          "path": "/facts/0/source/uri",
+          "value": "https://10.0.0.1/evidence"
+        },
+        {
+          "name": "non-opaque model id",
+          "path": "/modelId",
+          "value": "private@example.invalid"
+        },
+        {
+          "name": "free-form model fact forbidden",
+          "path": "/facts/0/value",
+          "value": "private person@example.invalid"
         }
       ]
     },
@@ -1555,6 +1575,11 @@
           "name": "tenant missing",
           "path": "/tenantId",
           "remove": true
+        },
+        {
+          "name": "free-form need fact forbidden",
+          "path": "/facts/0/value",
+          "value": "private person@example.invalid"
         }
       ]
     },

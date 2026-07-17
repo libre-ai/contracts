@@ -5,7 +5,12 @@
   "$defs": {
     "factScalar": {
       "oneOf": [
-        { "type": "string", "maxLength": 5000 },
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/+~-]{0,255}$"
+        },
         {
           "type": "number",
           "minimum": -9007199254740991,

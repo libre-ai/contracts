@@ -65,13 +65,16 @@ allowed. `-0` and `0` are equal. Strings are never case-folded, trimmed or Unico
 normalized.
 
 Every policy and fact source URI MUST be a sanitized public HTTPS citation with
-no userinfo, query or fragment and at most 2,048 characters. It MUST NOT contain
+a DNS-shaped host containing a public-style alphabetic top-level label, no IP
+literal, `localhost`, userinfo, query, fragment or percent encoding, and at most
+2,048 characters. It MUST NOT contain
 credentials, tokens, email addresses or other personal data. `proposedBy` is an
 opaque `usr_*` or `svc_*` principal ID; `approval.approverId` is an opaque `usr_*`
-ID and never a name, email or external account identifier. Fact names/values,
-`modelId` and need facts MUST describe models and organizational requirements only;
-they MUST NOT contain natural-person identifiers, free-form personal content,
-credentials or secrets. The authorized caller owns identity mapping, data
+ID and never a name, email or external account identifier. `modelId` is an opaque
+`mdl_*` identifier. String facts are bounded machine tokens without whitespace or
+`@`; fact names/values and need facts MUST describe models and organizational
+requirements only. They MUST NOT contain natural-person identifiers, free-form
+personal content, credentials or secrets. The authorized caller owns identity mapping, data
 minimization and source sanitization before invocation.
 
 `evaluated-at`, every snapshot `source.retrievedAt` and every emitted `evaluatedAt`

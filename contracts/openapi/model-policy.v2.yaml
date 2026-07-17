@@ -101,11 +101,13 @@ paths:
               properties:
                 policyId:
                   type: string
+                  pattern: '^urn:libre-ai:policy:[A-Za-z0-9._~-]+$'
                 policyDigest:
                   type: string
                   pattern: '^[a-f0-9]{64}$'
                 snapshotId:
                   type: string
+                  pattern: '^urn:libre-ai:snapshot:[A-Za-z0-9._~-]+$'
                 snapshotDigest:
                   type: string
                   pattern: '^[a-f0-9]{64}$'
@@ -188,6 +190,7 @@ paths:
           required: true
           schema:
             type: string
+            pattern: '^urn:libre-ai:snapshot:[A-Za-z0-9._~-]+$'
         - $ref: '#/components/parameters/IdempotencyKey'
         - $ref: '#/components/parameters/CsrfToken'
         - $ref: '#/components/parameters/Revision'
@@ -222,6 +225,7 @@ paths:
           required: true
           schema:
             type: string
+            pattern: '^urn:libre-ai:snapshot:[A-Za-z0-9._~-]+$'
       responses:
         '200':
           description: Sourced immutable snapshot and evidence projection
@@ -267,6 +271,7 @@ paths:
           required: true
           schema:
             type: string
+            pattern: '^urn:libre-ai:evaluation:[a-f0-9]{64}$'
       responses:
         '200':
           description: Evaluation, rule trace and deterministic replay projection
@@ -287,6 +292,7 @@ paths:
           required: true
           schema:
             type: string
+            pattern: '^urn:libre-ai:evaluation:[a-f0-9]{64}$'
         - $ref: '#/components/parameters/IdempotencyKey'
         - $ref: '#/components/parameters/CsrfToken'
         - $ref: '#/components/parameters/Revision'
@@ -308,6 +314,7 @@ components:
       required: true
       schema:
         type: string
+        pattern: '^urn:libre-ai:policy:[A-Za-z0-9._~-]+$'
     IdempotencyKey:
       name: Idempotency-Key
       in: header
