@@ -26,11 +26,13 @@
               "votesFor": 10,
               "votesAgainst": 5,
               "abstentions": 2,
-              "absent": 1
+              "absent": 1,
+              "subjectKind": "public-policy-proposal",
+              "personTargeting": "prohibited"
             }
           ],
           "publishedAt": "2026-07-16T00:00:00Z",
-          "digest": "1cb5bd7a6e4d8350866d8a0f4eddfca639d2937587cd588cc5aeff488c3e8340",
+          "digest": "ca63ffd0b7febb114cac942d3a367829e20fca3055c12ffa9a8381cdc54f5694",
           "approvals": [
             {
               "role": "methodological-review",
@@ -38,7 +40,7 @@
               "reviewerId": "rev_1111111111111111",
               "approvedAt": "2026-07-16T00:00:00Z",
               "reference": "urn:libre-ai:approval:dataset-votes-unit-method",
-              "subjectDigest": "1cb5bd7a6e4d8350866d8a0f4eddfca639d2937587cd588cc5aeff488c3e8340",
+              "subjectDigest": "ca63ffd0b7febb114cac942d3a367829e20fca3055c12ffa9a8381cdc54f5694",
               "professionalCapacity": "methodology-expert",
               "attestation": {
                 "uri": "https://reviews.example.invalid/boussole/methodology-v2",
@@ -53,7 +55,7 @@
               "reviewerId": "rev_2222222222222222",
               "approvedAt": "2026-07-16T00:00:00Z",
               "reference": "urn:libre-ai:approval:dataset-votes-unit-privacy",
-              "subjectDigest": "1cb5bd7a6e4d8350866d8a0f4eddfca639d2937587cd588cc5aeff488c3e8340",
+              "subjectDigest": "ca63ffd0b7febb114cac942d3a367829e20fca3055c12ffa9a8381cdc54f5694",
               "professionalCapacity": "privacy-legal-expert",
               "attestation": {
                 "uri": "https://reviews.example.invalid/boussole/privacy-v2",
@@ -118,7 +120,7 @@
         "responses": {
           "schemaVersion": "libre-ai.boussole-response-set.v2",
           "datasetId": "urn:libre-ai:dataset:votes-unit",
-          "datasetDigest": "1cb5bd7a6e4d8350866d8a0f4eddfca639d2937587cd588cc5aeff488c3e8340",
+          "datasetDigest": "ca63ffd0b7febb114cac942d3a367829e20fca3055c12ffa9a8381cdc54f5694",
           "methodId": "urn:libre-ai:method:method-unit",
           "methodDigest": "86afa940e36b8d2ff452ef6b2a7b93ae50e334b90ab9d2a7799a2f586312ee1a",
           "responses": [
@@ -134,10 +136,10 @@
       "expected": {
         "schemaVersion": "libre-ai.local-comparison.v2",
         "datasetId": "urn:libre-ai:dataset:votes-unit",
-        "datasetDigest": "1cb5bd7a6e4d8350866d8a0f4eddfca639d2937587cd588cc5aeff488c3e8340",
+        "datasetDigest": "ca63ffd0b7febb114cac942d3a367829e20fca3055c12ffa9a8381cdc54f5694",
         "methodId": "urn:libre-ai:method:method-unit",
         "methodDigest": "86afa940e36b8d2ff452ef6b2a7b93ae50e334b90ab9d2a7799a2f586312ee1a",
-        "responseSetDigest": "d7df4cbcd98e5942526d97ec4d962cf30b95a97d040667cf3d7d5a4319845034",
+        "responseSetDigest": "1690c59b1da3751ad038b40f3a927e07fdc6c179781615bc3e88db0a0da301ea",
         "score": 0.333333,
         "denominator": 15,
         "omitted": 3,
@@ -202,11 +204,13 @@
               "votesFor": 10,
               "votesAgainst": 5,
               "abstentions": 5,
-              "absent": 2
+              "absent": 2,
+              "subjectKind": "public-policy-proposal",
+              "personTargeting": "prohibited"
             }
           ],
           "publishedAt": "2026-07-16T00:00:00Z",
-          "digest": "a03fc8bfbc3080d7e205402b2d27b7543a5919c8d5e263eb56183f75edaa6e31",
+          "digest": "77032510a1a8270e6dfbeb1dd8221c842a294c67d8eb62ae3c36cb777f295ad5",
           "approvals": [
             {
               "role": "methodological-review",
@@ -214,7 +218,7 @@
               "reviewerId": "rev_1111111111111111",
               "approvedAt": "2026-07-16T00:00:00Z",
               "reference": "urn:libre-ai:approval:dataset-votes-neutral-five-method",
-              "subjectDigest": "a03fc8bfbc3080d7e205402b2d27b7543a5919c8d5e263eb56183f75edaa6e31",
+              "subjectDigest": "77032510a1a8270e6dfbeb1dd8221c842a294c67d8eb62ae3c36cb777f295ad5",
               "professionalCapacity": "methodology-expert",
               "attestation": {
                 "uri": "https://reviews.example.invalid/boussole/methodology-v2",
@@ -229,7 +233,7 @@
               "reviewerId": "rev_2222222222222222",
               "approvedAt": "2026-07-16T00:00:00Z",
               "reference": "urn:libre-ai:approval:dataset-votes-neutral-five-privacy",
-              "subjectDigest": "a03fc8bfbc3080d7e205402b2d27b7543a5919c8d5e263eb56183f75edaa6e31",
+              "subjectDigest": "77032510a1a8270e6dfbeb1dd8221c842a294c67d8eb62ae3c36cb777f295ad5",
               "professionalCapacity": "privacy-legal-expert",
               "attestation": {
                 "uri": "https://reviews.example.invalid/boussole/privacy-v2",
@@ -294,7 +298,7 @@
         "responses": {
           "schemaVersion": "libre-ai.boussole-response-set.v2",
           "datasetId": "urn:libre-ai:dataset:votes-neutral-five",
-          "datasetDigest": "a03fc8bfbc3080d7e205402b2d27b7543a5919c8d5e263eb56183f75edaa6e31",
+          "datasetDigest": "77032510a1a8270e6dfbeb1dd8221c842a294c67d8eb62ae3c36cb777f295ad5",
           "methodId": "urn:libre-ai:method:method-neutral-five",
           "methodDigest": "bb1c5e5199f0b6fe0a527d7dfe08cbd6785b34639a91c81ee0cb7a0e96ec575d",
           "responses": [
@@ -310,10 +314,10 @@
       "expected": {
         "schemaVersion": "libre-ai.local-comparison.v2",
         "datasetId": "urn:libre-ai:dataset:votes-neutral-five",
-        "datasetDigest": "a03fc8bfbc3080d7e205402b2d27b7543a5919c8d5e263eb56183f75edaa6e31",
+        "datasetDigest": "77032510a1a8270e6dfbeb1dd8221c842a294c67d8eb62ae3c36cb777f295ad5",
         "methodId": "urn:libre-ai:method:method-neutral-five",
         "methodDigest": "bb1c5e5199f0b6fe0a527d7dfe08cbd6785b34639a91c81ee0cb7a0e96ec575d",
-        "responseSetDigest": "6b55187f6272e222628e2307befb4f5e57ea606bed5983f9409de1c946ba2968",
+        "responseSetDigest": "820a6660ab2d61d1d8a840ff3ac765804b1d13b0531fa4df929253073df4aff0",
         "score": 0.25,
         "denominator": 20,
         "omitted": 2,
@@ -351,7 +355,9 @@
               "votesFor": 10,
               "votesAgainst": 0,
               "abstentions": 2,
-              "absent": 1
+              "absent": 1,
+              "subjectKind": "public-policy-proposal",
+              "personTargeting": "prohibited"
             },
             {
               "id": "statement_b",
@@ -365,7 +371,9 @@
               "votesFor": 0,
               "votesAgainst": 30,
               "abstentions": 0,
-              "absent": 2
+              "absent": 2,
+              "subjectKind": "public-policy-proposal",
+              "personTargeting": "prohibited"
             },
             {
               "id": "statement_c",
@@ -379,7 +387,9 @@
               "votesFor": 5,
               "votesAgainst": 5,
               "abstentions": 1,
-              "absent": 1
+              "absent": 1,
+              "subjectKind": "public-policy-proposal",
+              "personTargeting": "prohibited"
             },
             {
               "id": "statement_d",
@@ -393,11 +403,13 @@
               "votesFor": 2,
               "votesAgainst": 2,
               "abstentions": 0,
-              "absent": 1
+              "absent": 1,
+              "subjectKind": "public-policy-proposal",
+              "personTargeting": "prohibited"
             }
           ],
           "publishedAt": "2026-07-16T00:00:00Z",
-          "digest": "a8596a631180ed80e9cede36f88b5ddb4d17c8e943bab70c083e7f46fbd9942f",
+          "digest": "789d6d52b10abf47ec5db58ec9d504763572ff2aef971f4dae659568fdc32161",
           "approvals": [
             {
               "role": "methodological-review",
@@ -405,7 +417,7 @@
               "reviewerId": "rev_1111111111111111",
               "approvedAt": "2026-07-16T00:00:00Z",
               "reference": "urn:libre-ai:approval:dataset-votes-weighted-method",
-              "subjectDigest": "a8596a631180ed80e9cede36f88b5ddb4d17c8e943bab70c083e7f46fbd9942f",
+              "subjectDigest": "789d6d52b10abf47ec5db58ec9d504763572ff2aef971f4dae659568fdc32161",
               "professionalCapacity": "methodology-expert",
               "attestation": {
                 "uri": "https://reviews.example.invalid/boussole/methodology-v2",
@@ -420,7 +432,7 @@
               "reviewerId": "rev_2222222222222222",
               "approvedAt": "2026-07-16T00:00:00Z",
               "reference": "urn:libre-ai:approval:dataset-votes-weighted-privacy",
-              "subjectDigest": "a8596a631180ed80e9cede36f88b5ddb4d17c8e943bab70c083e7f46fbd9942f",
+              "subjectDigest": "789d6d52b10abf47ec5db58ec9d504763572ff2aef971f4dae659568fdc32161",
               "professionalCapacity": "privacy-legal-expert",
               "attestation": {
                 "uri": "https://reviews.example.invalid/boussole/privacy-v2",
@@ -485,7 +497,7 @@
         "responses": {
           "schemaVersion": "libre-ai.boussole-response-set.v2",
           "datasetId": "urn:libre-ai:dataset:votes-weighted",
-          "datasetDigest": "a8596a631180ed80e9cede36f88b5ddb4d17c8e943bab70c083e7f46fbd9942f",
+          "datasetDigest": "789d6d52b10abf47ec5db58ec9d504763572ff2aef971f4dae659568fdc32161",
           "methodId": "urn:libre-ai:method:method-weighted",
           "methodDigest": "08ee4206161020a655eabd5b53cb99453b6835f0c31a89d329c27f0a554638ea",
           "responses": [
@@ -510,10 +522,10 @@
       "expected": {
         "schemaVersion": "libre-ai.local-comparison.v2",
         "datasetId": "urn:libre-ai:dataset:votes-weighted",
-        "datasetDigest": "a8596a631180ed80e9cede36f88b5ddb4d17c8e943bab70c083e7f46fbd9942f",
+        "datasetDigest": "789d6d52b10abf47ec5db58ec9d504763572ff2aef971f4dae659568fdc32161",
         "methodId": "urn:libre-ai:method:method-weighted",
         "methodDigest": "08ee4206161020a655eabd5b53cb99453b6835f0c31a89d329c27f0a554638ea",
-        "responseSetDigest": "dfa1ee585316134732eeabed5d533b1f9c1374dd8eb7c2c8dc0adbd504170e1a",
+        "responseSetDigest": "f493fc8576eb3ab137d5a0cbc573a3d975fd99bb2011c8d91cc1c8e2bc340089",
         "score": -0.5,
         "denominator": 40,
         "omitted": 22,
@@ -557,7 +569,9 @@
               "votesFor": 2000001,
               "votesAgainst": 1999999,
               "abstentions": 0,
-              "absent": 0
+              "absent": 0,
+              "subjectKind": "public-policy-proposal",
+              "personTargeting": "prohibited"
             },
             {
               "id": "statement_odd_up",
@@ -571,11 +585,13 @@
               "votesFor": 2000003,
               "votesAgainst": 1999997,
               "abstentions": 0,
-              "absent": 0
+              "absent": 0,
+              "subjectKind": "public-policy-proposal",
+              "personTargeting": "prohibited"
             }
           ],
           "publishedAt": "2026-07-16T00:00:00Z",
-          "digest": "0e132f84959f452fb737a5cf9be1ebc8a9fd9ee1cc751bee9c457e66e4b705d0",
+          "digest": "c3cbf007cd63d08382fc48e4f226c6d437b8583a69fef05a00744085ae91f0b8",
           "approvals": [
             {
               "role": "methodological-review",
@@ -583,7 +599,7 @@
               "reviewerId": "rev_1111111111111111",
               "approvedAt": "2026-07-16T00:00:00Z",
               "reference": "urn:libre-ai:approval:dataset-votes-half-even-method",
-              "subjectDigest": "0e132f84959f452fb737a5cf9be1ebc8a9fd9ee1cc751bee9c457e66e4b705d0",
+              "subjectDigest": "c3cbf007cd63d08382fc48e4f226c6d437b8583a69fef05a00744085ae91f0b8",
               "professionalCapacity": "methodology-expert",
               "attestation": {
                 "uri": "https://reviews.example.invalid/boussole/methodology-v2",
@@ -598,7 +614,7 @@
               "reviewerId": "rev_2222222222222222",
               "approvedAt": "2026-07-16T00:00:00Z",
               "reference": "urn:libre-ai:approval:dataset-votes-half-even-privacy",
-              "subjectDigest": "0e132f84959f452fb737a5cf9be1ebc8a9fd9ee1cc751bee9c457e66e4b705d0",
+              "subjectDigest": "c3cbf007cd63d08382fc48e4f226c6d437b8583a69fef05a00744085ae91f0b8",
               "professionalCapacity": "privacy-legal-expert",
               "attestation": {
                 "uri": "https://reviews.example.invalid/boussole/privacy-v2",
@@ -663,7 +679,7 @@
         "responses": {
           "schemaVersion": "libre-ai.boussole-response-set.v2",
           "datasetId": "urn:libre-ai:dataset:votes-half-even",
-          "datasetDigest": "0e132f84959f452fb737a5cf9be1ebc8a9fd9ee1cc751bee9c457e66e4b705d0",
+          "datasetDigest": "c3cbf007cd63d08382fc48e4f226c6d437b8583a69fef05a00744085ae91f0b8",
           "methodId": "urn:libre-ai:method:method-half-even",
           "methodDigest": "0f271c5ba8b0d6f0d410b6a5731e27c7f80711f9f23dd8aface050973045245d",
           "responses": [
@@ -684,10 +700,10 @@
       "expected": {
         "schemaVersion": "libre-ai.local-comparison.v2",
         "datasetId": "urn:libre-ai:dataset:votes-half-even",
-        "datasetDigest": "0e132f84959f452fb737a5cf9be1ebc8a9fd9ee1cc751bee9c457e66e4b705d0",
+        "datasetDigest": "c3cbf007cd63d08382fc48e4f226c6d437b8583a69fef05a00744085ae91f0b8",
         "methodId": "urn:libre-ai:method:method-half-even",
         "methodDigest": "0f271c5ba8b0d6f0d410b6a5731e27c7f80711f9f23dd8aface050973045245d",
-        "responseSetDigest": "cafbe7ace027c9b8e3013ba783d819be4daf366e0a8e79fa394cf8dc1dfe616a",
+        "responseSetDigest": "9ada1a9c0cf415e8daf131aaa675eb2e037a747ff832e8b8485514ad867a0f7b",
         "score": 0.000001,
         "denominator": 8000000,
         "omitted": 0,
@@ -733,10 +749,10 @@
       "expected": {
         "schemaVersion": "libre-ai.local-comparison.v2",
         "datasetId": "urn:libre-ai:dataset:votes-unit",
-        "datasetDigest": "1cb5bd7a6e4d8350866d8a0f4eddfca639d2937587cd588cc5aeff488c3e8340",
+        "datasetDigest": "ca63ffd0b7febb114cac942d3a367829e20fca3055c12ffa9a8381cdc54f5694",
         "methodId": "urn:libre-ai:method:method-unit",
         "methodDigest": "86afa940e36b8d2ff452ef6b2a7b93ae50e334b90ab9d2a7799a2f586312ee1a",
-        "responseSetDigest": "628d1f1945df5166190b9c3a668cd636c57f51bbe80b3504b1ed0dac6f4d3349",
+        "responseSetDigest": "94e54870a28d0e98dfce65715d507e73f763ba35df7dffe8f819fe9a05df2593",
         "score": 0,
         "denominator": 15,
         "omitted": 3,
@@ -774,11 +790,13 @@
               "votesFor": 10,
               "votesAgainst": 5,
               "abstentions": 2,
-              "absent": 1
+              "absent": 1,
+              "subjectKind": "public-policy-proposal",
+              "personTargeting": "prohibited"
             }
           ],
           "publishedAt": "2026-07-16T00:00:00Z",
-          "digest": "da40288ae9fc3c7e5a703384a4e6749353a57b56d15c648f179e86449ab410ae",
+          "digest": "841ad032c477e6d2c466e7667b742960919ade625052b29846c007eb025ac8f1",
           "approvals": [
             {
               "role": "methodological-review",
@@ -786,7 +804,7 @@
               "reviewerId": "rev_1111111111111111",
               "approvedAt": "2026-07-16T00:00:00Z",
               "reference": "urn:libre-ai:approval:dataset-intermediate-1",
-              "subjectDigest": "da40288ae9fc3c7e5a703384a4e6749353a57b56d15c648f179e86449ab410ae",
+              "subjectDigest": "841ad032c477e6d2c466e7667b742960919ade625052b29846c007eb025ac8f1",
               "professionalCapacity": "methodology-expert",
               "attestation": {
                 "uri": "https://reviews.example.invalid/boussole/methodology-v2",
@@ -801,7 +819,7 @@
               "reviewerId": "rev_2222222222222222",
               "approvedAt": "2026-07-16T00:00:00Z",
               "reference": "urn:libre-ai:approval:dataset-intermediate-2",
-              "subjectDigest": "da40288ae9fc3c7e5a703384a4e6749353a57b56d15c648f179e86449ab410ae",
+              "subjectDigest": "841ad032c477e6d2c466e7667b742960919ade625052b29846c007eb025ac8f1",
               "professionalCapacity": "privacy-legal-expert",
               "attestation": {
                 "uri": "https://reviews.example.invalid/boussole/privacy-v2",
@@ -866,7 +884,7 @@
         "responses": {
           "schemaVersion": "libre-ai.boussole-response-set.v2",
           "datasetId": "urn:libre-ai:dataset:votes-intermediate-scale",
-          "datasetDigest": "da40288ae9fc3c7e5a703384a4e6749353a57b56d15c648f179e86449ab410ae",
+          "datasetDigest": "841ad032c477e6d2c466e7667b742960919ade625052b29846c007eb025ac8f1",
           "methodId": "urn:libre-ai:method:method-intermediate-scale",
           "methodDigest": "69cd329368d7529132bf058eb34001906a01728e423394a865eb147f2cf8cf84",
           "responses": [
@@ -882,10 +900,10 @@
       "expected": {
         "schemaVersion": "libre-ai.local-comparison.v2",
         "datasetId": "urn:libre-ai:dataset:votes-intermediate-scale",
-        "datasetDigest": "da40288ae9fc3c7e5a703384a4e6749353a57b56d15c648f179e86449ab410ae",
+        "datasetDigest": "841ad032c477e6d2c466e7667b742960919ade625052b29846c007eb025ac8f1",
         "methodId": "urn:libre-ai:method:method-intermediate-scale",
         "methodDigest": "69cd329368d7529132bf058eb34001906a01728e423394a865eb147f2cf8cf84",
-        "responseSetDigest": "616feb9c1b02c3f4ea6ece459c749fab0e072c10acd402a30f9a3efc007372c2",
+        "responseSetDigest": "e84a0c738e90344175a814646d78fa45f9ac78bb598bb1b923656b5cb23afa53",
         "score": 0.133333,
         "denominator": 15,
         "omitted": 3,
@@ -918,10 +936,10 @@
       "expected": {
         "schemaVersion": "libre-ai.local-comparison.v2",
         "datasetId": "urn:libre-ai:dataset:votes-half-even",
-        "datasetDigest": "0e132f84959f452fb737a5cf9be1ebc8a9fd9ee1cc751bee9c457e66e4b705d0",
+        "datasetDigest": "c3cbf007cd63d08382fc48e4f226c6d437b8583a69fef05a00744085ae91f0b8",
         "methodId": "urn:libre-ai:method:method-half-even",
         "methodDigest": "0f271c5ba8b0d6f0d410b6a5731e27c7f80711f9f23dd8aface050973045245d",
-        "responseSetDigest": "8a67a9fff57b6f2d66f3b18316be28e5ae565c7d3b789afc64387ee4bf6cd49d",
+        "responseSetDigest": "2fab97fccd57abb043b4136f0454eae6f6fafd304361c8826b3ba3a239980a8e",
         "score": -0.000001,
         "denominator": 8000000,
         "omitted": 0,

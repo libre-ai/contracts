@@ -43,10 +43,14 @@ Statement IDs and response statement IDs are each unique. Every response refers 
 Every dataset carries a hash-bound aggregate publication policy. `minimumGroupSize` is at least 5,
 and each included statement MUST have `votesFor + votesAgainst + abstentions + absent >= minimumGroupSize`.
 Smaller groups are excluded before publication, individual identity fields are prohibited, and a
-roll-call source may be represented only as an identity-free aggregate. Statement wording MUST
-concern a public proposal or issue and MUST NOT identify or profile a natural person. The publication
-review has an exact UTC-seconds expiry; comparison after that instant returns `approval-invalid`.
-A real dataset review MAY require a higher threshold or reject a source, but never a lower threshold.
+roll-call source may be represented only as an identity-free aggregate. Every statement MUST declare
+`subjectKind = public-policy-proposal` and `personTargeting = prohibited`; any other or absent value
+fails schema validation. Wording remains human language, so the release privacy reviewer verifies
+that it concerns a public proposal or issue and neither identifies nor profiles a natural person.
+The complete wording and declarations are dataset-digest-bound: any edit invalidates the prior
+privacy approval and requires a fresh attestation. The publication review has an exact UTC-seconds
+expiry; comparison after that instant returns `approval-invalid`. A real dataset review MAY require
+a higher threshold or reject a source, but never a lower threshold.
 
 `responseScale` is strictly ascending, symmetric (`x` implies `-x`) and has a non-zero maximum absolute value `M`. An answer is one exact scale member. A skip carries no value. Review approvals have distinct `reviewerId` values, `actorKind=human`, the two required roles, and `subjectDigest` equal to the object digest.
 

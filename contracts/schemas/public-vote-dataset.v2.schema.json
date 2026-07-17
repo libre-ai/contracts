@@ -172,6 +172,8 @@
         "additionalProperties": false,
         "required": [
           "id",
+          "subjectKind",
+          "personTargeting",
           "wording",
           "source",
           "votesFor",
@@ -182,6 +184,12 @@
         "properties": {
           "id": {
             "$ref": "common.v1.schema.json#/$defs/identifier"
+          },
+          "subjectKind": {
+            "const": "public-policy-proposal"
+          },
+          "personTargeting": {
+            "const": "prohibited"
           },
           "wording": {
             "type": "string",
