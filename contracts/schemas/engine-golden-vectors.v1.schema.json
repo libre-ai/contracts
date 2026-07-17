@@ -77,9 +77,25 @@
     "publicString": {
       "type": "string",
       "maxLength": 65536,
-      "not": {
-        "pattern": "^(?:[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}|[\\s\\S]*(?:sk_live_[A-Za-z0-9_-]{8,}|sk-(?:proj|svcacct)-[A-Za-z0-9_-]{16,}|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----)[\\s\\S]*)$"
-      }
+      "allOf": [
+        {
+          "not": {
+            "pattern": "[\\s\\S]*(?:sk_live_[A-Za-z0-9_-]{8,}|sk-(?:proj|svcacct)-[A-Za-z0-9_-]{16,}|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----)[\\s\\S]*"
+          }
+        },
+        {
+          "anyOf": [
+            { "not": { "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}" } },
+            {
+              "pattern": "^https://user:secret@example\\.org/feed\\.xml$"
+            }
+          ]
+        }
+      ]
+    },
+    "publicPropertyName": {
+      "type": "string",
+      "pattern": "^[A-Za-z_$][A-Za-z0-9_$.-]{0,127}$"
     },
     "contractPath": {
       "type": "string",
@@ -116,7 +132,7 @@
         {
           "type": "object",
           "maxProperties": 512,
-          "propertyNames": { "minLength": 1, "maxLength": 128 },
+          "propertyNames": { "$ref": "#/$defs/publicPropertyName" },
           "additionalProperties": { "$ref": "#/$defs/publicValue" }
         }
       ]
