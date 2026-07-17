@@ -11,6 +11,27 @@ const domainCodePoint = /^[\p{L}\p{M}\p{N}.-]$/u;
 const domainBoundaryContinuation = /^[\p{L}\p{M}\p{N}_.-]$/u;
 const textEncoder = new TextEncoder();
 const maximumDecodedCodePoints = 65_536;
+const emailContextLabels = new Set([
+  "adresse",
+  "adresse-email",
+  "bcc",
+  "cc",
+  "contact",
+  "contact-email",
+  "courriel",
+  "destinataire",
+  "e-mail",
+  "email",
+  "expediteur",
+  "expéditeur",
+  "from",
+  "mail",
+  "mailto",
+  "recipient",
+  "reply-to",
+  "sender",
+  "to",
+]);
 
 function decodePercentRuns(value: string): string {
   return value.replace(/(?:%[0-9a-f]{2})+/gi, (run) => {
@@ -134,15 +155,43 @@ function skipWhitespaceForward(value: string, start: number): number {
   return cursor;
 }
 
-function hasValidLocalBoundary(value: string, start: number): boolean {
+function findOpeningQuoteBoundaries(value: string): ReadonlySet<number> {
+  const openings = new Set<number>();
+  let quoted = false;
+  for (let cursor = 0; cursor < value.length; cursor += 1) {
+    if (!isUnescapedQuote(value, cursor)) continue;
+    if (!quoted) openings.add(cursor);
+    quoted = !quoted;
+  }
+  return openings;
+}
+
+function hasEmailContextLabel(value: string, colon: number): boolean {
+  const match = value
+    .slice(0, colon)
+    .toLowerCase()
+    .match(/(?:^|[\t\n\r ])([\p{L}-]+)$/u);
+  return match !== null && emailContextLabels.has(match[1] ?? "");
+}
+
+function hasValidLocalBoundary(
+  value: string,
+  start: number,
+  openingQuotes: ReadonlySet<number>,
+): boolean {
   if (start === 0) return true;
   const previous = previousCodePointStart(value, start);
   const character = value.slice(previous, start);
   if (isWhitespaceAt(value, previous, start) || "(<[{".includes(character)) return true;
-  return character === ":" && value.slice(0, previous).toLowerCase().endsWith("mailto");
+  if (character === '"') return openingQuotes.has(previous);
+  return character === ":" && hasEmailContextLabel(value, previous);
 }
 
-function hasValidDotAtomLocal(value: string, end: number): boolean {
+function hasValidDotAtomLocal(
+  value: string,
+  end: number,
+  openingQuotes: ReadonlySet<number>,
+): boolean {
   let start = end;
   while (start > 0) {
     const previous = previousCodePointStart(value, start);
@@ -150,7 +199,7 @@ function hasValidDotAtomLocal(value: string, end: number): boolean {
     if (!(character === "." || isAtextAt(value, previous, start))) break;
     start = previous;
   }
-  if (start === end || !hasValidLocalBoundary(value, start)) return false;
+  if (start === end || !hasValidLocalBoundary(value, start, openingQuotes)) return false;
   const candidate = value.slice(start, end);
   if (
     candidate.startsWith(".") ||
@@ -183,12 +232,16 @@ function isAllowedQuotedCodePoint(codePoint: number): boolean {
   );
 }
 
-function hasValidQuotedLocal(value: string, end: number): boolean {
+function hasValidQuotedLocal(
+  value: string,
+  end: number,
+  openingQuotes: ReadonlySet<number>,
+): boolean {
   const closingQuote = end - 1;
   if (!isUnescapedQuote(value, closingQuote)) return false;
   for (let openingQuote = closingQuote - 1; openingQuote >= 0; openingQuote -= 1) {
     if (!isUnescapedQuote(value, openingQuote)) continue;
-    if (!hasValidLocalBoundary(value, openingQuote)) return false;
+    if (!hasValidLocalBoundary(value, openingQuote, openingQuotes)) return false;
     for (let cursor = openingQuote + 1; cursor < closingQuote; ) {
       let codePoint = value.codePointAt(cursor);
       if (codePoint === undefined) return false;
@@ -270,11 +323,16 @@ function hasValidDomain(value: string, start: number): boolean {
 }
 
 function containsEmailIdentifierWithoutComments(value: string): boolean {
+  const openingQuotes = findOpeningQuoteBoundaries(value);
   for (let at = value.indexOf("@"); at >= 0; at = value.indexOf("@", at + 1)) {
     const localEnd = skipWhitespaceBackward(value, at);
     const domainStart = skipWhitespaceForward(value, at + 1);
     if (!hasValidDomain(value, domainStart)) continue;
-    if (hasValidDotAtomLocal(value, localEnd) || hasValidQuotedLocal(value, localEnd)) return true;
+    if (
+      hasValidDotAtomLocal(value, localEnd, openingQuotes) ||
+      hasValidQuotedLocal(value, localEnd, openingQuotes)
+    )
+      return true;
   }
   return false;
 }
@@ -354,6 +412,11 @@ export const publicSourceScannerSelfTests: ReadonlyArray<
   ["encoded trailing-dot email", "alice&commat;example&period;org&period;", true],
   ["domain-literal trailing-dot email", "alice@[127.0.0.1].", true],
   ["parenthesized email", "Contact (alice@example.org).", true],
+  ["double-quoted prose email", '"alice@example.org"', true],
+  ["encoded double-quoted prose email", "&quot;alice&commat;example&period;org&quot;", true],
+  ["contact-labelled email", "contact:alice@example.org", true],
+  ["email-labelled email", "Email:alice@example.org", true],
+  ["courriel-labelled email", "courriel:alice@example.org", true],
   ["encoded parenthesized email", "%28alice%40example.org%29", true],
   ["HTML parenthesized email", "&lpar;alice&commat;example&period;org&rpar;", true],
   ["mailto email", "mailto:alice@example.org", true],
@@ -421,6 +484,7 @@ export const publicSourceScannerSelfTests: ReadonlyArray<
   ["ideographic-space domain separator", "alice@\u3000example.org", false],
   ["C0-separated local token", "ali\u0000ce@example.org", false],
   ["colon-separated local token", "ali:ce@example.org", false],
+  ["unknown colon label", "unknown:alice@example.org", false],
   ["comma-separated local token", "ali,ce@example.org", false],
   ["RFC slash atext email", "ali/ce@example.org", true],
   ["leading-dot local", ".alice@example.org", false],

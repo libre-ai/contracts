@@ -27,6 +27,7 @@ describe("specialized-vector public-source scanner", () => {
     const cases = [
       "a".repeat(maximum),
       "@".repeat(maximum),
+      '""'.repeat(maximum / 2),
       `a@${"a.".repeat(32_760)}1`,
       `${"a".repeat(65_520)}"@example.org`,
       `${"&amp;".repeat(13_000)}text`,
