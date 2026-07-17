@@ -1997,7 +1997,8 @@
             "input": {
               "wording": "R&D: 50%",
               "encodedUrl": "https://example.org/a%20b?x=1&y=2",
-              "machineHandle": "release@2"
+              "machineHandle": "release@2",
+              "unicodePathControls": ["ｆｉｌｅ：／／／etc/passwd", ".\u200b./secrets.txt"]
             }
           }
         ]
@@ -2031,6 +2032,27 @@
           "path": "/reproductionEvidence",
           "value": {
             "note": "contact alice@example.org for details"
+          }
+        },
+        {
+          "name": "DSA private-key header in metadata",
+          "path": "/reproductionEvidence",
+          "value": {
+            "credential": "-----BEGIN DSA PRIVATE KEY-----"
+          }
+        },
+        {
+          "name": "OpenPGP private-key header in metadata",
+          "path": "/reproductionEvidence",
+          "value": {
+            "credential": "-----BEGIN PGP PRIVATE KEY BLOCK-----"
+          }
+        },
+        {
+          "name": "encrypted PKCS#8 private-key header in metadata",
+          "path": "/reproductionEvidence",
+          "value": {
+            "credential": "-----BEGIN ENCRYPTED PRIVATE KEY-----"
           }
         },
         {
@@ -2129,6 +2151,34 @@
           "path": "/reproductionEvidence",
           "value": {
             "url": "file:///var/private/data"
+          }
+        },
+        {
+          "name": "NFKC local file URI metadata",
+          "path": "/reproductionEvidence",
+          "value": {
+            "url": "ｆｉｌｅ：／／／var/private/data"
+          }
+        },
+        {
+          "name": "default-ignorable local file URI metadata",
+          "path": "/reproductionEvidence",
+          "value": {
+            "url": "fi\u200ble:///var/private/data"
+          }
+        },
+        {
+          "name": "NFKC traversal metadata",
+          "path": "/reproductionEvidence",
+          "value": {
+            "path": "．．／secrets.txt"
+          }
+        },
+        {
+          "name": "default-ignorable traversal metadata",
+          "path": "/reproductionEvidence",
+          "value": {
+            "path": ".\u200b./secrets.txt"
           }
         },
         {

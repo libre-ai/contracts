@@ -75,12 +75,14 @@
       "allOf": [{ "$ref": "#/$defs/metadataString" }, { "type": "string", "maxLength": 128 }]
     },
     "metadataString": {
+      "$comment": "ASCII-only metadata makes the file/traversal and credential exclusions closed under Unicode normalization; engine payload strings remain Unicode-capable and opaque.",
       "type": "string",
       "maxLength": 65536,
+      "pattern": "^[\\t\\n\\r\\x20-\\x7E]*$",
       "allOf": [
         {
           "not": {
-            "pattern": "[\\s\\S]*(?:sk_live_[A-Za-z0-9_-]{8,}|sk-(?:proj|svcacct)-[A-Za-z0-9_-]{16,}|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----)[\\s\\S]*"
+            "pattern": "[\\s\\S]*(?:sk_live_[A-Za-z0-9_-]{8,}|sk-(?:proj|svcacct)-[A-Za-z0-9_-]{16,}|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (?:(?:(?:RSA|DSA|EC|OPENSSH|ENCRYPTED) )?PRIVATE KEY|PGP PRIVATE KEY BLOCK)-----)[\\s\\S]*"
           }
         },
         { "not": { "pattern": "[@＠﹫%％﹪&＆﹠]" } },
