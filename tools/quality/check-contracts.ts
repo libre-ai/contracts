@@ -224,7 +224,7 @@ function inspectSpecializedVectorBounds(
 
 const credentialMarker =
   /(?:sk_live_[A-Za-z0-9_-]{8,}|sk-(?:proj|svcacct)-[A-Za-z0-9_-]{16,}|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----)/;
-const emailIdentifier = /[\p{L}\p{N}._%+-]+@[\p{L}\p{N}.-]+\.[\p{L}]{2,}/u;
+const emailIdentifier = /[\p{L}\p{N}!#$%&'*+/=?^_`{|}~.-]+@[\p{L}\p{N}.-]+\.[\p{L}]{2,}/u;
 const radarUserinfoCanary = "https://user:secret@example.org/feed.xml";
 const radarVectorPath = "contracts/fixtures/radar-engine-v2/golden-vectors.v1.json";
 
@@ -629,6 +629,10 @@ for (const [label, value, expectedSensitive] of [
   ["over-nested percent email", "alice%2525252540example.org", true],
   ["over-nested HTML email", "alice&amp;amp;amp;amp;commat;example.org", true],
   ["over-nested semicolonless HTML email", "alice&amp#38#38#38#64example.org", true],
+  ["RFC local-part ampersand", "alice&ops@example.org", true],
+  ["mixed amp numeric email", "alice&amp;&#64example.org", true],
+  ["mixed numeric named email", "alice&#38;&commat;example.org", true],
+  ["mixed amp numeric chain email", "alice&amp;&#38;&#64example.org", true],
   ["mixed nested encoding", "alice&#37;2540example.org", true],
   ["Unicode at-sign email", "alice＠example.org", true],
   ["percent-encoded Unicode at-sign email", "alice%EF%BC%A0example.org", true],
