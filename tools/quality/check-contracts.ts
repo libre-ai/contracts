@@ -1,4 +1,5 @@
-import { basename, dirname, join, normalize } from "node:path";
+import { lstat, realpath } from "node:fs/promises";
+import { basename, dirname, join, normalize, sep } from "node:path";
 import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020";
 import addFormats from "ajv-formats";
 
@@ -160,6 +161,41 @@ function stringArray(value: unknown, label: string): string[] {
     return [];
   }
   return value as string[];
+}
+
+function inspectSpecializedVectorBounds(
+  value: unknown,
+  path: string,
+  state = { nodes: 0, overflowReported: false },
+  depth = 0,
+): void {
+  state.nodes += 1;
+  if (depth > 64) {
+    failures.push(`${path}: specialized vector depth exceeds 64`);
+    return;
+  }
+  if (state.nodes > 200_000) {
+    if (!state.overflowReported) {
+      failures.push(`${path}: specialized vector node count exceeds 200000`);
+      state.overflowReported = true;
+    }
+    return;
+  }
+  if (Array.isArray(value)) {
+    for (const item of value) inspectSpecializedVectorBounds(item, path, state, depth + 1);
+  } else if (isRecord(value)) {
+    for (const item of Object.values(value))
+      inspectSpecializedVectorBounds(item, path, state, depth + 1);
+  }
+}
+
+async function containsSymbolicLink(path: string): Promise<boolean> {
+  let current = "";
+  for (const segment of path.split("/")) {
+    current = current.length === 0 ? segment : join(current, segment);
+    if ((await lstat(current)).isSymbolicLink()) return true;
+  }
+  return false;
 }
 
 function mutate(input: JsonRecord, mutation: FixtureMutation): JsonRecord {
@@ -426,6 +462,60 @@ for (const fixture of fixtureCases) {
 for (const name of schemaByName.keys()) {
   if (name !== "common.v1.schema.json" && !fixtureNames.has(name))
     failures.push(`${name}: missing positive/negative fixture pair`);
+}
+
+const specializedVectorPaths = [
+  "contracts/fixtures/radar-engine-v2/golden-vectors.v1.json",
+  "contracts/fixtures/notebook-core-v2/golden-vectors.v1.json",
+  "contracts/fixtures/policy-core-v1/golden.json",
+  "contracts/fixtures/policy-core-v2/golden.json",
+  "contracts/fixtures/boussole-scoring-v2/golden-vectors.v1.json",
+] as const;
+const specializedVectorValidator = validatorByName.get("engine-golden-vectors.v1.schema.json");
+const repositoryRoot = `${await realpath(".")}${sep}`;
+for (const path of specializedVectorPaths) {
+  const file = Bun.file(path);
+  if (file.size > 8 * 1024 * 1024) {
+    failures.push(`${path}: specialized vector file exceeds 8 MiB`);
+    continue;
+  }
+  const document: unknown = await file.json();
+  if (!specializedVectorValidator?.(document)) {
+    failures.push(
+      `${path}: shared vector envelope rejected: ${safeErrors(specializedVectorValidator?.errors)}`,
+    );
+    continue;
+  }
+  inspectSpecializedVectorBounds(document, path);
+  if (!isRecord(document) || !Array.isArray(document.contractFiles)) continue;
+  const contractFilePaths = new Set<string>();
+  for (const [index, contractFile] of document.contractFiles.entries()) {
+    const label = `${path}#/contractFiles/${index}`;
+    if (!isRecord(contractFile) || typeof contractFile.path !== "string") continue;
+    if (contractFilePaths.has(contractFile.path)) {
+      failures.push(`${label}: duplicate contract file path`);
+      continue;
+    }
+    contractFilePaths.add(contractFile.path);
+    try {
+      const stats = await lstat(contractFile.path);
+      const resolvedPath = await realpath(contractFile.path);
+      if (
+        !stats.isFile() ||
+        (await containsSymbolicLink(contractFile.path)) ||
+        !resolvedPath.startsWith(repositoryRoot)
+      ) {
+        failures.push(`${label}: non-file, symlink or out-of-repository path forbidden`);
+        continue;
+      }
+      const hasher = new Bun.CryptoHasher("sha256");
+      hasher.update(await Bun.file(contractFile.path).arrayBuffer());
+      if (hasher.digest("hex") !== contractFile.sha256)
+        failures.push(`${label}: contract file hash mismatch`);
+    } catch {
+      failures.push(`${label}: contract file is missing or unreadable`);
+    }
+  }
 }
 
 const retentionValidator = validatorByName.get("retention-policy.v1.schema.json");
