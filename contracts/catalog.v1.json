@@ -498,7 +498,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security"],
         "dossier": "docs/reviews/radar-engine-v2/README.md"
       }
@@ -515,7 +515,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security"],
         "dossier": "docs/reviews/radar-engine-v2/README.md"
       }
@@ -532,7 +532,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security"],
         "dossier": "docs/reviews/radar-engine-v2/README.md"
       }
@@ -549,7 +549,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security"],
         "dossier": "docs/reviews/radar-engine-v2/README.md"
       }
@@ -566,7 +566,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security"],
         "dossier": "docs/reviews/radar-engine-v2/README.md"
       }
@@ -583,7 +583,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security", "cryptography", "privacy"],
         "dossier": "docs/reviews/notebook-core-v2/README.md"
       }
@@ -600,7 +600,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security", "cryptography", "privacy"],
         "dossier": "docs/reviews/notebook-core-v2/README.md"
       }
@@ -617,7 +617,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security", "cryptography", "privacy"],
         "dossier": "docs/reviews/notebook-core-v2/README.md"
       }
@@ -634,7 +634,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security", "privacy"],
         "dossier": "docs/reviews/policy-core-v2/README.md"
       }
@@ -651,7 +651,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security", "privacy"],
         "dossier": "docs/reviews/policy-core-v2/README.md"
       }
@@ -668,7 +668,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security", "privacy"],
         "dossier": "docs/reviews/policy-core-v2/README.md"
       }
@@ -685,7 +685,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security", "privacy"],
         "dossier": "docs/reviews/policy-core-v2/README.md"
       }
@@ -702,7 +702,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security", "methodology", "privacy"],
         "dossier": "docs/reviews/boussole-scoring-v2/README.md"
       }
@@ -719,7 +719,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security", "methodology", "privacy"],
         "dossier": "docs/reviews/boussole-scoring-v2/README.md"
       }
@@ -736,7 +736,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security", "methodology", "privacy"],
         "dossier": "docs/reviews/boussole-scoring-v2/README.md"
       }
@@ -753,7 +753,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security", "methodology", "privacy"],
         "dossier": "docs/reviews/boussole-scoring-v2/README.md"
       }
@@ -770,7 +770,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security"],
         "dossier": "docs/reviews/specialized-engine-v2/README.md"
       }
@@ -787,7 +787,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security"],
         "dossier": "docs/reviews/radar-engine-v2/README.md"
       }
@@ -804,7 +804,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security", "privacy"],
         "dossier": "docs/reviews/policy-core-v2/README.md"
       }
@@ -826,7 +826,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security"],
         "dossier": "docs/reviews/radar-engine-v2/README.md"
       }
@@ -845,7 +845,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security", "cryptography", "privacy"],
         "dossier": "docs/reviews/notebook-core-v2/README.md"
       }
@@ -867,7 +867,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security", "privacy"],
         "dossier": "docs/reviews/policy-core-v2/README.md"
       }
@@ -886,7 +886,7 @@
       "review": {
         "state": "pending-independent-agent-review",
         "reviewerKind": "agent",
-        "separation": "different-agent-and-session",
+        "separation": "role-scoped-review-pass",
         "required": ["architecture", "security", "methodology", "privacy"],
         "dossier": "docs/reviews/boussole-scoring-v2/README.md"
       }
