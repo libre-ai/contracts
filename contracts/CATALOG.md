@@ -25,7 +25,9 @@ Uncataloged files and missing authorities fail `bun run check:contracts`.
 - `evidence-report.v1`: attributable gate results ;
 - `artifact-manifest.v1`: content-addressed release/export/evidence files ;
 - `agent-handoff.v1`: planning-only Specifications → Missions boundary ;
-- `common.v1`: identifiers, tenant IDs, digests, source, artifact and approval references.
+- `common.v1`: identifiers, tenant IDs, digests, source, artifact and approval references ;
+- `engine-golden-vectors.v1`: locked bounded public-vector envelope; engine WIT/semantics and dedicated
+  checkers remain authoritative, with no product/runtime authorization.
 
 ## Application contracts
 
