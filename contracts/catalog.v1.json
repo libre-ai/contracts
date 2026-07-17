@@ -292,6 +292,146 @@
       "status": "locked"
     },
     {
+      "id": "execution-plan-body-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/execution-plan-body.v1.schema.json",
+      "owners": ["agent-orchestrator"],
+      "consumers": ["missions", "agent-harness"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "locked"
+    },
+    {
+      "id": "agent-contributor-lineage-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/agent-contributor-lineage.v1.schema.json",
+      "owners": ["agent-harness"],
+      "consumers": ["missions", "proof"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "locked"
+    },
+    {
+      "id": "agent-review-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/agent-review.v1.schema.json",
+      "owners": ["missions", "agent-harness"],
+      "consumers": ["missions", "proof"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "locked"
+    },
+    {
+      "id": "agent-review-session-attestation-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/agent-review-session-attestation.v1.schema.json",
+      "owners": ["agent-harness", "security"],
+      "consumers": ["missions", "proof"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "locked"
+    },
+    {
+      "id": "agent-review-quorum-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/agent-review-quorum.v1.schema.json",
+      "owners": ["missions"],
+      "consumers": ["missions", "agent-orchestrator"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "locked"
+    },
+    {
+      "id": "agent-review-quorum-view-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/agent-review-quorum-view.v1.schema.json",
+      "owners": ["missions"],
+      "consumers": ["browser", "proof"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "locked"
+    },
+    {
+      "id": "execution-authorization-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/execution-authorization.v1.schema.json",
+      "owners": ["missions"],
+      "consumers": ["agent-orchestrator", "authz-biscuit"],
+      "compatibility": "major-versioned",
+      "classification": "internal",
+      "status": "locked"
+    },
+    {
+      "id": "orchestrator-control-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/orchestrator-control.v1.schema.json",
+      "owners": ["agent-orchestrator"],
+      "consumers": ["missions", "agent-harness"],
+      "compatibility": "major-versioned",
+      "classification": "internal",
+      "status": "locked"
+    },
+    {
+      "id": "orchestrator-event-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/orchestrator-event.v2.schema.json",
+      "owners": ["agent-orchestrator"],
+      "consumers": ["missions", "proof"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "locked"
+    },
+    {
+      "id": "harness-profile-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/harness-profile.v1.schema.json",
+      "owners": ["agent-harness", "security"],
+      "consumers": ["agent-orchestrator", "proof"],
+      "compatibility": "major-versioned",
+      "classification": "internal",
+      "status": "locked"
+    },
+    {
+      "id": "harness-attestation-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/harness-attestation.v1.schema.json",
+      "owners": ["agent-harness", "security"],
+      "consumers": ["missions", "agent-orchestrator", "proof"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "locked"
+    },
+    {
+      "id": "mission-record-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/mission-record.v2.schema.json",
+      "owners": ["missions"],
+      "consumers": ["missions", "agent-orchestrator"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "locked"
+    },
+    {
+      "id": "missions-api-v2",
+      "kind": "openapi",
+      "path": "contracts/openapi/missions.v2.yaml",
+      "owners": ["missions"],
+      "consumers": ["browser", "agent-orchestrator", "agent-harness"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "locked"
+    },
+    {
+      "id": "agent-runs-authz-v1",
+      "kind": "biscuit-policy",
+      "path": "contracts/authz/agent-runs-v1.datalog",
+      "owners": ["missions", "authz-biscuit"],
+      "consumers": ["missions", "agent-orchestrator", "agent-harness"],
+      "compatibility": "major-versioned",
+      "classification": "internal",
+      "status": "locked"
+    },
+    {
       "id": "evidence-report-v1",
       "kind": "json-schema",
       "path": "contracts/schemas/evidence-report.v1.schema.json",

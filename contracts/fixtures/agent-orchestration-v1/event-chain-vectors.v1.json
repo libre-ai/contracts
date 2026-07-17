@@ -1,0 +1,325 @@
+{
+  "schemaVersion": "libre-ai.orchestrator-event-chain-vectors.v1",
+  "pair": {
+    "previous": {
+      "id": "urn:libre-ai:event:event-1",
+      "eventDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tenantId": "ten_1234567890abcdef",
+      "missionId": "urn:libre-ai:mission:mission-1",
+      "runId": "urn:libre-ai:run:run-1",
+      "orchestratorId": "orchestrator_1",
+      "planDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "authorizationDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "sequence": 1,
+      "previousEventDigest": null,
+      "attempt": 1,
+      "budgetDelta": {
+        "durationSeconds": 10,
+        "toolCalls": 10,
+        "inputTokens": 100,
+        "outputTokens": 50,
+        "processesStarted": 2,
+        "filesChanged": 1,
+        "changedBytes": 1000
+      },
+      "budgetTotal": {
+        "durationSeconds": 10,
+        "toolCalls": 10,
+        "inputTokens": 100,
+        "outputTokens": 50,
+        "processesStarted": 2,
+        "filesChanged": 1,
+        "changedBytes": 1000
+      }
+    },
+    "current": {
+      "id": "urn:libre-ai:event:event-2",
+      "eventDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "tenantId": "ten_1234567890abcdef",
+      "missionId": "urn:libre-ai:mission:mission-1",
+      "runId": "urn:libre-ai:run:run-1",
+      "orchestratorId": "orchestrator_1",
+      "planDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "authorizationDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "sequence": 2,
+      "previousEventDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "attempt": 2,
+      "budgetDelta": {
+        "durationSeconds": 5,
+        "toolCalls": 2,
+        "inputTokens": 10,
+        "outputTokens": 5,
+        "processesStarted": 1,
+        "filesChanged": 1,
+        "changedBytes": 100
+      },
+      "budgetTotal": {
+        "durationSeconds": 15,
+        "toolCalls": 12,
+        "inputTokens": 110,
+        "outputTokens": 55,
+        "processesStarted": 3,
+        "filesChanged": 2,
+        "changedBytes": 1100
+      }
+    }
+  },
+  "genesis": {
+    "previous": null,
+    "current": {
+      "id": "urn:libre-ai:event:genesis",
+      "eventDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tenantId": "ten_1234567890abcdef",
+      "missionId": "urn:libre-ai:mission:mission-1",
+      "runId": "urn:libre-ai:run:run-1",
+      "orchestratorId": "orchestrator_1",
+      "planDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "authorizationDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "sequence": 1,
+      "previousEventDigest": null,
+      "attempt": 1,
+      "budgetDelta": {
+        "durationSeconds": 0,
+        "toolCalls": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "processesStarted": 0,
+        "filesChanged": 0,
+        "changedBytes": 0
+      },
+      "budgetTotal": {
+        "durationSeconds": 0,
+        "toolCalls": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "processesStarted": 0,
+        "filesChanged": 0,
+        "changedBytes": 0
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "valid-causal-retry",
+      "scenario": "pair",
+      "mutations": [],
+      "collision": "none",
+      "expected": "valid"
+    },
+    {
+      "id": "valid-genesis",
+      "scenario": "genesis",
+      "mutations": [],
+      "collision": "none",
+      "expected": "valid"
+    },
+    {
+      "id": "exact-duplicate-is-idempotent",
+      "scenario": "pair",
+      "mutations": [],
+      "collision": "exact-current",
+      "expected": "idempotent-duplicate"
+    },
+    {
+      "id": "same-id-different-digest-is-quarantined",
+      "scenario": "pair",
+      "mutations": [],
+      "collision": "same-id-different-digest",
+      "expected": "duplicate-divergent"
+    },
+    {
+      "id": "same-sequence-different-event-is-quarantined",
+      "scenario": "pair",
+      "mutations": [],
+      "collision": "same-sequence-different-id",
+      "expected": "duplicate-divergent"
+    },
+    {
+      "id": "reject-sequence-gap",
+      "scenario": "pair",
+      "mutations": [
+        {
+          "target": "current",
+          "path": "sequence",
+          "value": 4
+        }
+      ],
+      "collision": "none",
+      "expected": "sequence-invalid"
+    },
+    {
+      "id": "reject-predecessor-substitution",
+      "scenario": "pair",
+      "mutations": [
+        {
+          "target": "current",
+          "path": "previousEventDigest",
+          "value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      ],
+      "collision": "none",
+      "expected": "previous-digest-mismatch"
+    },
+    {
+      "id": "reject-cross-tenant",
+      "scenario": "pair",
+      "mutations": [
+        {
+          "target": "current",
+          "path": "tenantId",
+          "value": "ten_abcdef1234567890"
+        }
+      ],
+      "collision": "none",
+      "expected": "identity-mismatch"
+    },
+    {
+      "id": "reject-cross-mission",
+      "scenario": "pair",
+      "mutations": [
+        {
+          "target": "current",
+          "path": "missionId",
+          "value": "urn:libre-ai:mission:mission-2"
+        }
+      ],
+      "collision": "none",
+      "expected": "identity-mismatch"
+    },
+    {
+      "id": "reject-cross-run",
+      "scenario": "pair",
+      "mutations": [
+        {
+          "target": "current",
+          "path": "runId",
+          "value": "urn:libre-ai:run:run-2"
+        }
+      ],
+      "collision": "none",
+      "expected": "identity-mismatch"
+    },
+    {
+      "id": "reject-orchestrator-substitution",
+      "scenario": "pair",
+      "mutations": [
+        {
+          "target": "current",
+          "path": "orchestratorId",
+          "value": "orchestrator_2"
+        }
+      ],
+      "collision": "none",
+      "expected": "identity-mismatch"
+    },
+    {
+      "id": "reject-plan-substitution",
+      "scenario": "pair",
+      "mutations": [
+        {
+          "target": "current",
+          "path": "planDigest",
+          "value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      ],
+      "collision": "none",
+      "expected": "identity-mismatch"
+    },
+    {
+      "id": "reject-authorization-substitution",
+      "scenario": "pair",
+      "mutations": [
+        {
+          "target": "current",
+          "path": "authorizationDigest",
+          "value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        }
+      ],
+      "collision": "none",
+      "expected": "identity-mismatch"
+    },
+    {
+      "id": "reject-attempt-decrease",
+      "scenario": "pair",
+      "mutations": [
+        {
+          "target": "previous",
+          "path": "attempt",
+          "value": 2
+        },
+        {
+          "target": "current",
+          "path": "attempt",
+          "value": 1
+        }
+      ],
+      "collision": "none",
+      "expected": "attempt-decreased"
+    },
+    {
+      "id": "reject-budget-total-decrease-on-retry",
+      "scenario": "pair",
+      "mutations": [
+        {
+          "target": "current",
+          "path": "budgetTotal.toolCalls",
+          "value": 9
+        }
+      ],
+      "collision": "none",
+      "expected": "budget-decreased"
+    },
+    {
+      "id": "reject-budget-arithmetic-inflation",
+      "scenario": "pair",
+      "mutations": [
+        {
+          "target": "current",
+          "path": "budgetTotal.toolCalls",
+          "value": 13
+        }
+      ],
+      "collision": "none",
+      "expected": "budget-arithmetic-invalid"
+    },
+    {
+      "id": "reject-genesis-predecessor",
+      "scenario": "genesis",
+      "mutations": [
+        {
+          "target": "current",
+          "path": "previousEventDigest",
+          "value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        }
+      ],
+      "collision": "none",
+      "expected": "genesis-invalid"
+    },
+    {
+      "id": "reject-genesis-sequence",
+      "scenario": "genesis",
+      "mutations": [
+        {
+          "target": "current",
+          "path": "sequence",
+          "value": 2
+        }
+      ],
+      "collision": "none",
+      "expected": "genesis-invalid"
+    },
+    {
+      "id": "reject-genesis-budget-reset",
+      "scenario": "genesis",
+      "mutations": [
+        {
+          "target": "current",
+          "path": "budgetTotal.toolCalls",
+          "value": 1
+        }
+      ],
+      "collision": "none",
+      "expected": "budget-arithmetic-invalid"
+    }
+  ]
+}

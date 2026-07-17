@@ -4,11 +4,11 @@ Machine authority: [`catalog.v1.json`](catalog.v1.json).
 
 | Family | Count | Authority | Compatibility |
 | --- | ---: | --- | --- |
-| JSON Schema 2020-12 | 48 | `contracts/schemas/` | strict payloads; additive v1 only through coordinated producer/consumer qualification; breaking changes use a new major |
+| JSON Schema 2020-12 | 60 | `contracts/schemas/` | strict payloads; additive v1 only through coordinated producer/consumer qualification; breaking changes use a new major |
 | Retention policy | 1 | `contracts/data/` | exact ADR-0002 lifecycle projection |
-| OpenAPI 3.1 | 10 | `contracts/openapi/` | routes and payload majors remain aligned |
+| OpenAPI 3.1 | 11 | `contracts/openapi/` | routes and payload majors remain aligned |
 | WIT worlds | 9 | `contracts/wit/` | exact major-versioned component boundary + cataloged profile |
-| Biscuit authority/policies | 3 | `contracts/authz/` | minimal authority plus deny-by-default authorizers |
+| Biscuit authority/policies | 4 | `contracts/authz/` | minimal authority plus deny-by-default authorizers |
 
 The catalog records one ID, path, owner set, consumer set, classification, compatibility mode and
 `locked` or `pending-independent-agent-review` candidate status for every contract. Candidate entries
@@ -39,6 +39,7 @@ Uncataloged files and missing authorities fail `bun run check:contracts`.
 - Model Policy: locked v1 and v2 policy/need/snapshot/evaluation boundaries with human approval separation ;
 - Boussole: locked v1 and v2 reviewed dataset/method/responses/comparison boundaries, with public scoring disabled ;
 - Specifications: immutable SpecPackage and planning handoff ;
-- Missions: orchestrator event and human-verdict MissionRecord.
+- Missions: locked v1 human-verdict baseline plus locked, unimplemented v2 two-agent plan/result quorums ;
+- Agent Orchestrator/Harness: locked, unimplemented immutable plan, separate authorization, causal events, monotone budgets and signed fail-closed isolation profile/attestation.
 
 See [`COMPATIBILITY.md`](COMPATIBILITY.md) for evolution rules and [`fixtures/schema-fixtures.v1.json`](fixtures/schema-fixtures.v1.json) for executable positive/negative vectors.
