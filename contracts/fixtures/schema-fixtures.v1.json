@@ -2018,6 +2018,13 @@
           }
         },
         {
+          "name": "embedded private payload",
+          "path": "/reproductionEvidence",
+          "value": {
+            "note": "contact alice@example.org for details"
+          }
+        },
+        {
           "name": "unbounded public string",
           "path": "/status",
           "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
