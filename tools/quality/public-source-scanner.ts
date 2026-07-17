@@ -134,16 +134,12 @@ function skipWhitespaceForward(value: string, start: number): number {
   return cursor;
 }
 
-function hasInvalidLocalPrefix(value: string, start: number): boolean {
-  if (start === 0) return false;
+function hasValidLocalBoundary(value: string, start: number): boolean {
+  if (start === 0) return true;
   const previous = previousCodePointStart(value, start);
   const character = value.slice(previous, start);
-  return (
-    isAtextAt(value, previous, start) ||
-    character === "." ||
-    character === '"' ||
-    character === "\\"
-  );
+  if (isWhitespaceAt(value, previous, start) || "(<[{".includes(character)) return true;
+  return character === ":" && value.slice(0, previous).toLowerCase().endsWith("mailto");
 }
 
 function hasValidDotAtomLocal(value: string, end: number): boolean {
@@ -154,7 +150,7 @@ function hasValidDotAtomLocal(value: string, end: number): boolean {
     if (!(character === "." || isAtextAt(value, previous, start))) break;
     start = previous;
   }
-  if (start === end || hasInvalidLocalPrefix(value, start)) return false;
+  if (start === end || !hasValidLocalBoundary(value, start)) return false;
   const candidate = value.slice(start, end);
   if (
     candidate.startsWith(".") ||
@@ -192,7 +188,7 @@ function hasValidQuotedLocal(value: string, end: number): boolean {
   if (!isUnescapedQuote(value, closingQuote)) return false;
   for (let openingQuote = closingQuote - 1; openingQuote >= 0; openingQuote -= 1) {
     if (!isUnescapedQuote(value, openingQuote)) continue;
-    if (hasInvalidLocalPrefix(value, openingQuote)) return false;
+    if (!hasValidLocalBoundary(value, openingQuote)) return false;
     for (let cursor = openingQuote + 1; cursor < closingQuote; ) {
       let codePoint = value.codePointAt(cursor);
       if (codePoint === undefined) return false;
@@ -211,6 +207,20 @@ function hasValidQuotedLocal(value: string, end: number): boolean {
   return false;
 }
 
+function isDomainDot(character: string): boolean {
+  return character === "." || character === "。" || character === "．" || character === "｡";
+}
+
+function skipTrailingDomainDots(value: string, start: number): number {
+  let cursor = start;
+  while (cursor < value.length) {
+    const end = nextCodePointEnd(value, cursor);
+    if (!isDomainDot(value.slice(cursor, end))) break;
+    cursor = end;
+  }
+  return cursor;
+}
+
 function hasValidDomainBoundary(value: string, end: number): boolean {
   if (end >= value.length) return true;
   const next = nextCodePointEnd(value, end);
@@ -219,8 +229,8 @@ function hasValidDomainBoundary(value: string, end: number): boolean {
 
 function hasValidDomainLiteral(value: string, start: number): boolean {
   const closing = value.indexOf("]", start + 1);
-  if (closing < 0 || closing - start > 72 || !hasValidDomainBoundary(value, closing + 1))
-    return false;
+  const boundary = closing < 0 ? closing : skipTrailingDomainDots(value, closing + 1);
+  if (closing < 0 || closing - start > 72 || !hasValidDomainBoundary(value, boundary)) return false;
   const literal = value.slice(start + 1, closing);
   if (literal.startsWith("IPv6:")) return isIP(literal.slice(5)) === 6;
   return isIP(literal) === 4;
@@ -231,18 +241,16 @@ function hasValidDnsDomain(value: string, start: number): boolean {
   while (end < value.length) {
     const next = nextCodePointEnd(value, end);
     const character = value.slice(end, next);
-    if (
-      !(
-        domainCodePoint.test(character) ||
-        character === "。" ||
-        character === "．" ||
-        character === "｡"
-      )
-    )
-      break;
+    if (!(domainCodePoint.test(character) || isDomainDot(character))) break;
     end = next;
   }
   if (end === start || !hasValidDomainBoundary(value, end)) return false;
+  while (end > start) {
+    const previous = previousCodePointStart(value, end);
+    if (!isDomainDot(value.slice(previous, end))) break;
+    end = previous;
+  }
+  if (end === start) return false;
   const ascii = domainToASCII(value.slice(start, end));
   if (ascii.length === 0 || ascii.length > 253) return false;
   const labels = ascii.toLowerCase().split(".");
@@ -261,8 +269,7 @@ function hasValidDomain(value: string, start: number): boolean {
     : hasValidDnsDomain(value, start);
 }
 
-export function containsEmailIdentifier(input: string): boolean {
-  const value = removeEmailComments(input);
+function containsEmailIdentifierWithoutComments(value: string): boolean {
   for (let at = value.indexOf("@"); at >= 0; at = value.indexOf("@", at + 1)) {
     const localEnd = skipWhitespaceBackward(value, at);
     const domainStart = skipWhitespaceForward(value, at + 1);
@@ -270,6 +277,12 @@ export function containsEmailIdentifier(input: string): boolean {
     if (hasValidDotAtomLocal(value, localEnd) || hasValidQuotedLocal(value, localEnd)) return true;
   }
   return false;
+}
+
+export function containsEmailIdentifier(input: string): boolean {
+  if (containsEmailIdentifierWithoutComments(input)) return true;
+  const withoutComments = removeEmailComments(input);
+  return withoutComments !== input && containsEmailIdentifierWithoutComments(withoutComments);
 }
 
 function exceedsDecodedCodePointLimit(value: string): boolean {
@@ -281,9 +294,37 @@ function exceedsDecodedCodePointLimit(value: string): boolean {
   return false;
 }
 
+function normalizePreservingNonAsciiCfws(value: string): string {
+  let normalized = "";
+  for (const character of value) {
+    const replacement = character.normalize("NFKC");
+    normalized +=
+      (character.codePointAt(0) ?? 0) >= 0x80 && /^[\t\n\r ]+$/.test(replacement)
+        ? character
+        : replacement;
+  }
+  return normalized;
+}
+
+function containsUrlUserinfo(value: string): boolean {
+  for (const match of value.matchAll(/(?:https?|ftp):\/\//giu)) {
+    const start = match.index + match[0].length;
+    let end = start;
+    while (end < value.length) {
+      const next = nextCodePointEnd(value, end);
+      if (/^[\t\n\r /?#]$/.test(value.slice(end, next))) break;
+      end = next;
+    }
+    const authority = value.slice(start, end);
+    const at = authority.lastIndexOf("@");
+    if (at > 0 && at < authority.length - 1) return true;
+  }
+  return false;
+}
+
 export function containsSensitivePublicMarker(value: string): boolean {
   const decoded = decodeSensitiveMarkers(value);
-  const normalized = decoded.normalize("NFKC");
+  const normalized = normalizePreservingNonAsciiCfws(decoded);
   if (exceedsDecodedCodePointLimit(decoded) || exceedsDecodedCodePointLimit(normalized))
     return true;
   const variants = new Set([
@@ -293,7 +334,12 @@ export function containsSensitivePublicMarker(value: string): boolean {
     normalized.replace(/\p{Default_Ignorable_Code_Point}/gu, ""),
   ]);
   for (const variant of variants) {
-    if (credentialMarker.test(variant) || containsEmailIdentifier(variant)) return true;
+    if (
+      credentialMarker.test(variant) ||
+      containsEmailIdentifier(variant) ||
+      containsUrlUserinfo(variant)
+    )
+      return true;
   }
   return false;
 }
@@ -302,6 +348,16 @@ export const publicSourceScannerSelfTests: ReadonlyArray<
   readonly [label: string, value: string, expectedSensitive: boolean]
 > = [
   ["direct email", "alice@example.org", true],
+  ["trailing sentence-dot email", "alice@example.org.", true],
+  ["trailing Unicode-dot email", "alice@example.org。", true],
+  ["trailing ellipsis email", "alice@example.org...", true],
+  ["encoded trailing-dot email", "alice&commat;example&period;org&period;", true],
+  ["domain-literal trailing-dot email", "alice@[127.0.0.1].", true],
+  ["parenthesized email", "Contact (alice@example.org).", true],
+  ["encoded parenthesized email", "%28alice%40example.org%29", true],
+  ["HTML parenthesized email", "&lpar;alice&commat;example&period;org&rpar;", true],
+  ["mailto email", "mailto:alice@example.org", true],
+  ["URL userinfo identifier", "https://user:secret@example.org/feed.xml", true],
   ["percent email", "alice%40example.org", true],
   ["double-percent email", "alice%2540example.org", true],
   ["JavaScript escape email", "alice%u0040example.org", true],
@@ -315,6 +371,7 @@ export const publicSourceScannerSelfTests: ReadonlyArray<
   ["uppercase HTML5 quote alias", "&QUOT;alice&QUOT;&commat;example&period;org", true],
   ["mixed-case unknown HTML alias", "alice&CommaT;example&period;org", false],
   ["Unicode at-sign email", "alice＠example.org", true],
+  ["Unicode at-sign with ASCII CFWS", "alice ＠ example.org", true],
   ["default-ignorable email", "ali\u200bce@example.org", true],
   ["Unicode local email", "élise@example.org", true],
   ["EAI symbol local email", "😀@example.org", true],
@@ -358,6 +415,14 @@ export const publicSourceScannerSelfTests: ReadonlyArray<
   ["inert traversal", "../../secrets.txt", false],
   ["inert file URI", "file:///etc/passwd", false],
   ["legitimate Unicode", "Café démonstration", false],
+  ["non-ASCII domain separator", "alice@\u00A0example.org", false],
+  ["figure-space domain separator", "alice@\u2007example.org", false],
+  ["narrow-no-break domain separator", "alice@\u202Fexample.org", false],
+  ["ideographic-space domain separator", "alice@\u3000example.org", false],
+  ["C0-separated local token", "ali\u0000ce@example.org", false],
+  ["colon-separated local token", "ali:ce@example.org", false],
+  ["comma-separated local token", "ali,ce@example.org", false],
+  ["RFC slash atext email", "ali/ce@example.org", true],
   ["leading-dot local", ".alice@example.org", false],
   ["trailing-dot local", "alice.@example.org", false],
   ["double-dot local", "alice..ops@example.org", false],
@@ -367,6 +432,7 @@ export const publicSourceScannerSelfTests: ReadonlyArray<
   ["leading-hyphen domain", "alice@-example.org", false],
   ["trailing-hyphen domain", "alice@example-.org", false],
   ["empty domain label", "alice@example..org", false],
+  ["empty domain label with punctuation", "alice@example..org.", false],
   ["overlong domain label", `alice@${"a".repeat(64)}.org`, false],
   ["single-letter TLD", "alice@example.c", false],
   ["maximum public non-email", "a".repeat(65_536), false],
