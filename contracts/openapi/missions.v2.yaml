@@ -5,7 +5,7 @@ info:
 servers:
   - url: /
 x-libre-ai-domain:
-  commands: [ProposeMission, AssessMissionRisk, SubmitExecutionPlan, SubmitAgentReview, AuthorizeExecution, StartMission, PauseMission, ResumeMission, CancelMission, RecordOrchestratorEvent, AnswerDecisionRequest, SubmitMissionResult, AbandonMission, ExportMissionRecord]
+  commands: [ProposeMission, AssessMissionRisk, SubmitExecutionPlan, SubmitAgentReview, StartMission, PauseMission, ResumeMission, CancelMission, RecordOrchestratorEvent, AnswerDecisionRequest, SubmitMissionResult, AbandonMission, ExportMissionRecord]
   queries: [GetMission, ListMissions, GetMissionEvents, GetOpenDecisionRequests, GetResultEvidence, GetReviewQuorum, GetMissionExport]
 paths:
   /v2/missions:
@@ -135,7 +135,7 @@ paths:
   /v2/missions/{missionId}/reviews:
     post:
       operationId: submitAgentReview
-      x-libre-ai-operations: [SubmitAgentReview, AuthorizeExecution]
+      x-libre-ai-operations: [SubmitAgentReview]
       security:
         - internalBiscuit: []
       parameters:

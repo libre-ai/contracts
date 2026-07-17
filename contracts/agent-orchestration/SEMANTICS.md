@@ -61,7 +61,7 @@ A review is eligible only when all conditions hold:
 11. signing key, signature and preimage digest verify;
 12. verdict is `approve` and summary contains no `blocking` or `major` finding.
 
-Any `reject`, invalid review or changed subject/evidence/lineage digest prevents quorum for that digest. Remediation creates a new digest and requires two new reviews. A reviewer that modifies the subject becomes a contributor and is ineligible to review the new digest.
+Any `reject`, invalid review or changed subject/evidence/lineage digest prevents quorum for that digest. A `plan-rejected` or result `rejected` projection carries the exact eligible signed rejection-review reference; rejection is never inferred from an empty review set. Remediation creates a new digest and requires two new reviews. A reviewer that modifies the subject becomes a contributor and is ineligible to review the new digest.
 
 The threshold is two favorable reviews. High-risk policy may additionally require `reviewer-pool`, `runtime-family`, `model-family` or `provider` diversity. `diversityRequirements` must exactly match the requirements resolved by `policyDigest`, and both reviews must differ on every named dimension. The policy cannot reduce the threshold or permit self-review.
 
@@ -69,7 +69,7 @@ The threshold is two favorable reviews. High-risk policy may additionally requir
 
 `AgentReviewQuorum v1` contains exactly two full reviews. All duplicated tenant, mission, subject and lineage fields must be byte-identical across the quorum and both reviews. `reachedAt` is not earlier than either `issuedAt` and remains before both `expiresAt` values.
 
-Missions computes `quorumDigest` only after all semantic checks pass. A JSON-Schema-valid document that fails any semantic check is refused with a closed reason code and cannot transition a mission.
+Missions computes `quorumDigest` only after all semantic checks pass. `ExecutionAuthorization` is a server-owned consequence of the accepted plan quorum, never a reviewer-callable API command. A JSON-Schema-valid document that fails any semantic check is refused with a closed reason code and cannot transition a mission.
 
 ## Mission transitions
 

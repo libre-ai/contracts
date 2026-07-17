@@ -88,9 +88,10 @@
     "planReviewOutcome": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["status", "reasonCode", "decidedAt"],
+      "required": ["status", "reasonCode", "rejectionReview", "decidedAt"],
       "properties": {
         "status": { "const": "rejected" },
+        "rejectionReview": { "$ref": "common.v1.schema.json#/$defs/artifactReference" },
         "reasonCode": { "type": "string", "pattern": "^mission\\.[a-z0-9_.-]+$", "maxLength": 128 },
         "decidedAt": { "$ref": "common.v1.schema.json#/$defs/timestamp" }
       }
@@ -123,6 +124,7 @@
       "required": ["status", "reasonCode", "decidedAt"],
       "properties": {
         "status": { "enum": ["validated", "rejected", "abandoned"] },
+        "rejectionReview": { "$ref": "common.v1.schema.json#/$defs/artifactReference" },
         "reasonCode": { "type": "string", "pattern": "^mission\\.[a-z0-9_.-]+$", "maxLength": 128 },
         "decidedAt": { "$ref": "common.v1.schema.json#/$defs/timestamp" }
       }
@@ -287,8 +289,8 @@
         "properties": {
           "validation": {
             "type": "object",
-            "properties": { "status": { "const": "rejected" } },
-            "required": ["status"]
+            "properties": { "status": { "const": "rejected" }, "rejectionReview": true },
+            "required": ["status", "rejectionReview"]
           }
         }
       }
