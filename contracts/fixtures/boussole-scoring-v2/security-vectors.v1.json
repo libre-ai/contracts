@@ -149,10 +149,20 @@
       "expectedError": "digest-mismatch"
     },
     {
+      "id": "aggregation-threshold",
+      "mutation": "statement-below-publication-threshold",
+      "expectedError": "input-invalid"
+    },
+    {
+      "id": "publication-review-expired",
+      "mutation": "publication-review-expired",
+      "expectedError": "approval-invalid"
+    },
+    {
       "id": "redacted-approval",
       "mutation": "duplicate-private-reviewer-canary",
       "expectedError": "approval-invalid",
-      "forbiddenDiagnosticValues": ["private_reviewer_canary", "private_response_canary"]
+      "forbiddenDiagnosticValues": ["rev_3333333333333333", "private_response_canary"]
     }
   ],
   "maximumArithmetic": {

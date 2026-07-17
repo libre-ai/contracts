@@ -1724,19 +1724,19 @@
       "schema": "public-vote-dataset.v2.schema.json",
       "valid": {
         "schemaVersion": "libre-ai.public-vote-dataset.v2",
-        "id": "urn:libre-ai:dataset:votes-2",
+        "id": "urn:libre-ai:dataset:votes-unit",
         "version": "2.0.0",
         "scope": "Vote public de démonstration",
-        "methodId": "urn:libre-ai:method:method-2",
-        "methodDigest": "e410573d17a409dfbfda24adf0afea0e67f6706a24d9d51b21863b6129197159",
+        "methodId": "urn:libre-ai:method:method-unit",
+        "methodDigest": "86afa940e36b8d2ff452ef6b2a7b93ae50e334b90ab9d2a7799a2f586312ee1a",
         "statements": [
           {
             "id": "statement_1",
-            "wording": "Proposition sourcée",
+            "wording": "Proposition sourcée statement_1",
             "source": {
-              "uri": "https://example.org/vote",
+              "uri": "https://example.org/vote/statement_1",
               "retrievedAt": "2026-07-16T00:00:00Z",
-              "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "digest": "7114a5f1ab8f072738e138c5f0770deda0f60feee640e115b6523338d5ec731c",
               "licence": "Etalab-2.0"
             },
             "votesFor": 10,
@@ -1746,31 +1746,82 @@
           }
         ],
         "publishedAt": "2026-07-16T00:00:00Z",
-        "digest": "c0ef40cc0b8cc59ae5ee46b20ae016ba06f19c03476e542bae1e7d2a42d1d2de",
+        "digest": "1cb5bd7a6e4d8350866d8a0f4eddfca639d2937587cd588cc5aeff488c3e8340",
         "approvals": [
           {
             "role": "methodological-review",
             "actorKind": "human",
-            "reviewerId": "method_reviewer",
+            "reviewerId": "rev_1111111111111111",
             "approvedAt": "2026-07-16T00:00:00Z",
-            "reference": "urn:libre-ai:approval:dataset-method-2",
-            "subjectDigest": "c0ef40cc0b8cc59ae5ee46b20ae016ba06f19c03476e542bae1e7d2a42d1d2de"
+            "reference": "urn:libre-ai:approval:dataset-votes-unit-method",
+            "subjectDigest": "1cb5bd7a6e4d8350866d8a0f4eddfca639d2937587cd588cc5aeff488c3e8340",
+            "professionalCapacity": "methodology-expert",
+            "attestation": {
+              "uri": "https://reviews.example.invalid/boussole/methodology-v2",
+              "digest": "c4b3314981117b065396d38ae01c5d828eab5cbdec458a1a23b2fff44a976c86",
+              "publicationBasis": "explicit-publication-consent",
+              "identityBoundary": "professional-attestation-only"
+            }
           },
           {
             "role": "legal-privacy-review",
             "actorKind": "human",
-            "reviewerId": "privacy_reviewer",
+            "reviewerId": "rev_2222222222222222",
             "approvedAt": "2026-07-16T00:00:00Z",
-            "reference": "urn:libre-ai:approval:dataset-privacy-2",
-            "subjectDigest": "c0ef40cc0b8cc59ae5ee46b20ae016ba06f19c03476e542bae1e7d2a42d1d2de"
+            "reference": "urn:libre-ai:approval:dataset-votes-unit-privacy",
+            "subjectDigest": "1cb5bd7a6e4d8350866d8a0f4eddfca639d2937587cd588cc5aeff488c3e8340",
+            "professionalCapacity": "privacy-legal-expert",
+            "attestation": {
+              "uri": "https://reviews.example.invalid/boussole/privacy-v2",
+              "digest": "f61d06c7fe2adcdc5fe15ad8650dc1cdebc92e15bae2886a8555323cbf005b63",
+              "publicationBasis": "explicit-publication-consent",
+              "identityBoundary": "professional-attestation-only"
+            }
           }
-        ]
+        ],
+        "publicationPolicy": {
+          "sourceMode": "public-roll-call-aggregated",
+          "minimumGroupSize": 5,
+          "smallGroupAction": "exclude-statement",
+          "identityExposure": "prohibited",
+          "publicationReviewExpiresAt": "2027-07-16T00:00:00Z"
+        }
       },
       "invalidMutations": [
         {
           "name": "agent reviewer",
           "path": "/approvals/0/actorKind",
           "value": "agent"
+        },
+        {
+          "name": "cross-kind dataset id",
+          "path": "/id",
+          "value": "urn:libre-ai:method:wrong-kind"
+        },
+        {
+          "name": "cross-kind dataset method reference",
+          "path": "/methodId",
+          "value": "urn:libre-ai:dataset:wrong-kind"
+        },
+        {
+          "name": "publication group floor too low",
+          "path": "/publicationPolicy/minimumGroupSize",
+          "value": 4
+        },
+        {
+          "name": "publication identity exposure",
+          "path": "/publicationPolicy/identityExposure",
+          "value": "allowed"
+        },
+        {
+          "name": "private source host",
+          "path": "/statements/0/source/uri",
+          "value": "https://127.0.0.1/private"
+        },
+        {
+          "name": "non-opaque privacy reviewer",
+          "path": "/approvals/1/reviewerId",
+          "value": "person@example.invalid"
         }
       ]
     },
@@ -1778,7 +1829,7 @@
       "schema": "boussole-method.v2.schema.json",
       "valid": {
         "schemaVersion": "libre-ai.boussole-method.v2",
-        "id": "urn:libre-ai:method:method-2",
+        "id": "urn:libre-ai:method:method-unit",
         "version": "2.0.0",
         "responseScale": [-1, 0, 1],
         "abstentionTreatment": "excluded-from-denominator",
@@ -1786,23 +1837,37 @@
         "formula": "normalized-agreement-v2",
         "rounding": "decimal-6-half-even",
         "approvedAt": "2026-07-16T00:00:00Z",
-        "digest": "e410573d17a409dfbfda24adf0afea0e67f6706a24d9d51b21863b6129197159",
+        "digest": "86afa940e36b8d2ff452ef6b2a7b93ae50e334b90ab9d2a7799a2f586312ee1a",
         "approvals": [
           {
             "role": "methodological-review",
             "actorKind": "human",
-            "reviewerId": "method_reviewer",
+            "reviewerId": "rev_1111111111111111",
             "approvedAt": "2026-07-16T00:00:00Z",
-            "reference": "urn:libre-ai:approval:method-2",
-            "subjectDigest": "e410573d17a409dfbfda24adf0afea0e67f6706a24d9d51b21863b6129197159"
+            "reference": "urn:libre-ai:approval:method-method-unit-method",
+            "subjectDigest": "86afa940e36b8d2ff452ef6b2a7b93ae50e334b90ab9d2a7799a2f586312ee1a",
+            "professionalCapacity": "methodology-expert",
+            "attestation": {
+              "uri": "https://reviews.example.invalid/boussole/methodology-v2",
+              "digest": "c4b3314981117b065396d38ae01c5d828eab5cbdec458a1a23b2fff44a976c86",
+              "publicationBasis": "explicit-publication-consent",
+              "identityBoundary": "professional-attestation-only"
+            }
           },
           {
             "role": "legal-privacy-review",
             "actorKind": "human",
-            "reviewerId": "privacy_reviewer",
+            "reviewerId": "rev_2222222222222222",
             "approvedAt": "2026-07-16T00:00:00Z",
-            "reference": "urn:libre-ai:approval:privacy-2",
-            "subjectDigest": "e410573d17a409dfbfda24adf0afea0e67f6706a24d9d51b21863b6129197159"
+            "reference": "urn:libre-ai:approval:method-method-unit-privacy",
+            "subjectDigest": "86afa940e36b8d2ff452ef6b2a7b93ae50e334b90ab9d2a7799a2f586312ee1a",
+            "professionalCapacity": "privacy-legal-expert",
+            "attestation": {
+              "uri": "https://reviews.example.invalid/boussole/privacy-v2",
+              "digest": "f61d06c7fe2adcdc5fe15ad8650dc1cdebc92e15bae2886a8555323cbf005b63",
+              "publicationBasis": "explicit-publication-consent",
+              "identityBoundary": "professional-attestation-only"
+            }
           }
         ]
       },
@@ -1811,6 +1876,26 @@
           "name": "wrong formula",
           "path": "/formula",
           "value": "normalized-agreement-v1"
+        },
+        {
+          "name": "cross-kind method id",
+          "path": "/id",
+          "value": "urn:libre-ai:dataset:wrong-kind"
+        },
+        {
+          "name": "non-opaque methodology reviewer",
+          "path": "/approvals/0/reviewerId",
+          "value": "named_reviewer"
+        },
+        {
+          "name": "methodology reviewer wrong capacity",
+          "path": "/approvals/0/professionalCapacity",
+          "value": "privacy-legal-expert"
+        },
+        {
+          "name": "attestation query forbidden",
+          "path": "/approvals/0/attestation/uri",
+          "value": "https://reviews.example.invalid/attestation?person=private"
         }
       ]
     },
@@ -1818,10 +1903,10 @@
       "schema": "boussole-response-set.v2.schema.json",
       "valid": {
         "schemaVersion": "libre-ai.boussole-response-set.v2",
-        "datasetId": "urn:libre-ai:dataset:votes-2",
-        "datasetDigest": "c0ef40cc0b8cc59ae5ee46b20ae016ba06f19c03476e542bae1e7d2a42d1d2de",
-        "methodId": "urn:libre-ai:method:method-2",
-        "methodDigest": "e410573d17a409dfbfda24adf0afea0e67f6706a24d9d51b21863b6129197159",
+        "datasetId": "urn:libre-ai:dataset:votes-unit",
+        "datasetDigest": "1cb5bd7a6e4d8350866d8a0f4eddfca639d2937587cd588cc5aeff488c3e8340",
+        "methodId": "urn:libre-ai:method:method-unit",
+        "methodDigest": "86afa940e36b8d2ff452ef6b2a7b93ae50e334b90ab9d2a7799a2f586312ee1a",
         "responses": [
           {
             "statementId": "statement_1",
@@ -1835,6 +1920,16 @@
           "name": "answer outside scale bound",
           "path": "/responses/0/value",
           "value": 6
+        },
+        {
+          "name": "cross-kind response dataset id",
+          "path": "/datasetId",
+          "value": "urn:libre-ai:method:wrong-kind"
+        },
+        {
+          "name": "cross-kind response method id",
+          "path": "/methodId",
+          "value": "urn:libre-ai:dataset:wrong-kind"
         }
       ]
     },
@@ -1842,11 +1937,11 @@
       "schema": "local-comparison.v2.schema.json",
       "valid": {
         "schemaVersion": "libre-ai.local-comparison.v2",
-        "datasetId": "urn:libre-ai:dataset:votes-2",
-        "datasetDigest": "c0ef40cc0b8cc59ae5ee46b20ae016ba06f19c03476e542bae1e7d2a42d1d2de",
-        "methodId": "urn:libre-ai:method:method-2",
-        "methodDigest": "e410573d17a409dfbfda24adf0afea0e67f6706a24d9d51b21863b6129197159",
-        "responseSetDigest": "bcf2763ba2119662edfee375c9b8a7433a3c3f1e4f85805400bd6e2e408d02f3",
+        "datasetId": "urn:libre-ai:dataset:votes-unit",
+        "datasetDigest": "1cb5bd7a6e4d8350866d8a0f4eddfca639d2937587cd588cc5aeff488c3e8340",
+        "methodId": "urn:libre-ai:method:method-unit",
+        "methodDigest": "86afa940e36b8d2ff452ef6b2a7b93ae50e334b90ab9d2a7799a2f586312ee1a",
+        "responseSetDigest": "d7df4cbcd98e5942526d97ec4d962cf30b95a97d040667cf3d7d5a4319845034",
         "score": 0.333333,
         "denominator": 15,
         "omitted": 3,
@@ -1865,6 +1960,16 @@
           "name": "score out of range",
           "path": "/score",
           "value": 2
+        },
+        {
+          "name": "cross-kind comparison dataset id",
+          "path": "/datasetId",
+          "value": "urn:libre-ai:method:wrong-kind"
+        },
+        {
+          "name": "cross-kind comparison method id",
+          "path": "/methodId",
+          "value": "urn:libre-ai:dataset:wrong-kind"
         }
       ]
     },
