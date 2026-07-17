@@ -442,7 +442,7 @@ function hasValidDomainLiteral(value: string, start: number): boolean {
   const boundary = closing < 0 ? closing : skipTrailingDomainDots(value, closing + 1);
   if (closing < 0 || closing - start > 72 || !hasValidDomainBoundary(value, boundary)) return false;
   const literal = value.slice(start + 1, closing);
-  if (literal.startsWith("IPv6:")) return isIP(literal.slice(5)) === 6;
+  if (/^IPv6:/i.test(literal)) return isIP(literal.slice(5)) === 6;
   return isIP(literal) === 4;
 }
 
@@ -672,9 +672,16 @@ export const publicSourceScannerSelfTests: ReadonlyArray<
   ["punycode email", "alice@example.xn--p1ai", true],
   ["IPv4 domain literal", "alice@[127.0.0.1]", true],
   ["IPv6 domain literal", "alice@[IPv6:2001:db8::1]", true],
+  ["lowercase IPv6 domain literal", "alice@[ipv6:2001:db8::1]", true],
+  ["mixed-case IPv6 domain literal", "alice@[iPv6:2001:db8::1]", true],
   [
     "encoded IPv6 domain literal",
     "alice&commat;&lbrack;IPv6&colon;2001&colon;db8&colon;&colon;1&rsqb;",
+    true,
+  ],
+  [
+    "HTML5 lowercase IPv6 domain literal",
+    "alice&commat;&lbrack;ipv6&colon;2001&colon;db8&colon;&colon;1&rsqb;",
     true,
   ],
   ["credential", "sk_live_example_secret", true],
