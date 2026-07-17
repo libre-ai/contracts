@@ -31,7 +31,7 @@ Uncataloged files and missing authorities fail `bun run check:contracts`.
 
 - Website: public projection and correction record ;
 - Practices: activity definition/outcome and local progress export ;
-- Radar: v2 source-scoped parsing/rules with exact normalized feed/item and bounded output ;
+- Radar: locked v2 source-scoped parsing/rules with exact normalized feed/item and bounded output ;
 - Notebook: candidate context v2 plus authenticated Argon2id/AES-GCM backup envelope ;
 - Sessions: event and audience-safe export ;
 - Model Policy: locked v1 policy/need/snapshot/evaluation plus candidate v2 with human approval separation ;
