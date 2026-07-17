@@ -2034,6 +2034,27 @@
           }
         },
         {
+          "name": "DSA private-key header in metadata",
+          "path": "/reproductionEvidence",
+          "value": {
+            "credential": "-----BEGIN DSA PRIVATE KEY-----"
+          }
+        },
+        {
+          "name": "OpenPGP private-key header in metadata",
+          "path": "/reproductionEvidence",
+          "value": {
+            "credential": "-----BEGIN PGP PRIVATE KEY BLOCK-----"
+          }
+        },
+        {
+          "name": "encrypted PKCS#8 private-key header in metadata",
+          "path": "/reproductionEvidence",
+          "value": {
+            "credential": "-----BEGIN ENCRYPTED PRIVATE KEY-----"
+          }
+        },
+        {
           "name": "unapproved synthetic userinfo canary",
           "path": "/reproductionEvidence",
           "value": {
