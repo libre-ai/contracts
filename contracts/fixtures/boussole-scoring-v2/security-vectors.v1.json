@@ -1,0 +1,186 @@
+{
+  "schemaVersion": "libre-ai.boussole-security-vectors.v1",
+  "status": "candidate-security-remediation",
+  "rawDecoderCases": [
+    {
+      "id": "utf8-bom",
+      "target": "dataset",
+      "inputHex": "efbbbf7b7d",
+      "inputSha256": "aa25e978046d680ef8740d837e6de5bc1e2a2dc6089dbda1012544b538d53f65",
+      "defect": "bom",
+      "expectedError": "input-invalid"
+    },
+    {
+      "id": "invalid-utf8",
+      "target": "dataset",
+      "inputHex": "7b2276616c7565223a22c328227d",
+      "inputSha256": "a452ad021237e7af393f6432d26969900a9e4047075b776dc8a4383e36ffaffd",
+      "defect": "invalid-utf8",
+      "expectedError": "input-invalid"
+    },
+    {
+      "id": "duplicate-member",
+      "target": "dataset",
+      "inputHex": "7b22736368656d6156657273696f6e223a2278222c225c75303037336368656d6156657273696f6e223a2279227d",
+      "inputSha256": "293c11679936ffd28ab01c9af4f1556e86feb7b06e5a1e0271e470c538be5cb3",
+      "defect": "duplicate-member",
+      "expectedError": "input-invalid"
+    },
+    {
+      "id": "unpaired-surrogate",
+      "target": "dataset",
+      "inputHex": "7b2276616c7565223a225c7544383030227d",
+      "inputSha256": "c3c0f6e73919dc685c0a333f2160a12cbc94663790ff525abd109f1ceedcf00b",
+      "defect": "unpaired-surrogate",
+      "expectedError": "input-invalid"
+    },
+    {
+      "id": "invalid-number",
+      "target": "dataset",
+      "inputHex": "7b2276616c7565223a30317d",
+      "inputSha256": "cc7c115896e02faf43b57f3f5ee079206a25ae9a00ed0170ffb1e329d4e2416a",
+      "defect": "invalid-number",
+      "expectedError": "input-invalid"
+    },
+    {
+      "id": "malformed-json",
+      "target": "dataset",
+      "inputHex": "7b2276616c7565223a",
+      "inputSha256": "f87a452ffff823ec73ca2b9e92de475679a086a0f0ca3a7134a16a14b0112efc",
+      "defect": "invalid-json",
+      "expectedError": "input-invalid"
+    },
+    {
+      "id": "unknown-field",
+      "target": "dataset",
+      "inputHex": "7b22756e6578706563746564223a747275657d",
+      "inputSha256": "e7f5f6e5a781d62f599ff51c8cfdbe866f8ff4a971b5bbb569bf22f69e5295f2",
+      "defect": "schema-invalid",
+      "expectedError": "input-invalid"
+    },
+    {
+      "id": "maximum-depth-exceeded",
+      "target": "dataset",
+      "inputHex": "5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b305d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d5d",
+      "inputSha256": "2574b71c86249bc36bf15157b4883f41da049924b6ddd4477f68af56d73d76b2",
+      "defect": "max-depth",
+      "expectedError": "input-invalid"
+    }
+  ],
+  "resourceCases": [
+    {
+      "id": "dataset-at-limit",
+      "target": "dataset-input",
+      "byteLength": 8388608,
+      "expectedPreflight": "within-limit"
+    },
+    {
+      "id": "dataset-over-limit",
+      "target": "dataset-input",
+      "byteLength": 8388609,
+      "expectedError": "resource-limit-exceeded"
+    },
+    {
+      "id": "method-at-limit",
+      "target": "method-input",
+      "byteLength": 65536,
+      "expectedPreflight": "within-limit"
+    },
+    {
+      "id": "method-over-limit",
+      "target": "method-input",
+      "byteLength": 65537,
+      "expectedError": "resource-limit-exceeded"
+    },
+    {
+      "id": "responses-at-limit",
+      "target": "responses-input",
+      "byteLength": 262144,
+      "expectedPreflight": "within-limit"
+    },
+    {
+      "id": "responses-over-limit",
+      "target": "responses-input",
+      "byteLength": 262145,
+      "expectedError": "resource-limit-exceeded"
+    },
+    {
+      "id": "output-at-limit",
+      "target": "successful-output",
+      "byteLength": 524288,
+      "expectedPreflight": "within-limit"
+    },
+    {
+      "id": "output-over-limit",
+      "target": "successful-output",
+      "byteLength": 524289,
+      "expectedError": "resource-limit-exceeded"
+    }
+  ],
+  "semanticRefusalCases": [
+    {
+      "id": "digest-mismatch",
+      "mutation": "responses-dataset-digest-zero",
+      "expectedError": "digest-mismatch"
+    },
+    {
+      "id": "method-unsupported",
+      "mutation": "asymmetric-response-scale",
+      "expectedError": "method-unsupported"
+    },
+    {
+      "id": "computed-at-invalid",
+      "mutation": "invalid-gregorian-day",
+      "expectedError": "computed-at-invalid"
+    },
+    {
+      "id": "duplicate-statement-id",
+      "mutation": "duplicate-statement-id-with-valid-digests",
+      "expectedError": "response-invalid"
+    },
+    {
+      "id": "duplicate-response-id",
+      "mutation": "duplicate-response-id",
+      "expectedError": "response-invalid"
+    },
+    {
+      "id": "dataset-id-mismatch",
+      "mutation": "responses-dataset-id-mismatch",
+      "expectedError": "digest-mismatch"
+    },
+    {
+      "id": "redacted-approval",
+      "mutation": "duplicate-private-reviewer-canary",
+      "expectedError": "approval-invalid",
+      "forbiddenDiagnosticValues": ["private_reviewer_canary", "private_response_canary"]
+    }
+  ],
+  "maximumArithmetic": {
+    "maxVotePerCounter": 4294967295,
+    "maxStatements": 1000,
+    "maxScale": 5,
+    "decimalScale": 1000000,
+    "expected": {
+      "totalConsidered": "12884901885000",
+      "totalOmitted": "17179869180000",
+      "weightedNumerator": "21474836475000",
+      "scoreDenominator": "64424509425000",
+      "scaledWeightedNumerator": "21474836475000000000",
+      "exceedsUnsigned64": true,
+      "fitsSigned128": true
+    },
+    "executableCase": {
+      "id": "maximum-positive-wide-intermediate",
+      "statementCount": 1000,
+      "votesFor": 4294967295,
+      "votesAgainst": 0,
+      "abstentions": 0,
+      "absent": 4294967295,
+      "answer": 5,
+      "expectedScore": 1,
+      "expectedDenominator": "4294967295000",
+      "expectedOmitted": "4294967295000",
+      "expectedContributions": 1000
+    }
+  }
+}

@@ -1,6 +1,6 @@
 package libre-ai:boussole-scoring@2.0.0;
 
-interface types {
+interface api {
   enum refusal-code {
     input-invalid,
     digest-mismatch,
@@ -15,19 +15,19 @@ interface types {
   record contract-error {
     code: refusal-code,
   }
-}
-
-/// Pure local comparison component. SEMANTICS.md is normative.
-/// The component imports no network, storage, clock, randomness, identity or logging capability.
-world boussole-scoring {
-  use types.{contract-error};
 
   /// Inputs conform to public-vote-dataset.v2, boussole-method.v2 and
   /// boussole-response-set.v2. Success is local-comparison.v2 JCS JSON.
-  export compare: func(
+  compare: func(
     dataset: list<u8>,
     method: list<u8>,
     responses: list<u8>,
     computed-at: string,
   ) -> result<list<u8>, contract-error>;
+}
+
+/// Pure local comparison component. SEMANTICS.md is normative.
+/// The component imports no network, storage, clock, randomness, identity or logging capability.
+world boussole-scoring {
+  export api;
 }
