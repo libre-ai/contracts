@@ -708,7 +708,11 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/open
       ["Commands", commands],
       ["Queries", queries],
     ] as const) {
-      const line = spec.match(new RegExp(`\\*\\*${label}:\\*\\* ([^\\n]+)`))?.[1] ?? "";
+      const versioned = spec.match(
+        new RegExp(`\\*\\*${label} v${apiMajor}(?: candidate)?:\\*\\* ([^\\n]+)`),
+      )?.[1];
+      const line =
+        versioned ?? spec.match(new RegExp(`\\*\\*${label}:\\*\\* ([^\\n]+)`))?.[1] ?? "";
       const expected = [...line.matchAll(/`([A-Z][A-Za-z0-9]+)`/g)].map((match) => match[1]).sort();
       if (JSON.stringify([...actual].sort()) !== JSON.stringify(expected))
         failures.push(`${path}: ${label.toLowerCase()} diverge from ${appPath}`);

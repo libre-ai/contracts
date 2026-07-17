@@ -1,0 +1,322 @@
+{
+  "schemaVersion": "libre-ai.agent-review-quorum-vectors.v1",
+  "evaluationTime": "2026-07-16T10:30:00Z",
+  "subjectDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "evidenceDigests": ["cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"],
+  "lineageDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "contributorAgentIds": ["author_agent"],
+  "baseReviews": [
+    {
+      "reviewerAgentId": "reviewer_alpha",
+      "reviewerRunId": "urn:libre-ai:run:review-alpha",
+      "subjectDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "evidenceDigests": ["cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"],
+      "lineageDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "verdict": "approve",
+      "blindReview": true,
+      "siblingReviewDisclosed": false,
+      "signatureValid": true,
+      "nonceClaimed": true,
+      "nonce": "1111111111111111111111111111111111111111111111111111111111111111",
+      "signature": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "issuedAt": "2026-07-16T10:00:00Z",
+      "expiresAt": "2026-07-16T11:00:00Z",
+      "reviewerIdentityAttested": true,
+      "isolationAttested": true,
+      "nonDisclosureAttested": true,
+      "signingKeyActive": true,
+      "reviewerPoolId": "pool_alpha",
+      "runtimeFamily": "runtime_alpha",
+      "modelFamily": "model_alpha",
+      "providerId": "provider_alpha",
+      "contributorAgentIds": ["author_agent"]
+    },
+    {
+      "reviewerAgentId": "reviewer_beta",
+      "reviewerRunId": "urn:libre-ai:run:review-beta",
+      "subjectDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "evidenceDigests": ["cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"],
+      "lineageDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "verdict": "approve",
+      "blindReview": true,
+      "siblingReviewDisclosed": false,
+      "signatureValid": true,
+      "nonceClaimed": true,
+      "nonce": "2222222222222222222222222222222222222222222222222222222222222222",
+      "signature": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+      "issuedAt": "2026-07-16T10:01:00Z",
+      "expiresAt": "2026-07-16T11:01:00Z",
+      "reviewerIdentityAttested": true,
+      "isolationAttested": true,
+      "nonDisclosureAttested": true,
+      "signingKeyActive": true,
+      "reviewerPoolId": "pool_beta",
+      "runtimeFamily": "runtime_beta",
+      "modelFamily": "model_beta",
+      "providerId": "provider_beta",
+      "contributorAgentIds": ["author_agent"]
+    }
+  ],
+  "cases": [
+    {
+      "id": "valid-two-distinct-reviewers",
+      "mutation": null,
+      "expected": "valid",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-one-review",
+      "mutation": {
+        "review": 1,
+        "field": "verdict",
+        "value": "reject"
+      },
+      "expected": "review-rejected",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-self-review",
+      "mutation": {
+        "review": 1,
+        "field": "reviewerAgentId",
+        "value": "author_agent"
+      },
+      "expected": "reviewer-is-contributor",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-duplicate-reviewer",
+      "mutation": {
+        "review": 1,
+        "field": "reviewerAgentId",
+        "copyFromReview": 0
+      },
+      "expected": "duplicate-reviewer",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-duplicate-review-run",
+      "mutation": {
+        "review": 1,
+        "field": "reviewerRunId",
+        "copyFromReview": 0
+      },
+      "expected": "duplicate-review-run",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-duplicate-nonce",
+      "mutation": {
+        "review": 1,
+        "field": "nonce",
+        "copyFromReview": 0
+      },
+      "expected": "duplicate-nonce",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-duplicate-signature",
+      "mutation": {
+        "review": 1,
+        "field": "signature",
+        "copyFromReview": 0
+      },
+      "expected": "duplicate-signature",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-subject-mismatch",
+      "mutation": {
+        "review": 1,
+        "field": "subjectDigest",
+        "value": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      },
+      "expected": "subject-mismatch",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-evidence-mismatch",
+      "mutation": {
+        "review": 1,
+        "field": "evidenceDigests",
+        "value": ["dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"]
+      },
+      "expected": "evidence-mismatch",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-lineage-mismatch",
+      "mutation": {
+        "review": 1,
+        "field": "lineageDigest",
+        "value": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      },
+      "expected": "lineage-mismatch",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-invalid-signature",
+      "mutation": {
+        "review": 1,
+        "field": "signatureValid",
+        "value": false
+      },
+      "expected": "signature-invalid",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-replayed-nonce",
+      "mutation": {
+        "review": 1,
+        "field": "nonceClaimed",
+        "value": false
+      },
+      "expected": "nonce-replayed",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-disclosed-sibling",
+      "mutation": {
+        "review": 1,
+        "field": "siblingReviewDisclosed",
+        "value": true
+      },
+      "expected": "blind-review-violated",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-blind-claim-missing",
+      "mutation": {
+        "review": 1,
+        "field": "blindReview",
+        "value": false
+      },
+      "expected": "blind-review-violated",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-expired-review",
+      "mutation": {
+        "review": 1,
+        "field": "expiresAt",
+        "value": "2026-07-16T10:29:59Z"
+      },
+      "expected": "review-expired",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-invalid-time-window",
+      "mutation": {
+        "review": 1,
+        "field": "issuedAt",
+        "value": "2026-07-16T11:02:00Z"
+      },
+      "expected": "review-time-invalid",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-invalid-lineage-signature",
+      "expected": "lineage-invalid",
+      "rootMutation": {
+        "field": "lineageSignatureValid",
+        "value": false
+      },
+      "mutation": null
+    },
+    {
+      "id": "reject-incomplete-lineage",
+      "expected": "lineage-invalid",
+      "rootMutation": {
+        "field": "lineageComplete",
+        "value": false
+      },
+      "mutation": null
+    },
+    {
+      "id": "reject-unattested-reviewer-identity",
+      "mutation": {
+        "review": 1,
+        "field": "reviewerIdentityAttested",
+        "value": false
+      },
+      "expected": "reviewer-identity-invalid",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-unattested-isolation",
+      "mutation": {
+        "review": 1,
+        "field": "isolationAttested",
+        "value": false
+      },
+      "expected": "review-isolation-invalid",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-unattested-non-disclosure",
+      "mutation": {
+        "review": 1,
+        "field": "nonDisclosureAttested",
+        "value": false
+      },
+      "expected": "non-disclosure-invalid",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-inactive-signing-key",
+      "mutation": {
+        "review": 1,
+        "field": "signingKeyActive",
+        "value": false
+      },
+      "expected": "signing-key-invalid",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-future-review",
+      "mutation": {
+        "review": 1,
+        "field": "issuedAt",
+        "value": "2026-07-16T10:31:00Z"
+      },
+      "expected": "review-time-invalid",
+      "rootMutation": null
+    },
+    {
+      "id": "reject-required-reviewer-pool-collision",
+      "mutation": {
+        "review": 1,
+        "field": "reviewerPoolId",
+        "copyFromReview": 0
+      },
+      "rootMutation": {
+        "field": "diversityRequirements",
+        "value": ["reviewer-pool"]
+      },
+      "expected": "diversity-requirement-violated"
+    },
+    {
+      "id": "reject-lineage-subject-mismatch",
+      "mutation": null,
+      "rootMutation": {
+        "field": "lineageSubjectDigest",
+        "value": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      },
+      "expected": "lineage-subject-mismatch"
+    },
+    {
+      "id": "reject-lineage-contributors-mismatch",
+      "mutation": {
+        "review": 1,
+        "field": "contributorAgentIds",
+        "value": []
+      },
+      "rootMutation": null,
+      "expected": "lineage-contributors-mismatch"
+    }
+  ],
+  "lineageSignatureValid": true,
+  "lineageComplete": true,
+  "diversityRequirements": [],
+  "lineageSubjectDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}

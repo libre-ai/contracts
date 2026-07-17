@@ -1,0 +1,347 @@
+openapi: 3.1.0
+info:
+  title: Libre AI Missions API
+  version: 2.0.0
+servers:
+  - url: /
+x-libre-ai-domain:
+  commands: [ProposeMission, AssessMissionRisk, SubmitExecutionPlan, SubmitAgentReview, AuthorizeExecution, StartMission, PauseMission, ResumeMission, CancelMission, RecordOrchestratorEvent, AnswerDecisionRequest, SubmitMissionResult, AbandonMission, ExportMissionRecord]
+  queries: [GetMission, ListMissions, GetMissionEvents, GetOpenDecisionRequests, GetResultEvidence, GetReviewQuorum, GetMissionExport]
+paths:
+  /v2/missions:
+    get:
+      operationId: listMissionsV2
+      x-libre-ai-operations: [ListMissions]
+      security:
+        - sessionCookie: []
+      responses:
+        '200':
+          description: Tenant mission projections
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 1000
+                items:
+                  $ref: ../schemas/mission-record.v2.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      operationId: proposeMissionV2
+      x-libre-ai-operations: [ProposeMission]
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [handoffId, handoffDigest, acceptanceCriteria, budgets]
+              properties:
+                handoffId:
+                  type: string
+                  pattern: '^urn:libre-ai:handoff:[A-Za-z0-9._~-]+$'
+                handoffDigest:
+                  type: string
+                  pattern: '^[a-f0-9]{64}$'
+                acceptanceCriteria:
+                  type: array
+                  minItems: 1
+                  maxItems: 1000
+                  uniqueItems: true
+                  items:
+                    type: string
+                    pattern: '^[a-z][a-z0-9_-]{2,127}$'
+                budgets:
+                  type: object
+                  additionalProperties: false
+                  required: [maxDurationSeconds, maxToolCalls, maxInputTokens, maxOutputTokens, network]
+                  properties:
+                    maxDurationSeconds:
+                      type: integer
+                      minimum: 1
+                      maximum: 604800
+                    maxToolCalls:
+                      type: integer
+                      minimum: 1
+                      maximum: 100000
+                    maxInputTokens:
+                      type: integer
+                      minimum: 1
+                      maximum: 1000000000
+                    maxOutputTokens:
+                      type: integer
+                      minimum: 1
+                      maximum: 1000000000
+                    network:
+                      enum: [none, private-gateway-only]
+      responses:
+        '201':
+          description: Mission proposed without implicit authorization
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/mission-record.v2.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+  /v2/missions/{missionId}:
+    get:
+      operationId: getMissionV2
+      x-libre-ai-operations: [GetMission]
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/MissionId'
+      responses:
+        '200':
+          description: Mission projection
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/mission-record.v2.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+  /v2/missions/{missionId}/plan:
+    post:
+      operationId: submitExecutionPlan
+      x-libre-ai-operations: [SubmitExecutionPlan]
+      security:
+        - internalBiscuit: []
+      parameters:
+        - $ref: '#/components/parameters/MissionId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/execution-plan-body.v1.schema.json
+      responses:
+        '202':
+          description: Immutable plan accepted for blind review
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/mission-record.v2.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+  /v2/missions/{missionId}/reviews:
+    post:
+      operationId: submitAgentReview
+      x-libre-ai-operations: [SubmitAgentReview, AuthorizeExecution]
+      security:
+        - internalBiscuit: []
+      parameters:
+        - $ref: '#/components/parameters/MissionId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/agent-review.v1.schema.json
+      responses:
+        '202':
+          description: Review recorded; quorum transition is server-validated
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/mission-record.v2.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+  /v2/missions/{missionId}/events:
+    get:
+      operationId: getMissionEventsV2
+      x-libre-ai-operations: [GetMissionEvents]
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/MissionId'
+        - name: after
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 1000000000
+            default: 0
+      responses:
+        '200':
+          description: Ordered causal orchestrator events
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 1000
+                items:
+                  $ref: ../schemas/orchestrator-event.v2.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+    post:
+      operationId: recordOrchestratorEventV2
+      x-libre-ai-operations: [RecordOrchestratorEvent, SubmitMissionResult]
+      security:
+        - internalBiscuit: []
+      parameters:
+        - $ref: '#/components/parameters/MissionId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/orchestrator-event.v2.schema.json
+      responses:
+        '202':
+          description: Authorized causal event accepted
+        default:
+          $ref: '#/components/responses/Problem'
+  /v2/missions/{missionId}/commands:
+    post:
+      operationId: executeMissionCommandV2
+      x-libre-ai-operations: [AssessMissionRisk, StartMission, PauseMission, ResumeMission, CancelMission, AnswerDecisionRequest, AbandonMission, ExportMissionRecord]
+      security:
+        - sessionCookie: []
+        - internalBiscuit: []
+      parameters:
+        - $ref: '#/components/parameters/MissionId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/CsrfToken'
+        - $ref: '#/components/parameters/Revision'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [command, reasonCode]
+              properties:
+                command:
+                  enum: [assess-risk, start, pause, resume, cancel, answer-decision, abandon, export]
+                resourceId:
+                  type: string
+                  minLength: 1
+                  maxLength: 256
+                reasonCode:
+                  type: string
+                  pattern: '^mission\.[a-z0-9_.-]+$'
+                  maxLength: 128
+                riskLevel:
+                  enum: [low, medium, high, critical]
+                protectedHumanGateDigest:
+                  type: string
+                  pattern: '^[a-f0-9]{64}$'
+              allOf:
+                - if:
+                    properties:
+                      command:
+                        const: assess-risk
+                    required: [command]
+                  then:
+                    required: [riskLevel]
+                - if:
+                    properties:
+                      command:
+                        const: answer-decision
+                    required: [command]
+                  then:
+                    required: [resourceId]
+      responses:
+        '202':
+          description: Authorized mission command accepted
+        default:
+          $ref: '#/components/responses/Problem'
+  /v2/missions/{missionId}/review-quorum:
+    get:
+      operationId: getReviewQuorumV2
+      x-libre-ai-operations: [GetReviewQuorum]
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/MissionId'
+      responses:
+        '200':
+          description: Role-redacted review quorum projection
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/agent-review-quorum-view.v1.schema.json
+        default:
+          $ref: '#/components/responses/Problem'
+  /v2/missions/{missionId}/views/{view}:
+    get:
+      operationId: getMissionViewV2
+      x-libre-ai-operations: [GetOpenDecisionRequests, GetResultEvidence, GetMissionExport]
+      security:
+        - sessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/MissionId'
+        - name: view
+          in: path
+          required: true
+          schema:
+            enum: [open-decisions, result-evidence, export]
+      responses:
+        '200':
+          description: Authorized mission view with role-redacted identities
+        default:
+          $ref: '#/components/responses/Problem'
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: __Host-libre_ai_session
+    internalBiscuit:
+      type: http
+      scheme: bearer
+      bearerFormat: Biscuit
+  parameters:
+    MissionId:
+      name: missionId
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '^urn:libre-ai:mission:[A-Za-z0-9._~-]+$'
+        maxLength: 256
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: '^idem_[a-z0-9]{16,64}$'
+        maxLength: 69
+    CsrfToken:
+      name: X-CSRF-Token
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 32
+        maxLength: 256
+    Revision:
+      name: If-Match
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: '^"[0-9]+"$'
+        maxLength: 24
+  responses:
+    Problem:
+      description: Stable content-free refusal envelope
+      content:
+        application/problem+json:
+          schema:
+            $ref: ../schemas/problem-details.v1.schema.json
