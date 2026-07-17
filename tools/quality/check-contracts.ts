@@ -195,6 +195,88 @@ function inspectSpecializedVectorBounds(
   return bounded;
 }
 
+const approvedSyntheticSensitiveVectorValues = new Set([
+  "https://user:secret@example.org/feed.xml",
+]);
+const credentialMarker =
+  /(?:sk_live_[A-Za-z0-9_-]{8,}|sk-(?:proj|svcacct)-[A-Za-z0-9_-]{16,}|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----)/;
+
+function decodeSensitiveMarkers(input: string): string {
+  let current = input.normalize("NFKC");
+  for (let pass = 0; pass < 4; pass += 1) {
+    const decoded = current
+      .replace(/%u([0-9A-Fa-f]{4})/g, (encoded, hexadecimal: string) => {
+        const codePoint = Number.parseInt(hexadecimal, 16);
+        return codePoint <= 0x10ffff ? String.fromCodePoint(codePoint) : encoded;
+      })
+      .replace(/%U([0-9A-Fa-f]{8})/g, (encoded, hexadecimal: string) => {
+        const codePoint = Number.parseInt(hexadecimal, 16);
+        return codePoint <= 0x10ffff ? String.fromCodePoint(codePoint) : encoded;
+      })
+      .replace(/(?:%[0-9A-Fa-f]{2})+/g, (encoded) => {
+        const bytes = encoded
+          .split("%")
+          .slice(1)
+          .map((hexadecimal) => Number.parseInt(hexadecimal, 16));
+        return new TextDecoder().decode(new Uint8Array(bytes));
+      })
+      .replace(
+        /&#(?:[xX]([0-9A-Fa-f]+)|([0-9]+));?/g,
+        (encoded, hexadecimal: string | undefined, decimal: string | undefined) => {
+          const codePoint = Number.parseInt(hexadecimal ?? decimal ?? "", hexadecimal ? 16 : 10);
+          return Number.isInteger(codePoint) && codePoint <= 0x10ffff
+            ? String.fromCodePoint(codePoint)
+            : encoded;
+        },
+      )
+      .replace(/&commat;?/gi, "@")
+      .replace(/&amp;?/gi, "&")
+      .normalize("NFKC");
+    if (decoded === current) break;
+    current = decoded;
+  }
+  return current;
+}
+
+function containsSensitivePublicMarker(value: string): boolean {
+  if (approvedSyntheticSensitiveVectorValues.has(value)) return false;
+  const decoded = decodeSensitiveMarkers(value);
+  return decoded.includes("@") || credentialMarker.test(decoded);
+}
+
+function inspectSpecializedVectorPublicContent(
+  value: unknown,
+  path: string,
+  state = { sensitiveReported: false },
+): boolean {
+  if (state.sensitiveReported) return false;
+  if (typeof value === "string") {
+    if (containsSensitivePublicMarker(value)) {
+      failures.push(`${path}: specialized vector contains a forbidden sensitive marker`);
+      state.sensitiveReported = true;
+      return false;
+    }
+    return true;
+  }
+  let safe = true;
+  if (Array.isArray(value)) {
+    for (const item of value)
+      if (!inspectSpecializedVectorPublicContent(item, path, state)) safe = false;
+  } else if (isRecord(value)) {
+    for (const [key, item] of Object.entries(value)) {
+      if (containsSensitivePublicMarker(key)) {
+        if (!state.sensitiveReported)
+          failures.push(`${path}: specialized vector contains a forbidden sensitive marker`);
+        state.sensitiveReported = true;
+        safe = false;
+        break;
+      }
+      if (!inspectSpecializedVectorPublicContent(item, path, state)) safe = false;
+    }
+  }
+  return safe;
+}
+
 async function containsSymbolicLink(path: string): Promise<boolean> {
   let current = "";
   for (const segment of path.split("/")) {
@@ -478,6 +560,28 @@ const specializedVectorPaths = [
   "contracts/fixtures/boussole-scoring-v2/golden-vectors.v1.json",
 ] as const;
 const specializedVectorValidator = validatorByName.get("engine-golden-vectors.v1.schema.json");
+for (const [label, value, expectedSensitive] of [
+  ["direct email", "alice@example.org", true],
+  ["percent email", "alice%40example.org", true],
+  ["double-percent email", "alice%2540example.org", true],
+  ["JavaScript escape email", "alice%u0040example.org", true],
+  ["HTML entity email", "alice&#x40;example.org", true],
+  ["unterminated HTML entity email", "alice&#64example.org", true],
+  ["nested HTML entity email", "alice&amp;#64;example.org", true],
+  ["Unicode at-sign email", "alice＠example.org", true],
+  ["percent-encoded Unicode at-sign email", "alice%EF%BC%A0example.org", true],
+  ["credential", "sk_live_example_secret", true],
+  ["Radar userinfo canary", "https://user:secret@example.org/feed.xml", false],
+  ["legitimate ampersand", "R&D", false],
+  ["legitimate percentage", "50%", false],
+  ["legitimate encoded URL", "https://example.org/a%2Fb", false],
+  ["inert traversal payload", "../../secrets.txt", false],
+  ["inert Unicode file payload", "fıle:///tmp/x", false],
+  ["legitimate Unicode", "Café démonstration", false],
+] as const) {
+  if (containsSensitivePublicMarker(value) !== expectedSensitive)
+    failures.push(`specialized vector sensitive-marker self-test failed: ${label}`);
+}
 const repositoryRoot = `${await realpath(".")}${sep}`;
 for (const path of specializedVectorPaths) {
   const file = Bun.file(path);
@@ -487,6 +591,7 @@ for (const path of specializedVectorPaths) {
   }
   const document: unknown = await file.json();
   if (!inspectSpecializedVectorBounds(document, path)) continue;
+  if (!inspectSpecializedVectorPublicContent(document, path)) continue;
   if (!specializedVectorValidator?.(document)) {
     failures.push(
       `${path}: shared vector envelope rejected: ${safeErrors(specializedVectorValidator?.errors)}`,
