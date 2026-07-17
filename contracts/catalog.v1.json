@@ -494,14 +494,7 @@
       "consumers": ["radar", "radar-engine"],
       "compatibility": "major-versioned",
       "classification": "internal",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security"],
-        "dossier": "docs/reviews/radar-engine-v2/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "radar-normalized-feed-v1",
@@ -511,14 +504,7 @@
       "consumers": ["radar", "radar-engine"],
       "compatibility": "major-versioned",
       "classification": "internal",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security"],
-        "dossier": "docs/reviews/radar-engine-v2/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "radar-rule-evaluation-v1",
@@ -528,14 +514,7 @@
       "consumers": ["radar", "radar-engine"],
       "compatibility": "major-versioned",
       "classification": "personal",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security"],
-        "dossier": "docs/reviews/radar-engine-v2/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "curation-rule-set-v2",
@@ -545,14 +524,7 @@
       "consumers": ["radar", "radar-engine"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security"],
-        "dossier": "docs/reviews/radar-engine-v2/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "curated-item-export-v2",
@@ -562,14 +534,7 @@
       "consumers": ["radar", "radar-engine"],
       "compatibility": "major-versioned",
       "classification": "personal",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security"],
-        "dossier": "docs/reviews/radar-engine-v2/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "context-document-v2",
@@ -783,14 +748,7 @@
       "consumers": ["browser"],
       "compatibility": "major-versioned",
       "classification": "personal",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security"],
-        "dossier": "docs/reviews/radar-engine-v2/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "model-policy-api-v2",
@@ -817,19 +775,12 @@
       "consumers": ["radar"],
       "compatibility": "major-versioned",
       "classification": "internal",
-      "status": "candidate",
+      "status": "locked",
       "profiles": ["contracts/wit/radar-engine-v2/PROFILE.md"],
       "vectors": [
         "contracts/fixtures/radar-engine-v2/golden-vectors.v1.json",
         "contracts/fixtures/radar-engine-v2/security-vectors.v1.json"
-      ],
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security"],
-        "dossier": "docs/reviews/radar-engine-v2/README.md"
-      }
+      ]
     },
     {
       "id": "notebook-core-v2",
