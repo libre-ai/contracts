@@ -12,8 +12,8 @@ Machine authority: [`catalog.v1.json`](catalog.v1.json).
 
 The catalog records one ID, path, owner set, consumer set, classification, compatibility mode and
 `locked` or `pending-independent-agent-review` candidate status for every contract. Candidate entries
-are not implementation or release approvals. Their dossier names every required agent role and binds
-the reviewer to a distinct agent/session under [`AGENT-REVIEW-PROTOCOL.md`](../docs/reviews/AGENT-REVIEW-PROTOCOL.md).
+are not implementation or release approvals. Their dossier names every required role and binds each
+verdict to a dedicated review-only pass under [`AGENT-REVIEW-PROTOCOL.md`](../docs/reviews/AGENT-REVIEW-PROTOCOL.md).
 Uncataloged files and missing authorities fail `bun run check:contracts`.
 
 ## Shared contracts
