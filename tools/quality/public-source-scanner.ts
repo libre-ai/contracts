@@ -137,6 +137,153 @@ function removeEmailComments(value: string): string {
   return output.join("");
 }
 
+function projectEmailContextWithoutComments(value: string): string {
+  const removalDeltas = new Int32Array(value.length + 1);
+  const removedDelimiters = new Uint8Array(value.length);
+  const frames: Array<{ start: number; containsAt: boolean }> = [];
+
+  const removeRange = (start: number, end: number): void => {
+    removalDeltas[start] = (removalDeltas[start] ?? 0) + 1;
+    removalDeltas[end] = (removalDeltas[end] ?? 0) - 1;
+  };
+
+  for (let cursor = 0; cursor < value.length; ) {
+    const end = nextCodePointEnd(value, cursor);
+    const character = value.slice(cursor, end);
+    if (character === "\\" && frames.length > 0 && end < value.length) {
+      const escapedEnd = nextCodePointEnd(value, end);
+      const frame = frames.at(-1);
+      if (frame !== undefined && value.slice(end, escapedEnd) === "@") frame.containsAt = true;
+      cursor = escapedEnd;
+      continue;
+    }
+    if (character === "(") frames.push({ start: cursor, containsAt: false });
+    else if (character === ")") {
+      const frame = frames.pop();
+      if (frame === undefined) removedDelimiters[cursor] = 1;
+      else if (frame.containsAt) {
+        removedDelimiters[frame.start] = 1;
+        removedDelimiters[cursor] = 1;
+        const parent = frames.at(-1);
+        if (parent !== undefined) parent.containsAt = true;
+      } else removeRange(frame.start, end);
+    } else if (character === "@") {
+      const frame = frames.at(-1);
+      if (frame !== undefined) frame.containsAt = true;
+    }
+    cursor = end;
+  }
+
+  while (frames.length > 0) {
+    const frame = frames.pop();
+    if (frame === undefined) break;
+    if (frame.containsAt) {
+      removedDelimiters[frame.start] = 1;
+      const parent = frames.at(-1);
+      if (parent !== undefined) parent.containsAt = true;
+    } else removeRange(frame.start, value.length);
+  }
+
+  const output: string[] = [];
+  let removalDepth = 0;
+  for (let cursor = 0; cursor < value.length; ) {
+    removalDepth += removalDeltas[cursor] ?? 0;
+    const end = nextCodePointEnd(value, cursor);
+    if (removalDepth === 0 && removedDelimiters[cursor] !== 1)
+      output.push(value.slice(cursor, end));
+    cursor = end;
+  }
+  return output.join("");
+}
+
+function projectEmailContextByDirectAt(value: string): string {
+  type Group = {
+    start: number;
+    closing: number | undefined;
+    end: number;
+    parent: number | undefined;
+    directAt: boolean;
+    hasAtDescendant: boolean;
+  };
+
+  const groups: Group[] = [];
+  const stack: number[] = [];
+  const unmatchedClosings = new Uint8Array(value.length);
+  let rootDirectAt = false;
+
+  for (let cursor = 0; cursor < value.length; ) {
+    const end = nextCodePointEnd(value, cursor);
+    const character = value.slice(cursor, end);
+    if (character === "\\" && stack.length > 0 && end < value.length) {
+      cursor = nextCodePointEnd(value, end);
+      continue;
+    }
+    if (character === "(") {
+      const parent = stack.at(-1);
+      groups.push({
+        start: cursor,
+        closing: undefined,
+        end: value.length,
+        parent,
+        directAt: false,
+        hasAtDescendant: false,
+      });
+      stack.push(groups.length - 1);
+    } else if (character === ")") {
+      const index = stack.pop();
+      const group = index === undefined ? undefined : groups[index];
+      if (group === undefined) unmatchedClosings[cursor] = 1;
+      else {
+        group.closing = cursor;
+        group.end = end;
+      }
+    } else if (character === "@") {
+      const index = stack.at(-1);
+      const group = index === undefined ? undefined : groups[index];
+      if (group === undefined) rootDirectAt = true;
+      else group.directAt = true;
+    }
+    cursor = end;
+  }
+
+  for (let index = groups.length - 1; index >= 0; index -= 1) {
+    const group = groups[index];
+    if (group === undefined) continue;
+    group.hasAtDescendant = group.directAt || group.hasAtDescendant;
+    if (!group.hasAtDescendant || group.parent === undefined) continue;
+    const parent = groups[group.parent];
+    if (parent !== undefined) parent.hasAtDescendant = true;
+  }
+
+  const removalDeltas = new Int32Array(value.length + 1);
+  const removedDelimiters = new Uint8Array(value.length);
+  const removeRange = (start: number, end: number): void => {
+    removalDeltas[start] = (removalDeltas[start] ?? 0) + 1;
+    removalDeltas[end] = (removalDeltas[end] ?? 0) - 1;
+  };
+
+  for (const group of groups) {
+    const parentDirectAt =
+      group.parent === undefined ? rootDirectAt : (groups[group.parent]?.directAt ?? false);
+    if (parentDirectAt || !group.hasAtDescendant) removeRange(group.start, group.end);
+    else {
+      removedDelimiters[group.start] = 1;
+      if (group.closing !== undefined) removedDelimiters[group.closing] = 1;
+    }
+  }
+
+  const output: string[] = [];
+  let removalDepth = 0;
+  for (let cursor = 0; cursor < value.length; ) {
+    removalDepth += removalDeltas[cursor] ?? 0;
+    const end = nextCodePointEnd(value, cursor);
+    if (removalDepth === 0 && removedDelimiters[cursor] !== 1 && unmatchedClosings[cursor] !== 1)
+      output.push(value.slice(cursor, end));
+    cursor = end;
+  }
+  return output.join("");
+}
+
 function skipWhitespaceBackward(value: string, end: number): number {
   let cursor = end;
   while (cursor > 0) {
@@ -350,7 +497,13 @@ function containsEmailIdentifierWithoutComments(value: string): boolean {
 export function containsEmailIdentifier(input: string): boolean {
   if (containsEmailIdentifierWithoutComments(input)) return true;
   const withoutComments = removeEmailComments(input);
-  return withoutComments !== input && containsEmailIdentifierWithoutComments(withoutComments);
+  if (withoutComments !== input && containsEmailIdentifierWithoutComments(withoutComments))
+    return true;
+  const projectedContext = projectEmailContextWithoutComments(input);
+  if (projectedContext !== input && containsEmailIdentifierWithoutComments(projectedContext))
+    return true;
+  const directContext = projectEmailContextByDirectAt(input);
+  return directContext !== input && containsEmailIdentifierWithoutComments(directContext);
 }
 
 function exceedsDecodedCodePointLimit(value: string): boolean {
@@ -480,6 +633,40 @@ export const publicSourceScannerSelfTests: ReadonlyArray<
   ["CFWS email", "alice (comment) @ example.org", true],
   ["quoted CFWS email", '"alice" (comment) @ example.org', true],
   ["encoded CFWS email", "%22alice%22%28comment%29%40example.org", true],
+  ["parenthesized CFWS email", "(alice (comment) @ example.org)", true],
+  ["whole-quoted CFWS email", '"alice (comment) @ example.org"', true],
+  [
+    "parenthesized nested escaped CFWS email",
+    "(alice (outer(inner\\)x\\(y) tail) @ example.org)",
+    true,
+  ],
+  [
+    "whole-quoted nested escaped CFWS email",
+    '"alice (outer(inner\\)x\\(y) tail) @ example.org"',
+    true,
+  ],
+  [
+    "parenthesized even-backslash CFWS email",
+    "(alice (outer(inner\\\\) tail) @ example.org)",
+    true,
+  ],
+  ["parenthesized at-comment CFWS email", "(alice (foo@bar) @ example.org)", true],
+  ["whole-quoted at-comment CFWS email", '"alice (foo@bar) @ example.org"', true],
+  ["nested-wrapper CFWS email", "((alice (comment) @ example.org))", true],
+  ["email inside comment after handle", "release@2 (alice (comment) @ example.org)", true],
+  ["encoded parenthesized CFWS email", "%28alice%20%28comment%29%20%40%20example.org%29", true],
+  [
+    "HTML whole-quoted CFWS email",
+    "&quot;alice &lpar;comment&rpar; &commat; example&period;org&quot;",
+    true,
+  ],
+  ["parenthesized EAI CFWS email", "(😀 (comment) @ example.org)", true],
+  ["whole-quoted EAI CFWS email", '"😀 (comment) @ example.org"', true],
+  ["parenthesized IDN CFWS email", "(alice (comment) @ example.орг)", true],
+  ["whole-quoted IDN CFWS email", '"alice (comment) @ example.орг"', true],
+  ["parenthesized IPv6 CFWS email", "(alice (comment) @ [IPv6:2001:db8::1])", true],
+  ["whole-quoted IPv6 CFWS email", '"alice (comment) @ [IPv6:2001:db8::1]"', true],
+  ["parentheses in quoted local email", '"ali(ce)"@example.org', true],
   ["Unicode domain email", "alice@example.орг", true],
   ["combining-mark IDN email", "alice@e\u0301xample.org", true],
   ["punycode email", "alice@example.xn--p1ai", true],
@@ -501,6 +688,7 @@ export const publicSourceScannerSelfTests: ReadonlyArray<
   ],
   ["default-ignorable credential", "sk_li\u200bve_example_secret", true],
   ["machine handle", "release@2", false],
+  ["parenthesized machine handle", "(release@2)", false],
   ["quoted machine handle", '"release"@2', false],
   ["legitimate ampersand", "R&D", false],
   ["legitimate amp prefix", "R&amplitude", false],
