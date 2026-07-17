@@ -574,14 +574,7 @@
       "consumers": ["model-policy", "policy-core"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/policy-core-v2/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "policy-need-v2",
@@ -591,14 +584,7 @@
       "consumers": ["model-policy", "policy-core"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/policy-core-v2/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "model-snapshot-v2",
@@ -608,14 +594,7 @@
       "consumers": ["model-policy", "policy-core"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/policy-core-v2/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "policy-evaluation-v2",
@@ -625,14 +604,7 @@
       "consumers": ["model-policy", "policy-core"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/policy-core-v2/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "public-vote-dataset-v2",
@@ -709,14 +681,7 @@
       "consumers": ["browser"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/policy-core-v2/README.md"
-      }
+      "status": "locked"
     },
     {
       "id": "radar-engine-v2",
@@ -753,21 +718,14 @@
       "consumers": ["model-policy"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
+      "status": "locked",
       "profiles": ["contracts/wit/policy-core-v2/SEMANTICS.md"],
       "vectors": [
         "contracts/fixtures/policy-core-v2/operators.json",
         "contracts/fixtures/policy-core-v2/golden.json",
         "contracts/fixtures/policy-core-v2/resource-budgets.v1.json",
         "contracts/fixtures/policy-core-invalid-json/manifest.json"
-      ],
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/policy-core-v2/README.md"
-      }
+      ]
     },
     {
       "id": "boussole-scoring-v2",

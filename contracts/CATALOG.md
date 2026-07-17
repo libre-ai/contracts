@@ -34,7 +34,7 @@ Uncataloged files and missing authorities fail `bun run check:contracts`.
 - Radar: locked v2 source-scoped parsing/rules with exact normalized feed/item and bounded output ;
 - Notebook: candidate context v2 plus authenticated Argon2id/AES-GCM backup envelope ;
 - Sessions: event and audience-safe export ;
-- Model Policy: locked v1 policy/need/snapshot/evaluation plus candidate v2 with human approval separation ;
+- Model Policy: locked v1 and v2 policy/need/snapshot/evaluation boundaries with human approval separation ;
 - Boussole: locked v1 and v2 reviewed dataset/method/responses/comparison boundaries, with public scoring disabled ;
 - Specifications: immutable SpecPackage and planning handoff ;
 - Missions: orchestrator event and human-verdict MissionRecord.
