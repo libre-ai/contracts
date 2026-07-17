@@ -6,8 +6,7 @@ import { DecodingMode, decodeHTML } from "entities";
 const credentialMarker =
   /(?:sk_live_[A-Za-z0-9_-]{8,}|sk-(?:proj|svcacct)-[A-Za-z0-9_-]{16,}|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----)/;
 const asciiAtext = /^[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]$/;
-const unicodeAtext = /^[^\p{C}\p{Z}]$/u;
-const whitespace = /^\p{White_Space}$/u;
+const whitespace = /^[\t\n\r ]$/;
 const domainCodePoint = /^[\p{L}\p{M}\p{N}.-]$/u;
 const domainBoundaryContinuation = /^[\p{L}\p{M}\p{N}_.-]$/u;
 const textEncoder = new TextEncoder();
@@ -32,7 +31,7 @@ function collapseSensitiveEncodingNesting(input: string): string {
 }
 
 export function decodeSensitiveMarkers(input: string): string {
-  let current = input.normalize("NFKC").replace(/\p{Default_Ignorable_Code_Point}/gu, "");
+  let current = input;
   for (let pass = 0; pass < 4; pass += 1) {
     const decoded = decodeHTML(
       decodePercentRuns(collapseSensitiveEncodingNesting(current))
@@ -45,9 +44,7 @@ export function decodeSensitiveMarkers(input: string): string {
           return codePoint <= 0x10ffff ? String.fromCodePoint(codePoint) : encoded;
         }),
       DecodingMode.Legacy,
-    )
-      .normalize("NFKC")
-      .replace(/\p{Default_Ignorable_Code_Point}/gu, "");
+    );
     if (decoded === current) break;
     current = decoded;
   }
@@ -80,10 +77,7 @@ function isWhitespaceAt(value: string, start: number, end: number): boolean {
 function isAtextAt(value: string, start: number, end: number): boolean {
   const character = codePointSlice(value, start, end);
   const codePoint = value.codePointAt(start);
-  return (
-    asciiAtext.test(character) ||
-    (codePoint !== undefined && codePoint >= 0x80 && unicodeAtext.test(character))
-  );
+  return asciiAtext.test(character) || (codePoint !== undefined && codePoint >= 0x80);
 }
 
 function removeEmailComments(value: string): string {
@@ -289,11 +283,19 @@ function exceedsDecodedCodePointLimit(value: string): boolean {
 
 export function containsSensitivePublicMarker(value: string): boolean {
   const decoded = decodeSensitiveMarkers(value);
-  return (
-    exceedsDecodedCodePointLimit(decoded) ||
-    credentialMarker.test(decoded) ||
-    containsEmailIdentifier(decoded)
-  );
+  const normalized = decoded.normalize("NFKC");
+  if (exceedsDecodedCodePointLimit(decoded) || exceedsDecodedCodePointLimit(normalized))
+    return true;
+  const variants = new Set([
+    decoded,
+    normalized,
+    decoded.replace(/\p{Default_Ignorable_Code_Point}/gu, ""),
+    normalized.replace(/\p{Default_Ignorable_Code_Point}/gu, ""),
+  ]);
+  for (const variant of variants) {
+    if (credentialMarker.test(variant) || containsEmailIdentifier(variant)) return true;
+  }
+  return false;
 }
 
 export const publicSourceScannerSelfTests: ReadonlyArray<
@@ -318,6 +320,13 @@ export const publicSourceScannerSelfTests: ReadonlyArray<
   ["EAI symbol local email", "😀@example.org", true],
   ["percent EAI local email", "%F0%9F%98%80%40example.org", true],
   ["numeric EAI local email", "&#128512;&#64;example.org", true],
+  ["private-use EAI local email", "\uE000@example.org", true],
+  ["C1 EAI local email", "\u0080@example.org", true],
+  ["non-ASCII space EAI local email", "\u00A0@example.org", true],
+  ["unassigned EAI local email", "\u0378@example.org", true],
+  ["noncharacter EAI local email", "\uFFFF@example.org", true],
+  ["default-ignorable EAI local email", "\u200B@example.org", true],
+  ["HTML5 default-ignorable EAI local email", "&ZeroWidthSpace;&commat;example&period;org", true],
   ["quoted local email", '"alice"@example.org', true],
   ["quoted escaped local email", '"ali\\\\ce"@example.org', true],
   ["quoted Unicode local email", '"álîçé"@example.org', true],
@@ -338,6 +347,7 @@ export const publicSourceScannerSelfTests: ReadonlyArray<
     true,
   ],
   ["credential", "sk_live_example_secret", true],
+  ["default-ignorable credential", "sk_li\u200bve_example_secret", true],
   ["machine handle", "release@2", false],
   ["quoted machine handle", '"release"@2', false],
   ["legitimate ampersand", "R&D", false],
