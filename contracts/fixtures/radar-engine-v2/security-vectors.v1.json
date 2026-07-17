@@ -1,0 +1,168 @@
+{
+  "schemaVersion": "libre-ai.radar-engine-security-vectors.v1",
+  "status": "candidate-security-remediation",
+  "requiredParseCaseIds": [
+    "utf8-bom-accepted",
+    "utf16-bom-rejected",
+    "invalid-utf8-rejected",
+    "xml-numeric-and-predefined-references",
+    "xml-invalid-numeric-reference",
+    "max-depth-exceeded-in-unknown-xml",
+    "content-derived-identity",
+    "utc-year-rollover-becomes-null",
+    "max-input-bytes-equality",
+    "max-output-bytes-equality",
+    "max-depth-equality-in-unknown-json",
+    "max-items-equality-before-deduplication",
+    "precedence-invalid-source-before-body",
+    "precedence-body-before-media",
+    "precedence-media-before-encoding",
+    "base-url-userinfo-forbidden"
+  ],
+  "requiredEvaluationCaseIds": [
+    "json-invalid-duplicate-item-key",
+    "json-invalid-duplicate-rules-key",
+    "json-invalid-utf8-item",
+    "json-invalid-utf8-rules",
+    "item-invalid-tampered-identity",
+    "rule-invalid-unknown-member",
+    "json-not-canonical-rules",
+    "operator-matrix-and-strict-dates"
+  ],
+  "generatedBoundaryCases": [
+    {
+      "id": "parse-input-at-limit",
+      "target": "parse-input-bytes",
+      "value": 10485760,
+      "expectedPreflight": "within-limit"
+    },
+    {
+      "id": "parse-input-over-limit",
+      "target": "parse-input-bytes",
+      "value": 10485761,
+      "expectedPreflight": "body-too-large"
+    },
+    {
+      "id": "parse-output-at-limit",
+      "target": "parse-output-bytes",
+      "value": 52428800,
+      "expectedPreflight": "within-limit"
+    },
+    {
+      "id": "parse-output-over-limit",
+      "target": "parse-output-bytes",
+      "value": 52428801,
+      "expectedPreflight": "output-too-large"
+    },
+    {
+      "id": "evaluation-item-at-limit",
+      "target": "evaluation-item-bytes",
+      "value": 262144,
+      "expectedPreflight": "within-limit"
+    },
+    {
+      "id": "evaluation-item-over-limit",
+      "target": "evaluation-item-bytes",
+      "value": 262145,
+      "expectedPreflight": "body-too-large"
+    },
+    {
+      "id": "evaluation-rules-at-limit",
+      "target": "evaluation-rules-bytes",
+      "value": 524288,
+      "expectedPreflight": "within-limit"
+    },
+    {
+      "id": "evaluation-rules-over-limit",
+      "target": "evaluation-rules-bytes",
+      "value": 524289,
+      "expectedPreflight": "body-too-large"
+    },
+    {
+      "id": "max-items-at-limit",
+      "target": "candidate-items",
+      "value": 5000,
+      "expectedPreflight": "within-limit"
+    },
+    {
+      "id": "max-items-over-limit",
+      "target": "candidate-items",
+      "value": 5001,
+      "expectedPreflight": "max-items-exceeded"
+    },
+    {
+      "id": "max-depth-at-limit",
+      "target": "syntax-depth",
+      "value": 64,
+      "expectedPreflight": "within-limit"
+    },
+    {
+      "id": "max-depth-over-limit",
+      "target": "syntax-depth",
+      "value": 65,
+      "expectedPreflight": "max-depth-exceeded"
+    },
+    {
+      "id": "media-type-at-limit",
+      "target": "media-type-bytes",
+      "value": 128,
+      "expectedPreflight": "within-limit"
+    },
+    {
+      "id": "media-type-over-limit",
+      "target": "media-type-bytes",
+      "value": 129,
+      "expectedPreflight": "media-type-unsupported"
+    },
+    {
+      "id": "source-id-at-limit",
+      "target": "source-id-bytes",
+      "value": 256,
+      "expectedPreflight": "within-limit"
+    },
+    {
+      "id": "source-id-over-limit",
+      "target": "source-id-bytes",
+      "value": 257,
+      "expectedPreflight": "invalid-source"
+    },
+    {
+      "id": "base-url-at-limit",
+      "target": "base-url-bytes",
+      "value": 2048,
+      "expectedPreflight": "within-limit"
+    },
+    {
+      "id": "base-url-over-limit",
+      "target": "base-url-bytes",
+      "value": 2049,
+      "expectedPreflight": "invalid-source"
+    }
+  ],
+  "publicRefusalCases": [
+    { "componentCode": "invalid-limits", "publicCode": "radar.invalid_limits" },
+    { "componentCode": "invalid-source", "publicCode": "radar.invalid_source" },
+    { "componentCode": "body-too-large", "publicCode": "radar.body_too_large" },
+    { "componentCode": "output-too-large", "publicCode": "radar.output_too_large" },
+    { "componentCode": "media-type-unsupported", "publicCode": "radar.media_type_unsupported" },
+    { "componentCode": "encoding-unsupported", "publicCode": "radar.encoding_unsupported" },
+    { "componentCode": "feed-malformed", "publicCode": "radar.feed_malformed" },
+    { "componentCode": "feed-kind-unsupported", "publicCode": "radar.feed_kind_unsupported" },
+    { "componentCode": "xml-dtd-forbidden", "publicCode": "radar.xml_dtd_forbidden" },
+    { "componentCode": "xml-entity-forbidden", "publicCode": "radar.xml_entity_forbidden" },
+    { "componentCode": "max-depth-exceeded", "publicCode": "radar.max_depth_exceeded" },
+    { "componentCode": "max-items-exceeded", "publicCode": "radar.max_items_exceeded" },
+    { "componentCode": "json-invalid", "publicCode": "radar.json_invalid" },
+    { "componentCode": "json-not-canonical", "publicCode": "radar.json_not_canonical" },
+    { "componentCode": "item-invalid", "publicCode": "radar.item_invalid" },
+    { "componentCode": "rule-invalid", "publicCode": "radar.rule_invalid" }
+  ],
+  "publicMessage": "Request refused",
+  "forbiddenDiagnosticCanaries": [
+    "https://private.example/feed?token=secret",
+    "ten_privatecanary1234",
+    "urn:libre-ai:source:private-canary",
+    "<hostile-private-fragment>",
+    "parser line 7 column 9"
+  ]
+}
