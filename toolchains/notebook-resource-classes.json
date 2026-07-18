@@ -1,7 +1,7 @@
 {
   "schemaVersion": "libre-ai.notebook-resource-classes.v1",
   "defaultQualificationClassId": "desktop-arm64-high-memory-reference",
-  "minimumProductCandidateClassId": "desktop-arm64-constrained-8gib",
+  "minimumProductCandidateClassId": "desktop-arm64-high-memory-reference",
   "requiredBrowserCapabilities": [
     "webassembly-simd128",
     "dedicated-worker",
@@ -20,8 +20,8 @@
       "maximumPhysicalMemoryBytesExclusive": 12884901888,
       "minimumLogicalCpu": 8,
       "maximumLogicalCpuExclusive": null,
-      "evidenceStatus": "pending-real-hardware-qualification",
-      "purpose": "minimum-product-candidate"
+      "evidenceStatus": "community-evidence-requested",
+      "purpose": "community-observation"
     },
     {
       "id": "desktop-arm64-mainstream-16gib",
@@ -32,8 +32,8 @@
       "maximumPhysicalMemoryBytesExclusive": 34359738368,
       "minimumLogicalCpu": 8,
       "maximumLogicalCpuExclusive": null,
-      "evidenceStatus": "pending-real-hardware-qualification",
-      "purpose": "mainstream-product-target"
+      "evidenceStatus": "community-evidence-requested",
+      "purpose": "community-observation"
     },
     {
       "id": "desktop-arm64-high-memory-reference",
@@ -44,8 +44,8 @@
       "maximumPhysicalMemoryBytesExclusive": null,
       "minimumLogicalCpu": 12,
       "maximumLogicalCpuExclusive": null,
-      "evidenceStatus": "qualified-reference-5190972",
-      "purpose": "qualification-reference"
+      "evidenceStatus": "qualified-reference-96934a8",
+      "purpose": "minimum-product-candidate"
     }
   ]
 }
