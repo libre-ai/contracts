@@ -1,5 +1,16 @@
 {
-  "schemaVersion": "libre-ai.notebook-resource-classes.v1",
+  "schemaVersion": "libre-ai.notebook-resource-classes.v2",
+  "browserProcessFaultPolicy": {
+    "requiredEvidence": [
+      "abrupt-process-termination-recovery",
+      "process-crash-recovery",
+      "no-partial-artifact",
+      "same-profile-recovery",
+      "fresh-worker-after-recovery"
+    ],
+    "optionalDiagnostics": ["browser-process-oom"],
+    "unsafeHostExhaustionForbidden": true
+  },
   "defaultQualificationClassId": "desktop-arm64-high-memory-reference",
   "minimumProductCandidateClassId": "desktop-arm64-high-memory-reference",
   "requiredBrowserCapabilities": [
