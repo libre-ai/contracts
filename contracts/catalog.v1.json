@@ -607,6 +607,23 @@
       "status": "locked"
     },
     {
+      "id": "authority-v2",
+      "kind": "biscuit-authority",
+      "path": "contracts/authz/authority-v2.datalog",
+      "owners": ["authz-biscuit", "security"],
+      "consumers": ["agent-orchestrator", "authz-biscuit"],
+      "compatibility": "major-versioned",
+      "classification": "internal",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security"],
+        "dossier": "docs/reviews/authority-v2/REVIEW-PACKAGE.md"
+      }
+    },
+    {
       "id": "sessions-authz-v1",
       "kind": "biscuit-policy",
       "path": "contracts/authz/sessions-v1.datalog",
