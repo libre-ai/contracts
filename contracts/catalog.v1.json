@@ -439,14 +439,7 @@
       "consumers": ["missions", "agent-orchestrator", "agent-harness"],
       "compatibility": "major-versioned",
       "classification": "internal",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security"],
-        "dossier": "docs/reviews/agent-runs-v2/REVIEW-PACKAGE.md"
-      }
+      "status": "locked"
     },
     {
       "id": "evidence-report-v1",
@@ -631,14 +624,7 @@
       "consumers": ["agent-orchestrator", "authz-biscuit"],
       "compatibility": "major-versioned",
       "classification": "internal",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security"],
-        "dossier": "docs/reviews/authority-v2/REVIEW-PACKAGE.md"
-      }
+      "status": "locked"
     },
     {
       "id": "sessions-authz-v1",
