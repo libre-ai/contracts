@@ -432,6 +432,23 @@
       "status": "locked"
     },
     {
+      "id": "agent-runs-authz-v2",
+      "kind": "biscuit-policy",
+      "path": "contracts/authz/agent-runs-v2.datalog",
+      "owners": ["missions", "authz-biscuit", "security"],
+      "consumers": ["missions", "agent-orchestrator", "agent-harness"],
+      "compatibility": "major-versioned",
+      "classification": "internal",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security"],
+        "dossier": "docs/reviews/agent-runs-v2/REVIEW-PACKAGE.md"
+      }
+    },
+    {
       "id": "evidence-report-v1",
       "kind": "json-schema",
       "path": "contracts/schemas/evidence-report.v1.schema.json",
