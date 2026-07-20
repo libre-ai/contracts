@@ -874,6 +874,23 @@
         "contracts/fixtures/boussole-scoring-v2/golden-vectors.v1.json",
         "contracts/fixtures/boussole-scoring-v2/security-vectors.v1.json"
       ]
+    },
+    {
+      "id": "envelope-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/envelope.v1.schema.json",
+      "owners": ["envelope", "security"],
+      "consumers": ["forge", "harness"],
+      "compatibility": "additive-v1",
+      "classification": "internal",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "cryptography"],
+        "dossier": "docs/reviews/envelope-v1/REVIEW-PACKAGE.md"
+      }
     }
   ]
 }
