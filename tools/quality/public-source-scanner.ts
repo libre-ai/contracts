@@ -551,17 +551,26 @@ function containsUrlUserinfo(value: string): boolean {
   return false;
 }
 
-export function containsSensitivePublicMarker(value: string): boolean {
+function sensitiveVariants(value: string): {
+  readonly variants: Set<string>;
+  readonly overLimit: boolean;
+} {
   const decoded = decodeSensitiveMarkers(value);
   const normalized = normalizePreservingNonAsciiCfws(decoded);
-  if (exceedsDecodedCodePointLimit(decoded) || exceedsDecodedCodePointLimit(normalized))
-    return true;
+  const overLimit =
+    exceedsDecodedCodePointLimit(decoded) || exceedsDecodedCodePointLimit(normalized);
   const variants = new Set([
     decoded,
     normalized,
     decoded.replace(/\p{Default_Ignorable_Code_Point}/gu, ""),
     normalized.replace(/\p{Default_Ignorable_Code_Point}/gu, ""),
   ]);
+  return { variants, overLimit };
+}
+
+export function containsSensitivePublicMarker(value: string): boolean {
+  const { variants, overLimit } = sensitiveVariants(value);
+  if (overLimit) return true;
   for (const variant of variants) {
     if (
       credentialMarker.test(variant) ||
@@ -569,6 +578,20 @@ export function containsSensitivePublicMarker(value: string): boolean {
       containsUrlUserinfo(variant)
     )
       return true;
+  }
+  return false;
+}
+
+/**
+ * Credential-only marker (cloud keys, VCS/CI tokens, private keys) with the
+ * same decoding hardening as the full sensitive scan, but WITHOUT the email or
+ * URL-userinfo identifiers. The tree-wide secret gate uses this: an example
+ * address in a scanner fixture is not a committed credential.
+ */
+export function containsCredentialMarker(value: string): boolean {
+  const { variants } = sensitiveVariants(value);
+  for (const variant of variants) {
+    if (credentialMarker.test(variant)) return true;
   }
   return false;
 }
