@@ -903,14 +903,7 @@
       "consumers": ["forge", "harness"],
       "compatibility": "additive-v1",
       "classification": "internal",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "cryptography"],
-        "dossier": "docs/reviews/envelope-v1/REVIEW-PACKAGE.md"
-      }
+      "status": "locked"
     }
   ]
 }
