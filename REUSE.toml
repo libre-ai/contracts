@@ -33,7 +33,7 @@ SPDX-License-Identifier = "EUPL-1.2"
 
 # Editorial documentation and first-party project/ecosystem records.
 [[annotations]]
-path = ["*.md", "**/*.md", "docs/**", "ecosystem/LEGACY-MANIFEST.yaml", "ecosystem/objects/**", "ecosystem/projections/**"]
+path = ["*.md", "**/*.md", "docs/**", "ecosystem/LEGACY-MANIFEST.yaml", "ecosystem/objects/**", "ecosystem/projections/**", "llms.txt"]
 precedence = "closest"
 SPDX-FileCopyrightText = "2026 Libre AI contributors"
 SPDX-License-Identifier = "CC-BY-4.0"
