@@ -49,6 +49,7 @@ path = [
   "docs/security/notebook-core-v2-review/*.wit",
   "ecosystem/schemas/**",
   "packages/contracts/**",
+  "packages/ui/**",
   "packages/web-platform/**",
   "toolchains/*.json",
   "tools/**",
