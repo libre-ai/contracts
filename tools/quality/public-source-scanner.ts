@@ -5,6 +5,60 @@ import { DecodingMode, decodeHTML } from "entities";
 
 const credentialMarker =
   /(?:sk_live_[A-Za-z0-9_-]{8,}|sk-(?:proj|svcacct)-[A-Za-z0-9_-]{16,}|AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN (?:(?:(?:RSA|DSA|EC|OPENSSH|ENCRYPTED) )?PRIVATE KEY|PGP PRIVATE KEY BLOCK)-----)/;
+
+/**
+ * The markers above match a credential by its issuer-specific SHAPE. A
+ * provisioned connection string has no such shape: `postgresql://user:pw@host`
+ * is a secret by POSITION — whatever sits between `//` and `@`, past a colon,
+ * is a password. No vendor pattern covers it, which is why a credentialled
+ * connection URI crossed every per-PR gate.
+ *
+ * Two deliberate exclusions keep this from firing on documentation:
+ * - userinfo WITHOUT a non-empty password (`git://git@host`, `pg://user:@host`)
+ *   is an identifier, not a credential; it stays on the sensitive/PII path,
+ *   which already detects it;
+ * - RFC 2606 reserved hosts and localhost cannot name a provisioned service, so
+ *   a credential pointing at one is an example by construction. This is what
+ *   lets the gates keep their own detection canaries in-tree.
+ *
+ * Detection scans the URI authority (same mechanics as containsUrlUserinfo)
+ * instead of a positional regex: the K4 review of f49fc18 proved the regex
+ * missed the empty-username form (`redis://:pw@host`, canonical for Redis) and
+ * any percent-encoded `@` in the username (the Azure form), both valid RFC 3986.
+ */
+const documentationHost =
+  /^(?:localhost|(?:[^\s.]+\.)*example\.(?:com|org|net)|(?:[^\s.]+\.)*(?:test|invalid|localhost))$/i;
+
+function hasUriUserinfoCredential(value: string): boolean {
+  for (
+    let separator = value.indexOf("://");
+    separator >= 0;
+    separator = value.indexOf("://", separator + 3)
+  ) {
+    let schemeStart = separator;
+    while (schemeStart > 0 && uriSchemeCharacter.test(value[schemeStart - 1] ?? ""))
+      schemeStart -= 1;
+    if (!asciiLetter.test(value[schemeStart] ?? "")) continue;
+    const start = separator + 3;
+    let end = start;
+    while (end < value.length) {
+      const next = nextCodePointEnd(value, end);
+      if (/^[\t\n\r /?#]$/.test(value.slice(end, next))) break;
+      end = next;
+    }
+    const authority = value.slice(start, end);
+    const at = authority.lastIndexOf("@");
+    if (at < 0) continue;
+    const userinfo = authority.slice(0, at);
+    const colon = userinfo.indexOf(":");
+    if (colon < 0 || colon === userinfo.length - 1) continue;
+    const hostPort = authority.slice(at + 1);
+    const bracketEnd = hostPort.startsWith("[") ? hostPort.indexOf("]") : -1;
+    const host = bracketEnd > 0 ? hostPort.slice(1, bracketEnd) : (hostPort.split(":")[0] ?? "");
+    if (!documentationHost.test(host)) return true;
+  }
+  return false;
+}
 const asciiAtext = /^[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]$/;
 const asciiLetter = /^[A-Za-z]$/;
 const uriSchemeCharacter = /^[A-Za-z0-9+.-]$/;
@@ -590,8 +644,12 @@ export function containsSensitivePublicMarker(value: string): boolean {
  */
 export function containsCredentialMarker(value: string): boolean {
   const { variants } = sensitiveVariants(value);
-  for (const variant of variants) {
+  // The raw value is a variant of record: percent-encoded userinfo must be
+  // seen undecoded, because decoding an encoded `@` or `/` reshapes the
+  // authority and hides the credential from authority parsing.
+  for (const variant of [value, ...variants]) {
     if (credentialMarker.test(variant)) return true;
+    if (hasUriUserinfoCredential(variant)) return true;
   }
   return false;
 }
