@@ -11,7 +11,7 @@
       },
       "devDependencies": {
         "@biomejs/biome": "2.5.3",
-        "@libre-ai/governance": "github:libre-ai/governance#6eae09b597be52800d462400d2b9ecf5479407fd",
+        "@libre-ai/governance": "github:libre-ai/governance#9511c4087f284d0242fc4a202b2f1452228c16c3",
         "@types/bun": "1.3.14",
         "typescript": "7.0.2",
       },
@@ -39,7 +39,7 @@
 
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@2.5.3", "", { "os": "win32", "cpu": "x64" }, "sha512-ExSaJWi4/u6+GXCszlSKpWSjKNbDseAYqqkCznsCsZ/4uidZ/BEqsCc5/3ctlq6dfIubdIIRSVLC/PG9xPl70Q=="],
 
-    "@libre-ai/governance": ["@libre-ai/governance@github:libre-ai/governance#6eae09b", { "dependencies": { "ajv": "8.20.0", "ajv-formats": "3.0.1", "entities": "8.0.0" } }, "libre-ai-governance-6eae09b", "sha512-TKUJ5g4ekupn2GTf9h7tZ8VWIFMv83wNTu5pdq49ctWw8qrktJ5+pS3wBa9IEvAQv6BTpeKse/MujIVX7T1+VA=="],
+    "@libre-ai/governance": ["@libre-ai/governance@github:libre-ai/governance#9511c40", { "dependencies": { "ajv": "8.20.0", "ajv-formats": "3.0.1", "entities": "8.0.0" } }, "libre-ai-governance-9511c40", "sha512-RmGWaEDxLaebHhByodcWDlsRNAVMVLqqHL60fzaGf58pIccBvW2IanU8m/CBbjjx6wihloueDIbBCGCWchxkDw=="],
 
     "@types/bun": ["@types/bun@1.3.14", "", { "dependencies": { "bun-types": "1.3.14" } }, "sha512-h1hFqFVcvAvD9j9K7ZW7vd82aSA+rTdznZa+5bwvCwqSB1jmmfLcbIWhOLx1/+boy/xmjgCs/OMUL8hRJSmnPw=="],
 
