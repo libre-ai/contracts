@@ -1,0 +1,141 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # Manual escape hatch: GitHub occasionally fails to deliver pull_request
+  # open/synchronize events, leaving required checks unreported and a PR
+  # BLOCKED. `gh workflow run ci.yml --ref <branch>` (or the Actions UI)
+  # re-runs the same gates on demand; the checks attach to the branch head SHA
+  # and satisfy branch protection like an event-triggered run.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  governance:
+    name: Licensing and contribution governance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+      - name: Verify DCO sign-offs
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          missing=0
+          while read -r commit; do
+            expected="Signed-off-by: $(git show --no-patch --format='%an <%ae>' "$commit")"
+            if ! git show --no-patch --format=%B "$commit" | git interpret-trailers --parse | grep -Fqx "$expected"; then
+              echo "::error::Missing author-matching Signed-off-by trailer on $commit"
+              missing=1
+            fi
+          done < <(git rev-list "$BASE_SHA..$HEAD_SHA")
+          exit "$missing"
+      - name: Verify DCO sign-offs on pushed commits
+        if: github.event_name == 'push'
+        env:
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.event.after }}
+        run: |
+          # Anticipatory WP-G2-Q01 change: the pull_request step above cannot
+          # see the forge-generated integration commit because it does not
+          # exist yet at review time. This step closes that gap on push
+          # without re-examining accepted history: only the commits introduced
+          # by this push are verified. A forge-generated integration commit —
+          # a merge commit, or a squashed pull request — cannot carry an
+          # author-matching trailer (its author is the forge account), so it
+          # must carry a valid maintainer Signed-off-by trailer in its message
+          # instead.
+          if ! git cat-file -e "$BEFORE_SHA^{commit}" 2>/dev/null; then
+            echo "::warning::Push base $BEFORE_SHA is not reachable; skipping range verification"
+            exit 0
+          fi
+          missing=0
+          while read -r commit; do
+            committer="$(git show --no-patch --format='%cn <%ce>' "$commit")"
+            parent_words="$(git rev-list --parents -n 1 "$commit" | wc -w)"
+            author_email="$(git show --no-patch --format='%ae' "$commit")"
+            trailers="$(git show --no-patch --format=%B "$commit" | git interpret-trailers --parse)"
+            # A forge-generated integration commit is committed by GitHub and
+            # authored by the forge account (a @users.noreply.github.com
+            # address) — true of both merge commits (2+ parents) and squashed
+            # pull requests (1 parent). Neither can carry an author-matching
+            # contributor trailer, so accept any valid maintainer Signed-off-by
+            # for them; ordinary contributor commits still require an exact
+            # author match.
+            if [ "$committer" = "GitHub <noreply@github.com>" ] && \
+               { [ "$parent_words" -gt 2 ] || \
+                 printf '%s' "$author_email" | grep -Eq '@users\.noreply\.github\.com$'; }; then
+              if ! printf '%s\n' "$trailers" | grep -Eq '^Signed-off-by: .+ <.+@.+>$'; then
+                echo "::error::Forge-generated commit $commit lacks a valid Signed-off-by trailer in its message"
+                missing=1
+              fi
+            else
+              expected="Signed-off-by: $(git show --no-patch --format='%an <%ae>' "$commit")"
+              if ! printf '%s\n' "$trailers" | grep -Fqx "$expected"; then
+                echo "::error::Missing author-matching Signed-off-by trailer on $commit"
+                missing=1
+              fi
+            fi
+          done < <(git rev-list "$BEFORE_SHA..$AFTER_SHA")
+          exit "$missing"
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: "3.13"
+      - name: Install pinned REUSE toolchain
+        run: python -m pip install --disable-pip-version-check --requirement tools/licensing/requirements.txt
+      - name: Verify REUSE compliance
+        run: reuse lint
+      # `reuse lint` proves every file has an unambiguous licence; it never
+      # compares that licence to what a package manifest promises consumers.
+      # That gap let packages/ui ship "license": "Apache-2.0" to npm while REUSE
+      # attributed it EUPL-1.2, with this required check green throughout. The
+      # comparison is wired here rather than in a new workflow because a check
+      # that is not required is mergeable red, and here `reuse` is already
+      # installed — the gate reads its resolution instead of re-deriving it.
+      - name: Install archived Bun toolchain
+        env:
+          BUN_ARCHIVE_URL: https://github.com/libre-ai/libre-ai/releases/download/toolchain-bun-1.4.0-canary.1-57f349f63/bun-linux-x64.zip
+          BUN_ARCHIVE_SHA256: 83144e2542c33aaae541cf16b42f8cf1c55c3b94c5395fc776417fa27e95bcbf
+        run: |
+          curl --fail --location --retry 3 --output "$RUNNER_TEMP/bun.zip" "$BUN_ARCHIVE_URL"
+          echo "$BUN_ARCHIVE_SHA256  $RUNNER_TEMP/bun.zip" | sha256sum --check --strict
+          unzip -q "$RUNNER_TEMP/bun.zip" -d "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/bun-linux-x64" >> "$GITHUB_PATH"
+      - name: Verify declared package licences match REUSE attribution
+        run: bun tools/quality/check-declared-licenses.ts
+
+  bun-quality:
+    name: Bun quality
+    runs-on: ubuntu-latest
+    steps:
+      # Full history: `check:forgotten` proves each evicted tree is still recoverable
+      # at the commit its register entry records. Unverifiable in a shallow clone.
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0
+      - name: Install archived Bun toolchain
+        env:
+          BUN_ARCHIVE_URL: https://github.com/libre-ai/libre-ai/releases/download/toolchain-bun-1.4.0-canary.1-57f349f63/bun-linux-x64.zip
+          BUN_ARCHIVE_SHA256: 83144e2542c33aaae541cf16b42f8cf1c55c3b94c5395fc776417fa27e95bcbf
+        run: |
+          curl --fail --location --retry 3 --output "$RUNNER_TEMP/bun.zip" "$BUN_ARCHIVE_URL"
+          echo "$BUN_ARCHIVE_SHA256  $RUNNER_TEMP/bun.zip" | sha256sum --check --strict
+          unzip -q "$RUNNER_TEMP/bun.zip" -d "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/bun-linux-x64" >> "$GITHUB_PATH"
+      - name: Verify Bun 1.4+ floor and exact CI revision
+        run: |
+          test "$(bun --revision)" = "1.4.0-canary.1+57f349f63"
+          bun run check:toolchain
+      - run: bun install --frozen-lockfile
+      - run: bun run check

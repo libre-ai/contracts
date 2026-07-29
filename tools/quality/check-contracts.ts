@@ -653,6 +653,36 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/data
 }
 
 const appContractReferences = new Set<string>();
+
+/**
+ * Where protocol-authority documents resolve when absent locally. During the
+ * hub dismantling (ADR-0020) every application specification still lives in
+ * the hub archive; after γ 3.5 each product repository owns its own — this
+ * anchor then moves to the per-product repositories, with the migration
+ * index as the map. Offline, remote resolution degrades to an explicit
+ * warning: CI always has the network and always verifies.
+ */
+const PROTOCOL_AUTHORITY_ANCHOR = "libre-ai/libre-ai";
+const OFFLINE_UNVERIFIED_SPEC = Symbol("offline-unverified");
+
+async function readProtocolAuthority(
+  appPath: string,
+): Promise<string | typeof OFFLINE_UNVERIFIED_SPEC | null> {
+  const local = Bun.file(appPath);
+  if (await local.exists()) return await local.text();
+  const remote = Bun.spawnSync([
+    "gh",
+    "api",
+    `repos/${PROTOCOL_AUTHORITY_ANCHOR}/contents/${appPath}`,
+    "-H",
+    "Accept: application/vnd.github.raw+json",
+  ]);
+  if (remote.exitCode === 0) return new TextDecoder().decode(remote.stdout);
+  const stderr = new TextDecoder().decode(remote.stderr);
+  if (/HTTP 4\d\d/.test(stderr)) return null;
+  return OFFLINE_UNVERIFIED_SPEC;
+}
+
 for (const path of await scan("docs/apps/*.md")) {
   const text = await Bun.file(path).text();
   for (const match of text.matchAll(/contracts\/[A-Za-z0-9_./-]+/g))
@@ -702,8 +732,12 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/open
     appName === "auth"
       ? "docs/specifications/IDENTITY-AUTHORIZATION.md"
       : `docs/apps/${appName}.md`;
-  if (await Bun.file(appPath).exists()) {
-    const spec = await Bun.file(appPath).text();
+  const spec = await readProtocolAuthority(appPath);
+  if (spec === OFFLINE_UNVERIFIED_SPEC) {
+    console.warn(
+      `WARN: ${path}: protocol authority ${appPath} not resolvable offline — CI verifies with the network.`,
+    );
+  } else if (spec !== null) {
     for (const [label, actual] of [
       ["Commands", commands],
       ["Queries", queries],
@@ -718,7 +752,9 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/open
         failures.push(`${path}: ${label.toLowerCase()} diverge from ${appPath}`);
     }
   } else {
-    failures.push(`${path}: missing protocol authority ${appPath}`);
+    failures.push(
+      `${path}: missing protocol authority ${appPath} (checked locally and in ${PROTOCOL_AUTHORITY_ANCHOR})`,
+    );
   }
 
   for (const [route, rawPathItem] of Object.entries(

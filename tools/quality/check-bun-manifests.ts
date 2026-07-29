@@ -37,11 +37,16 @@ if (
 ) {
   failures.push("package.json: check:bun must verify runtime and workspace manifests");
 }
-if (!root.scripts?.["check:toolchain"]?.startsWith("bun run check:bun && ")) {
-  failures.push("package.json: check:toolchain must enforce the Bun floor first");
-}
-for (const script of ["build", "check"]) {
-  if (!root.scripts?.[script]?.startsWith("bun run check:bun && ")) {
+// check:toolchain and build are optional since the governance split
+// (ADR-0020): single-package repositories without a Rust toolchain or a
+// build step simply do not declare them; when declared, they are bound.
+for (const script of ["check:toolchain", "build", "check"]) {
+  const command = root.scripts?.[script];
+  if (script === "check" && command === undefined) {
+    failures.push("package.json: check is required");
+    continue;
+  }
+  if (command !== undefined && !command.startsWith("bun run check:bun && ")) {
     failures.push(`package.json: ${script} must enforce the Bun floor first`);
   }
 }
@@ -102,7 +107,9 @@ for (const path of [...manifestPaths].sort()) {
   }
 }
 
-if (manifestPaths.size === 0) failures.push("No Bun package or template manifests found");
+// Zero workspace manifests is the normal state of a single-package
+// repository after the workspace split (D07 as amended by ADR-0020); the
+// root contract above still applies.
 
 if (failures.length > 0) {
   for (const failure of failures) console.error(failure);
