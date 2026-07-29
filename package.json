@@ -19,15 +19,16 @@
   "devDependencies": {
     "@biomejs/biome": "2.5.3",
     "@types/bun": "1.3.14",
-    "typescript": "7.0.2"
+    "typescript": "7.0.2",
+    "@libre-ai/governance": "github:libre-ai/governance#6eae09b597be52800d462400d2b9ecf5479407fd"
   },
   "scripts": {
-    "check:bun:runtime": "bun tools/quality/check-bun-minimum.ts",
-    "check:bun": "bun run check:bun:runtime && bun tools/quality/check-bun-manifests.ts",
-    "check:toolchain": "bun run check:bun && bun tools/quality/check-toolchain.ts",
+    "check:bun:runtime": "bun node_modules/@libre-ai/governance/tools/quality/check-bun-minimum.ts",
+    "check:bun": "bun run check:bun:runtime && bun node_modules/@libre-ai/governance/tools/quality/check-bun-manifests.ts",
+    "check:toolchain": "bun run check:bun && bun node_modules/@libre-ai/governance/tools/quality/check-toolchain.ts",
     "check:contracts": "bun run check:bun:runtime && bun tools/quality/check-contracts.ts",
-    "check:secret-scan": "bun run check:bun:runtime && bun tools/quality/check-secret-scan.ts",
-    "check:personal-data": "bun run check:bun:runtime && bun tools/quality/check-personal-data-boundary.ts",
+    "check:secret-scan": "bun run check:bun:runtime && bun node_modules/@libre-ai/governance/tools/quality/check-secret-scan.ts",
+    "check:personal-data": "bun run check:bun:runtime && bun node_modules/@libre-ai/governance/tools/quality/check-personal-data-boundary.ts",
     "lint": "bun run check:bun:runtime && biome ci .",
     "typecheck": "bun run check:bun:runtime && tsc --noEmit -p tsconfig.json",
     "pretest": "bun run check:bun",
