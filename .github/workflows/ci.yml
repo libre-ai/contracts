@@ -41,9 +41,11 @@ jobs:
           echo "$BUN_ARCHIVE_SHA256  $RUNNER_TEMP/bun.zip" | sha256sum --check --strict
           unzip -q "$RUNNER_TEMP/bun.zip" -d "$RUNNER_TEMP"
           echo "$RUNNER_TEMP/bun-linux-x64" >> "$GITHUB_PATH"
+      # install first: the bun floor and toolchain scripts run from the
+      # pinned governance git-dep (node_modules), design §5.3.
+      - run: bun install --frozen-lockfile
       - name: Verify Bun 1.4+ floor and exact CI revision
         run: |
           test "$(bun --revision)" = "1.4.0-canary.1+57f349f63"
           bun run check:toolchain
-      - run: bun install --frozen-lockfile
       - run: bun run check
