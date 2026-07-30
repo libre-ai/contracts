@@ -1,0 +1,49 @@
+# Fiche d'état du projet — autorité de l'état depuis ADR-0020 (design §6.2).
+# La section statut du README est générée depuis cette fiche (sentinelles).
+schema_version: libre-ai.project.v1
+project: contracts
+repository: libre-ai/contracts
+kind: authority
+layer: transverse
+statement:
+  for: "les projets de la constellation Libre AI"
+  who_faces: "le coût et la dérive de machineries recopiées d'un repo à l'autre"
+  enables: "consommer des contrats canoniques versionnés au lieu de copies divergentes"
+  producing:
+    - "des contrats et golden vectors que chaque consommateur vérifie byte-exact"
+  without_depending_on:
+    - "aucun service tiers, aucune copie non vérifiée — consommation épinglée et gates de dérive"
+summary: "Autorité canonique des contrats : catalogue, vecteurs, politiques de compatibilité."
+current_situation: >-
+  Née verte en γ 3.3 (149 commits, 88 entrées de catalogue vérifiées) ; les produits et briques résolvent contrats, fixtures et datalog à travers cette git-dep épinglée.
+scope:
+  - "Autorité canonique des contrats : catalogue, vecteurs, politiques de compatibilité."
+non_goals:
+  - "aucune seconde implémentation durable de ce domaine ailleurs dans la constellation"
+dependencies:
+  - on: libre-ai/governance
+    why: "gabarit de flotte et gates de qualité"
+    pinned: "épinglée par SHA (ou release pour les outils) là où elle est consommée"
+maturity: usable
+confidence: medium
+exposure: usable-verifiable
+freshness:
+  last_verified_on: "2026-07-30"
+scope_stability: stable
+benchmark:
+  none: "n/a (contract authority, no external parity target)"
+phases:
+  - id: service
+    title: En service dans la constellation
+    exit_criteria:
+      - id: consumed-pinned
+        text: "Les autorités de contrats sont consommées épinglées par SHA ; chaque copie vendorée en aval est vérifiée byte-exacte par un gate de dérive."
+        weight: 1
+        status: accepted
+        evidence:
+          date: "2026-07-29"
+          reference: "gate-acceptance-log 2026-07-29 (ligne 3.3), PR hub #277"
+      - id: compat-policy
+        text: "L'API est couverte par une politique de compatibilité déclarée et un versionnage de rupture outillé."
+        weight: 1
+        status: pending
