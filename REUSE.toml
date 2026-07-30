@@ -109,3 +109,10 @@ path = "toolchains/notices/bun/1.4.0-canary.1+57f349f63/BUN-LICENSE.md"
 precedence = "override"
 SPDX-FileCopyrightText = "NOASSERTION"
 SPDX-License-Identifier = "LicenseRef-ThirdParty-Notices"
+
+# Project state card (γ 3.6) — same licence as the repository doctrine.
+[[annotations]]
+path = ["project.v1.yaml"]
+precedence = "closest"
+SPDX-FileCopyrightText = "2026 Libre AI contributors"
+SPDX-License-Identifier = "EUPL-1.2"
