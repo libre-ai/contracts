@@ -3,6 +3,7 @@ import { basename, dirname, join, normalize, sep } from "node:path";
 import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020";
 import addFormats from "ajv-formats";
 import { parseStrictJson } from "./policy-core-raw-inputs";
+import { DOCTRINE_ANCHOR, protocolAuthorityAnchors } from "./protocol-authority";
 import {
   containsSensitivePublicMarker,
   publicSourceScannerSelfTestFailures,
@@ -655,25 +656,28 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/data
 const appContractReferences = new Set<string>();
 
 /**
- * Where protocol-authority documents resolve when absent locally. During the
- * hub dismantling (ADR-0020) every application specification still lives in
- * the hub archive; after γ 3.5 each product repository owns its own — this
- * anchor then moves to the per-product repositories, with the migration
- * index as the map. Offline, remote resolution degrades to an explicit
- * warning: CI always has the network and always verifies.
+ * Where protocol-authority documents resolve when absent locally. The move this
+ * comment used to announce is done: each product repository owns its own
+ * document, and the ecosystem index is the map. Offline, remote resolution
+ * degrades to an explicit warning: CI always has the network and always
+ * verifies.
  */
-const PROTOCOL_AUTHORITY_ANCHOR = "libre-ai/libre-ai";
 const OFFLINE_UNVERIFIED_SPEC = Symbol("offline-unverified");
+
+const protocolAuthorityAnchor = protocolAuthorityAnchors(
+  await Bun.file("node_modules/@libre-ai/governance/ecosystem/repositories.v1.yaml").text(),
+);
 
 async function readProtocolAuthority(
   appPath: string,
+  anchor: string,
 ): Promise<string | typeof OFFLINE_UNVERIFIED_SPEC | null> {
   const local = Bun.file(appPath);
   if (await local.exists()) return await local.text();
   const remote = Bun.spawnSync([
     "gh",
     "api",
-    `repos/${PROTOCOL_AUTHORITY_ANCHOR}/contents/${appPath}`,
+    `repos/${anchor}/contents/${appPath}`,
     "-H",
     "Accept: application/vnd.github.raw+json",
   ]);
@@ -728,11 +732,20 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/open
   if (JSON.stringify([...localOperations].sort()) !== JSON.stringify(allowedLocal)) {
     failures.push(`${path}: local operation boundary diverges from the accepted application model`);
   }
-  const appPath =
-    appName === "auth"
-      ? "docs/specifications/IDENTITY-AUTHORIZATION.md"
-      : `docs/apps/${appName}.md`;
-  const spec = await readProtocolAuthority(appPath);
+  // Identity is doctrine, not a product: its specification stayed with the
+  // doctrine when the products left.
+  const isDoctrine = appName === "auth";
+  const appPath = isDoctrine
+    ? "docs/specifications/IDENTITY-AUTHORIZATION.md"
+    : `docs/apps/${appName}.md`;
+  const anchor = isDoctrine ? DOCTRINE_ANCHOR : protocolAuthorityAnchor.get(appName);
+  if (anchor === undefined) {
+    failures.push(
+      `${path}: no protocol authority anchor for "${appName}" in the ecosystem index — a contract whose application no repository declares owning`,
+    );
+    continue;
+  }
+  const spec = await readProtocolAuthority(appPath, anchor);
   if (spec === OFFLINE_UNVERIFIED_SPEC) {
     console.warn(
       `WARN: ${path}: protocol authority ${appPath} not resolvable offline — CI verifies with the network.`,
@@ -753,7 +766,7 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/open
     }
   } else {
     failures.push(
-      `${path}: missing protocol authority ${appPath} (checked locally and in ${PROTOCOL_AUTHORITY_ANCHOR})`,
+      `${path}: missing protocol authority ${appPath} (checked locally and in ${anchor})`,
     );
   }
 
