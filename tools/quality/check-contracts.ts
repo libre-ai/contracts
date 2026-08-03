@@ -668,6 +668,7 @@ const OFFLINE_UNVERIFIED_SPEC = Symbol("offline-unverified");
 const RUNNING_IN_CI = process.env.CI === "true" || process.env.CI === "1";
 let protocolAuthoritiesExpected = 0;
 let protocolAuthoritiesResolved = 0;
+let protocolAuthoritiesLocal = 0;
 
 const protocolAuthorityAnchor = protocolAuthorityAnchors(
   await Bun.file("node_modules/@libre-ai/governance/ecosystem/repositories.v1.yaml").text(),
@@ -677,8 +678,17 @@ async function readProtocolAuthority(
   appPath: string,
   anchor: string,
 ): Promise<string | typeof OFFLINE_UNVERIFIED_SPEC | null> {
+  // A local copy is a convenience for whoever owns the document in-tree. It is
+  // counted apart, and ignored entirely under CI: mirroring the eleven
+  // documents here would otherwise print "11/11 resolved" without a byte read
+  // from any anchor — the same invisibility this counter exists to remove. In
+  // CI we always ask the owning repository, so a stale local copy cannot stand
+  // in for it.
   const local = Bun.file(appPath);
-  if (await local.exists()) return await local.text();
+  if (!RUNNING_IN_CI && (await local.exists())) {
+    protocolAuthoritiesLocal += 1;
+    return await local.text();
+  }
   const remote = Bun.spawnSync([
     "gh",
     "api",
@@ -1037,5 +1047,5 @@ console.log(
   // The authority count belongs in the success line: without it, a run that
   // resolved every protocol authority and a run that resolved none printed the
   // same three numbers.
-  `Contracts verified: ${entries.length} catalog entries, ${fixtureCases.length} schema fixture pairs, ${operationIds.size} HTTP operations, ${protocolAuthoritiesResolved}/${protocolAuthoritiesExpected} protocol authorities resolved`,
+  `Contracts verified: ${entries.length} catalog entries, ${fixtureCases.length} schema fixture pairs, ${operationIds.size} HTTP operations, ${protocolAuthoritiesResolved}/${protocolAuthoritiesExpected} protocol authorities resolved${protocolAuthoritiesLocal > 0 ? ` (${protocolAuthoritiesLocal} read from a local copy, not from the owning repository)` : ""}`,
 );
