@@ -3,6 +3,7 @@ import { basename, dirname, join, normalize, sep } from "node:path";
 import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020";
 import addFormats from "ajv-formats";
 import { parseStrictJson } from "./policy-core-raw-inputs";
+import { DOCTRINE_ANCHOR, protocolAuthorityAnchors } from "./protocol-authority";
 import {
   containsSensitivePublicMarker,
   publicSourceScannerSelfTestFailures,
@@ -655,25 +656,43 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/data
 const appContractReferences = new Set<string>();
 
 /**
- * Where protocol-authority documents resolve when absent locally. During the
- * hub dismantling (ADR-0020) every application specification still lives in
- * the hub archive; after γ 3.5 each product repository owns its own — this
- * anchor then moves to the per-product repositories, with the migration
- * index as the map. Offline, remote resolution degrades to an explicit
- * warning: CI always has the network and always verifies.
+ * Where protocol-authority documents resolve when absent locally. The move this
+ * comment used to announce is done: each product repository owns its own
+ * document, and the ecosystem index is the map. Offline, remote resolution
+ * degrades to an explicit warning: CI always has the network and always
+ * verifies.
  */
-const PROTOCOL_AUTHORITY_ANCHOR = "libre-ai/libre-ai";
 const OFFLINE_UNVERIFIED_SPEC = Symbol("offline-unverified");
+
+/** GitHub Actions sets CI=true; so does every runner worth failing on. */
+const RUNNING_IN_CI = process.env.CI === "true" || process.env.CI === "1";
+let protocolAuthoritiesExpected = 0;
+let protocolAuthoritiesResolved = 0;
+let protocolAuthoritiesLocal = 0;
+
+const protocolAuthorityAnchor = protocolAuthorityAnchors(
+  await Bun.file("node_modules/@libre-ai/governance/ecosystem/repositories.v1.yaml").text(),
+);
 
 async function readProtocolAuthority(
   appPath: string,
+  anchor: string,
 ): Promise<string | typeof OFFLINE_UNVERIFIED_SPEC | null> {
+  // A local copy is a convenience for whoever owns the document in-tree. It is
+  // counted apart, and ignored entirely under CI: mirroring the eleven
+  // documents here would otherwise print "11/11 resolved" without a byte read
+  // from any anchor — the same invisibility this counter exists to remove. In
+  // CI we always ask the owning repository, so a stale local copy cannot stand
+  // in for it.
   const local = Bun.file(appPath);
-  if (await local.exists()) return await local.text();
+  if (!RUNNING_IN_CI && (await local.exists())) {
+    protocolAuthoritiesLocal += 1;
+    return await local.text();
+  }
   const remote = Bun.spawnSync([
     "gh",
     "api",
-    `repos/${PROTOCOL_AUTHORITY_ANCHOR}/contents/${appPath}`,
+    `repos/${anchor}/contents/${appPath}`,
     "-H",
     "Accept: application/vnd.github.raw+json",
   ]);
@@ -728,16 +747,37 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/open
   if (JSON.stringify([...localOperations].sort()) !== JSON.stringify(allowedLocal)) {
     failures.push(`${path}: local operation boundary diverges from the accepted application model`);
   }
-  const appPath =
-    appName === "auth"
-      ? "docs/specifications/IDENTITY-AUTHORIZATION.md"
-      : `docs/apps/${appName}.md`;
-  const spec = await readProtocolAuthority(appPath);
-  if (spec === OFFLINE_UNVERIFIED_SPEC) {
-    console.warn(
-      `WARN: ${path}: protocol authority ${appPath} not resolvable offline — CI verifies with the network.`,
+  // Identity is doctrine, not a product: its specification stayed with the
+  // doctrine when the products left.
+  const isDoctrine = appName === "auth";
+  const appPath = isDoctrine
+    ? "docs/specifications/IDENTITY-AUTHORIZATION.md"
+    : `docs/apps/${appName}.md`;
+  const anchor = isDoctrine ? DOCTRINE_ANCHOR : protocolAuthorityAnchor.get(appName);
+  if (anchor === undefined) {
+    failures.push(
+      `${path}: no protocol authority anchor for "${appName}" in the ecosystem index — a contract whose application no repository declares owning`,
     );
+    continue;
+  }
+  protocolAuthoritiesExpected += 1;
+  const spec = await readProtocolAuthority(appPath, anchor);
+  if (spec === OFFLINE_UNVERIFIED_SPEC) {
+    // Degrading to a warning is a local-developer convenience. In CI it is the
+    // whole defect: this gate ran green for weeks emitting exactly this line
+    // eleven times, because the workflow gave `gh` no token and an
+    // unauthenticated failure does not look like an HTTP 4xx.
+    if (RUNNING_IN_CI) {
+      failures.push(
+        `${path}: protocol authority ${appPath} unresolved in CI — the runner could not reach ${anchor} (is GH_TOKEN set on this job?)`,
+      );
+    } else {
+      console.warn(
+        `WARN: ${path}: protocol authority ${appPath} not resolvable offline — CI resolves it or fails.`,
+      );
+    }
   } else if (spec !== null) {
+    protocolAuthoritiesResolved += 1;
     for (const [label, actual] of [
       ["Commands", commands],
       ["Queries", queries],
@@ -753,7 +793,7 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/open
     }
   } else {
     failures.push(
-      `${path}: missing protocol authority ${appPath} (checked locally and in ${PROTOCOL_AUTHORITY_ANCHOR})`,
+      `${path}: missing protocol authority ${appPath} (checked locally and in ${anchor})`,
     );
   }
 
@@ -1004,5 +1044,8 @@ if (failures.length > 0) {
 }
 
 console.log(
-  `Contracts verified: ${entries.length} catalog entries, ${fixtureCases.length} schema fixture pairs, ${operationIds.size} HTTP operations`,
+  // The authority count belongs in the success line: without it, a run that
+  // resolved every protocol authority and a run that resolved none printed the
+  // same three numbers.
+  `Contracts verified: ${entries.length} catalog entries, ${fixtureCases.length} schema fixture pairs, ${operationIds.size} HTTP operations, ${protocolAuthoritiesResolved}/${protocolAuthoritiesExpected} protocol authorities resolved${protocolAuthoritiesLocal > 0 ? ` (${protocolAuthoritiesLocal} read from a local copy, not from the owning repository)` : ""}`,
 );
