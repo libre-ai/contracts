@@ -664,6 +664,11 @@ const appContractReferences = new Set<string>();
  */
 const OFFLINE_UNVERIFIED_SPEC = Symbol("offline-unverified");
 
+/** GitHub Actions sets CI=true; so does every runner worth failing on. */
+const RUNNING_IN_CI = process.env.CI === "true" || process.env.CI === "1";
+let protocolAuthoritiesExpected = 0;
+let protocolAuthoritiesResolved = 0;
+
 const protocolAuthorityAnchor = protocolAuthorityAnchors(
   await Bun.file("node_modules/@libre-ai/governance/ecosystem/repositories.v1.yaml").text(),
 );
@@ -745,12 +750,24 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/open
     );
     continue;
   }
+  protocolAuthoritiesExpected += 1;
   const spec = await readProtocolAuthority(appPath, anchor);
   if (spec === OFFLINE_UNVERIFIED_SPEC) {
-    console.warn(
-      `WARN: ${path}: protocol authority ${appPath} not resolvable offline — CI verifies with the network.`,
-    );
+    // Degrading to a warning is a local-developer convenience. In CI it is the
+    // whole defect: this gate ran green for weeks emitting exactly this line
+    // eleven times, because the workflow gave `gh` no token and an
+    // unauthenticated failure does not look like an HTTP 4xx.
+    if (RUNNING_IN_CI) {
+      failures.push(
+        `${path}: protocol authority ${appPath} unresolved in CI — the runner could not reach ${anchor} (is GH_TOKEN set on this job?)`,
+      );
+    } else {
+      console.warn(
+        `WARN: ${path}: protocol authority ${appPath} not resolvable offline — CI resolves it or fails.`,
+      );
+    }
   } else if (spec !== null) {
+    protocolAuthoritiesResolved += 1;
     for (const [label, actual] of [
       ["Commands", commands],
       ["Queries", queries],
@@ -1017,5 +1034,8 @@ if (failures.length > 0) {
 }
 
 console.log(
-  `Contracts verified: ${entries.length} catalog entries, ${fixtureCases.length} schema fixture pairs, ${operationIds.size} HTTP operations`,
+  // The authority count belongs in the success line: without it, a run that
+  // resolved every protocol authority and a run that resolved none printed the
+  // same three numbers.
+  `Contracts verified: ${entries.length} catalog entries, ${fixtureCases.length} schema fixture pairs, ${operationIds.size} HTTP operations, ${protocolAuthoritiesResolved}/${protocolAuthoritiesExpected} protocol authorities resolved`,
 );

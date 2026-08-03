@@ -54,4 +54,24 @@ describe("protocolAuthorityAnchors", () => {
     expect(DOCTRINE_ANCHOR).toBe("libre-ai/governance");
     expect(DOCTRINE_ANCHOR).not.toBe("libre-ai/libre-ai");
   });
+
+  test("two repositories claiming the same application is refused, not resolved last-wins", () => {
+    // Silently keeping the last writer would let an index entry redirect the
+    // protocol authority of a contract owned by another repository.
+    const ambiguous = `repositories:
+  - repository: libre-ai/feed-radar
+    canonical_paths:
+      - apps/radar
+  - repository: libre-ai/evil
+    canonical_paths:
+      - apps/radar
+`;
+    expect(() => protocolAuthorityAnchors(ambiguous)).toThrow(/radar/);
+  });
+
+  test("an index schema this module was not written against is named, not silently empty", () => {
+    expect(() => protocolAuthorityAnchors("schema_version: libre-ai.repositories.v9\n")).toThrow(
+      /v9/,
+    );
+  });
 });
