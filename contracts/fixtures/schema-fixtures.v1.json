@@ -949,7 +949,9 @@
         "id": "urn:libre-ai:deletion:receipt-1",
         "tenantId": "ten_1234567890abcdef",
         "owner": "radar",
-        "subjectDigests": ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"],
+        "subjectDigests": [
+          "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        ],
         "requestedBy": "usr_1234567890abcdef",
         "requestedAt": "2026-07-16T00:00:00Z",
         "completedAt": "2026-07-16T00:00:01Z",
@@ -2026,7 +2028,10 @@
               "wording": "R&D: 50%",
               "encodedUrl": "https://example.org/a%20b?x=1&y=2",
               "machineHandle": "release@2",
-              "unicodePathControls": ["ｆｉｌｅ：／／／etc/passwd", ".\u200b./secrets.txt"]
+              "unicodePathControls": [
+                "ｆｉｌｅ：／／／etc/passwd",
+                ".\u200b./secrets.txt"
+              ]
             }
           }
         ]
@@ -2784,7 +2789,11 @@
             "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
             "mediaType": "application/json"
           },
-          "requiredCapabilities": ["filesystem_mounts", "process_isolation", "resource_limits"],
+          "requiredCapabilities": [
+            "filesystem_mounts",
+            "process_isolation",
+            "resource_limits"
+          ],
           "denyOnMissing": true
         },
         "workerTransport": {
@@ -2997,7 +3006,11 @@
           "mediaType": "application/json"
         },
         "platform": "linux-x86_64",
-        "effectiveControls": ["filesystem_mounts", "process_isolation", "resource_limits"],
+        "effectiveControls": [
+          "filesystem_mounts",
+          "process_isolation",
+          "resource_limits"
+        ],
         "networkMode": "private-gateway-only",
         "generatedAt": "2026-07-16T10:11:00Z",
         "signingKeyId": "harness_key_1",
@@ -3116,6 +3129,233 @@
           "name": "invalid signature length",
           "path": "/signature",
           "value": "short"
+        }
+      ]
+    },
+    {
+      "schema": "public-vote-dataset.v3.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.public-vote-dataset.v3",
+        "id": "urn:libre-ai:dataset:votes-v3-unit",
+        "version": "3.0.0",
+        "scope": "Vote public de démonstration v3",
+        "methodId": "urn:libre-ai:method:method-v3-unit",
+        "methodDigest": "a9f1bef0da6d3134050b071886b9255e89b1af4de26c453bcbd7281c7edf722d",
+        "statements": [
+          {
+            "id": "statement_1",
+            "wording": "Proposition sourcée statement_1 (v3)",
+            "polarity": 1,
+            "source": {
+              "uri": "https://example.org/vote/statement_1",
+              "retrievedAt": "2026-08-18T00:00:00Z",
+              "digest": "9a1347eb1fdf7ce60f46a9172732ce5373b36613e1a2e43e2b5942d40fb75a54",
+              "licence": "Etalab-2.0"
+            },
+            "votesFor": 10,
+            "votesAgainst": 5,
+            "abstentions": 2,
+            "absent": 1,
+            "subjectKind": "public-policy-proposal",
+            "personTargeting": "prohibited"
+          }
+        ],
+        "publishedAt": "2026-08-18T00:00:00Z",
+        "digest": "a9ace7e3eb1d56f95dd0660a83d2c7a464d4bba95306f453e8ff83568ca5ac6d",
+        "approvals": [
+          {
+            "role": "methodological-review",
+            "actorKind": "human",
+            "reviewerId": "rev_1111111111111111",
+            "approvedAt": "2026-08-18T00:00:00Z",
+            "reference": "urn:libre-ai:approval:dataset-votes-v3-unit-method",
+            "subjectDigest": "a9ace7e3eb1d56f95dd0660a83d2c7a464d4bba95306f453e8ff83568ca5ac6d",
+            "professionalCapacity": "methodology-expert",
+            "attestation": {
+              "uri": "https://reviews.example.invalid/boussole/methodology-v3",
+              "digest": "e71d3dfcbdb36a942cc78a56ea3643bc8123deb5bcbbeff93a13765d08000cc1",
+              "publicationBasis": "explicit-publication-consent",
+              "identityBoundary": "professional-attestation-only"
+            }
+          },
+          {
+            "role": "legal-privacy-review",
+            "actorKind": "human",
+            "reviewerId": "rev_2222222222222222",
+            "approvedAt": "2026-08-18T00:00:00Z",
+            "reference": "urn:libre-ai:approval:dataset-votes-v3-unit-privacy",
+            "subjectDigest": "a9ace7e3eb1d56f95dd0660a83d2c7a464d4bba95306f453e8ff83568ca5ac6d",
+            "professionalCapacity": "privacy-legal-expert",
+            "attestation": {
+              "uri": "https://reviews.example.invalid/boussole/privacy-v3",
+              "digest": "141ac3fef4acbc9772f076a072d595e2b3fae42eb05719940b3c3231ecf35c9d",
+              "publicationBasis": "explicit-publication-consent",
+              "identityBoundary": "professional-attestation-only"
+            }
+          }
+        ],
+        "publicationPolicy": {
+          "sourceMode": "public-roll-call-aggregated",
+          "minimumGroupSize": 5,
+          "smallGroupAction": "exclude-statement",
+          "identityExposure": "prohibited",
+          "publicationReviewExpiresAt": "2027-08-18T00:00:00Z"
+        }
+      },
+      "invalidMutations": [
+        {
+          "name": "polarity out of enum",
+          "path": "/statements/0/polarity",
+          "value": 0
+        },
+        {
+          "name": "missing polarity",
+          "path": "/statements/0/polarity",
+          "remove": true
+        },
+        {
+          "name": "agent reviewer",
+          "path": "/approvals/0/actorKind",
+          "value": "agent"
+        },
+        {
+          "name": "publication group floor too low",
+          "path": "/publicationPolicy/minimumGroupSize",
+          "value": 4
+        }
+      ]
+    },
+    {
+      "schema": "boussole-method.v3.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.boussole-method.v3",
+        "id": "urn:libre-ai:method:method-v3-unit",
+        "version": "3.0.0",
+        "responseScale": [-1, 0, 1],
+        "abstentionTreatment": "excluded-from-denominator",
+        "missingTreatment": "excluded-and-reported",
+        "formula": "normalized-agreement-v3",
+        "rounding": "decimal-6-half-even-exact-rational",
+        "approvedAt": "2026-08-18T00:00:00Z",
+        "digest": "a9f1bef0da6d3134050b071886b9255e89b1af4de26c453bcbd7281c7edf722d",
+        "approvals": [
+          {
+            "role": "methodological-review",
+            "actorKind": "human",
+            "reviewerId": "rev_1111111111111111",
+            "approvedAt": "2026-08-18T00:00:00Z",
+            "reference": "urn:libre-ai:approval:method-method-v3-unit-method",
+            "subjectDigest": "a9f1bef0da6d3134050b071886b9255e89b1af4de26c453bcbd7281c7edf722d",
+            "professionalCapacity": "methodology-expert",
+            "attestation": {
+              "uri": "https://reviews.example.invalid/boussole/methodology-v3",
+              "digest": "e71d3dfcbdb36a942cc78a56ea3643bc8123deb5bcbbeff93a13765d08000cc1",
+              "publicationBasis": "explicit-publication-consent",
+              "identityBoundary": "professional-attestation-only"
+            }
+          },
+          {
+            "role": "legal-privacy-review",
+            "actorKind": "human",
+            "reviewerId": "rev_2222222222222222",
+            "approvedAt": "2026-08-18T00:00:00Z",
+            "reference": "urn:libre-ai:approval:method-method-v3-unit-privacy",
+            "subjectDigest": "a9f1bef0da6d3134050b071886b9255e89b1af4de26c453bcbd7281c7edf722d",
+            "professionalCapacity": "privacy-legal-expert",
+            "attestation": {
+              "uri": "https://reviews.example.invalid/boussole/privacy-v3",
+              "digest": "141ac3fef4acbc9772f076a072d595e2b3fae42eb05719940b3c3231ecf35c9d",
+              "publicationBasis": "explicit-publication-consent",
+              "identityBoundary": "professional-attestation-only"
+            }
+          }
+        ]
+      },
+      "invalidMutations": [
+        {
+          "name": "wrong formula",
+          "path": "/formula",
+          "value": "normalized-agreement-v2"
+        },
+        {
+          "name": "wrong rounding",
+          "path": "/rounding",
+          "value": "decimal-6-half-even"
+        },
+        {
+          "name": "cross-kind method id",
+          "path": "/id",
+          "value": "urn:libre-ai:dataset:wrong-kind"
+        },
+        {
+          "name": "non-opaque methodology reviewer",
+          "path": "/approvals/0/reviewerId",
+          "value": "named_reviewer"
+        }
+      ]
+    },
+    {
+      "schema": "local-comparison.v3.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.local-comparison.v3",
+        "datasetId": "urn:libre-ai:dataset:votes-v3-unit",
+        "datasetDigest": "a9ace7e3eb1d56f95dd0660a83d2c7a464d4bba95306f453e8ff83568ca5ac6d",
+        "methodId": "urn:libre-ai:method:method-v3-unit",
+        "methodDigest": "a9f1bef0da6d3134050b071886b9255e89b1af4de26c453bcbd7281c7edf722d",
+        "responseSetDigest": "f79015b0da74d47a8840f76bd4529689d341cae28194f15431c19dfba0a50ff4",
+        "scoreMicros": 333333,
+        "score": "0.333333",
+        "weightedNumerator": 5,
+        "scaledDenominator": 15,
+        "denominator": 15,
+        "omissions": [
+          {
+            "statementId": "statement_2",
+            "reason": "explicit-skip"
+          }
+        ],
+        "contributions": [
+          {
+            "statementId": "statement_1",
+            "contributionMicros": 333333,
+            "contribution": "0.333333",
+            "weightedTerm": 5,
+            "votesConsidered": 15,
+            "votesOmitted": 3
+          }
+        ],
+        "computedAt": "2026-08-18T00:00:00Z"
+      },
+      "invalidMutations": [
+        {
+          "name": "score does not match six-decimal pattern",
+          "path": "/score",
+          "value": "2.000000"
+        },
+        {
+          "name": "negative zero forbidden",
+          "path": "/score",
+          "value": "-0.000000"
+        },
+        {
+          "name": "scoreMicros out of bounds",
+          "path": "/scoreMicros",
+          "value": 1000001
+        },
+        {
+          "name": "omission reason outside closed taxonomy",
+          "path": "/omissions/0/reason",
+          "value": "unknown-reason"
+        },
+        {
+          "name": "weightedTerm out of bounds",
+          "path": "/contributions/0/weightedTerm",
+          "value": 99999999999999
+        },
+        {
+          "name": "cross-kind comparison dataset id",
+          "path": "/datasetId",
+          "value": "urn:libre-ai:method:wrong-kind"
         }
       ]
     }
