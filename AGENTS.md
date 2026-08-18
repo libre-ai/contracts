@@ -7,7 +7,9 @@ This repository is the **contract authority** of the Libre AI constellation
 authorities, their vectors and fixtures, the catalog
 (`contracts/catalog.v1.json`) and the compatibility policy
 (`contracts/COMPATIBILITY.md`). The `governance` repository is the other
-authority — doctrine, invariants and fleet gates live there, never here.
+transverse authority
+(https://raw.githubusercontent.com/libre-ai/governance/main/AGENTS.md) —
+doctrine, invariants and fleet gates live there, never here.
 
 ## Boundaries
 
