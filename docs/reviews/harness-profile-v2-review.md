@@ -43,19 +43,28 @@ independent second pass of either required role.
 **Known repository gap, not fixed by this candidate:** `contracts/CATALOG.md`,
 `contracts/README.md` and `contracts/COMPATIBILITY.md` all point to
 `docs/reviews/AGENT-REVIEW-PROTOCOL.md` as the process the review passes below must follow. That
-file does not exist anywhere in this repository as of this candidate — the same gap flagged by
-`docs/reviews/boussole-v3-numeric-polarity-omission-review.md`. The independent review passes
-below are therefore blocked on a protocol document that has yet to be written, in addition to
-being blocked on finding genuinely independent reviewers/roles for a solo-maintained repository.
-Flagging both blockers here rather than inventing either the protocol document or a fictitious
-review.
+file does not exist in this repository as of this candidate — the same gap flagged by
+`docs/reviews/boussole-v3-numeric-polarity-omission-review.md`. The protocol itself lives in the
+`governance` authority (`docs/reviews/AGENT-REVIEW-PROTOCOL.md` there), which defines review
+independence as **role separation and review-only passes on an immutable commit** — a second
+human or a distinct agent identity is explicitly not an independence criterion. The passes below
+follow that governance protocol; the missing local pointer file remains a documentation gap of
+this repository, nothing more.
 
-## Review passes required before promotion to `locked`
+## Review passes — both required roles executed (2026-08-19)
 
-| Role         | Scope                                                                                                                                                                                                                                    | Status  |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| architecture | Whether narrowing `verifyOsPeer` from `const: true` to `{ "type": "boolean" }` and dropping it from `required` is the correct successor shape given no `harness-profile.v1` producer was ever released (`COMPATIBILITY.md` "Pre-implementation candidates"), and whether the runtime refusal semantics documented above belong in this dossier versus a normative document consumers can cite programmatically. | pending |
-| security     | Whether an optional, unconstrained boolean is sufficient to prevent a resolving engine from silently downgrading OS-peer verification when a profile actually requests it — i.e., whether "refuse at resolution when untenable" is enforceable purely as documented semantics, or needs a machine-checkable companion (attestation field, golden vector) before this candidate can lock. | pending |
+Both passes ran review-only on the immutable authoring commit `cd59011`, per the governance
+`AGENT-REVIEW-PROTOCOL.md` (authoring committed first, worktree clean, explicit role-scoped
+review passes; the two roles ran on two distinct models).
+
+| Role         | Scope                                                                                                                                                                                             | Verdict                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | Record                                                 |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| architecture | Successor shape (no v1 producer released → consumers move directly, `COMPATIBILITY.md` "Pre-implementation candidates"); delta exactness; catalog entry mechanics; digest-vector reproducibility. | **accept** — diff v1→v2 verified to be exactly the four declared hunks; pure addition (515 insertions, 0 deletions), v1 schema/vector and the `harness-attestation` signature vector byte-intact; the v2 vector's `expectedDigest` (`6b521fdf…`) independently reproduced with the same method that reproduces the committed v1 digest (`b3e3198e…`).                                                                                                                                                                                                                                                                                                                              | orchestrator pass (model `claude-fable-5`), 2026-08-19 |
+| security     | Whether the optional boolean weakens any REAL guarantee; adversarial validation of the schema; fixture/mutation correctness; self-reported gaps verified.                                         | **accept** — 11/11 adversarial Ajv cases behave as declared (omitted/`true`/`false` valid; wrong type rejected; unknown property rejected; `runBoundToken`/`hostLoopbackAllowed` const locks intact; a v2-shaped payload still rejected by v1); no delivered guarantee is weakened (v1's `const: true` was never enforceable by any released engine). One **major, non-blocking** finding, already self-flagged above: the schema cannot express `kind`-conditional validity, so "refuse at resolution when untenable" lives entirely in engine behaviour — to be resolved (attestation field or golden vector) **before promotion to `locked`**, not before this candidate merge. | subagent pass (model `claude-sonnet-4-8`), 2026-08-19  |
+
+Promotion of this candidate to `locked` remains an owner act, gated on the major non-blocking
+finding above and pronounced together with the WP-G3-H01 re-delivery hard stop it serves
+(`governance` ADR-0030, `docs/reviews/wp-g3-h01/BOOTSTRAP-DOSSIER.md` § Round 4).
 
 ## Known follow-up outside this pull request's scope
 
