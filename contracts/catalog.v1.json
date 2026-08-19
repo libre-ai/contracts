@@ -392,6 +392,23 @@
       "status": "locked"
     },
     {
+      "id": "harness-profile-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/harness-profile.v2.schema.json",
+      "owners": ["agent-harness", "security"],
+      "consumers": ["agent-orchestrator", "proof"],
+      "compatibility": "major-versioned",
+      "classification": "internal",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security"],
+        "dossier": "docs/reviews/harness-profile-v2-review.md"
+      }
+    },
+    {
       "id": "harness-attestation-v1",
       "kind": "json-schema",
       "path": "contracts/schemas/harness-attestation.v1.schema.json",
