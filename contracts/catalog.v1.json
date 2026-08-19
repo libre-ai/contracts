@@ -807,6 +807,57 @@
       "status": "locked"
     },
     {
+      "id": "public-vote-dataset-v3",
+      "kind": "json-schema",
+      "path": "contracts/schemas/public-vote-dataset.v3.schema.json",
+      "owners": ["boussole", "specialized-rust"],
+      "consumers": ["boussole", "boussole-scoring"],
+      "compatibility": "major-versioned",
+      "classification": "public",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "methodology", "privacy"],
+        "dossier": "docs/reviews/boussole-v3-numeric-polarity-omission-review.md"
+      }
+    },
+    {
+      "id": "boussole-method-v3",
+      "kind": "json-schema",
+      "path": "contracts/schemas/boussole-method.v3.schema.json",
+      "owners": ["boussole", "specialized-rust"],
+      "consumers": ["boussole", "boussole-scoring"],
+      "compatibility": "major-versioned",
+      "classification": "public",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "methodology", "privacy"],
+        "dossier": "docs/reviews/boussole-v3-numeric-polarity-omission-review.md"
+      }
+    },
+    {
+      "id": "local-comparison-v3",
+      "kind": "json-schema",
+      "path": "contracts/schemas/local-comparison.v3.schema.json",
+      "owners": ["boussole", "specialized-rust"],
+      "consumers": ["boussole", "boussole-scoring"],
+      "compatibility": "major-versioned",
+      "classification": "local",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "methodology", "privacy"],
+        "dossier": "docs/reviews/boussole-v3-numeric-polarity-omission-review.md"
+      }
+    },
+    {
       "id": "engine-golden-vectors-v1",
       "kind": "json-schema",
       "path": "contracts/schemas/engine-golden-vectors.v1.schema.json",
