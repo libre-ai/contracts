@@ -949,9 +949,7 @@
         "id": "urn:libre-ai:deletion:receipt-1",
         "tenantId": "ten_1234567890abcdef",
         "owner": "radar",
-        "subjectDigests": [
-          "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-        ],
+        "subjectDigests": ["aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"],
         "requestedBy": "usr_1234567890abcdef",
         "requestedAt": "2026-07-16T00:00:00Z",
         "completedAt": "2026-07-16T00:00:01Z",
@@ -2028,10 +2026,7 @@
               "wording": "R&D: 50%",
               "encodedUrl": "https://example.org/a%20b?x=1&y=2",
               "machineHandle": "release@2",
-              "unicodePathControls": [
-                "ｆｉｌｅ：／／／etc/passwd",
-                ".\u200b./secrets.txt"
-              ]
+              "unicodePathControls": ["ｆｉｌｅ：／／／etc/passwd", ".\u200b./secrets.txt"]
             }
           }
         ]
@@ -2789,11 +2784,7 @@
             "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
             "mediaType": "application/json"
           },
-          "requiredCapabilities": [
-            "filesystem_mounts",
-            "process_isolation",
-            "resource_limits"
-          ],
+          "requiredCapabilities": ["filesystem_mounts", "process_isolation", "resource_limits"],
           "denyOnMissing": true
         },
         "workerTransport": {
@@ -3006,11 +2997,7 @@
           "mediaType": "application/json"
         },
         "platform": "linux-x86_64",
-        "effectiveControls": [
-          "filesystem_mounts",
-          "process_isolation",
-          "resource_limits"
-        ],
+        "effectiveControls": ["filesystem_mounts", "process_isolation", "resource_limits"],
         "networkMode": "private-gateway-only",
         "generatedAt": "2026-07-16T10:11:00Z",
         "signingKeyId": "harness_key_1",
