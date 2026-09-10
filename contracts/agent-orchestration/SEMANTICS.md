@@ -1,6 +1,7 @@
-# Agent orchestration candidate semantics v1
+# Agent orchestration semantics v1
 
-- **Status:** candidate; no implementation or real mission is authorized.
+- **Status:** normative for the cataloged locked contracts; no implementation or real mission is
+  authorized.
 - **RFC:** `docs/rfcs/0001-agent-orchestration-option-b.md`
 - **Normative JSON:** the cataloged schemas under `contracts/schemas/`.
 
@@ -73,7 +74,7 @@ Missions computes `quorumDigest` only after all semantic checks pass. `Execution
 
 ## Mission transitions
 
-The candidate v2 transition relation is closed:
+The v2 transition relation is closed:
 
 | From | Allowed next states |
 | --- | --- |
@@ -108,14 +109,15 @@ Review summaries contain only closed codes, severity and counts. Detailed findin
 
 Views and exports disclose reviewer and contributor identities only to authorized roles with a need to know. Deletion, anonymization and restore replay follow `docs/specifications/DATA-LIFECYCLE.md`; accepted deletion cannot be resurrected.
 
-## Authorized execution candidate family (D40)
+## Authorized execution locked family (D40/D42)
 
-The following contracts are a coordinated **candidate** family: `ExecutionGraph v1`,
+The following contracts are a coordinated **locked** family: `ExecutionGraph v1`,
 `ExecutionPlanBody v2`, `ExecutionTransfer v1`, `ExecutionAuthorization v2`,
 `HumanDecisionRequest v1`, `HumanDecisionResponse v1`, `StepInvocation v1`,
 `EffectAttestation v1`, `OrchestratorEvent v3`, `RetentionPolicy v2` and its schema. They
-authorize neither a runtime implementation nor a real mission. Promotion to `locked` is a
-separate owner decision after the required architecture, security and privacy reviews.
+authorize neither a runtime implementation nor a real mission. Governance ADR-0036/D42 records
+the separate owner Specification Lock after the required architecture, security and privacy
+reviews; any breaking semantic change requires a new major and a new lock cycle.
 
 ### Closed graph and authority binding
 

@@ -11,7 +11,7 @@ Machine authority: [`catalog.v1.json`](catalog.v1.json).
 | Biscuit authority/policies | 6 | `contracts/authz/` | minimal authorities plus deny-by-default authorizers |
 
 The catalog records one ID, path, owner set, consumer set, classification, compatibility mode and
-status for every contract. Of 103 current entries, 88 are `locked` and 15 are `candidate`. A
+status for every contract. Of 103 current entries, 99 are `locked` and 4 are `candidate`. A
 `pending-independent-agent-review` candidate does not authorize implementation or release and
 requires dedicated review-only verdicts under
 Governance [`AGENT-REVIEW-PROTOCOL.md`](https://github.com/libre-ai/governance/blob/main/docs/reviews/AGENT-REVIEW-PROTOCOL.md).
@@ -49,14 +49,15 @@ Uncataloged files and missing authorities fail `bun run check:contracts`.
 - Missions: locked v1 human-verdict baseline plus locked, unimplemented v2 two-agent plan/result quorums ;
 - Agent Orchestrator/Harness: locked immutable plan, separate authorization, causal events, monotone budgets and signed fail-closed isolation profile/attestation; only the simulation control core is implemented, never a harness or worker runtime.
 
-## Authorized execution candidates
+## Authorized execution Specification Lock
 
-Eleven coordinated entries remain candidates: `execution-graph-v1`,
+Eleven coordinated entries are locked under Governance ADR-0036/D42: `execution-graph-v1`,
 `execution-plan-body-v2`, `execution-transfer-v1`, `execution-authorization-v2`,
 `human-decision-request-v1`, `human-decision-response-v1`, `step-invocation-v1`,
 `effect-attestation-v1`, `orchestrator-event-v3`, `retention-policy-schema-v2` and
-`retention-policy-v2`. Their shared dossier requires architecture, security and privacy verdicts
-against an immutable authoring commit. SDK projections may be generated only from that pinned
-candidate revision; runtime adoption and promotion to `locked` remain separate gates.
+`retention-policy-v2`. Their shared dossier records architecture, security and privacy verdicts
+against an immutable authoring commit plus the separate promotion review. SDK projections may be
+generated only from the pinned lock authority. The lock stabilizes contract meaning; runtime
+adoption, real missions, effects, services and deployments remain separate gates.
 
 See [`COMPATIBILITY.md`](COMPATIBILITY.md) for evolution rules and [`fixtures/schema-fixtures.v1.json`](fixtures/schema-fixtures.v1.json) for executable positive/negative vectors.

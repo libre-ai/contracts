@@ -10,6 +10,11 @@ clonable archive. The `governance` repository is the other authority.
 Consumers carry byte-exact vendored copies under a drift gate (I-05) —
 projections, never canonical.
 
+The eleven authorized-execution contract families are Specification Locked
+under Governance ADR-0036/D42. This stabilizes their wire meaning only: no
+runtime implementation, real mission, effect, service or deployment is
+authorized by their catalog status.
+
 ## Verify
 
 ```sh
