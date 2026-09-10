@@ -132,6 +132,27 @@ catalog remains `candidate` with `pending-independent-agent-review` because that
 repository's pre-lock review state and is not changed by a dossier-only record. It must not be
 interpreted as a Specification Lock.
 
+## Candidate-integration pass
+
+### `authorized-execution-candidate-integration-20260910-01`
+
+- **Mode:** candidate-integration; this is not a specialized promotion approval.
+- **Reviewed heads:** Governance `388b89bdba89c80a39b560b3284d8984101813ce`; Contracts
+  `47bc543a3189cc969e41bc39b3b69c540bd72802` (dossier-only successor of the reviewed authority);
+  SDK TypeScript `1c5f26076f622a7a3d129b87465bfa6905df0d70`; SDK Rust
+  `9c1201eb0f1f40bd45df637f053be98846070bc4`.
+- **Evidence:** fresh full repository gates on all four heads; Contracts 221 tests; TypeScript 208
+  tests; Rust 14 tests including doc-tests; Rust `cargo deny check licenses`; zero-warning lints and
+  typechecks; byte-drift gates; secret and personal-data scans; REUSE; clean worktrees. The
+  Contracts tree remained `8015ead233c805a30f2bb1e74c5feedaaafdb7ce` after the role records.
+- **Sovereignty:** no dependency, managed service, runtime network, telemetry, checkpoint store,
+  US hyperscaler or runtime repository was introduced. LangGraph remains a question/failure oracle
+  only and is absent from contracts, pins and projections.
+- **Findings:** Blocking 0; Major 0; Minor 0; non-blocking 0.
+- **Residual risks:** remote branch and post-merge CI still have to reproduce the local gates;
+  candidate status authorizes no runtime adoption.
+- **Verdict:** `approve` for candidate integration only.
+
 ## Promotion boundary
 
 Promotion to `locked` is a separate Specification Lock owner act after all review findings are
