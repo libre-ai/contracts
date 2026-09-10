@@ -981,14 +981,7 @@
       "consumers": ["missions", "agent-orchestrator", "sdk-ts", "sdk-rs"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
-      }
+      "status": "locked"
     },
     {
       "id": "execution-plan-body-v2",
@@ -998,14 +991,7 @@
       "consumers": ["missions", "agent-orchestrator", "sdk-ts", "sdk-rs"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
-      }
+      "status": "locked"
     },
     {
       "id": "execution-transfer-v1",
@@ -1015,14 +1001,7 @@
       "consumers": ["agent-orchestrator", "sdk-ts", "sdk-rs"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
-      }
+      "status": "locked"
     },
     {
       "id": "execution-authorization-v2",
@@ -1032,14 +1011,7 @@
       "consumers": ["agent-orchestrator", "sdk-ts", "sdk-rs"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
-      }
+      "status": "locked"
     },
     {
       "id": "human-decision-request-v1",
@@ -1049,14 +1021,7 @@
       "consumers": ["agent-orchestrator", "sdk-ts", "sdk-rs"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
-      }
+      "status": "locked"
     },
     {
       "id": "human-decision-response-v1",
@@ -1066,14 +1031,7 @@
       "consumers": ["agent-orchestrator", "sdk-ts", "sdk-rs"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
-      }
+      "status": "locked"
     },
     {
       "id": "step-invocation-v1",
@@ -1083,14 +1041,7 @@
       "consumers": ["harness", "sdk-ts", "sdk-rs"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
-      }
+      "status": "locked"
     },
     {
       "id": "effect-attestation-v1",
@@ -1100,14 +1051,7 @@
       "consumers": ["missions", "agent-orchestrator", "sdk-ts", "sdk-rs"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
-      }
+      "status": "locked"
     },
     {
       "id": "orchestrator-event-v3",
@@ -1117,14 +1061,7 @@
       "consumers": ["missions", "sdk-ts", "sdk-rs"],
       "compatibility": "major-versioned",
       "classification": "tenant-private",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
-      }
+      "status": "locked"
     },
     {
       "id": "retention-policy-schema-v2",
@@ -1134,14 +1071,7 @@
       "consumers": ["missions", "agent-orchestrator", "operations", "sdk-ts", "sdk-rs"],
       "compatibility": "major-versioned",
       "classification": "public",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
-      }
+      "status": "locked"
     },
     {
       "id": "retention-policy-v2",
@@ -1151,14 +1081,7 @@
       "consumers": ["missions", "agent-orchestrator", "operations"],
       "compatibility": "major-versioned",
       "classification": "public",
-      "status": "candidate",
-      "review": {
-        "state": "pending-independent-agent-review",
-        "reviewerKind": "agent",
-        "separation": "role-scoped-review-pass",
-        "required": ["architecture", "security", "privacy"],
-        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
-      }
+      "status": "locked"
     }
   ]
 }
