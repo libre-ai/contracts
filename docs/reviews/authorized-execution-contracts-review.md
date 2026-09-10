@@ -1,14 +1,18 @@
 # Review dossier — Authorized execution contracts
 
-- **Candidates:** `execution-graph-v1`, `execution-plan-body-v2`,
+- **Specification Locked family:** `execution-graph-v1`, `execution-plan-body-v2`,
   `execution-transfer-v1`, `execution-authorization-v2`,
   `human-decision-request-v1`, `human-decision-response-v1`,
   `step-invocation-v1`, `effect-attestation-v1`, `orchestrator-event-v3`,
   `retention-policy-schema-v2` and `retention-policy-v2`.
-- **Status:** `pending-independent-agent-review`; authored as one protocol family.
+- **Status:** `locked` by promotion target
+  `5b9b6668909119b670e0db62174419ab04e5b402`; authored and reviewed as one
+  protocol family.
 - **Required roles:** architecture, security and privacy.
-- **Owner decision:** Governance ADR-0034 / D40 authorizes candidate contract design only.
-  It does not authorize runtime adoption or promotion to `locked`.
+- **Owner decisions:** Governance ADR-0034/D40 authorized candidate contract
+  design only; ADR-0036/D42 at Governance main
+  `a16c8657881cfbd79a3915b218e0a148bc01bd78` separately authorizes this exact
+  Specification Lock. Neither decision authorizes runtime adoption.
 
 ## Binding review protocol
 
@@ -127,10 +131,10 @@ with all three reviewed worktrees clean, and produced exactly one verdict.
   enablement.
 - **Verdict:** `approve`.
 
-These approvals satisfy the candidate's three catalog roles for the immutable authority SHA. The
-catalog remains `candidate` with `pending-independent-agent-review` because that wire value is the
-repository's pre-lock review state and is not changed by a dossier-only record. It must not be
-interpreted as a Specification Lock.
+These approvals satisfied the candidate's three catalog roles for the immutable authority SHA.
+Before the separate owner act and promotion target recorded below, the catalog correctly remained
+`candidate` with `pending-independent-agent-review`; the role records alone were not a
+Specification Lock.
 
 ## Candidate-integration pass
 
@@ -153,7 +157,80 @@ interpreted as a Specification Lock.
   candidate status authorizes no runtime adoption.
 - **Verdict:** `approve` for candidate integration only.
 
-## Promotion boundary
+## Specification Lock promotion
 
-Promotion to `locked` is a separate Specification Lock owner act after all review findings are
-closed. This implementation phase stops before that gate.
+- **Promotion base:** `bba034fb081ecd56bcf34c96592a6122a6527b6c`.
+- **Immutable promotion target:** `5b9b6668909119b670e0db62174419ab04e5b402`.
+- **Promotion target tree:** `20f934deacddd14bef6d83a2d83abf4b0a81330c`.
+- **Governance owner act on main:**
+  `a16c8657881cfbd79a3915b218e0a148bc01bd78` (ADR-0036/D42).
+- **Catalog SHA-256:**
+  `6e892492617c0a78a17b1d55b09c2b6efd27390640dfc8b49f36577298827e52`
+  before promotion;
+  `17c2a6742d83a3d0d115048b948a03b0ab3b986f29e73e3e3bc6ff41cb0de4e7`
+  on the target.
+- **Scope:** exactly the eleven family IDs above, `candidate -> locked`, with
+  only their satisfied review objects removed.
+- **Runtime/data/release:** **NOT AUTHORIZED**.
+
+The same `Codex / root` identity performed the following serial review-only
+passes as permitted by the Governance review protocol. The target worktree was
+clean before and after the passes; no review pass modified it. The harness does
+not expose a stable session, provider or model identifier, so none is invented.
+
+### `authorized-execution-lock-architecture-20260910-01`
+
+- **Evidence:** the structured catalog comparison proves 11 exact promotions,
+  92 unrelated entries byte-equivalent as parsed JSON, `99 locked / 4
+  candidate`, and the four remaining candidate IDs exact. The diff from the
+  reviewed authority SHA is empty for all ten schemas, retention v2 data and
+  both vector files. Documentation states the same authority/runtime boundary.
+- **Findings:** Blocking 0; Major 0; Minor 0; non-blocking 0.
+- **Residual risk:** a runtime state machine has not demonstrated conformance to
+  the locked vectors; Phase 4 remains closed.
+- **Verdict:** `approve`.
+
+### `authorized-execution-lock-security-20260910-01`
+
+- **Evidence:** the executable lock test reproduces all 13 reviewed hashes and
+  rejects missing status, retained review state, extra promotion or wrong
+  counts. `bun run check` passes the contract checker, secret scan,
+  personal-data boundary, zero-warning lint, strict typecheck and 224 tests / 0
+  failures. `package.json`, `bun.lock` and all runtime paths are unchanged.
+- **Findings:** Blocking 0; Major 0; Minor 0; non-blocking 0.
+- **Residual risk:** locked schemas cannot themselves make storage transitions
+  atomic or external effects idempotent/fenced; both remain blocking Phase 4
+  integration proofs.
+- **Verdict:** `approve`.
+
+### `authorized-execution-lock-privacy-20260910-01`
+
+- **Evidence:** all classifications, schema bytes and retention v2 bytes remain
+  unchanged; the reviewed retention data hash is
+  `1622c32bf106160a524590db42bd0e8a0e7bbbadc2ee1bedd5dbb9bddef9db84`.
+  The personal-data and secret gates pass, and the promotion adds no record,
+  subject data, log value or external transmission.
+- **Findings:** Blocking 0; Major 0; Minor 0; non-blocking 0.
+- **Residual risk:** a future logger can still copy tenant-private wire values;
+  allow-list and deletion/restore E2E tests remain mandatory before enablement.
+- **Verdict:** `approve`.
+
+### `authorized-execution-lock-promotion-integration-20260910-01`
+
+- **Evidence:** the candidate authority SHA is an ancestor of the promotion
+  target; Governance ADR-0036/D42 is present on `origin/main`; all reviewed
+  hashes match; the focused lock gate passes 3 tests / 49 assertions; the full
+  repository gate passes 224 tests / 357 assertions; `reuse lint` covers
+  225/225 files; `git diff --check` passes; all commits carry DCO sign-off.
+- **Sovereignty:** no dependency, managed service, US hyperscaler, telemetry,
+  checkpoint store, runtime network or infrastructure is added. LangGraph,
+  LangChain and LangSmith remain absent from dependencies and normative bytes.
+- **Findings:** Blocking 0; Major 0; Minor 0; non-blocking 0.
+- **Residual risks:** SDK pins and remote/post-merge CI remain to be reproduced;
+  they cannot expand the lock into runtime authority.
+- **Verdict:** `approve` for the exact technical promotion.
+
+Any authority-byte drift, additional status transition, stale Governance act,
+red gate, SDK projection drift or runtime expansion invalidates these verdicts.
+Rollback before a separately authorized runtime exists is a revert of the
+catalog/lifecycle promotion and SDK pins; no data migration is required.
