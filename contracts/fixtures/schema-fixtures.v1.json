@@ -3597,7 +3597,7 @@
         "specPackageDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
         "executionGraph": {
           "id": "urn:libre-ai:graph:synthetic-graph-1",
-          "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
           "mediaType": "application/schema+json"
         },
         "lineageMode": "initial",
@@ -3606,19 +3606,19 @@
         "decisionSchemaRefs": [
           {
             "id": "urn:libre-ai:schema:human-decision-request-v1",
-            "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
             "mediaType": "application/schema+json"
           },
           {
             "id": "urn:libre-ai:schema:human-decision-response-v1",
-            "digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
             "mediaType": "application/schema+json"
           }
         ],
         "executorProfileRefs": [
           {
             "id": "urn:libre-ai:profile:synthetic-executor-1",
-            "digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+            "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
             "mediaType": "application/schema+json"
           }
         ],
@@ -3847,9 +3847,11 @@
         "requestId": "urn:libre-ai:decision-request:synthetic-request-1",
         "requestDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         "choiceId": "approve",
-        "actor": {
-          "id": "urn:libre-ai:actor:synthetic-approver-1",
-          "role": "mission-approver"
+        "actorAuthorization": {
+          "role": "mission-approver",
+          "approvedAt": "2026-09-10T10:59:00Z",
+          "reference": "urn:libre-ai:approval:synthetic-decision-actor-1",
+          "subjectDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
         },
         "expectedRevision": 4,
         "idempotencyKey": "synthetic-decision-0001",
@@ -3864,7 +3866,11 @@
           "path": "/comment",
           "value": "Synthetic free text must remain in an artifact."
         },
-        { "name": "empty actor role", "path": "/actor/role", "value": "" }
+        {
+          "name": "empty actor authorization role",
+          "path": "/actorAuthorization/role",
+          "value": ""
+        }
       ]
     },
     {
@@ -4040,6 +4046,11 @@
           "name": "event payload identity mismatch",
           "path": "/type",
           "value": "graph-activated"
+        },
+        {
+          "name": "terminal event with non-terminal effect status",
+          "path": "/data/effectStatus",
+          "value": "reserved"
         },
         {
           "name": "stable identifier in operational diagnostics",

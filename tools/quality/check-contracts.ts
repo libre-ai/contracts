@@ -6,6 +6,7 @@ import {
   authorizedExecutionVectorDocumentFailures,
   canonicalJson,
   digestVectorDocumentFailures,
+  evaluateAuthorizedExecutionVector,
   retentionPolicyV2Failures,
 } from "./authorized-execution";
 import { parseStrictJson } from "./policy-core-raw-inputs";
@@ -546,6 +547,24 @@ for (const fixture of fixtureCases) {
 for (const name of schemaByName.keys()) {
   if (name !== "common.v1.schema.json" && !fixtureNames.has(name))
     failures.push(`${name}: missing positive/negative fixture pair`);
+}
+
+const executionGraphFixture = fixtureCases.find(
+  (fixture) => fixture.schema === "execution-graph.v1.schema.json",
+);
+const executionPlanFixture = fixtureCases.find(
+  (fixture) => fixture.schema === "execution-plan-body.v2.schema.json",
+);
+if (executionGraphFixture === undefined || executionPlanFixture === undefined) {
+  failures.push("authorized execution graph/plan fixture authority is incomplete");
+} else if (
+  evaluateAuthorizedExecutionVector({
+    domain: "authority",
+    graph: executionGraphFixture.valid,
+    plan: executionPlanFixture.valid,
+  }) !== "authority-valid"
+) {
+  failures.push("authorized execution graph/plan positive fixtures are not bound to one authority");
 }
 
 const specializedVectorPaths = [

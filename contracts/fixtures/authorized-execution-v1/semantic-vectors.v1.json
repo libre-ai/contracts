@@ -9,10 +9,25 @@
         "graph": {
           "entryStepId": "a",
           "steps": [
-            { "stepId": "a", "kind": "calculation", "outcomeCodes": ["ok"] },
-            { "stepId": "z", "kind": "terminal", "outcomeCodes": [] }
+            {
+              "stepId": "a",
+              "kind": "calculation",
+              "outcomeCodes": ["ok"]
+            },
+            {
+              "stepId": "z",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
           ],
-          "edges": [{ "edgeId": "e", "fromStepId": "a", "outcomeCode": "ok", "toStepId": "z" }]
+          "edges": [
+            {
+              "edgeId": "e",
+              "fromStepId": "a",
+              "outcomeCode": "ok",
+              "toStepId": "z"
+            }
+          ]
         }
       },
       "expected": "graph-valid"
@@ -25,8 +40,16 @@
         "graph": {
           "entryStepId": "a",
           "steps": [
-            { "stepId": "a", "kind": "calculation", "outcomeCodes": ["ok"] },
-            { "stepId": "a", "kind": "terminal", "outcomeCodes": [] }
+            {
+              "stepId": "a",
+              "kind": "calculation",
+              "outcomeCodes": ["ok"]
+            },
+            {
+              "stepId": "a",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
           ],
           "edges": []
         }
@@ -41,12 +64,30 @@
         "graph": {
           "entryStepId": "a",
           "steps": [
-            { "stepId": "a", "kind": "calculation", "outcomeCodes": ["ok"] },
-            { "stepId": "z", "kind": "terminal", "outcomeCodes": [] }
+            {
+              "stepId": "a",
+              "kind": "calculation",
+              "outcomeCodes": ["ok"]
+            },
+            {
+              "stepId": "z",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
           ],
           "edges": [
-            { "edgeId": "e", "fromStepId": "a", "outcomeCode": "ok", "toStepId": "z" },
-            { "edgeId": "e", "fromStepId": "a", "outcomeCode": "ok", "toStepId": "z" }
+            {
+              "edgeId": "e",
+              "fromStepId": "a",
+              "outcomeCode": "ok",
+              "toStepId": "z"
+            },
+            {
+              "edgeId": "e",
+              "fromStepId": "a",
+              "outcomeCode": "ok",
+              "toStepId": "z"
+            }
           ]
         }
       },
@@ -59,7 +100,13 @@
         "domain": "graph",
         "graph": {
           "entryStepId": "missing",
-          "steps": [{ "stepId": "z", "kind": "terminal", "outcomeCodes": [] }],
+          "steps": [
+            {
+              "stepId": "z",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
+          ],
           "edges": []
         }
       },
@@ -73,8 +120,16 @@
         "graph": {
           "entryStepId": "a",
           "steps": [
-            { "stepId": "a", "kind": "calculation", "outcomeCodes": ["ok"] },
-            { "stepId": "z", "kind": "terminal", "outcomeCodes": [] }
+            {
+              "stepId": "a",
+              "kind": "calculation",
+              "outcomeCodes": ["ok"]
+            },
+            {
+              "stepId": "z",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
           ],
           "edges": [
             {
@@ -96,8 +151,16 @@
         "graph": {
           "entryStepId": "a",
           "steps": [
-            { "stepId": "a", "kind": "calculation", "outcomeCodes": ["ok"] },
-            { "stepId": "z", "kind": "terminal", "outcomeCodes": [] }
+            {
+              "stepId": "a",
+              "kind": "calculation",
+              "outcomeCodes": ["ok"]
+            },
+            {
+              "stepId": "z",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
           ],
           "edges": []
         }
@@ -112,12 +175,30 @@
         "graph": {
           "entryStepId": "a",
           "steps": [
-            { "stepId": "a", "kind": "calculation", "outcomeCodes": ["ok"] },
-            { "stepId": "z", "kind": "terminal", "outcomeCodes": [] }
+            {
+              "stepId": "a",
+              "kind": "calculation",
+              "outcomeCodes": ["ok"]
+            },
+            {
+              "stepId": "z",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
           ],
           "edges": [
-            { "edgeId": "e1", "fromStepId": "a", "outcomeCode": "ok", "toStepId": "z" },
-            { "edgeId": "e2", "fromStepId": "a", "outcomeCode": "ok", "toStepId": "z" }
+            {
+              "edgeId": "e1",
+              "fromStepId": "a",
+              "outcomeCode": "ok",
+              "toStepId": "z"
+            },
+            {
+              "edgeId": "e2",
+              "fromStepId": "a",
+              "outcomeCode": "ok",
+              "toStepId": "z"
+            }
           ]
         }
       },
@@ -131,11 +212,30 @@
         "graph": {
           "entryStepId": "a",
           "steps": [
-            { "stepId": "a", "kind": "calculation", "outcomeCodes": ["ok"] },
-            { "stepId": "z", "kind": "terminal", "outcomeCodes": [] },
-            { "stepId": "orphan", "kind": "terminal", "outcomeCodes": [] }
+            {
+              "stepId": "a",
+              "kind": "calculation",
+              "outcomeCodes": ["ok"]
+            },
+            {
+              "stepId": "z",
+              "kind": "terminal",
+              "outcomeCodes": []
+            },
+            {
+              "stepId": "orphan",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
           ],
-          "edges": [{ "edgeId": "e", "fromStepId": "a", "outcomeCode": "ok", "toStepId": "z" }]
+          "edges": [
+            {
+              "edgeId": "e",
+              "fromStepId": "a",
+              "outcomeCode": "ok",
+              "toStepId": "z"
+            }
+          ]
         }
       },
       "expected": "unreachable-step"
@@ -148,11 +248,30 @@
         "graph": {
           "entryStepId": "a",
           "steps": [
-            { "stepId": "a", "kind": "calculation", "outcomeCodes": ["ok"] },
-            { "stepId": "sink", "kind": "calculation", "outcomeCodes": [] },
-            { "stepId": "z", "kind": "terminal", "outcomeCodes": [] }
+            {
+              "stepId": "a",
+              "kind": "calculation",
+              "outcomeCodes": ["ok"]
+            },
+            {
+              "stepId": "sink",
+              "kind": "calculation",
+              "outcomeCodes": []
+            },
+            {
+              "stepId": "z",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
           ],
-          "edges": [{ "edgeId": "e", "fromStepId": "a", "outcomeCode": "ok", "toStepId": "sink" }]
+          "edges": [
+            {
+              "edgeId": "e",
+              "fromStepId": "a",
+              "outcomeCode": "ok",
+              "toStepId": "sink"
+            }
+          ]
         }
       },
       "expected": "terminal-unreachable"
@@ -165,12 +284,30 @@
         "graph": {
           "entryStepId": "a",
           "steps": [
-            { "stepId": "a", "kind": "calculation", "outcomeCodes": ["ok"] },
-            { "stepId": "z", "kind": "terminal", "outcomeCodes": [] }
+            {
+              "stepId": "a",
+              "kind": "calculation",
+              "outcomeCodes": ["ok"]
+            },
+            {
+              "stepId": "z",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
           ],
           "edges": [
-            { "edgeId": "e1", "fromStepId": "a", "outcomeCode": "ok", "toStepId": "z" },
-            { "edgeId": "e2", "fromStepId": "z", "outcomeCode": "again", "toStepId": "a" }
+            {
+              "edgeId": "e1",
+              "fromStepId": "a",
+              "outcomeCode": "ok",
+              "toStepId": "z"
+            },
+            {
+              "edgeId": "e2",
+              "fromStepId": "z",
+              "outcomeCode": "again",
+              "toStepId": "a"
+            }
           ]
         }
       },
@@ -184,12 +321,30 @@
         "graph": {
           "entryStepId": "a",
           "steps": [
-            { "stepId": "a", "kind": "calculation", "outcomeCodes": ["ok", "again"] },
-            { "stepId": "z", "kind": "terminal", "outcomeCodes": [] }
+            {
+              "stepId": "a",
+              "kind": "calculation",
+              "outcomeCodes": ["ok", "again"]
+            },
+            {
+              "stepId": "z",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
           ],
           "edges": [
-            { "edgeId": "e1", "fromStepId": "a", "outcomeCode": "ok", "toStepId": "z" },
-            { "edgeId": "e2", "fromStepId": "a", "outcomeCode": "again", "toStepId": "a" }
+            {
+              "edgeId": "e1",
+              "fromStepId": "a",
+              "outcomeCode": "ok",
+              "toStepId": "z"
+            },
+            {
+              "edgeId": "e2",
+              "fromStepId": "a",
+              "outcomeCode": "again",
+              "toStepId": "a"
+            }
           ]
         }
       },
@@ -228,7 +383,9 @@
             "processesStarted": 0,
             "filesChanged": 0,
             "changedBytes": 0
-          }
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
         },
         "current": {
           "id": "event-2",
@@ -258,7 +415,9 @@
             "processesStarted": 0,
             "filesChanged": 0,
             "changedBytes": 0
-          }
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
         },
         "collision": null
       },
@@ -297,7 +456,9 @@
             "processesStarted": 0,
             "filesChanged": 0,
             "changedBytes": 0
-          }
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
         },
         "current": {
           "id": "event-2",
@@ -327,9 +488,15 @@
             "processesStarted": 0,
             "filesChanged": 0,
             "changedBytes": 0
-          }
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
         },
-        "collision": { "id": "event-2", "sequence": 2, "eventDigest": "d" }
+        "collision": {
+          "id": "event-2",
+          "sequence": 2,
+          "eventDigest": "d"
+        }
       },
       "expected": "idempotent-duplicate"
     },
@@ -366,7 +533,9 @@
             "processesStarted": 0,
             "filesChanged": 0,
             "changedBytes": 0
-          }
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
         },
         "current": {
           "id": "event-2",
@@ -396,9 +565,15 @@
             "processesStarted": 0,
             "filesChanged": 0,
             "changedBytes": 0
-          }
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
         },
-        "collision": { "id": "event-2", "sequence": 2, "eventDigest": "x" }
+        "collision": {
+          "id": "event-2",
+          "sequence": 2,
+          "eventDigest": "x"
+        }
       },
       "expected": "duplicate-divergent"
     },
@@ -435,7 +610,9 @@
             "processesStarted": 0,
             "filesChanged": 0,
             "changedBytes": 0
-          }
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
         },
         "current": {
           "id": "event-2",
@@ -465,7 +642,9 @@
             "processesStarted": 0,
             "filesChanged": 0,
             "changedBytes": 0
-          }
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
         },
         "collision": null
       },
@@ -504,7 +683,9 @@
             "processesStarted": 0,
             "filesChanged": 0,
             "changedBytes": 0
-          }
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
         },
         "current": {
           "id": "event-2",
@@ -534,7 +715,9 @@
             "processesStarted": 0,
             "filesChanged": 0,
             "changedBytes": 0
-          }
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
         },
         "collision": null
       },
@@ -573,7 +756,9 @@
             "processesStarted": 0,
             "filesChanged": 0,
             "changedBytes": 0
-          }
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
         },
         "current": {
           "id": "event-2",
@@ -603,7 +788,9 @@
             "processesStarted": 0,
             "filesChanged": 0,
             "changedBytes": 0
-          }
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
         },
         "collision": null
       },
@@ -642,7 +829,9 @@
             "processesStarted": 0,
             "filesChanged": 0,
             "changedBytes": 0
-          }
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
         },
         "current": {
           "id": "event-2",
@@ -672,7 +861,9 @@
             "processesStarted": 0,
             "filesChanged": 0,
             "changedBytes": 0
-          }
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
         },
         "collision": null
       },
@@ -711,7 +902,9 @@
             "processesStarted": 0,
             "filesChanged": 0,
             "changedBytes": 0
-          }
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
         },
         "current": {
           "id": "event-2",
@@ -741,7 +934,9 @@
             "processesStarted": 0,
             "filesChanged": 0,
             "changedBytes": 0
-          }
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
         },
         "collision": null
       },
@@ -780,7 +975,9 @@
             "processesStarted": 0,
             "filesChanged": 0,
             "changedBytes": 0
-          }
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
         },
         "current": {
           "id": "event-2",
@@ -810,7 +1007,9 @@
             "processesStarted": 0,
             "filesChanged": 0,
             "changedBytes": 0
-          }
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
         },
         "collision": null
       },
@@ -1089,8 +1288,12 @@
           "effectEmissionId": "emission-2",
           "emissionDigest": "d",
           "fencing": 2,
-          "status": "committed"
-        }
+          "status": "committed",
+          "runId": "run-2"
+        },
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a"
       },
       "expected": "effect-valid"
     },
@@ -1105,7 +1308,10 @@
         "lineageClosed": false,
         "predecessorEffectsTerminal": true,
         "executorProfileQualified": true,
-        "priorEmission": { "effectEmissionId": "emission-2", "emissionDigest": "d" },
+        "priorEmission": {
+          "effectEmissionId": "emission-2",
+          "emissionDigest": "d"
+        },
         "existingAttemptEmissionId": null,
         "attestation": {
           "organizationId": "o",
@@ -1115,8 +1321,12 @@
           "effectEmissionId": "emission-2",
           "emissionDigest": "d",
           "fencing": 2,
-          "status": "committed"
-        }
+          "status": "committed",
+          "runId": "run-2"
+        },
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a"
       },
       "expected": "emission-duplicate"
     },
@@ -1131,7 +1341,10 @@
         "lineageClosed": false,
         "predecessorEffectsTerminal": true,
         "executorProfileQualified": true,
-        "priorEmission": { "effectEmissionId": "emission-2", "emissionDigest": "x" },
+        "priorEmission": {
+          "effectEmissionId": "emission-2",
+          "emissionDigest": "x"
+        },
         "existingAttemptEmissionId": null,
         "attestation": {
           "organizationId": "o",
@@ -1141,8 +1354,12 @@
           "effectEmissionId": "emission-2",
           "emissionDigest": "d",
           "fencing": 2,
-          "status": "committed"
-        }
+          "status": "committed",
+          "runId": "run-2"
+        },
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a"
       },
       "expected": "emission-divergent"
     },
@@ -1167,8 +1384,12 @@
           "effectEmissionId": "emission-2",
           "emissionDigest": "d",
           "fencing": 2,
-          "status": "committed"
-        }
+          "status": "committed",
+          "runId": "run-2"
+        },
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a"
       },
       "expected": "second-emission-for-attempt"
     },
@@ -1193,8 +1414,12 @@
           "effectEmissionId": "emission-2",
           "emissionDigest": "d",
           "fencing": 1,
-          "status": "committed"
-        }
+          "status": "committed",
+          "runId": "run-2"
+        },
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a"
       },
       "expected": "fencing-stale"
     },
@@ -1219,8 +1444,12 @@
           "effectEmissionId": "emission-2",
           "emissionDigest": "d",
           "fencing": 2,
-          "status": "committed"
-        }
+          "status": "committed",
+          "runId": "run-2"
+        },
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a"
       },
       "expected": "executor-unqualified"
     },
@@ -1245,8 +1474,12 @@
           "effectEmissionId": "emission-2",
           "emissionDigest": "d",
           "fencing": 2,
-          "status": "state-unknown"
-        }
+          "status": "state-unknown",
+          "runId": "run-2"
+        },
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a"
       },
       "expected": "effect-state-unknown"
     },
@@ -1271,8 +1504,12 @@
           "effectEmissionId": "emission-2",
           "emissionDigest": "d",
           "fencing": 2,
-          "status": "committed"
-        }
+          "status": "committed",
+          "runId": "run-2"
+        },
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a"
       },
       "expected": "predecessor-effects-nonterminal"
     },
@@ -1297,8 +1534,12 @@
           "effectEmissionId": "emission-2",
           "emissionDigest": "d",
           "fencing": 2,
-          "status": "committed"
-        }
+          "status": "committed",
+          "runId": "run-2"
+        },
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a"
       },
       "expected": "generation-consumed"
     },
@@ -1323,10 +1564,595 @@
           "effectEmissionId": "emission-2",
           "emissionDigest": "d",
           "fencing": 2,
+          "status": "committed",
+          "runId": "run-2"
+        },
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a"
+      },
+      "expected": "lineage-administratively-closed"
+    },
+    {
+      "id": "authority-valid",
+      "domain": "authority",
+      "input": {
+        "domain": "authority",
+        "graph": {
+          "id": "graph-1",
+          "organizationId": "organization-1",
+          "graphDigest": "g",
+          "steps": [
+            {
+              "kind": "calculation",
+              "outcomeCodes": ["ready"],
+              "retryPolicy": {
+                "maximumAttempts": 2,
+                "retryableOutcomeCodes": ["ready"]
+              }
+            },
+            {
+              "kind": "human-decision",
+              "outcomeCodes": ["approved", "rejected", "no-response"],
+              "retryPolicy": {
+                "maximumAttempts": 1,
+                "retryableOutcomeCodes": []
+              },
+              "decisionPolicy": {
+                "choices": [
+                  {
+                    "choiceId": "approve",
+                    "outcomeCode": "approved"
+                  },
+                  {
+                    "choiceId": "reject",
+                    "outcomeCode": "rejected"
+                  }
+                ],
+                "noResponseOutcomeCode": "no-response",
+                "requestSchemaRef": {
+                  "digest": "request-schema"
+                },
+                "responseSchemaRef": {
+                  "digest": "response-schema"
+                }
+              }
+            },
+            {
+              "kind": "external-effect",
+              "outcomeCodes": ["committed"],
+              "retryPolicy": {
+                "maximumAttempts": 1,
+                "retryableOutcomeCodes": []
+              },
+              "effectPolicy": {
+                "executorProfileDigest": "executor-profile"
+              }
+            },
+            {
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
+          ]
+        },
+        "plan": {
+          "organizationId": "organization-1",
+          "executionGraph": {
+            "id": "graph-1",
+            "digest": "g"
+          },
+          "decisionSchemaRefs": [
+            {
+              "digest": "request-schema"
+            },
+            {
+              "digest": "response-schema"
+            }
+          ],
+          "executorProfileRefs": [
+            {
+              "digest": "executor-profile"
+            }
+          ]
+        }
+      },
+      "expected": "authority-valid"
+    },
+    {
+      "id": "authority-graph-policy-invalid",
+      "domain": "authority",
+      "input": {
+        "domain": "authority",
+        "graph": {
+          "id": "graph-1",
+          "organizationId": "organization-1",
+          "graphDigest": "g",
+          "steps": [
+            {
+              "kind": "calculation",
+              "outcomeCodes": ["ready"],
+              "retryPolicy": {
+                "maximumAttempts": 2,
+                "retryableOutcomeCodes": ["unknown"]
+              }
+            }
+          ]
+        },
+        "plan": {
+          "organizationId": "organization-1",
+          "executionGraph": {
+            "id": "graph-1",
+            "digest": "g"
+          },
+          "decisionSchemaRefs": [],
+          "executorProfileRefs": []
+        }
+      },
+      "expected": "graph-policy-invalid"
+    },
+    {
+      "id": "authority-binding-mismatch",
+      "domain": "authority",
+      "input": {
+        "domain": "authority",
+        "graph": {
+          "id": "graph-1",
+          "organizationId": "organization-1",
+          "graphDigest": "g",
+          "steps": [
+            {
+              "kind": "calculation",
+              "outcomeCodes": ["ready"],
+              "retryPolicy": {
+                "maximumAttempts": 1,
+                "retryableOutcomeCodes": []
+              }
+            }
+          ]
+        },
+        "plan": {
+          "organizationId": "organization-1",
+          "executionGraph": {
+            "id": "graph-1",
+            "digest": "substituted"
+          },
+          "decisionSchemaRefs": [],
+          "executorProfileRefs": []
+        }
+      },
+      "expected": "authority-binding-mismatch"
+    },
+    {
+      "id": "transfer-valid",
+      "domain": "transfer",
+      "input": {
+        "domain": "transfer",
+        "transfer": {
+          "id": "transfer-1",
+          "transferDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "expectedRevision": 4,
+          "successorPlanDigest": "s",
+          "issuedAt": "2026-09-10T10:00:00Z",
+          "expiresAt": "2026-09-10T10:15:00Z"
+        },
+        "state": {
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "revision": 4,
+          "successorPlanDigest": "s",
+          "generationConsumed": false
+        },
+        "collision": null,
+        "now": "2026-09-10T10:05:00Z"
+      },
+      "expected": "transfer-valid"
+    },
+    {
+      "id": "transfer-idempotent-duplicate",
+      "domain": "transfer",
+      "input": {
+        "domain": "transfer",
+        "transfer": {
+          "id": "transfer-1",
+          "transferDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "expectedRevision": 4,
+          "successorPlanDigest": "s",
+          "issuedAt": "2026-09-10T10:00:00Z",
+          "expiresAt": "2026-09-10T10:15:00Z"
+        },
+        "state": {
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "revision": 4,
+          "successorPlanDigest": "s",
+          "generationConsumed": false
+        },
+        "collision": {
+          "id": "transfer-1",
+          "currentGeneration": 1,
+          "transferDigest": "d"
+        },
+        "now": "2026-09-10T10:05:00Z"
+      },
+      "expected": "idempotent-duplicate"
+    },
+    {
+      "id": "transfer-duplicate-divergent",
+      "domain": "transfer",
+      "input": {
+        "domain": "transfer",
+        "transfer": {
+          "id": "transfer-1",
+          "transferDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "expectedRevision": 4,
+          "successorPlanDigest": "s",
+          "issuedAt": "2026-09-10T10:00:00Z",
+          "expiresAt": "2026-09-10T10:15:00Z"
+        },
+        "state": {
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "revision": 4,
+          "successorPlanDigest": "s",
+          "generationConsumed": false
+        },
+        "collision": {
+          "id": "transfer-1",
+          "currentGeneration": 1,
+          "transferDigest": "x"
+        },
+        "now": "2026-09-10T10:05:00Z"
+      },
+      "expected": "duplicate-divergent"
+    },
+    {
+      "id": "transfer-generation-consumed",
+      "domain": "transfer",
+      "input": {
+        "domain": "transfer",
+        "transfer": {
+          "id": "transfer-1",
+          "transferDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "expectedRevision": 4,
+          "successorPlanDigest": "s",
+          "issuedAt": "2026-09-10T10:00:00Z",
+          "expiresAt": "2026-09-10T10:15:00Z"
+        },
+        "state": {
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "revision": 4,
+          "successorPlanDigest": "s",
+          "generationConsumed": true
+        },
+        "collision": null,
+        "now": "2026-09-10T10:05:00Z"
+      },
+      "expected": "generation-consumed"
+    },
+    {
+      "id": "transfer-revision-stale",
+      "domain": "transfer",
+      "input": {
+        "domain": "transfer",
+        "transfer": {
+          "id": "transfer-1",
+          "transferDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "expectedRevision": 3,
+          "successorPlanDigest": "s",
+          "issuedAt": "2026-09-10T10:00:00Z",
+          "expiresAt": "2026-09-10T10:15:00Z"
+        },
+        "state": {
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "revision": 4,
+          "successorPlanDigest": "s",
+          "generationConsumed": false
+        },
+        "collision": null,
+        "now": "2026-09-10T10:05:00Z"
+      },
+      "expected": "revision-stale"
+    },
+    {
+      "id": "transfer-successor-mismatch",
+      "domain": "transfer",
+      "input": {
+        "domain": "transfer",
+        "transfer": {
+          "id": "transfer-1",
+          "transferDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "expectedRevision": 4,
+          "successorPlanDigest": "changed",
+          "issuedAt": "2026-09-10T10:00:00Z",
+          "expiresAt": "2026-09-10T10:15:00Z"
+        },
+        "state": {
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "revision": 4,
+          "successorPlanDigest": "s",
+          "generationConsumed": false
+        },
+        "collision": null,
+        "now": "2026-09-10T10:05:00Z"
+      },
+      "expected": "identity-mismatch"
+    },
+    {
+      "id": "decision-idempotent-duplicate",
+      "domain": "decision",
+      "input": {
+        "domain": "decision",
+        "request": {
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceIds": ["approve", "reject"],
+          "requiredRole": "approver",
+          "expectedRevision": 4,
+          "expiresAt": "2026-09-10T12:00:00Z"
+        },
+        "response": {
+          "id": "response-1",
+          "responseDigest": "r",
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceId": "approve",
+          "actorRoles": ["approver"],
+          "expectedRevision": 4
+        },
+        "now": "2026-09-10T11:00:00Z",
+        "replaced": false,
+        "consumed": false,
+        "priorResponse": {
+          "id": "response-1",
+          "responseDigest": "r"
+        }
+      },
+      "expected": "idempotent-duplicate"
+    },
+    {
+      "id": "decision-duplicate-divergent",
+      "domain": "decision",
+      "input": {
+        "domain": "decision",
+        "request": {
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceIds": ["approve", "reject"],
+          "requiredRole": "approver",
+          "expectedRevision": 4,
+          "expiresAt": "2026-09-10T12:00:00Z"
+        },
+        "response": {
+          "id": "response-1",
+          "responseDigest": "r",
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceId": "approve",
+          "actorRoles": ["approver"],
+          "expectedRevision": 4
+        },
+        "now": "2026-09-10T11:00:00Z",
+        "replaced": false,
+        "consumed": false,
+        "priorResponse": {
+          "id": "response-1",
+          "responseDigest": "x"
+        }
+      },
+      "expected": "duplicate-divergent"
+    },
+    {
+      "id": "authority-duplicate-choice-id",
+      "domain": "authority",
+      "input": {
+        "domain": "authority",
+        "graph": {
+          "id": "graph-1",
+          "organizationId": "organization-1",
+          "graphDigest": "g",
+          "steps": [
+            {
+              "kind": "human-decision",
+              "outcomeCodes": ["approved", "rejected", "no-response"],
+              "retryPolicy": {
+                "maximumAttempts": 1,
+                "retryableOutcomeCodes": []
+              },
+              "decisionPolicy": {
+                "choices": [
+                  {
+                    "choiceId": "approve",
+                    "outcomeCode": "approved"
+                  },
+                  {
+                    "choiceId": "approve",
+                    "outcomeCode": "rejected"
+                  }
+                ],
+                "noResponseOutcomeCode": "no-response",
+                "requestSchemaRef": {
+                  "digest": "request-schema"
+                },
+                "responseSchemaRef": {
+                  "digest": "response-schema"
+                }
+              }
+            }
+          ]
+        },
+        "plan": {
+          "organizationId": "organization-1",
+          "executionGraph": {
+            "id": "graph-1",
+            "digest": "g"
+          },
+          "decisionSchemaRefs": [
+            {
+              "digest": "request-schema"
+            },
+            {
+              "digest": "response-schema"
+            }
+          ],
+          "executorProfileRefs": []
+        }
+      },
+      "expected": "graph-policy-invalid"
+    },
+    {
+      "id": "transfer-consumed-identical-replay",
+      "domain": "transfer",
+      "input": {
+        "domain": "transfer",
+        "transfer": {
+          "id": "transfer-1",
+          "transferDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "expectedRevision": 4,
+          "successorPlanDigest": "s",
+          "issuedAt": "2026-09-10T10:00:00Z",
+          "expiresAt": "2026-09-10T10:15:00Z"
+        },
+        "state": {
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "revision": 4,
+          "successorPlanDigest": "s",
+          "generationConsumed": true
+        },
+        "collision": {
+          "id": "transfer-1",
+          "currentGeneration": 1,
+          "transferDigest": "d"
+        },
+        "now": "2026-09-10T10:05:00Z"
+      },
+      "expected": "idempotent-duplicate"
+    },
+    {
+      "id": "effect-old-run-replay",
+      "domain": "effect",
+      "input": {
+        "domain": "effect",
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a",
+        "currentGeneration": 2,
+        "activeFencing": 2,
+        "generationConsumed": false,
+        "lineageClosed": false,
+        "predecessorEffectsTerminal": true,
+        "executorProfileQualified": true,
+        "priorEmission": null,
+        "existingAttemptEmissionId": null,
+        "attestation": {
+          "organizationId": "o",
+          "runId": "run-1",
+          "generation": 2,
+          "attemptId": "a",
+          "effectId": "effect",
+          "effectEmissionId": "emission-2",
+          "emissionDigest": "d",
+          "fencing": 2,
           "status": "committed"
         }
       },
-      "expected": "lineage-administratively-closed"
+      "expected": "identity-mismatch"
+    },
+    {
+      "id": "transfer-expired",
+      "domain": "transfer",
+      "input": {
+        "domain": "transfer",
+        "transfer": {
+          "id": "transfer-1",
+          "transferDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "expectedRevision": 4,
+          "successorPlanDigest": "s",
+          "issuedAt": "2026-09-10T10:00:00Z",
+          "expiresAt": "2026-09-10T10:15:00Z"
+        },
+        "state": {
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "revision": 4,
+          "successorPlanDigest": "s",
+          "generationConsumed": false
+        },
+        "collision": null,
+        "now": "2026-09-10T10:15:00Z"
+      },
+      "expected": "transfer-expired"
     }
   ]
 }

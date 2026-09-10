@@ -124,6 +124,113 @@ describe("authorized execution topology", () => {
   });
 });
 
+const authorityGraph = {
+  id: "urn:libre-ai:graph:synthetic-graph-1",
+  organizationId: "ten_1234567890abcdef",
+  graphDigest: "a".repeat(64),
+  steps: [
+    {
+      kind: "calculation",
+      outcomeCodes: ["ready"],
+      retryPolicy: { maximumAttempts: 2, retryableOutcomeCodes: ["ready"] },
+    },
+    {
+      kind: "human-decision",
+      outcomeCodes: ["approved", "rejected", "no-response"],
+      retryPolicy: { maximumAttempts: 1, retryableOutcomeCodes: [] },
+      decisionPolicy: {
+        choices: [
+          { choiceId: "approve", outcomeCode: "approved" },
+          { choiceId: "reject", outcomeCode: "rejected" },
+        ],
+        noResponseOutcomeCode: "no-response",
+        requestSchemaRef: { digest: "b".repeat(64) },
+        responseSchemaRef: { digest: "c".repeat(64) },
+      },
+    },
+    {
+      kind: "external-effect",
+      outcomeCodes: ["committed"],
+      retryPolicy: { maximumAttempts: 1, retryableOutcomeCodes: [] },
+      effectPolicy: { executorProfileDigest: "d".repeat(64) },
+    },
+    { kind: "terminal", outcomeCodes: [] },
+  ],
+};
+
+const authorityPlan = {
+  organizationId: authorityGraph.organizationId,
+  executionGraph: { id: authorityGraph.id, digest: authorityGraph.graphDigest },
+  decisionSchemaRefs: [{ digest: "b".repeat(64) }, { digest: "c".repeat(64) }],
+  executorProfileRefs: [{ digest: "d".repeat(64) }],
+};
+
+function authorityVector(overrides: Record<string, unknown> = {}) {
+  return {
+    domain: "authority",
+    graph: structuredClone(authorityGraph),
+    plan: structuredClone(authorityPlan),
+    ...overrides,
+  };
+}
+
+describe("authorized execution authority binding", () => {
+  test("accepts exact graph, decision schema and executor profile bindings", () => {
+    expect(evaluateAuthorizedExecutionVector(authorityVector())).toBe("authority-valid");
+  });
+
+  test("rejects a retry outcome outside the step's closed outcomes", () => {
+    const graph = structuredClone(authorityGraph);
+    const step = fixtureItem(graph.steps, 0);
+    if (step.retryPolicy === undefined) throw new Error("Retry fixture policy is missing");
+    step.retryPolicy.retryableOutcomeCodes = ["unknown"];
+    expect(evaluateAuthorizedExecutionVector(authorityVector({ graph }))).toBe(
+      "graph-policy-invalid",
+    );
+  });
+
+  test("rejects a decision consequence outside the step's closed outcomes", () => {
+    const graph = structuredClone(authorityGraph);
+    const decision = fixtureItem(graph.steps, 1);
+    if (decision.decisionPolicy === undefined)
+      throw new Error("Decision fixture policy is missing");
+    fixtureItem(decision.decisionPolicy.choices, 0).outcomeCode = "unknown";
+    expect(evaluateAuthorizedExecutionVector(authorityVector({ graph }))).toBe(
+      "graph-policy-invalid",
+    );
+  });
+
+  test("rejects duplicate human-decision choice identities", () => {
+    const graph = structuredClone(authorityGraph);
+    const decision = fixtureItem(graph.steps, 1);
+    if (decision.decisionPolicy === undefined)
+      throw new Error("Decision fixture policy is missing");
+    fixtureItem(decision.decisionPolicy.choices, 1).choiceId = "approve";
+    expect(evaluateAuthorizedExecutionVector(authorityVector({ graph }))).toBe(
+      "graph-policy-invalid",
+    );
+  });
+
+  test("rejects graph, organization, decision schema or executor profile substitution", () => {
+    const substitutions = [
+      { plan: { ...authorityPlan, organizationId: "ten_0000000000000000" } },
+      {
+        plan: {
+          ...authorityPlan,
+          executionGraph: { ...authorityPlan.executionGraph, digest: "f".repeat(64) },
+        },
+      },
+      { plan: { ...authorityPlan, decisionSchemaRefs: [{ digest: "f".repeat(64) }] } },
+      { plan: { ...authorityPlan, executorProfileRefs: [{ digest: "f".repeat(64) }] } },
+    ];
+    for (const substitution of substitutions) {
+      expect(evaluateAuthorizedExecutionVector(authorityVector(substitution))).toBe(
+        "authority-binding-mismatch",
+      );
+    }
+  });
+});
+
 const zeroBudget = {
   durationSeconds: 0,
   toolCalls: 0,
@@ -139,6 +246,8 @@ const previousEvent = {
   eventDigest: "a".repeat(64),
   organizationId: "organization-1",
   missionId: "mission-1",
+  orchestratorId: "orchestrator-1",
+  authorizationDigest: "f".repeat(64),
   planDigest: "b".repeat(64),
   graphDigest: "c".repeat(64),
   runId: "run-1",
@@ -200,10 +309,37 @@ describe("authorized execution causal events", () => {
     ).toBe("duplicate-divergent");
   });
 
+  test("rejects malformed collision facts instead of treating them as absent", () => {
+    expect(() =>
+      evaluateAuthorizedExecutionVector(
+        causalVector({
+          collision: {
+            id: currentEvent.id,
+            sequence: "2",
+            eventDigest: currentEvent.eventDigest,
+          },
+        }),
+      ),
+    ).toThrow("collision.sequence must be a safe integer");
+  });
+
   test("rejects a changed organization identity", () => {
     expect(
       evaluateAuthorizedExecutionVector(
         causalVector({ current: { ...currentEvent, organizationId: "organization-2" } }),
+      ),
+    ).toBe("identity-mismatch");
+  });
+
+  test("rejects changed orchestrator or authorization authority", () => {
+    expect(
+      evaluateAuthorizedExecutionVector(
+        causalVector({ current: { ...currentEvent, orchestratorId: "orchestrator-2" } }),
+      ),
+    ).toBe("identity-mismatch");
+    expect(
+      evaluateAuthorizedExecutionVector(
+        causalVector({ current: { ...currentEvent, authorizationDigest: "e".repeat(64) } }),
       ),
     ).toBe("identity-mismatch");
   });
@@ -262,6 +398,8 @@ const decisionRequest = {
 };
 
 const decisionResponse = {
+  id: "response-1",
+  responseDigest: "e".repeat(64),
   organizationId: "organization-1",
   attemptId: "attempt-1",
   requestDigest: decisionRequest.requestDigest,
@@ -278,6 +416,7 @@ function decisionVector(overrides: Record<string, unknown> = {}) {
     now: "2026-09-10T11:00:00Z",
     replaced: false,
     consumed: false,
+    priorResponse: null,
     ...overrides,
   };
 }
@@ -344,10 +483,156 @@ describe("authorized human decisions", () => {
       ),
     ).toBe("organization-mismatch");
   });
+
+  test("accepts only a digest-identical response replay", () => {
+    expect(
+      evaluateAuthorizedExecutionVector(
+        decisionVector({
+          priorResponse: {
+            id: decisionResponse.id,
+            responseDigest: decisionResponse.responseDigest,
+          },
+        }),
+      ),
+    ).toBe("idempotent-duplicate");
+    expect(
+      evaluateAuthorizedExecutionVector(
+        decisionVector({
+          priorResponse: { id: decisionResponse.id, responseDigest: "f".repeat(64) },
+        }),
+      ),
+    ).toBe("duplicate-divergent");
+  });
+
+  test("rejects non-UTC or malformed evaluation timestamps", () => {
+    for (const now of ["tomorrow", "2026-02-30T00:00:00Z", "2026-09-10T13:00:00+01:00"]) {
+      expect(() => evaluateAuthorizedExecutionVector(decisionVector({ now }))).toThrow(
+        "now must be an ISO 8601 UTC timestamp",
+      );
+    }
+  });
+
+  test("treats the exact expiry instant as expired", () => {
+    expect(
+      evaluateAuthorizedExecutionVector(decisionVector({ now: decisionRequest.expiresAt })),
+    ).toBe("request-expired");
+  });
+});
+
+const transfer = {
+  id: "transfer-1",
+  transferDigest: "a".repeat(64),
+  organizationId: "organization-1",
+  missionId: "mission-1",
+  predecessorRunId: "run-1",
+  predecessorPlanDigest: "b".repeat(64),
+  currentGeneration: 1,
+  expectedRevision: 4,
+  successorPlanDigest: "c".repeat(64),
+  issuedAt: "2026-09-10T10:00:00Z",
+  expiresAt: "2026-09-10T10:15:00Z",
+};
+
+const transferState = {
+  organizationId: transfer.organizationId,
+  missionId: transfer.missionId,
+  predecessorRunId: transfer.predecessorRunId,
+  predecessorPlanDigest: transfer.predecessorPlanDigest,
+  currentGeneration: transfer.currentGeneration,
+  revision: transfer.expectedRevision,
+  successorPlanDigest: transfer.successorPlanDigest,
+  generationConsumed: false,
+};
+
+function transferVector(overrides: Record<string, unknown> = {}) {
+  return {
+    domain: "transfer",
+    transfer: structuredClone(transfer),
+    state: structuredClone(transferState),
+    collision: null,
+    now: "2026-09-10T10:05:00Z",
+    ...overrides,
+  };
+}
+
+describe("authorized execution generation transfer", () => {
+  test("accepts one exact transfer for the active generation", () => {
+    expect(evaluateAuthorizedExecutionVector(transferVector())).toBe("transfer-valid");
+  });
+
+  test("makes an identical transfer replay idempotent and a divergent reuse quarantined", () => {
+    expect(
+      evaluateAuthorizedExecutionVector(
+        transferVector({
+          collision: {
+            id: transfer.id,
+            currentGeneration: transfer.currentGeneration,
+            transferDigest: transfer.transferDigest,
+          },
+        }),
+      ),
+    ).toBe("idempotent-duplicate");
+    expect(
+      evaluateAuthorizedExecutionVector(
+        transferVector({
+          collision: {
+            id: transfer.id,
+            currentGeneration: transfer.currentGeneration,
+            transferDigest: "f".repeat(64),
+          },
+        }),
+      ),
+    ).toBe("duplicate-divergent");
+  });
+
+  test("keeps an identical replay idempotent after its generation was consumed", () => {
+    expect(
+      evaluateAuthorizedExecutionVector(
+        transferVector({
+          state: { ...transferState, generationConsumed: true },
+          collision: {
+            id: transfer.id,
+            currentGeneration: transfer.currentGeneration,
+            transferDigest: transfer.transferDigest,
+          },
+        }),
+      ),
+    ).toBe("idempotent-duplicate");
+  });
+
+  test("rejects a consumed generation, stale revision or changed successor", () => {
+    expect(
+      evaluateAuthorizedExecutionVector(
+        transferVector({ state: { ...transferState, generationConsumed: true } }),
+      ),
+    ).toBe("generation-consumed");
+    expect(
+      evaluateAuthorizedExecutionVector(
+        transferVector({ transfer: { ...transfer, expectedRevision: 3 } }),
+      ),
+    ).toBe("revision-stale");
+    expect(
+      evaluateAuthorizedExecutionVector(
+        transferVector({ transfer: { ...transfer, successorPlanDigest: "f".repeat(64) } }),
+      ),
+    ).toBe("identity-mismatch");
+  });
+
+  test("rejects an expired transfer and malformed transfer timestamps", () => {
+    expect(evaluateAuthorizedExecutionVector(transferVector({ now: transfer.expiresAt }))).toBe(
+      "transfer-expired",
+    );
+    expect(() =>
+      evaluateAuthorizedExecutionVector(
+        transferVector({ transfer: { ...transfer, expiresAt: "2026-02-30T00:00:00Z" } }),
+      ),
+    ).toThrow("transfer.expiresAt must be an ISO 8601 UTC timestamp");
+  });
 });
 
 const effectAttestation = {
   organizationId: "organization-1",
+  runId: "run-2",
   generation: 2,
   attemptId: "attempt-2",
   effectId: "effect-1",
@@ -360,6 +645,9 @@ const effectAttestation = {
 function effectVector(overrides: Record<string, unknown> = {}) {
   return {
     domain: "effect",
+    expectedOrganizationId: effectAttestation.organizationId,
+    expectedRunId: effectAttestation.runId,
+    expectedAttemptId: effectAttestation.attemptId,
     currentGeneration: 2,
     activeFencing: 2,
     generationConsumed: false,
@@ -402,6 +690,37 @@ describe("authorized external effects", () => {
         }),
       ),
     ).toBe("emission-divergent");
+  });
+
+  test("rejects malformed prior emission facts", () => {
+    expect(() =>
+      evaluateAuthorizedExecutionVector(
+        effectVector({
+          priorEmission: {
+            effectEmissionId: effectAttestation.effectEmissionId,
+            emissionDigest: 7,
+          },
+        }),
+      ),
+    ).toThrow("priorEmission.emissionDigest must be a string");
+  });
+
+  test("rejects an attestation replayed from another organization, run or attempt", () => {
+    expect(
+      evaluateAuthorizedExecutionVector(
+        effectVector({ attestation: { ...effectAttestation, organizationId: "organization-2" } }),
+      ),
+    ).toBe("organization-mismatch");
+    expect(
+      evaluateAuthorizedExecutionVector(
+        effectVector({ attestation: { ...effectAttestation, runId: "run-1" } }),
+      ),
+    ).toBe("identity-mismatch");
+    expect(
+      evaluateAuthorizedExecutionVector(
+        effectVector({ attestation: { ...effectAttestation, attemptId: "attempt-1" } }),
+      ),
+    ).toBe("attempt-mismatch");
   });
 
   test("rejects a second emission identity under one attempt", () => {
@@ -517,6 +836,22 @@ describe("committed authorized execution semantic vectors", () => {
         "case[0] has unknown properties",
         "case[0] domain does not match input.domain",
       ]),
+    );
+  });
+
+  test("binds the committed graph and plan positive fixtures to one authority", async () => {
+    const document = (await Bun.file("contracts/fixtures/schema-fixtures.v1.json").json()) as {
+      cases: { schema: string; valid: unknown }[];
+    };
+    const graph = document.cases.find(
+      (fixture) => fixture.schema === "execution-graph.v1.schema.json",
+    )?.valid;
+    const plan = document.cases.find(
+      (fixture) => fixture.schema === "execution-plan-body.v2.schema.json",
+    )?.valid;
+
+    expect(evaluateAuthorizedExecutionVector({ domain: "authority", graph, plan })).toBe(
+      "authority-valid",
     );
   });
 });

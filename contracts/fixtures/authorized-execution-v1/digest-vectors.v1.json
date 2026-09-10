@@ -131,7 +131,7 @@
         "specPackageDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
         "executionGraph": {
           "id": "urn:libre-ai:graph:synthetic-graph-1",
-          "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
           "mediaType": "application/schema+json"
         },
         "lineageMode": "initial",
@@ -140,19 +140,19 @@
         "decisionSchemaRefs": [
           {
             "id": "urn:libre-ai:schema:human-decision-request-v1",
-            "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
             "mediaType": "application/schema+json"
           },
           {
             "id": "urn:libre-ai:schema:human-decision-response-v1",
-            "digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
             "mediaType": "application/schema+json"
           }
         ],
         "executorProfileRefs": [
           {
             "id": "urn:libre-ai:profile:synthetic-executor-1",
-            "digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+            "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
             "mediaType": "application/schema+json"
           }
         ],
@@ -226,7 +226,7 @@
         "createdAt": "2026-09-10T10:00:00Z",
         "expiresAt": "2026-09-10T12:00:00Z"
       },
-      "expectedDigest": "4d6b97fe09bb8357b86b8f12d9656034041fb49c94f27eea9606064b3f624522"
+      "expectedDigest": "d89282483e79e9a341a8b02b74275c6c140be15657dbd5fef099e41b551bc8b7"
     },
     {
       "id": "execution-transfer-v1",
@@ -335,16 +335,18 @@
         "requestId": "urn:libre-ai:decision-request:synthetic-request-1",
         "requestDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         "choiceId": "approve",
-        "actor": {
-          "id": "urn:libre-ai:actor:synthetic-approver-1",
-          "role": "mission-approver"
+        "actorAuthorization": {
+          "role": "mission-approver",
+          "approvedAt": "2026-09-10T10:59:00Z",
+          "reference": "urn:libre-ai:approval:synthetic-decision-actor-1",
+          "subjectDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
         },
         "expectedRevision": 4,
         "idempotencyKey": "synthetic-decision-0001",
         "commentArtifactRef": null,
         "submittedAt": "2026-09-10T11:00:00Z"
       },
-      "expectedDigest": "48d6b5271f6be016d94ff2a710c940374086e6946133ef4d67c8c8db3f78af2d"
+      "expectedDigest": "edc1b2bfe50dfaa9d4f72f52306c9c53a39099c4d5b7510399425b7d156b63ce"
     },
     {
       "id": "step-invocation-v1",

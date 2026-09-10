@@ -12,6 +12,9 @@ export type AuthorizedExecutionOutcome =
   | "terminal-unreachable"
   | "terminal-has-outgoing-edge"
   | "cycle-forbidden"
+  | "authority-valid"
+  | "graph-policy-invalid"
+  | "authority-binding-mismatch"
   | "event-valid"
   | "idempotent-duplicate"
   | "duplicate-divergent"
@@ -21,6 +24,8 @@ export type AuthorizedExecutionOutcome =
   | "previous-digest-mismatch"
   | "budget-decreased"
   | "budget-arithmetic-invalid"
+  | "transfer-valid"
+  | "transfer-expired"
   | "decision-valid"
   | "request-expired"
   | "request-replaced"
@@ -53,6 +58,9 @@ export const authorizedExecutionOutcomes = [
   "terminal-unreachable",
   "terminal-has-outgoing-edge",
   "cycle-forbidden",
+  "authority-valid",
+  "graph-policy-invalid",
+  "authority-binding-mismatch",
   "event-valid",
   "idempotent-duplicate",
   "duplicate-divergent",
@@ -62,6 +70,8 @@ export const authorizedExecutionOutcomes = [
   "previous-digest-mismatch",
   "budget-decreased",
   "budget-arithmetic-invalid",
+  "transfer-valid",
+  "transfer-expired",
   "decision-valid",
   "request-expired",
   "request-replaced",
@@ -84,7 +94,14 @@ export const authorizedExecutionOutcomes = [
 ] as const satisfies readonly AuthorizedExecutionOutcome[];
 
 const authorizedExecutionOutcomeSet = new Set<string>(authorizedExecutionOutcomes);
-const authorizedExecutionDomains = new Set(["graph", "causal", "decision", "effect"]);
+const authorizedExecutionDomains = new Set([
+  "graph",
+  "authority",
+  "causal",
+  "transfer",
+  "decision",
+  "effect",
+]);
 
 interface GraphStep {
   stepId: string;
@@ -120,6 +137,8 @@ interface CausalEventFacts {
   eventDigest: string;
   organizationId: string;
   missionId: string;
+  orchestratorId: string;
+  authorizationDigest: string;
   planDigest: string;
   graphDigest: string;
   runId: string;
@@ -147,6 +166,8 @@ interface DecisionRequestFacts {
 }
 
 interface DecisionResponseFacts {
+  id: string | null;
+  responseDigest: string | null;
   organizationId: string;
   attemptId: string;
   requestDigest: string;
@@ -155,8 +176,14 @@ interface DecisionResponseFacts {
   expectedRevision: number;
 }
 
+interface PriorDecisionResponseFacts {
+  id: string;
+  responseDigest: string;
+}
+
 interface EffectAttestationFacts {
   organizationId: string;
+  runId: string;
   generation: number;
   attemptId: string;
   effectId: string;
@@ -210,6 +237,20 @@ function requireStringArray(value: unknown, label: string): string[] {
     throw new TypeError(`${label} must be a string array`);
   }
   return value;
+}
+
+function requireUtcTimestamp(value: unknown, label: string): string {
+  const timestamp = requireString(value, label);
+  const secondPrecisionTimestamp = timestamp.replace(/\.\d{1,9}Z$/, "Z");
+  const parsed = Date.parse(timestamp);
+  if (
+    !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?Z$/.test(timestamp) ||
+    !Number.isFinite(parsed) ||
+    `${new Date(parsed).toISOString().slice(0, 19)}Z` !== secondPrecisionTimestamp
+  ) {
+    throw new TypeError(`${label} must be an ISO 8601 UTC timestamp`);
+  }
+  return timestamp;
 }
 
 function graphFacts(value: unknown): GraphFacts {
@@ -331,6 +372,137 @@ function evaluateGraph(value: unknown): AuthorizedExecutionOutcome {
   return visited === graph.steps.length ? "graph-valid" : "cycle-forbidden";
 }
 
+function referenceDigests(value: unknown, label: string): string[] {
+  if (!Array.isArray(value)) throw new TypeError(`${label} must be an array`);
+  return value.map((rawReference, index) => {
+    const reference = requireRecord(rawReference, `${label}.${index}`);
+    return requireString(reference.digest, `${label}.${index}.digest`);
+  });
+}
+
+function sameStringSet(left: readonly string[], right: readonly string[]): boolean {
+  return (
+    new Set(left).size === left.length &&
+    new Set(right).size === right.length &&
+    left.length === right.length &&
+    left.every((item) => right.includes(item))
+  );
+}
+
+function evaluateAuthority(vector: JsonRecord): AuthorizedExecutionOutcome {
+  const graph = requireRecord(vector.graph, "graph");
+  const plan = requireRecord(vector.plan, "plan");
+  if (!Array.isArray(graph.steps) || graph.steps.length < 1 || graph.steps.length > 256) {
+    throw new TypeError("graph.steps must contain between 1 and 256 items");
+  }
+
+  const graphDecisionSchemaDigests: string[] = [];
+  const graphExecutorProfileDigests: string[] = [];
+  for (const [index, rawStep] of graph.steps.entries()) {
+    const step = requireRecord(rawStep, `graph.steps.${index}`);
+    const kind = requireString(step.kind, `graph.steps.${index}.kind`);
+    const outcomeCodes = requireStringArray(step.outcomeCodes, `graph.steps.${index}.outcomeCodes`);
+    if (kind === "terminal") continue;
+    const retryPolicy = requireRecord(step.retryPolicy, `graph.steps.${index}.retryPolicy`);
+    const maximumAttempts = requireInteger(
+      retryPolicy.maximumAttempts,
+      `graph.steps.${index}.retryPolicy.maximumAttempts`,
+    );
+    const retryableOutcomeCodes = requireStringArray(
+      retryPolicy.retryableOutcomeCodes,
+      `graph.steps.${index}.retryPolicy.retryableOutcomeCodes`,
+    );
+    if (
+      maximumAttempts < 1 ||
+      maximumAttempts > 32 ||
+      retryableOutcomeCodes.some((outcome) => !outcomeCodes.includes(outcome))
+    ) {
+      return "graph-policy-invalid";
+    }
+    if (kind === "human-decision") {
+      const decisionPolicy = requireRecord(
+        step.decisionPolicy,
+        `graph.steps.${index}.decisionPolicy`,
+      );
+      if (!Array.isArray(decisionPolicy.choices)) {
+        throw new TypeError(`graph.steps.${index}.decisionPolicy.choices must be an array`);
+      }
+      const choiceOutcomes = decisionPolicy.choices.map((rawChoice, choiceIndex) => {
+        const choice = requireRecord(
+          rawChoice,
+          `graph.steps.${index}.decisionPolicy.choices.${choiceIndex}`,
+        );
+        return requireString(
+          choice.outcomeCode,
+          `graph.steps.${index}.decisionPolicy.choices.${choiceIndex}.outcomeCode`,
+        );
+      });
+      const choiceIds = decisionPolicy.choices.map((rawChoice, choiceIndex) => {
+        const choice = requireRecord(
+          rawChoice,
+          `graph.steps.${index}.decisionPolicy.choices.${choiceIndex}`,
+        );
+        return requireString(
+          choice.choiceId,
+          `graph.steps.${index}.decisionPolicy.choices.${choiceIndex}.choiceId`,
+        );
+      });
+      const noResponseOutcomeCode = requireString(
+        decisionPolicy.noResponseOutcomeCode,
+        `graph.steps.${index}.decisionPolicy.noResponseOutcomeCode`,
+      );
+      if (
+        hasDuplicate(choiceIds) ||
+        choiceOutcomes.some((outcome) => !outcomeCodes.includes(outcome)) ||
+        !outcomeCodes.includes(noResponseOutcomeCode)
+      ) {
+        return "graph-policy-invalid";
+      }
+      graphDecisionSchemaDigests.push(
+        ...referenceDigests(
+          [decisionPolicy.requestSchemaRef, decisionPolicy.responseSchemaRef],
+          `graph.steps.${index}.decisionSchemaRefs`,
+        ),
+      );
+    }
+    if (kind === "external-effect") {
+      const effectPolicy = requireRecord(step.effectPolicy, `graph.steps.${index}.effectPolicy`);
+      graphExecutorProfileDigests.push(
+        requireString(
+          effectPolicy.executorProfileDigest,
+          `graph.steps.${index}.effectPolicy.executorProfileDigest`,
+        ),
+      );
+    }
+  }
+
+  if (
+    requireString(graph.organizationId, "graph.organizationId") !==
+      requireString(plan.organizationId, "plan.organizationId") ||
+    requireString(graph.id, "graph.id") !==
+      requireString(
+        requireRecord(plan.executionGraph, "plan.executionGraph").id,
+        "plan.executionGraph.id",
+      ) ||
+    requireString(graph.graphDigest, "graph.graphDigest") !==
+      requireString(
+        requireRecord(plan.executionGraph, "plan.executionGraph").digest,
+        "plan.executionGraph.digest",
+      ) ||
+    !sameStringSet(
+      graphDecisionSchemaDigests,
+      referenceDigests(plan.decisionSchemaRefs, "plan.decisionSchemaRefs"),
+    ) ||
+    !sameStringSet(
+      graphExecutorProfileDigests,
+      referenceDigests(plan.executorProfileRefs, "plan.executorProfileRefs"),
+    )
+  ) {
+    return "authority-binding-mismatch";
+  }
+  return "authority-valid";
+}
+
 function budgetFacts(value: unknown, label: string): BudgetCounters {
   const record = requireRecord(value, label);
   return Object.fromEntries(
@@ -349,6 +521,8 @@ function causalEventFacts(value: unknown, label: string): CausalEventFacts {
     eventDigest: requireString(event.eventDigest, `${label}.eventDigest`),
     organizationId: requireString(event.organizationId, `${label}.organizationId`),
     missionId: requireString(event.missionId, `${label}.missionId`),
+    orchestratorId: requireString(event.orchestratorId, `${label}.orchestratorId`),
+    authorizationDigest: requireString(event.authorizationDigest, `${label}.authorizationDigest`),
     planDigest: requireString(event.planDigest, `${label}.planDigest`),
     graphDigest: requireString(event.graphDigest, `${label}.graphDigest`),
     runId: requireString(event.runId, `${label}.runId`),
@@ -364,6 +538,8 @@ function sameCausalAuthority(previous: CausalEventFacts, current: CausalEventFac
   return (
     previous.organizationId === current.organizationId &&
     previous.missionId === current.missionId &&
+    previous.orchestratorId === current.orchestratorId &&
+    previous.authorizationDigest === current.authorizationDigest &&
     previous.planDigest === current.planDigest &&
     previous.graphDigest === current.graphDigest &&
     previous.runId === current.runId
@@ -373,10 +549,16 @@ function sameCausalAuthority(previous: CausalEventFacts, current: CausalEventFac
 function evaluateCausal(vector: JsonRecord): AuthorizedExecutionOutcome {
   const previous = causalEventFacts(vector.previous, "previous");
   const current = causalEventFacts(vector.current, "current");
-  const collision =
-    vector.collision === null
+  const collisionRecord =
+    vector.collision === null ? null : requireRecord(vector.collision, "collision");
+  const collision: CollisionFacts | null =
+    collisionRecord === null
       ? null
-      : (requireRecord(vector.collision, "collision") as unknown as CollisionFacts);
+      : {
+          id: requireString(collisionRecord.id, "collision.id"),
+          sequence: requireInteger(collisionRecord.sequence, "collision.sequence"),
+          eventDigest: requireString(collisionRecord.eventDigest, "collision.eventDigest"),
+        };
   if (collision !== null) {
     const sameId = current.id === collision.id;
     const sameSequence = current.sequence === collision.sequence;
@@ -400,6 +582,94 @@ function evaluateCausal(vector: JsonRecord): AuthorizedExecutionOutcome {
   return "event-valid";
 }
 
+interface TransferFacts {
+  id: string;
+  transferDigest: string;
+  organizationId: string;
+  missionId: string;
+  predecessorRunId: string;
+  predecessorPlanDigest: string;
+  currentGeneration: number;
+  expectedRevision: number;
+  successorPlanDigest: string;
+  issuedAt: string;
+  expiresAt: string;
+}
+
+function transferFacts(value: unknown): TransferFacts {
+  const transfer = requireRecord(value, "transfer");
+  return {
+    id: requireString(transfer.id, "transfer.id"),
+    transferDigest: requireString(transfer.transferDigest, "transfer.transferDigest"),
+    organizationId: requireString(transfer.organizationId, "transfer.organizationId"),
+    missionId: requireString(transfer.missionId, "transfer.missionId"),
+    predecessorRunId: requireString(transfer.predecessorRunId, "transfer.predecessorRunId"),
+    predecessorPlanDigest: requireString(
+      transfer.predecessorPlanDigest,
+      "transfer.predecessorPlanDigest",
+    ),
+    currentGeneration: requireInteger(transfer.currentGeneration, "transfer.currentGeneration"),
+    expectedRevision: requireInteger(transfer.expectedRevision, "transfer.expectedRevision"),
+    successorPlanDigest: requireString(
+      transfer.successorPlanDigest,
+      "transfer.successorPlanDigest",
+    ),
+    issuedAt: requireUtcTimestamp(transfer.issuedAt, "transfer.issuedAt"),
+    expiresAt: requireUtcTimestamp(transfer.expiresAt, "transfer.expiresAt"),
+  };
+}
+
+function evaluateTransfer(vector: JsonRecord): AuthorizedExecutionOutcome {
+  const transfer = transferFacts(vector.transfer);
+  const state = requireRecord(vector.state, "state");
+  if (vector.collision !== null) {
+    const collision = requireRecord(vector.collision, "collision");
+    const collisionId = requireString(collision.id, "collision.id");
+    const collisionGeneration = requireInteger(
+      collision.currentGeneration,
+      "collision.currentGeneration",
+    );
+    const collisionDigest = requireString(collision.transferDigest, "collision.transferDigest");
+    if (collisionId === transfer.id || collisionGeneration === transfer.currentGeneration) {
+      return collisionId === transfer.id &&
+        collisionGeneration === transfer.currentGeneration &&
+        collisionDigest === transfer.transferDigest
+        ? "idempotent-duplicate"
+        : "duplicate-divergent";
+    }
+  }
+  const now = requireUtcTimestamp(vector.now, "now");
+  if (Date.parse(transfer.issuedAt) >= Date.parse(transfer.expiresAt)) {
+    throw new TypeError("transfer.expiresAt must be after transfer.issuedAt");
+  }
+  if (Date.parse(now) >= Date.parse(transfer.expiresAt)) return "transfer-expired";
+  if (requireBoolean(state.generationConsumed, "state.generationConsumed")) {
+    return "generation-consumed";
+  }
+  if (
+    transfer.organizationId !== requireString(state.organizationId, "state.organizationId") ||
+    transfer.missionId !== requireString(state.missionId, "state.missionId") ||
+    transfer.predecessorRunId !== requireString(state.predecessorRunId, "state.predecessorRunId") ||
+    transfer.predecessorPlanDigest !==
+      requireString(state.predecessorPlanDigest, "state.predecessorPlanDigest")
+  ) {
+    return "identity-mismatch";
+  }
+  const currentGeneration = requireInteger(state.currentGeneration, "state.currentGeneration");
+  if (transfer.currentGeneration < currentGeneration) return "generation-stale";
+  if (transfer.currentGeneration !== currentGeneration) return "identity-mismatch";
+  if (transfer.expectedRevision !== requireInteger(state.revision, "state.revision")) {
+    return "revision-stale";
+  }
+  if (
+    transfer.successorPlanDigest !==
+    requireString(state.successorPlanDigest, "state.successorPlanDigest")
+  ) {
+    return "identity-mismatch";
+  }
+  return "transfer-valid";
+}
+
 function decisionRequestFacts(value: unknown): DecisionRequestFacts {
   const request = requireRecord(value, "request");
   return {
@@ -409,13 +679,18 @@ function decisionRequestFacts(value: unknown): DecisionRequestFacts {
     choiceIds: requireStringArray(request.choiceIds, "request.choiceIds"),
     requiredRole: requireString(request.requiredRole, "request.requiredRole"),
     expectedRevision: requireInteger(request.expectedRevision, "request.expectedRevision"),
-    expiresAt: requireString(request.expiresAt, "request.expiresAt"),
+    expiresAt: requireUtcTimestamp(request.expiresAt, "request.expiresAt"),
   };
 }
 
 function decisionResponseFacts(value: unknown): DecisionResponseFacts {
   const response = requireRecord(value, "response");
   return {
+    id: response.id === undefined ? null : requireString(response.id, "response.id"),
+    responseDigest:
+      response.responseDigest === undefined
+        ? null
+        : requireString(response.responseDigest, "response.responseDigest"),
     organizationId: requireString(response.organizationId, "response.organizationId"),
     attemptId: requireString(response.attemptId, "response.attemptId"),
     requestDigest: requireString(response.requestDigest, "response.requestDigest"),
@@ -430,12 +705,27 @@ function evaluateDecision(vector: JsonRecord): AuthorizedExecutionOutcome {
   const response = decisionResponseFacts(vector.response);
   if (response.organizationId !== request.organizationId) return "organization-mismatch";
   if (response.attemptId !== request.attemptId) return "attempt-mismatch";
-  if (Date.parse(requireString(vector.now, "now")) > Date.parse(request.expiresAt)) {
+  if (response.requestDigest !== request.requestDigest) return "request-replaced";
+  if (vector.priorResponse !== null && vector.priorResponse !== undefined) {
+    const priorRecord = requireRecord(vector.priorResponse, "priorResponse");
+    const prior: PriorDecisionResponseFacts = {
+      id: requireString(priorRecord.id, "priorResponse.id"),
+      responseDigest: requireString(priorRecord.responseDigest, "priorResponse.responseDigest"),
+    };
+    if (response.id === null || response.responseDigest === null) {
+      throw new TypeError("response identity is required for replay evaluation");
+    }
+    if (prior.id === response.id) {
+      return prior.responseDigest === response.responseDigest
+        ? "idempotent-duplicate"
+        : "duplicate-divergent";
+    }
+  }
+  if (Date.parse(requireUtcTimestamp(vector.now, "now")) >= Date.parse(request.expiresAt)) {
     return "request-expired";
   }
   if (requireBoolean(vector.replaced, "replaced")) return "request-replaced";
   if (requireBoolean(vector.consumed, "consumed")) return "request-consumed";
-  if (response.requestDigest !== request.requestDigest) return "request-replaced";
   if (!request.choiceIds.includes(response.choiceId)) return "choice-unknown";
   if (!response.actorRoles.includes(request.requiredRole)) return "actor-unauthorized";
   if (response.expectedRevision !== request.expectedRevision) return "revision-stale";
@@ -446,6 +736,7 @@ function effectAttestationFacts(value: unknown): EffectAttestationFacts {
   const attestation = requireRecord(value, "attestation");
   return {
     organizationId: requireString(attestation.organizationId, "attestation.organizationId"),
+    runId: requireString(attestation.runId, "attestation.runId"),
     generation: requireInteger(attestation.generation, "attestation.generation"),
     attemptId: requireString(attestation.attemptId, "attestation.attemptId"),
     effectId: requireString(attestation.effectId, "attestation.effectId"),
@@ -458,6 +749,18 @@ function effectAttestationFacts(value: unknown): EffectAttestationFacts {
 
 function evaluateEffect(vector: JsonRecord): AuthorizedExecutionOutcome {
   const attestation = effectAttestationFacts(vector.attestation);
+  if (
+    attestation.organizationId !==
+    requireString(vector.expectedOrganizationId, "expectedOrganizationId")
+  ) {
+    return "organization-mismatch";
+  }
+  if (attestation.runId !== requireString(vector.expectedRunId, "expectedRunId")) {
+    return "identity-mismatch";
+  }
+  if (attestation.attemptId !== requireString(vector.expectedAttemptId, "expectedAttemptId")) {
+    return "attempt-mismatch";
+  }
   if (requireBoolean(vector.lineageClosed, "lineageClosed")) {
     return "lineage-administratively-closed";
   }
@@ -468,10 +771,14 @@ function evaluateEffect(vector: JsonRecord): AuthorizedExecutionOutcome {
     return "generation-stale";
   }
   if (vector.priorEmission !== null) {
-    const prior = requireRecord(
-      vector.priorEmission,
-      "priorEmission",
-    ) as unknown as PriorEmissionFacts;
+    const priorRecord = requireRecord(vector.priorEmission, "priorEmission");
+    const prior: PriorEmissionFacts = {
+      effectEmissionId: requireString(
+        priorRecord.effectEmissionId,
+        "priorEmission.effectEmissionId",
+      ),
+      emissionDigest: requireString(priorRecord.emissionDigest, "priorEmission.emissionDigest"),
+    };
     if (prior.effectEmissionId === attestation.effectEmissionId) {
       return prior.emissionDigest === attestation.emissionDigest
         ? "emission-duplicate"
@@ -503,8 +810,12 @@ export function evaluateAuthorizedExecutionVector(vector: unknown): AuthorizedEx
   switch (record.domain) {
     case "graph":
       return evaluateGraph(record.graph);
+    case "authority":
+      return evaluateAuthority(record);
     case "causal":
       return evaluateCausal(record);
+    case "transfer":
+      return evaluateTransfer(record);
     case "decision":
       return evaluateDecision(record);
     case "effect":

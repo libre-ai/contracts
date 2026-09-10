@@ -443,6 +443,90 @@
     {
       "if": {
         "type": "object",
+        "properties": { "type": { "const": "effect-reserved" } },
+        "required": ["type"]
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "cause": {
+            "type": "object",
+            "properties": { "kind": { "const": "effect" } }
+          },
+          "data": {
+            "type": "object",
+            "properties": { "effectStatus": { "const": "reserved" } }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "properties": { "type": { "const": "effect-started" } },
+        "required": ["type"]
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "cause": {
+            "type": "object",
+            "properties": { "kind": { "const": "effect" } }
+          },
+          "data": {
+            "type": "object",
+            "properties": { "effectStatus": { "const": "started" } }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "properties": { "type": { "const": "effect-terminal" } },
+        "required": ["type"]
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "cause": {
+            "type": "object",
+            "properties": { "kind": { "const": "effect" } }
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "effectStatus": {
+                "enum": ["committed", "rejected-final", "not-committed-final"]
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "properties": { "type": { "const": "effect-unknown" } },
+        "required": ["type"]
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "cause": {
+            "type": "object",
+            "properties": { "kind": { "const": "effect" } }
+          },
+          "data": {
+            "type": "object",
+            "properties": { "effectStatus": { "const": "state-unknown" } }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
         "properties": { "type": { "const": "predecessor-sealed" } },
         "required": ["type"]
       },
