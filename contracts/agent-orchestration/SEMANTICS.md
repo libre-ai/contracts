@@ -107,3 +107,72 @@ Before projection, the TypeScript/Rust event-chain validator checks these identi
 Review summaries contain only closed codes, severity and counts. Detailed findings are tenant-private evidence artifacts with approved retention. Agent/reviewer IDs, review references, subject digests and findings never enter operational logs or OTEL attributes.
 
 Views and exports disclose reviewer and contributor identities only to authorized roles with a need to know. Deletion, anonymization and restore replay follow `docs/specifications/DATA-LIFECYCLE.md`; accepted deletion cannot be resurrected.
+
+## Authorized execution candidate family (D40)
+
+The following contracts are a coordinated **candidate** family: `ExecutionGraph v1`,
+`ExecutionPlanBody v2`, `ExecutionTransfer v1`, `ExecutionAuthorization v2`,
+`HumanDecisionRequest v1`, `HumanDecisionResponse v1`, `StepInvocation v1`,
+`EffectAttestation v1`, `OrchestratorEvent v3`, `RetentionPolicy v2` and its schema. They
+authorize neither a runtime implementation nor a real mission. Promotion to `locked` is a
+separate owner decision after the required architecture, security and privacy reviews.
+
+### Closed graph and authority binding
+
+An execution graph is a finite, sequential and acyclic authority: 1–256 steps, 0–512 edges,
+exactly one entry, total routing for every declared non-terminal outcome and no outgoing route
+from a terminal. Every reachable step must be able to reach a terminal. Declaration order does
+not resolve ambiguity. Duplicate identities, dangling edges, missing or multiple routes,
+unreachable steps and cycles fail with the closed outcomes in
+`fixtures/authorized-execution-v1/semantic-vectors.v1.json`.
+
+Plan v2 retains every v1 capability, filesystem, network, model-egress, harness and budget bound.
+It additionally binds the graph, decision schemas, executor profiles and organization. Initial
+plans require generation 1 and no predecessor. Successor plans require generation > 1 and the
+complete predecessor run, plan, sealed revision, terminal-effect inventory and transfer binding.
+No graph engine or SDK may infer or expand any of these authorities.
+
+### One-shot lineage, decisions and effects
+
+Transfers consume one predecessor generation exactly once. A byte-identical replay is
+idempotent; reuse of an ID or sequence with a different canonical digest quarantines. Event
+sequence increments by one, preserves the full authority identity tuple and satisfies
+component-wise checked budget arithmetic. A successor is forbidden while any predecessor effect
+is `reserved`, `started` or `state-unknown`.
+
+Human decisions bind one organization, run, step, attempt, request digest, revision and closed
+choice set. Requests expire and are consumed once. Responses carry an opaque actor reference and
+an optional classified artifact reference, never a free-text comment. An `other` choice must have
+been preauthorized and can only select `replan-required`.
+
+Each external-effect attempt owns at most one emission ID. Effect attestations bind the active
+generation, executor profile and exactly one deduplication proof: fencing or executor-idempotency
+evidence. Only `committed`, `rejected-final` and `not-committed-final` close the effect inventory;
+`state-unknown` creates a continuity barrier. Attestations are Ed25519-signed over the declared
+preimage digest using the signature framing already defined above.
+
+### Content-free events and retention
+
+Event v3 payloads contain closed codes and content-addressed lifecycle references. Prompts, tool
+arguments, decision comments, effect destinations, raw observations, paths and raw errors are not
+event or diagnostic fields. Operational errors expose only closed outcomes and aggregate
+counters, never identifiers or digests.
+
+Retention v2 preserves every v1 rule byte-for-byte. It adds only a content-free orchestrator
+execution record (`P1Y`, configurable to `P6Y`, equal to the owning mission retention) and a
+content-free deletion tombstone (`P35D`, the backup ceiling). Restore applies tombstones before
+execution records. After tombstone expiry, no backup capable of resurrecting the deleted lineage
+remains.
+
+### Canonical vectors
+
+`fixtures/authorized-execution-v1/digest-vectors.v1.json` contains the nine explicit RFC 8785
+unsigned preimages. Array order is authoritative; object-key order is not. The effect-attestation
+preimage excludes both `preimageDigest` and `signature`; every other preimage excludes its own
+digest field. `check:contracts` reproduces each SHA-256, checks fixture equality and rejects an
+excluded field inside an unsigned payload.
+
+The semantic vector file covers every closed graph, causal, decision and effect outcome. It is a
+portable conformance oracle for SDKs and future runtimes, not a runtime state machine. LangGraph
+may generate additional questions and failure scenarios, but it is neither a dependency nor a
+source of authority.

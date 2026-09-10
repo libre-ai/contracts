@@ -1,0 +1,501 @@
+{
+  "schemaVersion": "libre-ai.authorized-execution-digest-vectors.v1",
+  "cases": [
+    {
+      "id": "execution-graph-v1",
+      "schema": "execution-graph.v1.schema.json",
+      "digestField": "graphDigest",
+      "excludedFields": ["graphDigest"],
+      "unsignedPayload": {
+        "schemaVersion": "libre-ai.execution-graph.v1",
+        "id": "urn:libre-ai:graph:synthetic-graph-1",
+        "organizationId": "ten_1234567890abcdef",
+        "entryStepId": "urn:libre-ai:step:calculate-1",
+        "steps": [
+          {
+            "stepId": "urn:libre-ai:step:calculate-1",
+            "kind": "calculation",
+            "outcomeCodes": ["calculation-ready"],
+            "retryPolicy": {
+              "maximumAttempts": 2,
+              "retryableOutcomeCodes": ["calculation-ready"]
+            }
+          },
+          {
+            "stepId": "urn:libre-ai:step:decision-1",
+            "kind": "human-decision",
+            "outcomeCodes": ["approved", "rejected", "no-response"],
+            "retryPolicy": {
+              "maximumAttempts": 1,
+              "retryableOutcomeCodes": []
+            },
+            "decisionPolicy": {
+              "choices": [
+                {
+                  "choiceId": "approve",
+                  "outcomeCode": "approved"
+                },
+                {
+                  "choiceId": "reject",
+                  "outcomeCode": "rejected"
+                }
+              ],
+              "requiredRole": "mission-approver",
+              "expiresAfterSeconds": 3600,
+              "noResponseOutcomeCode": "no-response",
+              "requestSchemaRef": {
+                "id": "urn:libre-ai:schema:human-decision-request-v1",
+                "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "mediaType": "application/schema+json"
+              },
+              "responseSchemaRef": {
+                "id": "urn:libre-ai:schema:human-decision-response-v1",
+                "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "mediaType": "application/schema+json"
+              }
+            }
+          },
+          {
+            "stepId": "urn:libre-ai:step:effect-1",
+            "kind": "external-effect",
+            "outcomeCodes": ["effect-committed", "effect-refused"],
+            "retryPolicy": {
+              "maximumAttempts": 2,
+              "retryableOutcomeCodes": ["effect-refused"]
+            },
+            "effectPolicy": {
+              "executorProfileDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "reEmissionMode": "retry-after-terminal-status-with-fencing"
+            }
+          },
+          {
+            "stepId": "urn:libre-ai:step:terminal-1",
+            "kind": "terminal",
+            "outcomeCodes": []
+          }
+        ],
+        "edges": [
+          {
+            "edgeId": "urn:libre-ai:edge:calculated-1",
+            "fromStepId": "urn:libre-ai:step:calculate-1",
+            "outcomeCode": "calculation-ready",
+            "toStepId": "urn:libre-ai:step:decision-1"
+          },
+          {
+            "edgeId": "urn:libre-ai:edge:approved-1",
+            "fromStepId": "urn:libre-ai:step:decision-1",
+            "outcomeCode": "approved",
+            "toStepId": "urn:libre-ai:step:effect-1"
+          },
+          {
+            "edgeId": "urn:libre-ai:edge:rejected-1",
+            "fromStepId": "urn:libre-ai:step:decision-1",
+            "outcomeCode": "rejected",
+            "toStepId": "urn:libre-ai:step:terminal-1"
+          },
+          {
+            "edgeId": "urn:libre-ai:edge:no-response-1",
+            "fromStepId": "urn:libre-ai:step:decision-1",
+            "outcomeCode": "no-response",
+            "toStepId": "urn:libre-ai:step:terminal-1"
+          },
+          {
+            "edgeId": "urn:libre-ai:edge:committed-1",
+            "fromStepId": "urn:libre-ai:step:effect-1",
+            "outcomeCode": "effect-committed",
+            "toStepId": "urn:libre-ai:step:terminal-1"
+          },
+          {
+            "edgeId": "urn:libre-ai:edge:refused-1",
+            "fromStepId": "urn:libre-ai:step:effect-1",
+            "outcomeCode": "effect-refused",
+            "toStepId": "urn:libre-ai:step:terminal-1"
+          }
+        ],
+        "createdAt": "2026-09-10T10:00:00Z"
+      },
+      "expectedDigest": "333dc5dcdf1532c29676e36c39608c1e23e03c4643255868647de7ff603d71e8"
+    },
+    {
+      "id": "execution-plan-body-v2",
+      "schema": "execution-plan-body.v2.schema.json",
+      "digestField": "bodyDigest",
+      "excludedFields": ["bodyDigest"],
+      "unsignedPayload": {
+        "schemaVersion": "libre-ai.execution-plan-body.v2",
+        "id": "urn:libre-ai:plan:synthetic-plan-2",
+        "organizationId": "ten_1234567890abcdef",
+        "missionId": "urn:libre-ai:mission:synthetic-mission-1",
+        "handoffId": "urn:libre-ai:handoff:synthetic-handoff-1",
+        "handoffDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "specPackageDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "executionGraph": {
+          "id": "urn:libre-ai:graph:synthetic-graph-1",
+          "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+          "mediaType": "application/schema+json"
+        },
+        "lineageMode": "initial",
+        "successorLineage": null,
+        "requestedGeneration": 1,
+        "decisionSchemaRefs": [
+          {
+            "id": "urn:libre-ai:schema:human-decision-request-v1",
+            "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "mediaType": "application/schema+json"
+          },
+          {
+            "id": "urn:libre-ai:schema:human-decision-response-v1",
+            "digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+            "mediaType": "application/schema+json"
+          }
+        ],
+        "executorProfileRefs": [
+          {
+            "id": "urn:libre-ai:profile:synthetic-executor-1",
+            "digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+            "mediaType": "application/schema+json"
+          }
+        ],
+        "acceptanceCriteria": ["criterion_1"],
+        "tools": [
+          {
+            "name": "read_file",
+            "access": "read",
+            "argumentPolicyDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "maxCalls": 20
+          }
+        ],
+        "filesystem": {
+          "readPaths": ["src/**"],
+          "writePaths": ["src/**"],
+          "denyPaths": [".env", "**/.git/**"],
+          "copyIgnoredFiles": false
+        },
+        "budgets": {
+          "maxDurationSeconds": 3600,
+          "maxToolCalls": 100,
+          "maxInputTokens": 100000,
+          "maxOutputTokens": 50000,
+          "maxProcesses": 16,
+          "maxFilesChanged": 100,
+          "maxChangedBytes": 1048576,
+          "maxConcurrentAgents": 3
+        },
+        "network": {
+          "workerMode": "private-gateway-only",
+          "gatewayOrigins": [
+            {
+              "scheme": "https",
+              "host": "models.eu.example",
+              "port": 443
+            }
+          ]
+        },
+        "modelEgress": {
+          "purposeCode": "code_review",
+          "authorizationBasis": "contract",
+          "maximumClassification": "tenant-private",
+          "sourcePaths": ["src/**"],
+          "maxBytesPerRequest": 1048576,
+          "region": "eu",
+          "subprocessors": ["provider_eu"],
+          "zeroDataRetention": true,
+          "trainingAllowed": false,
+          "reuseAllowed": false,
+          "policyDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "harnessProfile": {
+          "id": "urn:libre-ai:profile:synthetic-harness-1",
+          "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "mediaType": "application/json"
+        },
+        "workerManifests": [
+          {
+            "id": "urn:libre-ai:manifest:synthetic-worker-1",
+            "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "mediaType": "application/json"
+          }
+        ],
+        "evidenceDestinations": [
+          {
+            "id": "urn:libre-ai:artifact:synthetic-proof-destination-1",
+            "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "mediaType": "application/json"
+          }
+        ],
+        "createdAt": "2026-09-10T10:00:00Z",
+        "expiresAt": "2026-09-10T12:00:00Z"
+      },
+      "expectedDigest": "4d6b97fe09bb8357b86b8f12d9656034041fb49c94f27eea9606064b3f624522"
+    },
+    {
+      "id": "execution-transfer-v1",
+      "schema": "execution-transfer.v1.schema.json",
+      "digestField": "transferDigest",
+      "excludedFields": ["transferDigest"],
+      "unsignedPayload": {
+        "schemaVersion": "libre-ai.execution-transfer.v1",
+        "id": "urn:libre-ai:transfer:synthetic-transfer-1",
+        "organizationId": "ten_1234567890abcdef",
+        "missionId": "urn:libre-ai:mission:synthetic-mission-1",
+        "predecessorRunId": "urn:libre-ai:run:synthetic-run-1",
+        "predecessorPlanDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "currentGeneration": 1,
+        "expectedRevision": 4,
+        "successorPlanDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "idempotencyKey": "synthetic-transfer-0001",
+        "issuedAt": "2026-09-10T10:00:00Z",
+        "expiresAt": "2026-09-10T10:15:00Z"
+      },
+      "expectedDigest": "d70c5f4e5306a0639d4efeaf39caaacaa22440cba6a7027a3705d9302bbff714"
+    },
+    {
+      "id": "execution-authorization-v2",
+      "schema": "execution-authorization.v2.schema.json",
+      "digestField": "authorizationDigest",
+      "excludedFields": ["authorizationDigest"],
+      "unsignedPayload": {
+        "schemaVersion": "libre-ai.execution-authorization.v2",
+        "id": "urn:libre-ai:authorization:synthetic-authorization-2",
+        "organizationId": "ten_1234567890abcdef",
+        "missionId": "urn:libre-ai:mission:synthetic-mission-1",
+        "missionRevision": 4,
+        "missionRecordDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "planId": "urn:libre-ai:plan:synthetic-plan-2",
+        "planDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "graphDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "planQuorum": {
+          "id": "urn:libre-ai:quorum:synthetic-plan-quorum-1",
+          "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "mediaType": "application/json"
+        },
+        "generation": 1,
+        "lineageMode": "initial",
+        "successorBinding": null,
+        "revocationId": "urn:libre-ai:revocation:synthetic-revocation-1",
+        "issuedAt": "2026-09-10T10:00:00Z",
+        "expiresAt": "2026-09-10T12:00:00Z"
+      },
+      "expectedDigest": "85677fbc683616a4099c557a0f7c8b2942453872092f3c3f9105bf716b167048"
+    },
+    {
+      "id": "human-decision-request-v1",
+      "schema": "human-decision-request.v1.schema.json",
+      "digestField": "requestDigest",
+      "excludedFields": ["requestDigest"],
+      "unsignedPayload": {
+        "schemaVersion": "libre-ai.human-decision-request.v1",
+        "id": "urn:libre-ai:decision-request:synthetic-request-1",
+        "organizationId": "ten_1234567890abcdef",
+        "missionId": "urn:libre-ai:mission:synthetic-mission-1",
+        "runId": "urn:libre-ai:run:synthetic-run-1",
+        "planDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "graphDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "stepId": "urn:libre-ai:step:synthetic-decision-1",
+        "attemptId": "urn:libre-ai:attempt:synthetic-attempt-1",
+        "choices": [
+          {
+            "choiceId": "approve",
+            "label": "Approve",
+            "consequenceCode": "approved"
+          },
+          {
+            "choiceId": "reject",
+            "label": "Reject",
+            "consequenceCode": "rejected"
+          }
+        ],
+        "requiredRole": "mission-approver",
+        "expectedRevision": 4,
+        "expiresAt": "2026-09-10T12:00:00Z",
+        "noResponseOutcomeCode": "no-response",
+        "evidenceRefs": [
+          {
+            "id": "urn:libre-ai:evidence:synthetic-decision-context-1",
+            "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "mediaType": "application/json"
+          }
+        ]
+      },
+      "expectedDigest": "28de97f07c5a84a23dae15039127866746fb23435d237926ed576c6096a58e98"
+    },
+    {
+      "id": "human-decision-response-v1",
+      "schema": "human-decision-response.v1.schema.json",
+      "digestField": "responseDigest",
+      "excludedFields": ["responseDigest"],
+      "unsignedPayload": {
+        "schemaVersion": "libre-ai.human-decision-response.v1",
+        "id": "urn:libre-ai:decision-response:synthetic-response-1",
+        "organizationId": "ten_1234567890abcdef",
+        "missionId": "urn:libre-ai:mission:synthetic-mission-1",
+        "runId": "urn:libre-ai:run:synthetic-run-1",
+        "stepId": "urn:libre-ai:step:synthetic-decision-1",
+        "attemptId": "urn:libre-ai:attempt:synthetic-attempt-1",
+        "requestId": "urn:libre-ai:decision-request:synthetic-request-1",
+        "requestDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "choiceId": "approve",
+        "actor": {
+          "id": "urn:libre-ai:actor:synthetic-approver-1",
+          "role": "mission-approver"
+        },
+        "expectedRevision": 4,
+        "idempotencyKey": "synthetic-decision-0001",
+        "commentArtifactRef": null,
+        "submittedAt": "2026-09-10T11:00:00Z"
+      },
+      "expectedDigest": "48d6b5271f6be016d94ff2a710c940374086e6946133ef4d67c8c8db3f78af2d"
+    },
+    {
+      "id": "step-invocation-v1",
+      "schema": "step-invocation.v1.schema.json",
+      "digestField": "invocationDigest",
+      "excludedFields": ["invocationDigest"],
+      "unsignedPayload": {
+        "schemaVersion": "libre-ai.step-invocation.v1",
+        "id": "urn:libre-ai:invocation:synthetic-invocation-1",
+        "organizationId": "ten_1234567890abcdef",
+        "missionId": "urn:libre-ai:mission:synthetic-mission-1",
+        "planDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "graphDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "runId": "urn:libre-ai:run:synthetic-run-1",
+        "generation": 1,
+        "stepId": "urn:libre-ai:step:synthetic-calculation-1",
+        "attemptId": "urn:libre-ai:attempt:synthetic-attempt-1",
+        "workerInvocationId": "urn:libre-ai:worker-invocation:synthetic-worker-invocation-1",
+        "causeEventDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "selectedEdgeId": null,
+        "harnessProfile": {
+          "id": "urn:libre-ai:profile:synthetic-harness-1",
+          "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "mediaType": "application/json"
+        },
+        "workerManifest": {
+          "id": "urn:libre-ai:manifest:synthetic-worker-1",
+          "digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "mediaType": "application/json"
+        },
+        "remainingBudgets": {
+          "durationSeconds": 3600,
+          "toolCalls": 20,
+          "inputTokens": 100000,
+          "outputTokens": 50000,
+          "processesStarted": 16,
+          "filesChanged": 100,
+          "changedBytes": 1048576
+        },
+        "inputArtifactRef": {
+          "id": "urn:libre-ai:artifact:synthetic-input-1",
+          "digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "mediaType": "application/json"
+        },
+        "createdAt": "2026-09-10T10:00:00Z"
+      },
+      "expectedDigest": "31338e316f976dea4f1e25e8dd3ef407967805a6bf8c2173475ceb1616417b4c"
+    },
+    {
+      "id": "effect-attestation-v1",
+      "schema": "effect-attestation.v1.schema.json",
+      "digestField": "preimageDigest",
+      "excludedFields": ["preimageDigest", "signature"],
+      "unsignedPayload": {
+        "schemaVersion": "libre-ai.effect-attestation.v1",
+        "id": "urn:libre-ai:effect-attestation:synthetic-attestation-1",
+        "organizationId": "ten_1234567890abcdef",
+        "missionId": "urn:libre-ai:mission:synthetic-mission-1",
+        "planDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "graphDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "runId": "urn:libre-ai:run:synthetic-run-1",
+        "generation": 1,
+        "stepId": "urn:libre-ai:step:synthetic-effect-1",
+        "attemptId": "urn:libre-ai:attempt:synthetic-attempt-1",
+        "workerInvocationId": "urn:libre-ai:worker-invocation:synthetic-worker-invocation-1",
+        "effectId": "urn:libre-ai:effect:synthetic-effect-1",
+        "effectEmissionId": "urn:libre-ai:emission:synthetic-emission-1",
+        "effectRequestDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "destinationRef": {
+          "id": "urn:libre-ai:destination:synthetic-destination-1",
+          "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "mediaType": "application/json"
+        },
+        "executorProfileRef": {
+          "id": "urn:libre-ai:profile:synthetic-executor-1",
+          "digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "mediaType": "application/json"
+        },
+        "fencingValue": 7,
+        "executorIdempotencyEvidence": null,
+        "status": "committed",
+        "observationRef": {
+          "id": "urn:libre-ai:observation:synthetic-observation-1",
+          "digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "mediaType": "application/json"
+        },
+        "reservedAt": "2026-09-10T10:00:00Z",
+        "observedAt": "2026-09-10T10:00:01Z",
+        "signingKeyId": "executor_key_1"
+      },
+      "expectedDigest": "73d4cf7a36f1c92b1db54a8fda68d46b7d68372d525221a96ca4a910d699e0ff"
+    },
+    {
+      "id": "orchestrator-event-v3",
+      "schema": "orchestrator-event.v3.schema.json",
+      "digestField": "eventDigest",
+      "excludedFields": ["eventDigest"],
+      "unsignedPayload": {
+        "schemaVersion": "libre-ai.orchestrator-event.v3",
+        "id": "urn:libre-ai:event:synthetic-event-3",
+        "organizationId": "ten_1234567890abcdef",
+        "missionId": "urn:libre-ai:mission:synthetic-mission-1",
+        "runId": "urn:libre-ai:run:synthetic-run-1",
+        "orchestratorId": "orchestrator_1",
+        "planDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "authorizationDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "graphDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "generation": 1,
+        "sequence": 3,
+        "previousEventDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "stepId": "urn:libre-ai:step:synthetic-effect-1",
+        "attemptId": "urn:libre-ai:attempt:synthetic-attempt-1",
+        "workerInvocationId": "urn:libre-ai:worker-invocation:synthetic-worker-invocation-1",
+        "selectedEdgeId": "urn:libre-ai:edge:synthetic-committed-1",
+        "cause": {
+          "kind": "effect",
+          "id": "urn:libre-ai:effect-attestation:synthetic-attestation-1",
+          "digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+        },
+        "type": "effect-terminal",
+        "budgetDelta": {
+          "durationSeconds": 1,
+          "toolCalls": 1,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "processesStarted": 0,
+          "filesChanged": 0,
+          "changedBytes": 0
+        },
+        "budgetTotal": {
+          "durationSeconds": 10,
+          "toolCalls": 3,
+          "inputTokens": 1000,
+          "outputTokens": 500,
+          "processesStarted": 1,
+          "filesChanged": 0,
+          "changedBytes": 0
+        },
+        "occurredAt": "2026-09-10T10:00:01Z",
+        "data": {
+          "effectId": "urn:libre-ai:effect:synthetic-effect-1",
+          "effectEmissionId": "urn:libre-ai:emission:synthetic-emission-1",
+          "effectStatus": "committed",
+          "lifecycleRef": {
+            "id": "urn:libre-ai:effect-attestation:synthetic-attestation-1",
+            "digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+            "mediaType": "application/json"
+          }
+        }
+      },
+      "expectedDigest": "f68c95910c62fbdfb117f3af0483301cd593a906c3e17d48d279881771527dc8"
+    }
+  ]
+}

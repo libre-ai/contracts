@@ -14,7 +14,13 @@ JSON Schema, OpenAPI, WIT and Biscuit policies are the only cross-module protoco
 
 OpenAPI `x-libre-ai-domain` lists the complete protocol from each application specification. Only commands/queries crossing HTTP appear under `paths`; local and offline commands remain visible without becoming endpoints.
 
-A `candidate` catalog entry is machine-checkable but not approved: it carries a dossier listing at least role-separated architecture and security review, plus cryptography, methodology or privacy where required. In solo work, the same agent/session may perform serial authoring and dedicated review-only passes under [`AGENT-REVIEW-PROTOCOL.md`](../docs/reviews/AGENT-REVIEW-PROTOCOL.md). Promotion requires every attributable role verdict, a separate promotion pass and the human control milestone. Cataloged WIT `profiles` and `vectors` are normative adjuncts to that world.
+A `candidate` catalog entry is machine-checkable but not approved: it carries a dossier listing at least role-separated architecture and security review, plus cryptography, methodology or privacy where required. In solo work, the same agent/session may perform serial authoring and dedicated review-only passes under Governance [`AGENT-REVIEW-PROTOCOL.md`](https://github.com/libre-ai/governance/blob/main/docs/reviews/AGENT-REVIEW-PROTOCOL.md). Promotion requires every attributable role verdict, a separate promotion pass and the human control milestone. Cataloged WIT `profiles` and `vectors` are normative adjuncts to that world.
+
+The coordinated authorized-execution family is currently candidate-only: graph v1, plan v2,
+transfer v1, authorization v2, human decision request/response v1, step invocation v1, effect
+attestation v1, orchestrator event v3 and retention policy/schema v2. Its shared review dossier is
+`docs/reviews/authorized-execution-contracts-review.md`. These contracts do not authorize runtime
+adoption, and no LangGraph library or behavior is normative.
 
 ## Verification
 
@@ -27,6 +33,10 @@ A `candidate` catalog entry is machine-checkable but not approved: it carries a 
 - unversioned routes, missing idempotency/revision/CSRF or refusal responses ;
 - WIT host imports and malformed package/world conventions ;
 - retention rules diverging from their schema or backup ceiling ;
+- authorized-execution semantic vectors with incomplete closed outcomes, unsafe content or a
+  non-reproducible result ;
+- RFC 8785 preimages containing their own digest/signature, diverging from positive fixtures or
+  producing a different SHA-256 ;
 - Biscuit authority expansion, token-supplied revocation IDs, allow rules without user/role/matching tenant, or missing final deny.
 
 Cargo tests parse/resolve all WIT worlds with `wit-parser` and parse the Biscuit authority plus policy sources with `biscuit-parser`. Security behavior remains subject to end-to-end authorizer vectors when the G2 authz capability is implemented.
