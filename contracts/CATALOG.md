@@ -4,17 +4,17 @@ Machine authority: [`catalog.v1.json`](catalog.v1.json).
 
 | Family | Count | Authority | Compatibility |
 | --- | ---: | --- | --- |
-| JSON Schema 2020-12 | 60 | `contracts/schemas/` | strict payloads; additive v1 only through coordinated producer/consumer qualification; breaking changes use a new major |
-| Retention policy | 1 | `contracts/data/` | exact ADR-0002 lifecycle projection |
+| JSON Schema 2020-12 | 75 | `contracts/schemas/` | strict payloads; additive v1 only through coordinated producer/consumer qualification; breaking changes use a new major |
+| Retention policy | 2 | `contracts/data/` | exact lifecycle projections; v2 preserves v1 and adds two bounded execution classes |
 | OpenAPI 3.1 | 11 | `contracts/openapi/` | routes and payload majors remain aligned |
 | WIT worlds | 9 | `contracts/wit/` | exact major-versioned component boundary + cataloged profile |
-| Biscuit authority/policies | 4 | `contracts/authz/` | minimal authority plus deny-by-default authorizers |
+| Biscuit authority/policies | 6 | `contracts/authz/` | minimal authorities plus deny-by-default authorizers |
 
 The catalog records one ID, path, owner set, consumer set, classification, compatibility mode and
-status for every contract. All 85 current entries are `locked`. The status model can still represent a
-future `pending-independent-agent-review` candidate; such a candidate would not authorize implementation
-or release and would require dedicated review-only verdicts under
-[`AGENT-REVIEW-PROTOCOL.md`](../docs/reviews/AGENT-REVIEW-PROTOCOL.md).
+status for every contract. Of 103 current entries, 88 are `locked` and 15 are `candidate`. A
+`pending-independent-agent-review` candidate does not authorize implementation or release and
+requires dedicated review-only verdicts under
+Governance [`AGENT-REVIEW-PROTOCOL.md`](https://github.com/libre-ai/governance/blob/main/docs/reviews/AGENT-REVIEW-PROTOCOL.md).
 
 Some locked engine profiles and vector payloads retain candidate-era status strings because their exact
 bytes are hash-bound review evidence. Those embedded strings are historical metadata, not live catalog
@@ -48,5 +48,15 @@ Uncataloged files and missing authorities fail `bun run check:contracts`.
 - Specifications: immutable SpecPackage and planning handoff ;
 - Missions: locked v1 human-verdict baseline plus locked, unimplemented v2 two-agent plan/result quorums ;
 - Agent Orchestrator/Harness: locked immutable plan, separate authorization, causal events, monotone budgets and signed fail-closed isolation profile/attestation; only the simulation control core is implemented, never a harness or worker runtime.
+
+## Authorized execution candidates
+
+Eleven coordinated entries remain candidates: `execution-graph-v1`,
+`execution-plan-body-v2`, `execution-transfer-v1`, `execution-authorization-v2`,
+`human-decision-request-v1`, `human-decision-response-v1`, `step-invocation-v1`,
+`effect-attestation-v1`, `orchestrator-event-v3`, `retention-policy-schema-v2` and
+`retention-policy-v2`. Their shared dossier requires architecture, security and privacy verdicts
+against an immutable authoring commit. SDK projections may be generated only from that pinned
+candidate revision; runtime adoption and promotion to `locked` remain separate gates.
 
 See [`COMPATIBILITY.md`](COMPATIBILITY.md) for evolution rules and [`fixtures/schema-fixtures.v1.json`](fixtures/schema-fixtures.v1.json) for executable positive/negative vectors.

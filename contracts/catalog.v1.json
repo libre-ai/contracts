@@ -972,6 +972,193 @@
       "compatibility": "additive-v1",
       "classification": "internal",
       "status": "locked"
+    },
+    {
+      "id": "execution-graph-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/execution-graph.v1.schema.json",
+      "owners": ["missions", "agent-orchestrator"],
+      "consumers": ["missions", "agent-orchestrator", "sdk-ts", "sdk-rs"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "privacy"],
+        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
+      }
+    },
+    {
+      "id": "execution-plan-body-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/execution-plan-body.v2.schema.json",
+      "owners": ["missions", "agent-orchestrator"],
+      "consumers": ["missions", "agent-orchestrator", "sdk-ts", "sdk-rs"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "privacy"],
+        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
+      }
+    },
+    {
+      "id": "execution-transfer-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/execution-transfer.v1.schema.json",
+      "owners": ["missions"],
+      "consumers": ["agent-orchestrator", "sdk-ts", "sdk-rs"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "privacy"],
+        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
+      }
+    },
+    {
+      "id": "execution-authorization-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/execution-authorization.v2.schema.json",
+      "owners": ["missions"],
+      "consumers": ["agent-orchestrator", "sdk-ts", "sdk-rs"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "privacy"],
+        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
+      }
+    },
+    {
+      "id": "human-decision-request-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/human-decision-request.v1.schema.json",
+      "owners": ["missions"],
+      "consumers": ["agent-orchestrator", "sdk-ts", "sdk-rs"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "privacy"],
+        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
+      }
+    },
+    {
+      "id": "human-decision-response-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/human-decision-response.v1.schema.json",
+      "owners": ["missions"],
+      "consumers": ["agent-orchestrator", "sdk-ts", "sdk-rs"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "privacy"],
+        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
+      }
+    },
+    {
+      "id": "step-invocation-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/step-invocation.v1.schema.json",
+      "owners": ["agent-orchestrator"],
+      "consumers": ["harness", "sdk-ts", "sdk-rs"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "privacy"],
+        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
+      }
+    },
+    {
+      "id": "effect-attestation-v1",
+      "kind": "json-schema",
+      "path": "contracts/schemas/effect-attestation.v1.schema.json",
+      "owners": ["agent-orchestrator", "harness"],
+      "consumers": ["missions", "agent-orchestrator", "sdk-ts", "sdk-rs"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "privacy"],
+        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
+      }
+    },
+    {
+      "id": "orchestrator-event-v3",
+      "kind": "json-schema",
+      "path": "contracts/schemas/orchestrator-event.v3.schema.json",
+      "owners": ["agent-orchestrator"],
+      "consumers": ["missions", "sdk-ts", "sdk-rs"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "privacy"],
+        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
+      }
+    },
+    {
+      "id": "retention-policy-schema-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/retention-policy.v2.schema.json",
+      "owners": ["canonical-core", "agent-orchestrator"],
+      "consumers": ["missions", "agent-orchestrator", "operations", "sdk-ts", "sdk-rs"],
+      "compatibility": "major-versioned",
+      "classification": "public",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "privacy"],
+        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
+      }
+    },
+    {
+      "id": "retention-policy-v2",
+      "kind": "data-policy",
+      "path": "contracts/data/retention.v2.json",
+      "owners": ["canonical-core", "agent-orchestrator"],
+      "consumers": ["missions", "agent-orchestrator", "operations"],
+      "compatibility": "major-versioned",
+      "classification": "public",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "privacy"],
+        "dossier": "docs/reviews/authorized-execution-contracts-review.md"
+      }
     }
   ]
 }

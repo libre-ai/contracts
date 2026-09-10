@@ -1,0 +1,2158 @@
+{
+  "schemaVersion": "libre-ai.authorized-execution-semantic-vectors.v1",
+  "cases": [
+    {
+      "id": "graph-valid",
+      "domain": "graph",
+      "input": {
+        "domain": "graph",
+        "graph": {
+          "entryStepId": "a",
+          "steps": [
+            {
+              "stepId": "a",
+              "kind": "calculation",
+              "outcomeCodes": ["ok"]
+            },
+            {
+              "stepId": "z",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
+          ],
+          "edges": [
+            {
+              "edgeId": "e",
+              "fromStepId": "a",
+              "outcomeCode": "ok",
+              "toStepId": "z"
+            }
+          ]
+        }
+      },
+      "expected": "graph-valid"
+    },
+    {
+      "id": "graph-duplicate-step",
+      "domain": "graph",
+      "input": {
+        "domain": "graph",
+        "graph": {
+          "entryStepId": "a",
+          "steps": [
+            {
+              "stepId": "a",
+              "kind": "calculation",
+              "outcomeCodes": ["ok"]
+            },
+            {
+              "stepId": "a",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
+          ],
+          "edges": []
+        }
+      },
+      "expected": "duplicate-step"
+    },
+    {
+      "id": "graph-duplicate-edge",
+      "domain": "graph",
+      "input": {
+        "domain": "graph",
+        "graph": {
+          "entryStepId": "a",
+          "steps": [
+            {
+              "stepId": "a",
+              "kind": "calculation",
+              "outcomeCodes": ["ok"]
+            },
+            {
+              "stepId": "z",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
+          ],
+          "edges": [
+            {
+              "edgeId": "e",
+              "fromStepId": "a",
+              "outcomeCode": "ok",
+              "toStepId": "z"
+            },
+            {
+              "edgeId": "e",
+              "fromStepId": "a",
+              "outcomeCode": "ok",
+              "toStepId": "z"
+            }
+          ]
+        }
+      },
+      "expected": "duplicate-edge"
+    },
+    {
+      "id": "graph-entry-missing",
+      "domain": "graph",
+      "input": {
+        "domain": "graph",
+        "graph": {
+          "entryStepId": "missing",
+          "steps": [
+            {
+              "stepId": "z",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
+          ],
+          "edges": []
+        }
+      },
+      "expected": "entry-missing"
+    },
+    {
+      "id": "graph-dangling-edge",
+      "domain": "graph",
+      "input": {
+        "domain": "graph",
+        "graph": {
+          "entryStepId": "a",
+          "steps": [
+            {
+              "stepId": "a",
+              "kind": "calculation",
+              "outcomeCodes": ["ok"]
+            },
+            {
+              "stepId": "z",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
+          ],
+          "edges": [
+            {
+              "edgeId": "e",
+              "fromStepId": "a",
+              "outcomeCode": "ok",
+              "toStepId": "missing"
+            }
+          ]
+        }
+      },
+      "expected": "dangling-edge"
+    },
+    {
+      "id": "graph-route-missing",
+      "domain": "graph",
+      "input": {
+        "domain": "graph",
+        "graph": {
+          "entryStepId": "a",
+          "steps": [
+            {
+              "stepId": "a",
+              "kind": "calculation",
+              "outcomeCodes": ["ok"]
+            },
+            {
+              "stepId": "z",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
+          ],
+          "edges": []
+        }
+      },
+      "expected": "route-missing"
+    },
+    {
+      "id": "graph-route-ambiguous",
+      "domain": "graph",
+      "input": {
+        "domain": "graph",
+        "graph": {
+          "entryStepId": "a",
+          "steps": [
+            {
+              "stepId": "a",
+              "kind": "calculation",
+              "outcomeCodes": ["ok"]
+            },
+            {
+              "stepId": "z",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
+          ],
+          "edges": [
+            {
+              "edgeId": "e1",
+              "fromStepId": "a",
+              "outcomeCode": "ok",
+              "toStepId": "z"
+            },
+            {
+              "edgeId": "e2",
+              "fromStepId": "a",
+              "outcomeCode": "ok",
+              "toStepId": "z"
+            }
+          ]
+        }
+      },
+      "expected": "route-ambiguous"
+    },
+    {
+      "id": "graph-unreachable-step",
+      "domain": "graph",
+      "input": {
+        "domain": "graph",
+        "graph": {
+          "entryStepId": "a",
+          "steps": [
+            {
+              "stepId": "a",
+              "kind": "calculation",
+              "outcomeCodes": ["ok"]
+            },
+            {
+              "stepId": "z",
+              "kind": "terminal",
+              "outcomeCodes": []
+            },
+            {
+              "stepId": "orphan",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
+          ],
+          "edges": [
+            {
+              "edgeId": "e",
+              "fromStepId": "a",
+              "outcomeCode": "ok",
+              "toStepId": "z"
+            }
+          ]
+        }
+      },
+      "expected": "unreachable-step"
+    },
+    {
+      "id": "graph-terminal-unreachable",
+      "domain": "graph",
+      "input": {
+        "domain": "graph",
+        "graph": {
+          "entryStepId": "a",
+          "steps": [
+            {
+              "stepId": "a",
+              "kind": "calculation",
+              "outcomeCodes": ["ok"]
+            },
+            {
+              "stepId": "sink",
+              "kind": "calculation",
+              "outcomeCodes": []
+            },
+            {
+              "stepId": "z",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
+          ],
+          "edges": [
+            {
+              "edgeId": "e",
+              "fromStepId": "a",
+              "outcomeCode": "ok",
+              "toStepId": "sink"
+            }
+          ]
+        }
+      },
+      "expected": "terminal-unreachable"
+    },
+    {
+      "id": "graph-terminal-has-outgoing-edge",
+      "domain": "graph",
+      "input": {
+        "domain": "graph",
+        "graph": {
+          "entryStepId": "a",
+          "steps": [
+            {
+              "stepId": "a",
+              "kind": "calculation",
+              "outcomeCodes": ["ok"]
+            },
+            {
+              "stepId": "z",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
+          ],
+          "edges": [
+            {
+              "edgeId": "e1",
+              "fromStepId": "a",
+              "outcomeCode": "ok",
+              "toStepId": "z"
+            },
+            {
+              "edgeId": "e2",
+              "fromStepId": "z",
+              "outcomeCode": "again",
+              "toStepId": "a"
+            }
+          ]
+        }
+      },
+      "expected": "terminal-has-outgoing-edge"
+    },
+    {
+      "id": "graph-cycle-forbidden",
+      "domain": "graph",
+      "input": {
+        "domain": "graph",
+        "graph": {
+          "entryStepId": "a",
+          "steps": [
+            {
+              "stepId": "a",
+              "kind": "calculation",
+              "outcomeCodes": ["ok", "again"]
+            },
+            {
+              "stepId": "z",
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
+          ],
+          "edges": [
+            {
+              "edgeId": "e1",
+              "fromStepId": "a",
+              "outcomeCode": "ok",
+              "toStepId": "z"
+            },
+            {
+              "edgeId": "e2",
+              "fromStepId": "a",
+              "outcomeCode": "again",
+              "toStepId": "a"
+            }
+          ]
+        }
+      },
+      "expected": "cycle-forbidden"
+    },
+    {
+      "id": "causal-event-valid",
+      "domain": "causal",
+      "input": {
+        "domain": "causal",
+        "previous": {
+          "id": "event-1",
+          "eventDigest": "a",
+          "organizationId": "organization-1",
+          "missionId": "mission-1",
+          "planDigest": "b",
+          "graphDigest": "c",
+          "runId": "run-1",
+          "generation": 1,
+          "sequence": 1,
+          "previousEventDigest": null,
+          "budgetDelta": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "budgetTotal": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
+        },
+        "current": {
+          "id": "event-2",
+          "eventDigest": "d",
+          "organizationId": "organization-1",
+          "missionId": "mission-1",
+          "planDigest": "b",
+          "graphDigest": "c",
+          "runId": "run-1",
+          "generation": 1,
+          "sequence": 2,
+          "previousEventDigest": "a",
+          "budgetDelta": {
+            "durationSeconds": 0,
+            "toolCalls": 1,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "budgetTotal": {
+            "durationSeconds": 0,
+            "toolCalls": 1,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
+        },
+        "collision": null
+      },
+      "expected": "event-valid"
+    },
+    {
+      "id": "causal-idempotent-duplicate",
+      "domain": "causal",
+      "input": {
+        "domain": "causal",
+        "previous": {
+          "id": "event-1",
+          "eventDigest": "a",
+          "organizationId": "o",
+          "missionId": "m",
+          "planDigest": "p",
+          "graphDigest": "g",
+          "runId": "r",
+          "generation": 1,
+          "sequence": 1,
+          "previousEventDigest": null,
+          "budgetDelta": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "budgetTotal": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
+        },
+        "current": {
+          "id": "event-2",
+          "eventDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "planDigest": "p",
+          "graphDigest": "g",
+          "runId": "r",
+          "generation": 1,
+          "sequence": 2,
+          "previousEventDigest": "a",
+          "budgetDelta": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "budgetTotal": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
+        },
+        "collision": {
+          "id": "event-2",
+          "sequence": 2,
+          "eventDigest": "d"
+        }
+      },
+      "expected": "idempotent-duplicate"
+    },
+    {
+      "id": "causal-duplicate-divergent",
+      "domain": "causal",
+      "input": {
+        "domain": "causal",
+        "previous": {
+          "id": "event-1",
+          "eventDigest": "a",
+          "organizationId": "o",
+          "missionId": "m",
+          "planDigest": "p",
+          "graphDigest": "g",
+          "runId": "r",
+          "generation": 1,
+          "sequence": 1,
+          "previousEventDigest": null,
+          "budgetDelta": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "budgetTotal": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
+        },
+        "current": {
+          "id": "event-2",
+          "eventDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "planDigest": "p",
+          "graphDigest": "g",
+          "runId": "r",
+          "generation": 1,
+          "sequence": 2,
+          "previousEventDigest": "a",
+          "budgetDelta": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "budgetTotal": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
+        },
+        "collision": {
+          "id": "event-2",
+          "sequence": 2,
+          "eventDigest": "x"
+        }
+      },
+      "expected": "duplicate-divergent"
+    },
+    {
+      "id": "causal-identity-mismatch",
+      "domain": "causal",
+      "input": {
+        "domain": "causal",
+        "previous": {
+          "id": "event-1",
+          "eventDigest": "a",
+          "organizationId": "o1",
+          "missionId": "m",
+          "planDigest": "p",
+          "graphDigest": "g",
+          "runId": "r",
+          "generation": 1,
+          "sequence": 1,
+          "previousEventDigest": null,
+          "budgetDelta": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "budgetTotal": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
+        },
+        "current": {
+          "id": "event-2",
+          "eventDigest": "d",
+          "organizationId": "o2",
+          "missionId": "m",
+          "planDigest": "p",
+          "graphDigest": "g",
+          "runId": "r",
+          "generation": 1,
+          "sequence": 2,
+          "previousEventDigest": "a",
+          "budgetDelta": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "budgetTotal": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
+        },
+        "collision": null
+      },
+      "expected": "identity-mismatch"
+    },
+    {
+      "id": "causal-generation-stale",
+      "domain": "causal",
+      "input": {
+        "domain": "causal",
+        "previous": {
+          "id": "event-1",
+          "eventDigest": "a",
+          "organizationId": "o",
+          "missionId": "m",
+          "planDigest": "p",
+          "graphDigest": "g",
+          "runId": "r",
+          "generation": 2,
+          "sequence": 1,
+          "previousEventDigest": null,
+          "budgetDelta": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "budgetTotal": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
+        },
+        "current": {
+          "id": "event-2",
+          "eventDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "planDigest": "p",
+          "graphDigest": "g",
+          "runId": "r",
+          "generation": 1,
+          "sequence": 2,
+          "previousEventDigest": "a",
+          "budgetDelta": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "budgetTotal": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
+        },
+        "collision": null
+      },
+      "expected": "generation-stale"
+    },
+    {
+      "id": "causal-sequence-invalid",
+      "domain": "causal",
+      "input": {
+        "domain": "causal",
+        "previous": {
+          "id": "event-1",
+          "eventDigest": "a",
+          "organizationId": "o",
+          "missionId": "m",
+          "planDigest": "p",
+          "graphDigest": "g",
+          "runId": "r",
+          "generation": 1,
+          "sequence": 1,
+          "previousEventDigest": null,
+          "budgetDelta": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "budgetTotal": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
+        },
+        "current": {
+          "id": "event-2",
+          "eventDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "planDigest": "p",
+          "graphDigest": "g",
+          "runId": "r",
+          "generation": 1,
+          "sequence": 3,
+          "previousEventDigest": "a",
+          "budgetDelta": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "budgetTotal": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
+        },
+        "collision": null
+      },
+      "expected": "sequence-invalid"
+    },
+    {
+      "id": "causal-previous-digest-mismatch",
+      "domain": "causal",
+      "input": {
+        "domain": "causal",
+        "previous": {
+          "id": "event-1",
+          "eventDigest": "a",
+          "organizationId": "o",
+          "missionId": "m",
+          "planDigest": "p",
+          "graphDigest": "g",
+          "runId": "r",
+          "generation": 1,
+          "sequence": 1,
+          "previousEventDigest": null,
+          "budgetDelta": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "budgetTotal": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
+        },
+        "current": {
+          "id": "event-2",
+          "eventDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "planDigest": "p",
+          "graphDigest": "g",
+          "runId": "r",
+          "generation": 1,
+          "sequence": 2,
+          "previousEventDigest": "x",
+          "budgetDelta": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "budgetTotal": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
+        },
+        "collision": null
+      },
+      "expected": "previous-digest-mismatch"
+    },
+    {
+      "id": "causal-budget-decreased",
+      "domain": "causal",
+      "input": {
+        "domain": "causal",
+        "previous": {
+          "id": "event-1",
+          "eventDigest": "a",
+          "organizationId": "o",
+          "missionId": "m",
+          "planDigest": "p",
+          "graphDigest": "g",
+          "runId": "r",
+          "generation": 1,
+          "sequence": 1,
+          "previousEventDigest": null,
+          "budgetDelta": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "budgetTotal": {
+            "durationSeconds": 0,
+            "toolCalls": 2,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
+        },
+        "current": {
+          "id": "event-2",
+          "eventDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "planDigest": "p",
+          "graphDigest": "g",
+          "runId": "r",
+          "generation": 1,
+          "sequence": 2,
+          "previousEventDigest": "a",
+          "budgetDelta": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "budgetTotal": {
+            "durationSeconds": 0,
+            "toolCalls": 1,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
+        },
+        "collision": null
+      },
+      "expected": "budget-decreased"
+    },
+    {
+      "id": "causal-budget-arithmetic-invalid",
+      "domain": "causal",
+      "input": {
+        "domain": "causal",
+        "previous": {
+          "id": "event-1",
+          "eventDigest": "a",
+          "organizationId": "o",
+          "missionId": "m",
+          "planDigest": "p",
+          "graphDigest": "g",
+          "runId": "r",
+          "generation": 1,
+          "sequence": 1,
+          "previousEventDigest": null,
+          "budgetDelta": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "budgetTotal": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
+        },
+        "current": {
+          "id": "event-2",
+          "eventDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "planDigest": "p",
+          "graphDigest": "g",
+          "runId": "r",
+          "generation": 1,
+          "sequence": 2,
+          "previousEventDigest": "a",
+          "budgetDelta": {
+            "durationSeconds": 0,
+            "toolCalls": 1,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "budgetTotal": {
+            "durationSeconds": 0,
+            "toolCalls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "processesStarted": 0,
+            "filesChanged": 0,
+            "changedBytes": 0
+          },
+          "orchestratorId": "orchestrator-1",
+          "authorizationDigest": "authorization-1"
+        },
+        "collision": null
+      },
+      "expected": "budget-arithmetic-invalid"
+    },
+    {
+      "id": "decision-valid",
+      "domain": "decision",
+      "input": {
+        "domain": "decision",
+        "request": {
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceIds": ["approve", "reject"],
+          "requiredRole": "approver",
+          "expectedRevision": 4,
+          "expiresAt": "2026-09-10T12:00:00Z"
+        },
+        "response": {
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceId": "approve",
+          "actorRoles": ["approver"],
+          "expectedRevision": 4
+        },
+        "now": "2026-09-10T11:00:00Z",
+        "replaced": false,
+        "consumed": false
+      },
+      "expected": "decision-valid"
+    },
+    {
+      "id": "decision-request-expired",
+      "domain": "decision",
+      "input": {
+        "domain": "decision",
+        "request": {
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceIds": ["approve", "reject"],
+          "requiredRole": "approver",
+          "expectedRevision": 4,
+          "expiresAt": "2026-09-10T12:00:00Z"
+        },
+        "response": {
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceId": "approve",
+          "actorRoles": ["approver"],
+          "expectedRevision": 4
+        },
+        "now": "2026-09-10T12:00:01Z",
+        "replaced": false,
+        "consumed": false
+      },
+      "expected": "request-expired"
+    },
+    {
+      "id": "decision-request-replaced",
+      "domain": "decision",
+      "input": {
+        "domain": "decision",
+        "request": {
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceIds": ["approve", "reject"],
+          "requiredRole": "approver",
+          "expectedRevision": 4,
+          "expiresAt": "2026-09-10T12:00:00Z"
+        },
+        "response": {
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceId": "approve",
+          "actorRoles": ["approver"],
+          "expectedRevision": 4
+        },
+        "now": "2026-09-10T11:00:00Z",
+        "replaced": true,
+        "consumed": false
+      },
+      "expected": "request-replaced"
+    },
+    {
+      "id": "decision-request-consumed",
+      "domain": "decision",
+      "input": {
+        "domain": "decision",
+        "request": {
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceIds": ["approve", "reject"],
+          "requiredRole": "approver",
+          "expectedRevision": 4,
+          "expiresAt": "2026-09-10T12:00:00Z"
+        },
+        "response": {
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceId": "approve",
+          "actorRoles": ["approver"],
+          "expectedRevision": 4
+        },
+        "now": "2026-09-10T11:00:00Z",
+        "replaced": false,
+        "consumed": true
+      },
+      "expected": "request-consumed"
+    },
+    {
+      "id": "decision-choice-unknown",
+      "domain": "decision",
+      "input": {
+        "domain": "decision",
+        "request": {
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceIds": ["approve", "reject"],
+          "requiredRole": "approver",
+          "expectedRevision": 4,
+          "expiresAt": "2026-09-10T12:00:00Z"
+        },
+        "response": {
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceId": "other",
+          "actorRoles": ["approver"],
+          "expectedRevision": 4
+        },
+        "now": "2026-09-10T11:00:00Z",
+        "replaced": false,
+        "consumed": false
+      },
+      "expected": "choice-unknown"
+    },
+    {
+      "id": "decision-actor-unauthorized",
+      "domain": "decision",
+      "input": {
+        "domain": "decision",
+        "request": {
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceIds": ["approve", "reject"],
+          "requiredRole": "approver",
+          "expectedRevision": 4,
+          "expiresAt": "2026-09-10T12:00:00Z"
+        },
+        "response": {
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceId": "approve",
+          "actorRoles": ["viewer"],
+          "expectedRevision": 4
+        },
+        "now": "2026-09-10T11:00:00Z",
+        "replaced": false,
+        "consumed": false
+      },
+      "expected": "actor-unauthorized"
+    },
+    {
+      "id": "decision-revision-stale",
+      "domain": "decision",
+      "input": {
+        "domain": "decision",
+        "request": {
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceIds": ["approve", "reject"],
+          "requiredRole": "approver",
+          "expectedRevision": 4,
+          "expiresAt": "2026-09-10T12:00:00Z"
+        },
+        "response": {
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceId": "approve",
+          "actorRoles": ["approver"],
+          "expectedRevision": 3
+        },
+        "now": "2026-09-10T11:00:00Z",
+        "replaced": false,
+        "consumed": false
+      },
+      "expected": "revision-stale"
+    },
+    {
+      "id": "decision-attempt-mismatch",
+      "domain": "decision",
+      "input": {
+        "domain": "decision",
+        "request": {
+          "organizationId": "o",
+          "attemptId": "a1",
+          "requestDigest": "d",
+          "choiceIds": ["approve", "reject"],
+          "requiredRole": "approver",
+          "expectedRevision": 4,
+          "expiresAt": "2026-09-10T12:00:00Z"
+        },
+        "response": {
+          "organizationId": "o",
+          "attemptId": "a2",
+          "requestDigest": "d",
+          "choiceId": "approve",
+          "actorRoles": ["approver"],
+          "expectedRevision": 4
+        },
+        "now": "2026-09-10T11:00:00Z",
+        "replaced": false,
+        "consumed": false
+      },
+      "expected": "attempt-mismatch"
+    },
+    {
+      "id": "decision-organization-mismatch",
+      "domain": "decision",
+      "input": {
+        "domain": "decision",
+        "request": {
+          "organizationId": "o1",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceIds": ["approve", "reject"],
+          "requiredRole": "approver",
+          "expectedRevision": 4,
+          "expiresAt": "2026-09-10T12:00:00Z"
+        },
+        "response": {
+          "organizationId": "o2",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceId": "approve",
+          "actorRoles": ["approver"],
+          "expectedRevision": 4
+        },
+        "now": "2026-09-10T11:00:00Z",
+        "replaced": false,
+        "consumed": false
+      },
+      "expected": "organization-mismatch"
+    },
+    {
+      "id": "effect-valid",
+      "domain": "effect",
+      "input": {
+        "domain": "effect",
+        "currentGeneration": 2,
+        "activeFencing": 2,
+        "generationConsumed": false,
+        "lineageClosed": false,
+        "predecessorEffectsTerminal": true,
+        "executorProfileQualified": true,
+        "priorEmission": null,
+        "existingAttemptEmissionId": null,
+        "attestation": {
+          "organizationId": "o",
+          "generation": 2,
+          "attemptId": "a",
+          "effectId": "effect",
+          "effectEmissionId": "emission-2",
+          "emissionDigest": "d",
+          "fencing": 2,
+          "status": "committed",
+          "runId": "run-2"
+        },
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a"
+      },
+      "expected": "effect-valid"
+    },
+    {
+      "id": "effect-emission-duplicate",
+      "domain": "effect",
+      "input": {
+        "domain": "effect",
+        "currentGeneration": 2,
+        "activeFencing": 2,
+        "generationConsumed": false,
+        "lineageClosed": false,
+        "predecessorEffectsTerminal": true,
+        "executorProfileQualified": true,
+        "priorEmission": {
+          "effectEmissionId": "emission-2",
+          "emissionDigest": "d"
+        },
+        "existingAttemptEmissionId": null,
+        "attestation": {
+          "organizationId": "o",
+          "generation": 2,
+          "attemptId": "a",
+          "effectId": "effect",
+          "effectEmissionId": "emission-2",
+          "emissionDigest": "d",
+          "fencing": 2,
+          "status": "committed",
+          "runId": "run-2"
+        },
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a"
+      },
+      "expected": "emission-duplicate"
+    },
+    {
+      "id": "effect-emission-divergent",
+      "domain": "effect",
+      "input": {
+        "domain": "effect",
+        "currentGeneration": 2,
+        "activeFencing": 2,
+        "generationConsumed": false,
+        "lineageClosed": false,
+        "predecessorEffectsTerminal": true,
+        "executorProfileQualified": true,
+        "priorEmission": {
+          "effectEmissionId": "emission-2",
+          "emissionDigest": "x"
+        },
+        "existingAttemptEmissionId": null,
+        "attestation": {
+          "organizationId": "o",
+          "generation": 2,
+          "attemptId": "a",
+          "effectId": "effect",
+          "effectEmissionId": "emission-2",
+          "emissionDigest": "d",
+          "fencing": 2,
+          "status": "committed",
+          "runId": "run-2"
+        },
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a"
+      },
+      "expected": "emission-divergent"
+    },
+    {
+      "id": "effect-second-emission-for-attempt",
+      "domain": "effect",
+      "input": {
+        "domain": "effect",
+        "currentGeneration": 2,
+        "activeFencing": 2,
+        "generationConsumed": false,
+        "lineageClosed": false,
+        "predecessorEffectsTerminal": true,
+        "executorProfileQualified": true,
+        "priorEmission": null,
+        "existingAttemptEmissionId": "emission-1",
+        "attestation": {
+          "organizationId": "o",
+          "generation": 2,
+          "attemptId": "a",
+          "effectId": "effect",
+          "effectEmissionId": "emission-2",
+          "emissionDigest": "d",
+          "fencing": 2,
+          "status": "committed",
+          "runId": "run-2"
+        },
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a"
+      },
+      "expected": "second-emission-for-attempt"
+    },
+    {
+      "id": "effect-fencing-stale",
+      "domain": "effect",
+      "input": {
+        "domain": "effect",
+        "currentGeneration": 2,
+        "activeFencing": 2,
+        "generationConsumed": false,
+        "lineageClosed": false,
+        "predecessorEffectsTerminal": true,
+        "executorProfileQualified": true,
+        "priorEmission": null,
+        "existingAttemptEmissionId": null,
+        "attestation": {
+          "organizationId": "o",
+          "generation": 2,
+          "attemptId": "a",
+          "effectId": "effect",
+          "effectEmissionId": "emission-2",
+          "emissionDigest": "d",
+          "fencing": 1,
+          "status": "committed",
+          "runId": "run-2"
+        },
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a"
+      },
+      "expected": "fencing-stale"
+    },
+    {
+      "id": "effect-executor-unqualified",
+      "domain": "effect",
+      "input": {
+        "domain": "effect",
+        "currentGeneration": 2,
+        "activeFencing": 2,
+        "generationConsumed": false,
+        "lineageClosed": false,
+        "predecessorEffectsTerminal": true,
+        "executorProfileQualified": false,
+        "priorEmission": null,
+        "existingAttemptEmissionId": null,
+        "attestation": {
+          "organizationId": "o",
+          "generation": 2,
+          "attemptId": "a",
+          "effectId": "effect",
+          "effectEmissionId": "emission-2",
+          "emissionDigest": "d",
+          "fencing": 2,
+          "status": "committed",
+          "runId": "run-2"
+        },
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a"
+      },
+      "expected": "executor-unqualified"
+    },
+    {
+      "id": "effect-state-unknown",
+      "domain": "effect",
+      "input": {
+        "domain": "effect",
+        "currentGeneration": 2,
+        "activeFencing": 2,
+        "generationConsumed": false,
+        "lineageClosed": false,
+        "predecessorEffectsTerminal": true,
+        "executorProfileQualified": true,
+        "priorEmission": null,
+        "existingAttemptEmissionId": null,
+        "attestation": {
+          "organizationId": "o",
+          "generation": 2,
+          "attemptId": "a",
+          "effectId": "effect",
+          "effectEmissionId": "emission-2",
+          "emissionDigest": "d",
+          "fencing": 2,
+          "status": "state-unknown",
+          "runId": "run-2"
+        },
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a"
+      },
+      "expected": "effect-state-unknown"
+    },
+    {
+      "id": "effect-predecessor-effects-nonterminal",
+      "domain": "effect",
+      "input": {
+        "domain": "effect",
+        "currentGeneration": 2,
+        "activeFencing": 2,
+        "generationConsumed": false,
+        "lineageClosed": false,
+        "predecessorEffectsTerminal": false,
+        "executorProfileQualified": true,
+        "priorEmission": null,
+        "existingAttemptEmissionId": null,
+        "attestation": {
+          "organizationId": "o",
+          "generation": 2,
+          "attemptId": "a",
+          "effectId": "effect",
+          "effectEmissionId": "emission-2",
+          "emissionDigest": "d",
+          "fencing": 2,
+          "status": "committed",
+          "runId": "run-2"
+        },
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a"
+      },
+      "expected": "predecessor-effects-nonterminal"
+    },
+    {
+      "id": "effect-generation-consumed",
+      "domain": "effect",
+      "input": {
+        "domain": "effect",
+        "currentGeneration": 2,
+        "activeFencing": 2,
+        "generationConsumed": true,
+        "lineageClosed": false,
+        "predecessorEffectsTerminal": true,
+        "executorProfileQualified": true,
+        "priorEmission": null,
+        "existingAttemptEmissionId": null,
+        "attestation": {
+          "organizationId": "o",
+          "generation": 2,
+          "attemptId": "a",
+          "effectId": "effect",
+          "effectEmissionId": "emission-2",
+          "emissionDigest": "d",
+          "fencing": 2,
+          "status": "committed",
+          "runId": "run-2"
+        },
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a"
+      },
+      "expected": "generation-consumed"
+    },
+    {
+      "id": "effect-lineage-administratively-closed",
+      "domain": "effect",
+      "input": {
+        "domain": "effect",
+        "currentGeneration": 2,
+        "activeFencing": 2,
+        "generationConsumed": false,
+        "lineageClosed": true,
+        "predecessorEffectsTerminal": true,
+        "executorProfileQualified": true,
+        "priorEmission": null,
+        "existingAttemptEmissionId": null,
+        "attestation": {
+          "organizationId": "o",
+          "generation": 2,
+          "attemptId": "a",
+          "effectId": "effect",
+          "effectEmissionId": "emission-2",
+          "emissionDigest": "d",
+          "fencing": 2,
+          "status": "committed",
+          "runId": "run-2"
+        },
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a"
+      },
+      "expected": "lineage-administratively-closed"
+    },
+    {
+      "id": "authority-valid",
+      "domain": "authority",
+      "input": {
+        "domain": "authority",
+        "graph": {
+          "id": "graph-1",
+          "organizationId": "organization-1",
+          "graphDigest": "g",
+          "steps": [
+            {
+              "kind": "calculation",
+              "outcomeCodes": ["ready"],
+              "retryPolicy": {
+                "maximumAttempts": 2,
+                "retryableOutcomeCodes": ["ready"]
+              }
+            },
+            {
+              "kind": "human-decision",
+              "outcomeCodes": ["approved", "rejected", "no-response"],
+              "retryPolicy": {
+                "maximumAttempts": 1,
+                "retryableOutcomeCodes": []
+              },
+              "decisionPolicy": {
+                "choices": [
+                  {
+                    "choiceId": "approve",
+                    "outcomeCode": "approved"
+                  },
+                  {
+                    "choiceId": "reject",
+                    "outcomeCode": "rejected"
+                  }
+                ],
+                "noResponseOutcomeCode": "no-response",
+                "requestSchemaRef": {
+                  "digest": "request-schema"
+                },
+                "responseSchemaRef": {
+                  "digest": "response-schema"
+                }
+              }
+            },
+            {
+              "kind": "external-effect",
+              "outcomeCodes": ["committed"],
+              "retryPolicy": {
+                "maximumAttempts": 1,
+                "retryableOutcomeCodes": []
+              },
+              "effectPolicy": {
+                "executorProfileDigest": "executor-profile"
+              }
+            },
+            {
+              "kind": "terminal",
+              "outcomeCodes": []
+            }
+          ]
+        },
+        "plan": {
+          "organizationId": "organization-1",
+          "executionGraph": {
+            "id": "graph-1",
+            "digest": "g"
+          },
+          "decisionSchemaRefs": [
+            {
+              "digest": "request-schema"
+            },
+            {
+              "digest": "response-schema"
+            }
+          ],
+          "executorProfileRefs": [
+            {
+              "digest": "executor-profile"
+            }
+          ]
+        }
+      },
+      "expected": "authority-valid"
+    },
+    {
+      "id": "authority-graph-policy-invalid",
+      "domain": "authority",
+      "input": {
+        "domain": "authority",
+        "graph": {
+          "id": "graph-1",
+          "organizationId": "organization-1",
+          "graphDigest": "g",
+          "steps": [
+            {
+              "kind": "calculation",
+              "outcomeCodes": ["ready"],
+              "retryPolicy": {
+                "maximumAttempts": 2,
+                "retryableOutcomeCodes": ["unknown"]
+              }
+            }
+          ]
+        },
+        "plan": {
+          "organizationId": "organization-1",
+          "executionGraph": {
+            "id": "graph-1",
+            "digest": "g"
+          },
+          "decisionSchemaRefs": [],
+          "executorProfileRefs": []
+        }
+      },
+      "expected": "graph-policy-invalid"
+    },
+    {
+      "id": "authority-binding-mismatch",
+      "domain": "authority",
+      "input": {
+        "domain": "authority",
+        "graph": {
+          "id": "graph-1",
+          "organizationId": "organization-1",
+          "graphDigest": "g",
+          "steps": [
+            {
+              "kind": "calculation",
+              "outcomeCodes": ["ready"],
+              "retryPolicy": {
+                "maximumAttempts": 1,
+                "retryableOutcomeCodes": []
+              }
+            }
+          ]
+        },
+        "plan": {
+          "organizationId": "organization-1",
+          "executionGraph": {
+            "id": "graph-1",
+            "digest": "substituted"
+          },
+          "decisionSchemaRefs": [],
+          "executorProfileRefs": []
+        }
+      },
+      "expected": "authority-binding-mismatch"
+    },
+    {
+      "id": "transfer-valid",
+      "domain": "transfer",
+      "input": {
+        "domain": "transfer",
+        "transfer": {
+          "id": "transfer-1",
+          "transferDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "expectedRevision": 4,
+          "successorPlanDigest": "s",
+          "issuedAt": "2026-09-10T10:00:00Z",
+          "expiresAt": "2026-09-10T10:15:00Z"
+        },
+        "state": {
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "revision": 4,
+          "successorPlanDigest": "s",
+          "generationConsumed": false
+        },
+        "collision": null,
+        "now": "2026-09-10T10:05:00Z"
+      },
+      "expected": "transfer-valid"
+    },
+    {
+      "id": "transfer-idempotent-duplicate",
+      "domain": "transfer",
+      "input": {
+        "domain": "transfer",
+        "transfer": {
+          "id": "transfer-1",
+          "transferDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "expectedRevision": 4,
+          "successorPlanDigest": "s",
+          "issuedAt": "2026-09-10T10:00:00Z",
+          "expiresAt": "2026-09-10T10:15:00Z"
+        },
+        "state": {
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "revision": 4,
+          "successorPlanDigest": "s",
+          "generationConsumed": false
+        },
+        "collision": {
+          "id": "transfer-1",
+          "currentGeneration": 1,
+          "transferDigest": "d"
+        },
+        "now": "2026-09-10T10:05:00Z"
+      },
+      "expected": "idempotent-duplicate"
+    },
+    {
+      "id": "transfer-duplicate-divergent",
+      "domain": "transfer",
+      "input": {
+        "domain": "transfer",
+        "transfer": {
+          "id": "transfer-1",
+          "transferDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "expectedRevision": 4,
+          "successorPlanDigest": "s",
+          "issuedAt": "2026-09-10T10:00:00Z",
+          "expiresAt": "2026-09-10T10:15:00Z"
+        },
+        "state": {
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "revision": 4,
+          "successorPlanDigest": "s",
+          "generationConsumed": false
+        },
+        "collision": {
+          "id": "transfer-1",
+          "currentGeneration": 1,
+          "transferDigest": "x"
+        },
+        "now": "2026-09-10T10:05:00Z"
+      },
+      "expected": "duplicate-divergent"
+    },
+    {
+      "id": "transfer-generation-consumed",
+      "domain": "transfer",
+      "input": {
+        "domain": "transfer",
+        "transfer": {
+          "id": "transfer-1",
+          "transferDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "expectedRevision": 4,
+          "successorPlanDigest": "s",
+          "issuedAt": "2026-09-10T10:00:00Z",
+          "expiresAt": "2026-09-10T10:15:00Z"
+        },
+        "state": {
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "revision": 4,
+          "successorPlanDigest": "s",
+          "generationConsumed": true
+        },
+        "collision": null,
+        "now": "2026-09-10T10:05:00Z"
+      },
+      "expected": "generation-consumed"
+    },
+    {
+      "id": "transfer-revision-stale",
+      "domain": "transfer",
+      "input": {
+        "domain": "transfer",
+        "transfer": {
+          "id": "transfer-1",
+          "transferDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "expectedRevision": 3,
+          "successorPlanDigest": "s",
+          "issuedAt": "2026-09-10T10:00:00Z",
+          "expiresAt": "2026-09-10T10:15:00Z"
+        },
+        "state": {
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "revision": 4,
+          "successorPlanDigest": "s",
+          "generationConsumed": false
+        },
+        "collision": null,
+        "now": "2026-09-10T10:05:00Z"
+      },
+      "expected": "revision-stale"
+    },
+    {
+      "id": "transfer-successor-mismatch",
+      "domain": "transfer",
+      "input": {
+        "domain": "transfer",
+        "transfer": {
+          "id": "transfer-1",
+          "transferDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "expectedRevision": 4,
+          "successorPlanDigest": "changed",
+          "issuedAt": "2026-09-10T10:00:00Z",
+          "expiresAt": "2026-09-10T10:15:00Z"
+        },
+        "state": {
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "revision": 4,
+          "successorPlanDigest": "s",
+          "generationConsumed": false
+        },
+        "collision": null,
+        "now": "2026-09-10T10:05:00Z"
+      },
+      "expected": "identity-mismatch"
+    },
+    {
+      "id": "decision-idempotent-duplicate",
+      "domain": "decision",
+      "input": {
+        "domain": "decision",
+        "request": {
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceIds": ["approve", "reject"],
+          "requiredRole": "approver",
+          "expectedRevision": 4,
+          "expiresAt": "2026-09-10T12:00:00Z"
+        },
+        "response": {
+          "id": "response-1",
+          "responseDigest": "r",
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceId": "approve",
+          "actorRoles": ["approver"],
+          "expectedRevision": 4
+        },
+        "now": "2026-09-10T11:00:00Z",
+        "replaced": false,
+        "consumed": false,
+        "priorResponse": {
+          "id": "response-1",
+          "responseDigest": "r"
+        }
+      },
+      "expected": "idempotent-duplicate"
+    },
+    {
+      "id": "decision-duplicate-divergent",
+      "domain": "decision",
+      "input": {
+        "domain": "decision",
+        "request": {
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceIds": ["approve", "reject"],
+          "requiredRole": "approver",
+          "expectedRevision": 4,
+          "expiresAt": "2026-09-10T12:00:00Z"
+        },
+        "response": {
+          "id": "response-1",
+          "responseDigest": "r",
+          "organizationId": "o",
+          "attemptId": "a",
+          "requestDigest": "d",
+          "choiceId": "approve",
+          "actorRoles": ["approver"],
+          "expectedRevision": 4
+        },
+        "now": "2026-09-10T11:00:00Z",
+        "replaced": false,
+        "consumed": false,
+        "priorResponse": {
+          "id": "response-1",
+          "responseDigest": "x"
+        }
+      },
+      "expected": "duplicate-divergent"
+    },
+    {
+      "id": "authority-duplicate-choice-id",
+      "domain": "authority",
+      "input": {
+        "domain": "authority",
+        "graph": {
+          "id": "graph-1",
+          "organizationId": "organization-1",
+          "graphDigest": "g",
+          "steps": [
+            {
+              "kind": "human-decision",
+              "outcomeCodes": ["approved", "rejected", "no-response"],
+              "retryPolicy": {
+                "maximumAttempts": 1,
+                "retryableOutcomeCodes": []
+              },
+              "decisionPolicy": {
+                "choices": [
+                  {
+                    "choiceId": "approve",
+                    "outcomeCode": "approved"
+                  },
+                  {
+                    "choiceId": "approve",
+                    "outcomeCode": "rejected"
+                  }
+                ],
+                "noResponseOutcomeCode": "no-response",
+                "requestSchemaRef": {
+                  "digest": "request-schema"
+                },
+                "responseSchemaRef": {
+                  "digest": "response-schema"
+                }
+              }
+            }
+          ]
+        },
+        "plan": {
+          "organizationId": "organization-1",
+          "executionGraph": {
+            "id": "graph-1",
+            "digest": "g"
+          },
+          "decisionSchemaRefs": [
+            {
+              "digest": "request-schema"
+            },
+            {
+              "digest": "response-schema"
+            }
+          ],
+          "executorProfileRefs": []
+        }
+      },
+      "expected": "graph-policy-invalid"
+    },
+    {
+      "id": "transfer-consumed-identical-replay",
+      "domain": "transfer",
+      "input": {
+        "domain": "transfer",
+        "transfer": {
+          "id": "transfer-1",
+          "transferDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "expectedRevision": 4,
+          "successorPlanDigest": "s",
+          "issuedAt": "2026-09-10T10:00:00Z",
+          "expiresAt": "2026-09-10T10:15:00Z"
+        },
+        "state": {
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "revision": 4,
+          "successorPlanDigest": "s",
+          "generationConsumed": true
+        },
+        "collision": {
+          "id": "transfer-1",
+          "currentGeneration": 1,
+          "transferDigest": "d"
+        },
+        "now": "2026-09-10T10:05:00Z"
+      },
+      "expected": "idempotent-duplicate"
+    },
+    {
+      "id": "effect-old-run-replay",
+      "domain": "effect",
+      "input": {
+        "domain": "effect",
+        "expectedOrganizationId": "o",
+        "expectedRunId": "run-2",
+        "expectedAttemptId": "a",
+        "currentGeneration": 2,
+        "activeFencing": 2,
+        "generationConsumed": false,
+        "lineageClosed": false,
+        "predecessorEffectsTerminal": true,
+        "executorProfileQualified": true,
+        "priorEmission": null,
+        "existingAttemptEmissionId": null,
+        "attestation": {
+          "organizationId": "o",
+          "runId": "run-1",
+          "generation": 2,
+          "attemptId": "a",
+          "effectId": "effect",
+          "effectEmissionId": "emission-2",
+          "emissionDigest": "d",
+          "fencing": 2,
+          "status": "committed"
+        }
+      },
+      "expected": "identity-mismatch"
+    },
+    {
+      "id": "transfer-expired",
+      "domain": "transfer",
+      "input": {
+        "domain": "transfer",
+        "transfer": {
+          "id": "transfer-1",
+          "transferDigest": "d",
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "expectedRevision": 4,
+          "successorPlanDigest": "s",
+          "issuedAt": "2026-09-10T10:00:00Z",
+          "expiresAt": "2026-09-10T10:15:00Z"
+        },
+        "state": {
+          "organizationId": "o",
+          "missionId": "m",
+          "predecessorRunId": "r",
+          "predecessorPlanDigest": "p",
+          "currentGeneration": 1,
+          "revision": 4,
+          "successorPlanDigest": "s",
+          "generationConsumed": false
+        },
+        "collision": null,
+        "now": "2026-09-10T10:15:00Z"
+      },
+      "expected": "transfer-expired"
+    }
+  ]
+}

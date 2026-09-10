@@ -27,4 +27,4 @@ MissionRecord/API v2 and orchestrator-event v2 are parallel locked, unimplemente
 
 ## Evidence
 
-A contract change is incomplete until catalog, schemas/protocol source, positive and negative fixtures, generated/validated projections and every named consumer pass in the same candidate. Contract artifacts never contain secrets or production/personal fixture data. Authoring and review must be separate passes; attributable review follows `docs/reviews/AGENT-REVIEW-PROTOCOL.md`.
+A contract change is incomplete until catalog, schemas/protocol source, positive and negative fixtures, generated/validated projections and every named consumer pass in the same candidate. Contract artifacts never contain secrets or production/personal fixture data. Authoring and review must be separate passes; attributable review follows Governance [`AGENT-REVIEW-PROTOCOL.md`](https://github.com/libre-ai/governance/blob/main/docs/reviews/AGENT-REVIEW-PROTOCOL.md).

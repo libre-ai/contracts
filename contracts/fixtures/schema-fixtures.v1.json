@@ -3460,6 +3460,774 @@
           "value": "urn:libre-ai:method:wrong-kind"
         }
       ]
+    },
+    {
+      "schema": "execution-graph.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.execution-graph.v1",
+        "id": "urn:libre-ai:graph:synthetic-graph-1",
+        "organizationId": "ten_1234567890abcdef",
+        "entryStepId": "urn:libre-ai:step:calculate-1",
+        "steps": [
+          {
+            "stepId": "urn:libre-ai:step:calculate-1",
+            "kind": "calculation",
+            "outcomeCodes": ["calculation-ready"],
+            "retryPolicy": {
+              "maximumAttempts": 2,
+              "retryableOutcomeCodes": ["calculation-ready"]
+            }
+          },
+          {
+            "stepId": "urn:libre-ai:step:decision-1",
+            "kind": "human-decision",
+            "outcomeCodes": ["approved", "rejected", "no-response"],
+            "retryPolicy": {
+              "maximumAttempts": 1,
+              "retryableOutcomeCodes": []
+            },
+            "decisionPolicy": {
+              "choices": [
+                { "choiceId": "approve", "outcomeCode": "approved" },
+                { "choiceId": "reject", "outcomeCode": "rejected" }
+              ],
+              "requiredRole": "mission-approver",
+              "expiresAfterSeconds": 3600,
+              "noResponseOutcomeCode": "no-response",
+              "requestSchemaRef": {
+                "id": "urn:libre-ai:schema:human-decision-request-v1",
+                "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "mediaType": "application/schema+json"
+              },
+              "responseSchemaRef": {
+                "id": "urn:libre-ai:schema:human-decision-response-v1",
+                "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "mediaType": "application/schema+json"
+              }
+            }
+          },
+          {
+            "stepId": "urn:libre-ai:step:effect-1",
+            "kind": "external-effect",
+            "outcomeCodes": ["effect-committed", "effect-refused"],
+            "retryPolicy": {
+              "maximumAttempts": 2,
+              "retryableOutcomeCodes": ["effect-refused"]
+            },
+            "effectPolicy": {
+              "executorProfileDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+              "reEmissionMode": "retry-after-terminal-status-with-fencing"
+            }
+          },
+          {
+            "stepId": "urn:libre-ai:step:terminal-1",
+            "kind": "terminal",
+            "outcomeCodes": []
+          }
+        ],
+        "edges": [
+          {
+            "edgeId": "urn:libre-ai:edge:calculated-1",
+            "fromStepId": "urn:libre-ai:step:calculate-1",
+            "outcomeCode": "calculation-ready",
+            "toStepId": "urn:libre-ai:step:decision-1"
+          },
+          {
+            "edgeId": "urn:libre-ai:edge:approved-1",
+            "fromStepId": "urn:libre-ai:step:decision-1",
+            "outcomeCode": "approved",
+            "toStepId": "urn:libre-ai:step:effect-1"
+          },
+          {
+            "edgeId": "urn:libre-ai:edge:rejected-1",
+            "fromStepId": "urn:libre-ai:step:decision-1",
+            "outcomeCode": "rejected",
+            "toStepId": "urn:libre-ai:step:terminal-1"
+          },
+          {
+            "edgeId": "urn:libre-ai:edge:no-response-1",
+            "fromStepId": "urn:libre-ai:step:decision-1",
+            "outcomeCode": "no-response",
+            "toStepId": "urn:libre-ai:step:terminal-1"
+          },
+          {
+            "edgeId": "urn:libre-ai:edge:committed-1",
+            "fromStepId": "urn:libre-ai:step:effect-1",
+            "outcomeCode": "effect-committed",
+            "toStepId": "urn:libre-ai:step:terminal-1"
+          },
+          {
+            "edgeId": "urn:libre-ai:edge:refused-1",
+            "fromStepId": "urn:libre-ai:step:effect-1",
+            "outcomeCode": "effect-refused",
+            "toStepId": "urn:libre-ai:step:terminal-1"
+          }
+        ],
+        "createdAt": "2026-09-10T10:00:00Z",
+        "graphDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      },
+      "invalidMutations": [
+        { "name": "empty graph", "path": "/steps", "value": [] },
+        {
+          "name": "terminal declares an outcome",
+          "path": "/steps/3/outcomeCodes",
+          "value": ["again"]
+        },
+        {
+          "name": "unknown re-emission mode",
+          "path": "/steps/2/effectPolicy/reEmissionMode",
+          "value": "retry-without-proof"
+        },
+        {
+          "name": "human decision has only one choice",
+          "path": "/steps/1/decisionPolicy/choices",
+          "value": [{ "choiceId": "approve", "outcomeCode": "approved" }]
+        }
+      ]
+    },
+    {
+      "schema": "execution-plan-body.v2.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.execution-plan-body.v2",
+        "id": "urn:libre-ai:plan:synthetic-plan-2",
+        "organizationId": "ten_1234567890abcdef",
+        "missionId": "urn:libre-ai:mission:synthetic-mission-1",
+        "handoffId": "urn:libre-ai:handoff:synthetic-handoff-1",
+        "handoffDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "specPackageDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "executionGraph": {
+          "id": "urn:libre-ai:graph:synthetic-graph-1",
+          "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "mediaType": "application/schema+json"
+        },
+        "lineageMode": "initial",
+        "successorLineage": null,
+        "requestedGeneration": 1,
+        "decisionSchemaRefs": [
+          {
+            "id": "urn:libre-ai:schema:human-decision-request-v1",
+            "digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "mediaType": "application/schema+json"
+          },
+          {
+            "id": "urn:libre-ai:schema:human-decision-response-v1",
+            "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mediaType": "application/schema+json"
+          }
+        ],
+        "executorProfileRefs": [
+          {
+            "id": "urn:libre-ai:profile:synthetic-executor-1",
+            "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "mediaType": "application/schema+json"
+          }
+        ],
+        "acceptanceCriteria": ["criterion_1"],
+        "tools": [
+          {
+            "name": "read_file",
+            "access": "read",
+            "argumentPolicyDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "maxCalls": 20
+          }
+        ],
+        "filesystem": {
+          "readPaths": ["src/**"],
+          "writePaths": ["src/**"],
+          "denyPaths": [".env", "**/.git/**"],
+          "copyIgnoredFiles": false
+        },
+        "budgets": {
+          "maxDurationSeconds": 3600,
+          "maxToolCalls": 100,
+          "maxInputTokens": 100000,
+          "maxOutputTokens": 50000,
+          "maxProcesses": 16,
+          "maxFilesChanged": 100,
+          "maxChangedBytes": 1048576,
+          "maxConcurrentAgents": 3
+        },
+        "network": {
+          "workerMode": "private-gateway-only",
+          "gatewayOrigins": [{ "scheme": "https", "host": "models.eu.example", "port": 443 }]
+        },
+        "modelEgress": {
+          "purposeCode": "code_review",
+          "authorizationBasis": "contract",
+          "maximumClassification": "tenant-private",
+          "sourcePaths": ["src/**"],
+          "maxBytesPerRequest": 1048576,
+          "region": "eu",
+          "subprocessors": ["provider_eu"],
+          "zeroDataRetention": true,
+          "trainingAllowed": false,
+          "reuseAllowed": false,
+          "policyDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "harnessProfile": {
+          "id": "urn:libre-ai:profile:synthetic-harness-1",
+          "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "mediaType": "application/json"
+        },
+        "workerManifests": [
+          {
+            "id": "urn:libre-ai:manifest:synthetic-worker-1",
+            "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "mediaType": "application/json"
+          }
+        ],
+        "evidenceDestinations": [
+          {
+            "id": "urn:libre-ai:artifact:synthetic-proof-destination-1",
+            "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+            "mediaType": "application/json"
+          }
+        ],
+        "createdAt": "2026-09-10T10:00:00Z",
+        "expiresAt": "2026-09-10T12:00:00Z",
+        "bodyDigest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      },
+      "invalidMutations": [
+        { "name": "generation zero", "path": "/requestedGeneration", "value": 0 },
+        {
+          "name": "successor mode without lineage",
+          "path": "/lineageMode",
+          "value": "successor"
+        },
+        {
+          "name": "initial mode with successor lineage",
+          "path": "/successorLineage",
+          "value": {
+            "predecessorRunId": "urn:libre-ai:run:synthetic-run-1",
+            "predecessorPlanDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "sealedRevision": 4,
+            "terminalEffectInventoryDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "executionTransferId": "urn:libre-ai:transfer:synthetic-transfer-1"
+          }
+        },
+        {
+          "name": "missing decision schema refs",
+          "path": "/decisionSchemaRefs",
+          "value": []
+        }
+      ]
+    },
+    {
+      "schema": "execution-transfer.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.execution-transfer.v1",
+        "id": "urn:libre-ai:transfer:synthetic-transfer-1",
+        "organizationId": "ten_1234567890abcdef",
+        "missionId": "urn:libre-ai:mission:synthetic-mission-1",
+        "predecessorRunId": "urn:libre-ai:run:synthetic-run-1",
+        "predecessorPlanDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "currentGeneration": 1,
+        "expectedRevision": 4,
+        "successorPlanDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "idempotencyKey": "synthetic-transfer-0001",
+        "issuedAt": "2026-09-10T10:00:00Z",
+        "expiresAt": "2026-09-10T10:15:00Z",
+        "transferDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "invalidMutations": [
+        { "name": "generation zero", "path": "/currentGeneration", "value": 0 },
+        { "name": "missing expected revision", "path": "/expectedRevision", "remove": true },
+        { "name": "short idempotency key", "path": "/idempotencyKey", "value": "short" }
+      ]
+    },
+    {
+      "schema": "execution-authorization.v2.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.execution-authorization.v2",
+        "id": "urn:libre-ai:authorization:synthetic-authorization-2",
+        "organizationId": "ten_1234567890abcdef",
+        "missionId": "urn:libre-ai:mission:synthetic-mission-1",
+        "missionRevision": 4,
+        "missionRecordDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "planId": "urn:libre-ai:plan:synthetic-plan-2",
+        "planDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "graphDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "planQuorum": {
+          "id": "urn:libre-ai:quorum:synthetic-plan-quorum-1",
+          "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "mediaType": "application/json"
+        },
+        "generation": 1,
+        "lineageMode": "initial",
+        "successorBinding": null,
+        "revocationId": "urn:libre-ai:revocation:synthetic-revocation-1",
+        "issuedAt": "2026-09-10T10:00:00Z",
+        "expiresAt": "2026-09-10T12:00:00Z",
+        "authorizationDigest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      },
+      "invalidMutations": [
+        { "name": "generation zero", "path": "/generation", "value": 0 },
+        {
+          "name": "successor authorization with null binding",
+          "path": "/lineageMode",
+          "value": "successor"
+        },
+        {
+          "name": "initial authorization with successor binding",
+          "path": "/successorBinding",
+          "value": {
+            "executionTransferId": "urn:libre-ai:transfer:synthetic-transfer-1",
+            "executionTransferDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "predecessorRunId": "urn:libre-ai:run:synthetic-run-1",
+            "predecessorPlanDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "sealedRevision": 4,
+            "terminalEffectInventoryDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+          }
+        }
+      ]
+    },
+    {
+      "schema": "human-decision-request.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.human-decision-request.v1",
+        "id": "urn:libre-ai:decision-request:synthetic-request-1",
+        "organizationId": "ten_1234567890abcdef",
+        "missionId": "urn:libre-ai:mission:synthetic-mission-1",
+        "runId": "urn:libre-ai:run:synthetic-run-1",
+        "planDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "graphDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "stepId": "urn:libre-ai:step:synthetic-decision-1",
+        "attemptId": "urn:libre-ai:attempt:synthetic-attempt-1",
+        "choices": [
+          { "choiceId": "approve", "label": "Approve", "consequenceCode": "approved" },
+          { "choiceId": "reject", "label": "Reject", "consequenceCode": "rejected" }
+        ],
+        "requiredRole": "mission-approver",
+        "expectedRevision": 4,
+        "expiresAt": "2026-09-10T12:00:00Z",
+        "noResponseOutcomeCode": "no-response",
+        "evidenceRefs": [
+          {
+            "id": "urn:libre-ai:evidence:synthetic-decision-context-1",
+            "digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+            "mediaType": "application/json"
+          }
+        ],
+        "requestDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+      },
+      "invalidMutations": [
+        {
+          "name": "fewer than two choices",
+          "path": "/choices",
+          "value": [{ "choiceId": "approve", "label": "Approve", "consequenceCode": "approved" }]
+        },
+        {
+          "name": "more than four choices",
+          "path": "/choices",
+          "value": [
+            { "choiceId": "approve", "label": "Approve", "consequenceCode": "approved" },
+            { "choiceId": "reject", "label": "Reject", "consequenceCode": "rejected" },
+            { "choiceId": "defer", "label": "Defer", "consequenceCode": "deferred" },
+            { "choiceId": "replan", "label": "Replan", "consequenceCode": "replan-required" },
+            { "choiceId": "cancel", "label": "Cancel", "consequenceCode": "cancelled" }
+          ]
+        },
+        {
+          "name": "other choice expands topology",
+          "path": "/choices/0",
+          "value": { "choiceId": "other", "label": "Other", "consequenceCode": "approved" }
+        }
+      ]
+    },
+    {
+      "schema": "human-decision-response.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.human-decision-response.v1",
+        "id": "urn:libre-ai:decision-response:synthetic-response-1",
+        "organizationId": "ten_1234567890abcdef",
+        "missionId": "urn:libre-ai:mission:synthetic-mission-1",
+        "runId": "urn:libre-ai:run:synthetic-run-1",
+        "stepId": "urn:libre-ai:step:synthetic-decision-1",
+        "attemptId": "urn:libre-ai:attempt:synthetic-attempt-1",
+        "requestId": "urn:libre-ai:decision-request:synthetic-request-1",
+        "requestDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "choiceId": "approve",
+        "actorAuthorization": {
+          "role": "mission-approver",
+          "approvedAt": "2026-09-10T10:59:00Z",
+          "reference": "urn:libre-ai:approval:synthetic-decision-actor-1",
+          "subjectDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        },
+        "expectedRevision": 4,
+        "idempotencyKey": "synthetic-decision-0001",
+        "commentArtifactRef": null,
+        "submittedAt": "2026-09-10T11:00:00Z",
+        "responseDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+      },
+      "invalidMutations": [
+        { "name": "missing idempotency key", "path": "/idempotencyKey", "remove": true },
+        {
+          "name": "embedded comment text",
+          "path": "/comment",
+          "value": "Synthetic free text must remain in an artifact."
+        },
+        {
+          "name": "empty actor authorization role",
+          "path": "/actorAuthorization/role",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "schema": "step-invocation.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.step-invocation.v1",
+        "id": "urn:libre-ai:invocation:synthetic-invocation-1",
+        "organizationId": "ten_1234567890abcdef",
+        "missionId": "urn:libre-ai:mission:synthetic-mission-1",
+        "planDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "graphDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "runId": "urn:libre-ai:run:synthetic-run-1",
+        "generation": 1,
+        "stepId": "urn:libre-ai:step:synthetic-calculation-1",
+        "attemptId": "urn:libre-ai:attempt:synthetic-attempt-1",
+        "workerInvocationId": "urn:libre-ai:worker-invocation:synthetic-worker-invocation-1",
+        "causeEventDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "selectedEdgeId": null,
+        "harnessProfile": {
+          "id": "urn:libre-ai:profile:synthetic-harness-1",
+          "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "mediaType": "application/json"
+        },
+        "workerManifest": {
+          "id": "urn:libre-ai:manifest:synthetic-worker-1",
+          "digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "mediaType": "application/json"
+        },
+        "remainingBudgets": {
+          "durationSeconds": 3600,
+          "toolCalls": 20,
+          "inputTokens": 100000,
+          "outputTokens": 50000,
+          "processesStarted": 16,
+          "filesChanged": 100,
+          "changedBytes": 1048576
+        },
+        "inputArtifactRef": {
+          "id": "urn:libre-ai:artifact:synthetic-input-1",
+          "digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "mediaType": "application/json"
+        },
+        "createdAt": "2026-09-10T10:00:00Z",
+        "invocationDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "invalidMutations": [
+        { "name": "generation zero", "path": "/generation", "value": 0 },
+        { "name": "missing cause digest", "path": "/causeEventDigest", "remove": true },
+        { "name": "raw prompt", "path": "/prompt", "value": "Synthetic prompt" },
+        {
+          "name": "raw tool arguments",
+          "path": "/toolArguments",
+          "value": { "path": "src/private.ts" }
+        }
+      ]
+    },
+    {
+      "schema": "effect-attestation.v1.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.effect-attestation.v1",
+        "id": "urn:libre-ai:effect-attestation:synthetic-attestation-1",
+        "organizationId": "ten_1234567890abcdef",
+        "missionId": "urn:libre-ai:mission:synthetic-mission-1",
+        "planDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "graphDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "runId": "urn:libre-ai:run:synthetic-run-1",
+        "generation": 1,
+        "stepId": "urn:libre-ai:step:synthetic-effect-1",
+        "attemptId": "urn:libre-ai:attempt:synthetic-attempt-1",
+        "workerInvocationId": "urn:libre-ai:worker-invocation:synthetic-worker-invocation-1",
+        "effectId": "urn:libre-ai:effect:synthetic-effect-1",
+        "effectEmissionId": "urn:libre-ai:emission:synthetic-emission-1",
+        "effectRequestDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "destinationRef": {
+          "id": "urn:libre-ai:destination:synthetic-destination-1",
+          "digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "mediaType": "application/json"
+        },
+        "executorProfileRef": {
+          "id": "urn:libre-ai:profile:synthetic-executor-1",
+          "digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "mediaType": "application/json"
+        },
+        "fencingValue": 7,
+        "executorIdempotencyEvidence": null,
+        "status": "committed",
+        "observationRef": {
+          "id": "urn:libre-ai:observation:synthetic-observation-1",
+          "digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "mediaType": "application/json"
+        },
+        "reservedAt": "2026-09-10T10:00:00Z",
+        "observedAt": "2026-09-10T10:00:01Z",
+        "signingKeyId": "executor_key_1",
+        "preimageDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "signature": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "invalidMutations": [
+        { "name": "generation zero", "path": "/generation", "value": 0 },
+        { "name": "unsigned attestation", "path": "/signature", "remove": true },
+        { "name": "missing fencing evidence", "path": "/fencingValue", "value": null },
+        {
+          "name": "two deduplication proofs",
+          "path": "/executorIdempotencyEvidence",
+          "value": {
+            "id": "urn:libre-ai:evidence:synthetic-idempotency-1",
+            "digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "mediaType": "application/json"
+          }
+        }
+      ]
+    },
+    {
+      "schema": "orchestrator-event.v3.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.orchestrator-event.v3",
+        "id": "urn:libre-ai:event:synthetic-event-3",
+        "organizationId": "ten_1234567890abcdef",
+        "missionId": "urn:libre-ai:mission:synthetic-mission-1",
+        "runId": "urn:libre-ai:run:synthetic-run-1",
+        "orchestratorId": "orchestrator_1",
+        "planDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "authorizationDigest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "graphDigest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "generation": 1,
+        "sequence": 3,
+        "previousEventDigest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+        "stepId": "urn:libre-ai:step:synthetic-effect-1",
+        "attemptId": "urn:libre-ai:attempt:synthetic-attempt-1",
+        "workerInvocationId": "urn:libre-ai:worker-invocation:synthetic-worker-invocation-1",
+        "selectedEdgeId": "urn:libre-ai:edge:synthetic-committed-1",
+        "cause": {
+          "kind": "effect",
+          "id": "urn:libre-ai:effect-attestation:synthetic-attestation-1",
+          "digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+        },
+        "type": "effect-terminal",
+        "budgetDelta": {
+          "durationSeconds": 1,
+          "toolCalls": 1,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "processesStarted": 0,
+          "filesChanged": 0,
+          "changedBytes": 0
+        },
+        "budgetTotal": {
+          "durationSeconds": 10,
+          "toolCalls": 3,
+          "inputTokens": 1000,
+          "outputTokens": 500,
+          "processesStarted": 1,
+          "filesChanged": 0,
+          "changedBytes": 0
+        },
+        "occurredAt": "2026-09-10T10:00:01Z",
+        "data": {
+          "effectId": "urn:libre-ai:effect:synthetic-effect-1",
+          "effectEmissionId": "urn:libre-ai:emission:synthetic-emission-1",
+          "effectStatus": "committed",
+          "lifecycleRef": {
+            "id": "urn:libre-ai:effect-attestation:synthetic-attestation-1",
+            "digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+            "mediaType": "application/json"
+          }
+        },
+        "eventDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "invalidMutations": [
+        { "name": "generation zero", "path": "/generation", "value": 0 },
+        { "name": "missing cause digest", "path": "/cause/digest", "remove": true },
+        {
+          "name": "event payload identity mismatch",
+          "path": "/type",
+          "value": "graph-activated"
+        },
+        {
+          "name": "terminal event with non-terminal effect status",
+          "path": "/data/effectStatus",
+          "value": "reserved"
+        },
+        {
+          "name": "stable identifier in operational diagnostics",
+          "path": "/data/diagnosticIdentifier",
+          "value": "urn:libre-ai:mission:synthetic-mission-1"
+        }
+      ]
+    },
+    {
+      "schema": "retention-policy.v2.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.retention-policy.v2",
+        "authority": "urn:libre-ai:decision:adr-0034-authorized-execution",
+        "approvedAt": "2026-09-10T00:00:00Z",
+        "backupExpiry": "P35D",
+        "restoreOrder": ["execution-deletion-tombstone", "orchestrator-execution-record"],
+        "rules": [
+          {
+            "id": "fixture-rule-01",
+            "owner": "operations",
+            "dataClass": "fixture-data-01",
+            "location": "memory",
+            "mode": "immediate",
+            "trigger": "normalization"
+          },
+          {
+            "id": "fixture-rule-02",
+            "owner": "operations",
+            "dataClass": "fixture-data-02",
+            "location": "memory",
+            "mode": "immediate",
+            "trigger": "normalization"
+          },
+          {
+            "id": "fixture-rule-03",
+            "owner": "operations",
+            "dataClass": "fixture-data-03",
+            "location": "memory",
+            "mode": "immediate",
+            "trigger": "normalization"
+          },
+          {
+            "id": "fixture-rule-04",
+            "owner": "operations",
+            "dataClass": "fixture-data-04",
+            "location": "memory",
+            "mode": "immediate",
+            "trigger": "normalization"
+          },
+          {
+            "id": "fixture-rule-05",
+            "owner": "operations",
+            "dataClass": "fixture-data-05",
+            "location": "memory",
+            "mode": "immediate",
+            "trigger": "normalization"
+          },
+          {
+            "id": "fixture-rule-06",
+            "owner": "operations",
+            "dataClass": "fixture-data-06",
+            "location": "memory",
+            "mode": "immediate",
+            "trigger": "normalization"
+          },
+          {
+            "id": "fixture-rule-07",
+            "owner": "operations",
+            "dataClass": "fixture-data-07",
+            "location": "memory",
+            "mode": "immediate",
+            "trigger": "normalization"
+          },
+          {
+            "id": "fixture-rule-08",
+            "owner": "operations",
+            "dataClass": "fixture-data-08",
+            "location": "memory",
+            "mode": "immediate",
+            "trigger": "normalization"
+          },
+          {
+            "id": "fixture-rule-09",
+            "owner": "operations",
+            "dataClass": "fixture-data-09",
+            "location": "memory",
+            "mode": "immediate",
+            "trigger": "normalization"
+          },
+          {
+            "id": "fixture-rule-10",
+            "owner": "operations",
+            "dataClass": "fixture-data-10",
+            "location": "memory",
+            "mode": "immediate",
+            "trigger": "normalization"
+          },
+          {
+            "id": "fixture-rule-11",
+            "owner": "operations",
+            "dataClass": "fixture-data-11",
+            "location": "memory",
+            "mode": "immediate",
+            "trigger": "normalization"
+          },
+          {
+            "id": "fixture-rule-12",
+            "owner": "operations",
+            "dataClass": "fixture-data-12",
+            "location": "memory",
+            "mode": "immediate",
+            "trigger": "normalization"
+          },
+          {
+            "id": "fixture-rule-13",
+            "owner": "operations",
+            "dataClass": "fixture-data-13",
+            "location": "memory",
+            "mode": "immediate",
+            "trigger": "normalization"
+          },
+          {
+            "id": "fixture-rule-14",
+            "owner": "operations",
+            "dataClass": "fixture-data-14",
+            "location": "memory",
+            "mode": "immediate",
+            "trigger": "normalization"
+          },
+          {
+            "id": "fixture-rule-15",
+            "owner": "operations",
+            "dataClass": "fixture-data-15",
+            "location": "memory",
+            "mode": "immediate",
+            "trigger": "normalization"
+          },
+          {
+            "id": "orchestrator-execution-record",
+            "owner": "agent-orchestrator",
+            "dataClass": "content-free-authorized-execution-state",
+            "location": "postgresql",
+            "mode": "fixed",
+            "trigger": "creation",
+            "defaultRetention": "P1Y",
+            "configurable": { "maximum": "P6Y" },
+            "effectiveRetentionEqualsRule": "mission-record"
+          },
+          {
+            "id": "execution-deletion-tombstone",
+            "owner": "agent-orchestrator",
+            "dataClass": "content-free-execution-deletion-tombstone",
+            "location": "postgresql",
+            "mode": "fixed",
+            "trigger": "explicit-delete",
+            "defaultRetention": "P35D"
+          }
+        ]
+      },
+      "invalidMutations": [
+        { "name": "unknown owner", "path": "/rules/0/owner", "value": "unknown-owner" },
+        {
+          "name": "execution record lacks retention alignment",
+          "path": "/rules/15/effectiveRetentionEqualsRule",
+          "remove": true
+        },
+        {
+          "name": "restore applies execution before tombstone",
+          "path": "/restoreOrder",
+          "value": ["orchestrator-execution-record", "execution-deletion-tombstone"]
+        },
+        {
+          "name": "immediate rule carries retention",
+          "path": "/rules/0/defaultRetention",
+          "value": "P1D"
+        }
+      ]
     }
   ]
 }

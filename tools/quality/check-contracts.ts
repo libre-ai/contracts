@@ -2,6 +2,13 @@ import { lstat, realpath } from "node:fs/promises";
 import { basename, dirname, join, normalize, sep } from "node:path";
 import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020";
 import addFormats from "ajv-formats";
+import {
+  authorizedExecutionVectorDocumentFailures,
+  canonicalJson,
+  digestVectorDocumentFailures,
+  evaluateAuthorizedExecutionVector,
+  retentionPolicyV2Failures,
+} from "./authorized-execution";
 import { parseStrictJson } from "./policy-core-raw-inputs";
 import { DOCTRINE_ANCHOR, protocolAuthorityAnchors } from "./protocol-authority";
 import {
@@ -542,6 +549,24 @@ for (const name of schemaByName.keys()) {
     failures.push(`${name}: missing positive/negative fixture pair`);
 }
 
+const executionGraphFixture = fixtureCases.find(
+  (fixture) => fixture.schema === "execution-graph.v1.schema.json",
+);
+const executionPlanFixture = fixtureCases.find(
+  (fixture) => fixture.schema === "execution-plan-body.v2.schema.json",
+);
+if (executionGraphFixture === undefined || executionPlanFixture === undefined) {
+  failures.push("authorized execution graph/plan fixture authority is incomplete");
+} else if (
+  evaluateAuthorizedExecutionVector({
+    domain: "authority",
+    graph: executionGraphFixture.valid,
+    plan: executionPlanFixture.valid,
+  }) !== "authority-valid"
+) {
+  failures.push("authorized execution graph/plan positive fixtures are not bound to one authority");
+}
+
 const specializedVectorPaths = [
   "contracts/fixtures/radar-engine-v2/golden-vectors.v1.json",
   "contracts/fixtures/notebook-core-v2/golden-vectors.v1.json",
@@ -614,10 +639,102 @@ for (const path of specializedVectorPaths) {
   }
 }
 
-const retentionValidator = validatorByName.get("retention-policy.v1.schema.json");
+const authorizedExecutionVectorPath =
+  "contracts/fixtures/authorized-execution-v1/semantic-vectors.v1.json";
+const authorizedExecutionVectorFile = Bun.file(authorizedExecutionVectorPath);
+if (!(await authorizedExecutionVectorFile.exists())) {
+  failures.push(`${authorizedExecutionVectorPath}: required semantic vectors are missing`);
+} else if (authorizedExecutionVectorFile.size > 8 * 1024 * 1024) {
+  failures.push(`${authorizedExecutionVectorPath}: semantic vector file exceeds 8 MiB`);
+} else {
+  let document: unknown;
+  try {
+    document = parseStrictJson(
+      new Uint8Array(await authorizedExecutionVectorFile.arrayBuffer()),
+      64,
+    );
+  } catch {
+    failures.push(`${authorizedExecutionVectorPath}: semantic vector is not strict UTF-8 JSON`);
+    document = null;
+  }
+  if (
+    document !== null &&
+    inspectSpecializedVectorBounds(document, authorizedExecutionVectorPath) &&
+    inspectSpecializedVectorPublicContent(document, authorizedExecutionVectorPath)
+  ) {
+    for (const failure of authorizedExecutionVectorDocumentFailures(document)) {
+      failures.push(`${authorizedExecutionVectorPath}: ${failure}`);
+    }
+  }
+}
+
+const authorizedExecutionDigestVectorPath =
+  "contracts/fixtures/authorized-execution-v1/digest-vectors.v1.json";
+const authorizedExecutionDigestVectorFile = Bun.file(authorizedExecutionDigestVectorPath);
+if (!(await authorizedExecutionDigestVectorFile.exists())) {
+  failures.push(`${authorizedExecutionDigestVectorPath}: required digest vectors are missing`);
+} else if (authorizedExecutionDigestVectorFile.size > 8 * 1024 * 1024) {
+  failures.push(`${authorizedExecutionDigestVectorPath}: digest vector file exceeds 8 MiB`);
+} else {
+  let document: unknown;
+  try {
+    document = parseStrictJson(
+      new Uint8Array(await authorizedExecutionDigestVectorFile.arrayBuffer()),
+      64,
+    );
+  } catch {
+    failures.push(`${authorizedExecutionDigestVectorPath}: digest vector is not strict UTF-8 JSON`);
+    document = null;
+  }
+  if (
+    document !== null &&
+    inspectSpecializedVectorBounds(document, authorizedExecutionDigestVectorPath) &&
+    inspectSpecializedVectorPublicContent(document, authorizedExecutionDigestVectorPath)
+  ) {
+    for (const failure of await digestVectorDocumentFailures(document)) {
+      failures.push(`${authorizedExecutionDigestVectorPath}: ${failure}`);
+    }
+    if (isRecord(document) && Array.isArray(document.cases)) {
+      for (const [index, vector] of document.cases.entries()) {
+        if (
+          !isRecord(vector) ||
+          typeof vector.schema !== "string" ||
+          !Array.isArray(vector.excludedFields) ||
+          vector.excludedFields.some((field) => typeof field !== "string") ||
+          !isRecord(vector.unsignedPayload)
+        ) {
+          continue;
+        }
+        const fixture = fixtureCases.find((candidate) => candidate.schema === vector.schema);
+        if (fixture === undefined) {
+          failures.push(
+            `${authorizedExecutionDigestVectorPath}: case[${index}] fixture is missing`,
+          );
+          continue;
+        }
+        const expectedUnsignedPayload = structuredClone(fixture.valid);
+        for (const field of vector.excludedFields as string[])
+          delete expectedUnsignedPayload[field];
+        if (canonicalJson(expectedUnsignedPayload) !== canonicalJson(vector.unsignedPayload)) {
+          failures.push(
+            `${authorizedExecutionDigestVectorPath}: case[${index}] diverges from its positive fixture`,
+          );
+        }
+      }
+    }
+  }
+}
+
+const retentionV1Validator = validatorByName.get("retention-policy.v1.schema.json");
+const retentionV2Validator = validatorByName.get("retention-policy.v2.schema.json");
+const retentionV1Authority = await Bun.file("contracts/data/retention.v1.json").json();
 for (const path of managedPaths.filter((item) => item.startsWith("contracts/data/"))) {
   try {
     const policy = await Bun.file(path).json();
+    const retentionValidator =
+      isRecord(policy) && policy.schemaVersion === "libre-ai.retention-policy.v2"
+        ? retentionV2Validator
+        : retentionV1Validator;
     if (!retentionValidator?.(policy)) {
       failures.push(`${path}: invalid retention policy: ${safeErrors(retentionValidator?.errors)}`);
       continue;
@@ -631,6 +748,12 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/data
     const ruleIds = retentionRules.map((rule) => rule.id);
     if (new Set(ruleIds).size !== ruleIds.length)
       failures.push(`${path}: duplicate retention rule id`);
+    if (policy.schemaVersion === "libre-ai.retention-policy.v2") {
+      for (const failure of retentionPolicyV2Failures(retentionV1Authority, policy)) {
+        failures.push(`${path}: ${failure}`);
+      }
+      continue;
+    }
     if (new Set(ruleIds).size !== Object.keys(retentionExpectations).length)
       failures.push(`${path}: retention rule inventory diverges from ADR-0002`);
     for (const [ruleId, expected] of Object.entries(retentionExpectations)) {
