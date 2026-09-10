@@ -4,7 +4,9 @@
   "title": "Libre AI OrchestratorEvent v3",
   "$defs": {
     "nullableUrn": {
-      "oneOf": [{ "type": "null" }, { "$ref": "common.v1.schema.json#/$defs/urn" }]
+      "type": ["string", "null"],
+      "pattern": "^urn:libre-ai:[a-z][a-z0-9-]*:[A-Za-z0-9._~-]+$",
+      "maxLength": 512
     },
     "budgetCounters": {
       "type": "object",
