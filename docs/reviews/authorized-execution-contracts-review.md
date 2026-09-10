@@ -234,3 +234,45 @@ Any authority-byte drift, additional status transition, stale Governance act,
 red gate, SDK projection drift or runtime expansion invalidates these verdicts.
 Rollback before a separately authorized runtime exists is a revert of the
 catalog/lifecycle promotion and SDK pins; no data migration is required.
+
+## Post-merge SDK integration closeout
+
+### `authorized-execution-lock-final-integration-20260910-01`
+
+- **Mode:** final cross-repository review-only closeout; no authority or runtime
+  authoring.
+- **Reviewed default-branch heads:** Governance
+  `a16c8657881cfbd79a3915b218e0a148bc01bd78`; Contracts
+  `a4c1a42d3e004e8c66886e2a18c21b728e9078f1`; SDK TypeScript
+  `7067049b2adbf39b37a9fa71dc6fdb7e6b6fd7f1`; SDK Rust
+  `ac9f2020425733183839a58fc2c3928a4de5c066`.
+- **Pins:** both SDK default branches name the immutable Contracts promotion
+  target `5b9b6668909119b670e0db62174419ab04e5b402`; that commit is an ancestor of
+  Contracts main. The installed catalog SHA-256 is
+  `17c2a6742d83a3d0d115048b948a03b0ab3b986f29e73e3e3bc6ff41cb0de4e7`.
+- **TypeScript evidence:** PR #9 and post-merge CI pass; 209 tests / 687
+  assertions pass; all 75 generated projections and vendored schemas remain
+  byte-exact, with no generated file in the pin diff.
+- **Rust evidence:** PR #14 and post-merge CI pass; the lock, schema drift,
+  secret, personal-data, lint and strict type gates pass; 14 Rust tests plus
+  doc-tests pass; `cargo fmt --all --check`, clippy with `-D warnings` and
+  dependency-policy licensing pass. All 75 vendored schemas and generated Rust
+  types remain unchanged.
+- **Authority evidence:** Governance PR #104, Contracts PR #14 and every
+  post-merge workflow on the four reviewed heads pass. Contracts main reports
+  `99 locked / 4 candidate`, with exactly `boussole-method-v3`,
+  `harness-profile-v2`, `local-comparison-v3` and
+  `public-vote-dataset-v3` remaining candidates.
+- **Security/privacy/sovereignty:** no runtime, schema, retention data, vector,
+  generated projection, capability, service, infrastructure, telemetry or
+  external dependency was added. No personal or tenant-private value is added
+  to logs or review evidence. LangGraph remains absent from normative bytes and
+  dependencies.
+- **Findings:** Blocking 0; Major 0; Minor 0; non-blocking 0.
+- **Residual runtime gates:** transaction serialization, executor-side
+  idempotency/fencing, log allow-listing and deletion/restore E2E remain
+  unproven and blocking before any Phase 4 enablement.
+- **Verdict:** `approve` for completed Specification Lock integration only.
+
+This closeout resolves the earlier promotion-pass residual concerning SDK pins
+and remote/post-merge CI. It does not resolve or waive any runtime residual.
