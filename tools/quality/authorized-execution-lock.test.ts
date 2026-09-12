@@ -27,10 +27,19 @@ const authorizedExecutionIds = [
 ] as const;
 
 const remainingCandidateIds = [
+  "agent-handoff-v2",
+  "build-brief-acceptance-v2",
+  "build-brief-api-v2",
+  "build-brief-body-v2",
+  "build-brief-policy-v2",
   "boussole-method-v3",
   "harness-profile-v2",
   "local-comparison-v3",
   "public-vote-dataset-v3",
+  "spec-package-v2",
+  "retention-policy-schema-v3",
+  "retention-policy-v3",
+  "specifications-api-v2",
 ] as const;
 
 const reviewedAuthorityHashes = {
@@ -89,7 +98,7 @@ describe("authorized execution Specification Lock", () => {
     }
   });
 
-  test("leaves only the four unrelated candidates outside the lock", async () => {
+  test("keeps unrelated candidates and Build Brief successors outside the execution lock", async () => {
     const catalog = await readCatalog();
     const locked = catalog.contracts.filter((entry) => entry.status === "locked");
     const candidates = catalog.contracts
@@ -98,7 +107,7 @@ describe("authorized execution Specification Lock", () => {
       .sort();
 
     expect(locked).toHaveLength(99);
-    expect(candidates).toEqual([...remainingCandidateIds]);
+    expect(candidates).toEqual([...remainingCandidateIds].sort());
   });
 
   test("preserves every reviewed authority and vector byte", async () => {

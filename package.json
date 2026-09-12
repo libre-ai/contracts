@@ -12,6 +12,7 @@
     "fast-uri": "4.1.4"
   },
   "dependencies": {
+    "@noble/curves": "2.4.0",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
     "entities": "8.0.0"
@@ -23,16 +24,19 @@
     "@libre-ai/governance": "github:libre-ai/governance#8c238c09efd443a4866459160dac1cfee31d88be"
   },
   "scripts": {
+    "check:auth-retention": "bun run check:bun:runtime && bun test --config=tools/quality/auth-retention-v3.bunfig.toml tools/quality/auth-retention-v3.test.ts",
     "check:bun:runtime": "bun node_modules/@libre-ai/governance/tools/quality/check-bun-minimum.ts",
     "check:bun": "bun run check:bun:runtime && bun node_modules/@libre-ai/governance/tools/quality/check-bun-manifests.ts",
     "check:toolchain": "bun run check:bun && bun node_modules/@libre-ai/governance/tools/quality/check-toolchain.ts",
-    "check:contracts": "bun run check:bun:runtime && bun tools/quality/check-contracts.ts",
+    "check:contracts": "bun run check:bun:runtime && bun tools/quality/check-contracts.ts && bun run check:build-brief",
     "check:secret-scan": "bun run check:bun:runtime && bun node_modules/@libre-ai/governance/tools/quality/check-secret-scan.ts",
     "check:personal-data": "bun run check:bun:runtime && bun node_modules/@libre-ai/governance/tools/quality/check-personal-data-boundary.ts",
     "lint": "bun run check:bun:runtime && biome ci .",
     "typecheck": "bun run check:bun:runtime && tsc --noEmit -p tsconfig.json",
     "pretest": "bun run check:bun",
     "test": "bun test",
-    "check": "bun run check:bun && bun run check:toolchain && bun run check:contracts && bun run check:secret-scan && bun run check:personal-data && bun run lint && bun run typecheck && bun test"
+    "check": "bun run check:bun && bun run check:auth-retention && bun run check:toolchain && bun run check:contracts && bun run check:secret-scan && bun run check:personal-data && bun run lint && bun run typecheck && bun test",
+    "check:build-brief": "bun run check:bun:runtime && bun test --config=tools/quality/build-brief-v2.bunfig.toml tools/quality/build-brief-v2.test.ts",
+    "check:build-brief:crypto-oracle": "bun run check:bun:runtime && cargo run --locked --manifest-path tools/quality/build-brief-crypto-oracle/Cargo.toml -- contracts/fixtures/build-brief-v2/strict-ed25519-vectors.json"
   }
 }

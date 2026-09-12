@@ -1,0 +1,947 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.libre-ai.fr/schemas/build-brief-api.v2.schema.json",
+  "title": "Libre AI Specifications HTTP v2 candidate",
+  "$ref": "#/$defs/packageResponse",
+  "$defs": {
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requestId", "revision"],
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^req_[a-z0-9]{16,64}$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      }
+    },
+    "workspace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tenantId",
+        "problem",
+        "actors",
+        "requirements",
+        "decisions",
+        "contracts",
+        "risks",
+        "acceptanceCriteria",
+        "contributors",
+        "id",
+        "revision",
+        "status"
+      ],
+      "properties": {
+        "tenantId": {
+          "$ref": "common.v1.schema.json#/$defs/tenantId"
+        },
+        "problem": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 5000
+        },
+        "actors": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "common.v1.schema.json#/$defs/identifier"
+          }
+        },
+        "requirements": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 1000,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "text", "priority"],
+            "properties": {
+              "id": {
+                "$ref": "common.v1.schema.json#/$defs/identifier"
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 5000
+              },
+              "priority": {
+                "enum": ["must", "should", "could"]
+              }
+            }
+          }
+        },
+        "decisions": {
+          "type": "array",
+          "maxItems": 1000,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "status", "decision"],
+            "properties": {
+              "id": {
+                "$ref": "common.v1.schema.json#/$defs/identifier"
+              },
+              "status": {
+                "enum": ["open", "accepted", "rejected"]
+              },
+              "decision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 5000
+              }
+            }
+          }
+        },
+        "contracts": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 1000,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "common.v1.schema.json#/$defs/urn"
+          }
+        },
+        "risks": {
+          "type": "array",
+          "maxItems": 1000,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "severity", "control"],
+            "properties": {
+              "id": {
+                "$ref": "common.v1.schema.json#/$defs/identifier"
+              },
+              "severity": {
+                "enum": ["low", "medium", "high", "critical"]
+              },
+              "control": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 5000
+              }
+            }
+          }
+        },
+        "acceptanceCriteria": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 1000,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "observable", "evidenceRule"],
+            "properties": {
+              "id": {
+                "$ref": "common.v1.schema.json#/$defs/identifier"
+              },
+              "observable": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 5000
+              },
+              "evidenceRule": {
+                "$ref": "common.v1.schema.json#/$defs/identifier"
+              }
+            }
+          }
+        },
+        "contributors": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "common.v1.schema.json#/$defs/identifier"
+          }
+        },
+        "id": {
+          "$ref": "common.v1.schema.json#/$defs/urn"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "status": {
+          "enum": ["draft", "submitted", "accepted", "superseded"]
+        }
+      }
+    },
+    "createRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["problem", "actors"],
+      "properties": {
+        "problem": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 5000
+        },
+        "actors": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "common.v1.schema.json#/$defs/identifier"
+          }
+        }
+      }
+    },
+    "acceptRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["body", "acceptance"],
+      "properties": {
+        "body": {
+          "$ref": "build-brief-body.v2.schema.json"
+        },
+        "acceptance": {
+          "$ref": "build-brief-acceptance.v2.schema.json"
+        }
+      }
+    },
+    "commandRequest": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["command", "id", "text", "priority"],
+          "properties": {
+            "command": {
+              "const": "add-requirement"
+            },
+            "id": {
+              "$ref": "common.v1.schema.json#/$defs/identifier"
+            },
+            "text": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 5000
+            },
+            "priority": {
+              "enum": ["must", "should", "could"]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["command", "id", "decision"],
+          "properties": {
+            "command": {
+              "const": "record-decision"
+            },
+            "id": {
+              "$ref": "common.v1.schema.json#/$defs/identifier"
+            },
+            "decision": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 5000
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["command", "id", "status"],
+          "properties": {
+            "command": {
+              "const": "resolve-decision"
+            },
+            "id": {
+              "$ref": "common.v1.schema.json#/$defs/identifier"
+            },
+            "status": {
+              "enum": ["accepted", "rejected"]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["command", "contractId"],
+          "properties": {
+            "command": {
+              "const": "attach-contract"
+            },
+            "contractId": {
+              "$ref": "common.v1.schema.json#/$defs/urn"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["command", "id", "observable", "evidenceRule"],
+          "properties": {
+            "command": {
+              "const": "define-acceptance"
+            },
+            "id": {
+              "$ref": "common.v1.schema.json#/$defs/identifier"
+            },
+            "observable": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 5000
+            },
+            "evidenceRule": {
+              "$ref": "common.v1.schema.json#/$defs/identifier"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["command"],
+          "properties": {
+            "command": {
+              "const": "submit-review"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["command", "status"],
+          "properties": {
+            "command": {
+              "const": "review"
+            },
+            "status": {
+              "enum": ["accepted", "rejected"]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "command",
+            "successorPackageId",
+            "successorPackageVersion",
+            "successorBodyDigest"
+          ],
+          "properties": {
+            "command": {
+              "const": "supersede"
+            },
+            "successorPackageId": {
+              "$ref": "common.v1.schema.json#/$defs/urn"
+            },
+            "successorPackageVersion": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            },
+            "successorBodyDigest": {
+              "$ref": "common.v1.schema.json#/$defs/sha256"
+            }
+          }
+        }
+      ]
+    },
+    "exportRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command"],
+      "properties": {
+        "command": {
+          "const": "export"
+        }
+      }
+    },
+    "handoffRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["handoff"],
+      "properties": {
+        "handoff": {
+          "$ref": "agent-handoff.v2.schema.json"
+        }
+      }
+    },
+    "workspaceResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["data", "meta"],
+      "properties": {
+        "data": {
+          "$ref": "#/$defs/workspace"
+        },
+        "meta": {
+          "$ref": "#/$defs/meta"
+        }
+      }
+    },
+    "packageResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["data", "meta"],
+      "properties": {
+        "data": {
+          "$ref": "spec-package.v2.schema.json"
+        },
+        "meta": {
+          "$ref": "#/$defs/meta"
+        }
+      }
+    },
+    "handoffResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["data", "meta"],
+      "properties": {
+        "data": {
+          "$ref": "agent-handoff.v2.schema.json"
+        },
+        "meta": {
+          "$ref": "#/$defs/meta"
+        }
+      }
+    },
+    "cursor": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512,
+      "pattern": "^[A-Za-z0-9_-]+$"
+    },
+    "pageMeta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requestId", "revision", "nextCursor"],
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "pattern": "^req_[a-z0-9]{16,64}$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "nextCursor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512,
+              "pattern": "^[A-Za-z0-9_-]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "viewResponse": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["data", "meta"],
+          "properties": {
+            "data": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["view", "items"],
+              "properties": {
+                "view": {
+                  "const": "open-decisions"
+                },
+                "items": {
+                  "type": "array",
+                  "minItems": 0,
+                  "maxItems": 100,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["id", "status", "decision"],
+                    "properties": {
+                      "id": {
+                        "$ref": "common.v1.schema.json#/$defs/identifier"
+                      },
+                      "status": {
+                        "const": "open"
+                      },
+                      "decision": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 5000
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "meta": {
+              "$ref": "#/$defs/pageMeta"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["data", "meta"],
+          "properties": {
+            "data": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["view", "items"],
+              "properties": {
+                "view": {
+                  "const": "validation"
+                },
+                "items": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 1,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["valid", "refusals"],
+                    "properties": {
+                      "valid": {
+                        "type": "boolean"
+                      },
+                      "refusals": {
+                        "type": "array",
+                        "minItems": 0,
+                        "maxItems": 20,
+                        "items": {
+                          "enum": [
+                            "build-brief.schema-invalid",
+                            "build-brief.digest-invalid",
+                            "build-brief.signature-invalid",
+                            "build-brief.acceptance-invalid",
+                            "build-brief.context-invalid",
+                            "build-brief.semantic-invalid"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "meta": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/pageMeta"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "nextCursor": {
+                      "type": "null"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["data", "meta"],
+          "properties": {
+            "data": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["view", "items"],
+              "properties": {
+                "view": {
+                  "const": "version-diff"
+                },
+                "items": {
+                  "type": "array",
+                  "minItems": 0,
+                  "maxItems": 100,
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["path", "change"],
+                    "properties": {
+                      "path": {
+                        "type": "string",
+                        "pattern": "^/",
+                        "maxLength": 512
+                      },
+                      "change": {
+                        "enum": ["added", "removed", "changed"]
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "meta": {
+              "$ref": "#/$defs/pageMeta"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["data", "meta"],
+          "properties": {
+            "data": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["view", "items"],
+              "properties": {
+                "view": {
+                  "const": "approvals"
+                },
+                "items": {
+                  "type": "array",
+                  "minItems": 0,
+                  "maxItems": 100,
+                  "items": {
+                    "$ref": "build-brief-acceptance.v2.schema.json"
+                  }
+                }
+              }
+            },
+            "meta": {
+              "$ref": "#/$defs/pageMeta"
+            }
+          }
+        }
+      ]
+    },
+    "problem400": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["data", "meta"],
+      "properties": {
+        "data": {
+          "type": "null"
+        },
+        "meta": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requestId", "code", "message"],
+          "properties": {
+            "requestId": {
+              "type": "string",
+              "pattern": "^req_[a-z0-9]{16,64}$"
+            },
+            "code": {
+              "const": "build-brief.http_400"
+            },
+            "message": {
+              "const": "Request refused"
+            }
+          }
+        }
+      }
+    },
+    "problem401": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["data", "meta"],
+      "properties": {
+        "data": {
+          "type": "null"
+        },
+        "meta": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requestId", "code", "message"],
+          "properties": {
+            "requestId": {
+              "type": "string",
+              "pattern": "^req_[a-z0-9]{16,64}$"
+            },
+            "code": {
+              "const": "build-brief.http_401"
+            },
+            "message": {
+              "const": "Request refused"
+            }
+          }
+        }
+      }
+    },
+    "problem403": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["data", "meta"],
+      "properties": {
+        "data": {
+          "type": "null"
+        },
+        "meta": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requestId", "code", "message"],
+          "properties": {
+            "requestId": {
+              "type": "string",
+              "pattern": "^req_[a-z0-9]{16,64}$"
+            },
+            "code": {
+              "const": "build-brief.http_403"
+            },
+            "message": {
+              "const": "Request refused"
+            }
+          }
+        }
+      }
+    },
+    "problem404": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["data", "meta"],
+      "properties": {
+        "data": {
+          "type": "null"
+        },
+        "meta": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requestId", "code", "message"],
+          "properties": {
+            "requestId": {
+              "type": "string",
+              "pattern": "^req_[a-z0-9]{16,64}$"
+            },
+            "code": {
+              "const": "build-brief.http_404"
+            },
+            "message": {
+              "const": "Request refused"
+            }
+          }
+        }
+      }
+    },
+    "problem405": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["data", "meta"],
+      "properties": {
+        "data": {
+          "type": "null"
+        },
+        "meta": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requestId", "code", "message"],
+          "properties": {
+            "requestId": {
+              "type": "string",
+              "pattern": "^req_[a-z0-9]{16,64}$"
+            },
+            "code": {
+              "const": "build-brief.http_405"
+            },
+            "message": {
+              "const": "Request refused"
+            }
+          }
+        }
+      }
+    },
+    "problem409": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["data", "meta"],
+      "properties": {
+        "data": {
+          "type": "null"
+        },
+        "meta": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requestId", "code", "message"],
+          "properties": {
+            "requestId": {
+              "type": "string",
+              "pattern": "^req_[a-z0-9]{16,64}$"
+            },
+            "code": {
+              "const": "build-brief.http_409"
+            },
+            "message": {
+              "const": "Request refused"
+            }
+          }
+        }
+      }
+    },
+    "problem412": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["data", "meta"],
+      "properties": {
+        "data": {
+          "type": "null"
+        },
+        "meta": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requestId", "code", "message"],
+          "properties": {
+            "requestId": {
+              "type": "string",
+              "pattern": "^req_[a-z0-9]{16,64}$"
+            },
+            "code": {
+              "const": "build-brief.http_412"
+            },
+            "message": {
+              "const": "Request refused"
+            }
+          }
+        }
+      }
+    },
+    "problem413": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["data", "meta"],
+      "properties": {
+        "data": {
+          "type": "null"
+        },
+        "meta": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requestId", "code", "message"],
+          "properties": {
+            "requestId": {
+              "type": "string",
+              "pattern": "^req_[a-z0-9]{16,64}$"
+            },
+            "code": {
+              "const": "build-brief.http_413"
+            },
+            "message": {
+              "const": "Request refused"
+            }
+          }
+        }
+      }
+    },
+    "problem415": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["data", "meta"],
+      "properties": {
+        "data": {
+          "type": "null"
+        },
+        "meta": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requestId", "code", "message"],
+          "properties": {
+            "requestId": {
+              "type": "string",
+              "pattern": "^req_[a-z0-9]{16,64}$"
+            },
+            "code": {
+              "const": "build-brief.http_415"
+            },
+            "message": {
+              "const": "Request refused"
+            }
+          }
+        }
+      }
+    },
+    "problem422": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["data", "meta"],
+      "properties": {
+        "data": {
+          "type": "null"
+        },
+        "meta": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requestId", "code", "message"],
+          "properties": {
+            "requestId": {
+              "type": "string",
+              "pattern": "^req_[a-z0-9]{16,64}$"
+            },
+            "code": {
+              "const": "build-brief.http_422"
+            },
+            "message": {
+              "const": "Request refused"
+            }
+          }
+        }
+      }
+    },
+    "problem503": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["data", "meta"],
+      "properties": {
+        "data": {
+          "type": "null"
+        },
+        "meta": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["requestId", "code", "message"],
+          "properties": {
+            "requestId": {
+              "type": "string",
+              "pattern": "^req_[a-z0-9]{16,64}$"
+            },
+            "code": {
+              "const": "build-brief.http_503"
+            },
+            "message": {
+              "const": "Request refused"
+            }
+          }
+        }
+      }
+    },
+    "acceptanceSubjectResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["data", "meta"],
+      "properties": {
+        "data": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["body", "bodyDigest"],
+          "properties": {
+            "body": {
+              "$ref": "build-brief-body.v2.schema.json"
+            },
+            "bodyDigest": {
+              "$ref": "common.v1.schema.json#/$defs/sha256"
+            }
+          }
+        },
+        "meta": {
+          "$ref": "#/$defs/meta"
+        }
+      }
+    }
+  }
+}

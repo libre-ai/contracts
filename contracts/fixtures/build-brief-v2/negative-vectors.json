@@ -1,0 +1,138 @@
+{
+  "schemaVersion": "libre-ai.build-brief-negative-vectors.v2",
+  "cases": [
+    {
+      "id": "body-tamper",
+      "target": "package",
+      "path": "body.problem",
+      "value": "Substituted",
+      "expected": "build-brief.digest-invalid"
+    },
+    {
+      "id": "self-reference",
+      "target": "package",
+      "path": "body.digest",
+      "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "expected": "build-brief.schema-invalid"
+    },
+    {
+      "id": "missing-acceptance",
+      "target": "package",
+      "path": "acceptances",
+      "value": [],
+      "expected": "build-brief.schema-invalid"
+    },
+    {
+      "id": "unsigned-time-tamper",
+      "target": "package",
+      "path": "acceptances.0.statement.acceptedAt",
+      "value": "2026-09-12T10:03:00Z",
+      "expected": "build-brief.signature-invalid"
+    },
+    {
+      "id": "cross-organization",
+      "target": "package",
+      "path": "acceptances.0.statement.tenantId",
+      "value": "ten_ffffffffffffffff",
+      "expected": "build-brief.acceptance-invalid"
+    },
+    {
+      "id": "cross-version",
+      "target": "package",
+      "path": "acceptances.0.statement.specPackageVersion",
+      "value": 2,
+      "expected": "build-brief.acceptance-invalid"
+    },
+    {
+      "id": "cross-subject",
+      "target": "package",
+      "path": "acceptances.0.statement.subjectDigest",
+      "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "expected": "build-brief.acceptance-invalid"
+    },
+    {
+      "id": "self-acceptance",
+      "target": "package",
+      "path": "acceptances.0.statement.approverId",
+      "value": "fixture_author",
+      "expected": "build-brief.acceptance-invalid"
+    },
+    {
+      "id": "wrong-key",
+      "target": "context",
+      "path": "keys.0.publicKey",
+      "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "expected": "build-brief.signature-invalid"
+    },
+    {
+      "id": "key-outage",
+      "target": "context",
+      "path": "keys",
+      "value": [],
+      "expected": "build-brief.acceptance-invalid"
+    },
+    {
+      "id": "revoked-key",
+      "target": "context",
+      "path": "keys.0.status",
+      "value": "revoked",
+      "expected": "build-brief.acceptance-invalid"
+    },
+    {
+      "id": "expired-at-signature",
+      "target": "context",
+      "path": "keys.0.validUntil",
+      "value": "2026-09-12T10:00:00Z",
+      "expected": "build-brief.acceptance-invalid"
+    },
+    {
+      "id": "not-yet-valid-key",
+      "target": "context",
+      "path": "keys.0.validFrom",
+      "value": "2026-09-12T10:01:00Z",
+      "expected": "build-brief.acceptance-invalid"
+    },
+    {
+      "id": "wrong-membership-proof",
+      "target": "context",
+      "path": "keys.0.membershipRevision",
+      "value": 8,
+      "expected": "build-brief.acceptance-invalid"
+    },
+    {
+      "id": "future-acceptance",
+      "target": "context",
+      "path": "now",
+      "value": "2026-09-12T09:30:00Z",
+      "expected": "build-brief.acceptance-invalid"
+    },
+    {
+      "id": "wrong-handoff-receipt",
+      "target": "handoff",
+      "path": "acceptanceDigest",
+      "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "expected": "build-brief.handoff-invalid"
+    },
+    {
+      "id": "execution-forbidden",
+      "target": "handoff",
+      "path": "capabilities",
+      "value": ["execute"],
+      "expected": "build-brief.handoff-invalid"
+    },
+    {
+      "id": "handoff-precedes-approval",
+      "target": "handoff",
+      "path": "createdAt",
+      "value": "2026-09-12T09:59:59Z",
+      "expected": "build-brief.handoff-invalid"
+    },
+    {
+      "id": "expired-handoff",
+      "target": "handoff",
+      "path": "expiresAt",
+      "value": "2026-09-12T10:30:00Z",
+      "expected": "build-brief.handoff-invalid"
+    }
+  ]
+}

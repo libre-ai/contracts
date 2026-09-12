@@ -1,0 +1,1288 @@
+{
+  "schemaVersion": "libre-ai.build-brief-policy-vectors.v2",
+  "policyDigest": "6a9a912e861e0210bb8701f702c7def45d8d46c10c5cf6c90cfe84980b524605",
+  "matrix": {
+    "build-brief-author": {
+      "resourceKind": "spec-workspace",
+      "operations": ["author", "read", "export"]
+    },
+    "build-brief-reviewer": {
+      "resourceKind": "spec-workspace",
+      "operations": ["review", "read", "export"]
+    },
+    "build-brief-approver": {
+      "resourceKind": "spec-package",
+      "operations": ["approve", "read", "export"]
+    },
+    "build-brief-planner": {
+      "resourceKind": "agent-handoff",
+      "operations": ["plan"]
+    }
+  },
+  "cases": [
+    {
+      "id": "build-brief-author-spec-workspace-author",
+      "role": "build-brief-author",
+      "resourceKind": "spec-workspace",
+      "operation": "author",
+      "expected": "allow"
+    },
+    {
+      "id": "build-brief-author-spec-workspace-review",
+      "role": "build-brief-author",
+      "resourceKind": "spec-workspace",
+      "operation": "review",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-author-spec-workspace-approve",
+      "role": "build-brief-author",
+      "resourceKind": "spec-workspace",
+      "operation": "approve",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-author-spec-workspace-read",
+      "role": "build-brief-author",
+      "resourceKind": "spec-workspace",
+      "operation": "read",
+      "expected": "allow"
+    },
+    {
+      "id": "build-brief-author-spec-workspace-export",
+      "role": "build-brief-author",
+      "resourceKind": "spec-workspace",
+      "operation": "export",
+      "expected": "allow"
+    },
+    {
+      "id": "build-brief-author-spec-workspace-plan",
+      "role": "build-brief-author",
+      "resourceKind": "spec-workspace",
+      "operation": "plan",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-author-spec-workspace-execute",
+      "role": "build-brief-author",
+      "resourceKind": "spec-workspace",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-author-spec-workspace-start",
+      "role": "build-brief-author",
+      "resourceKind": "spec-workspace",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-author-spec-package-author",
+      "role": "build-brief-author",
+      "resourceKind": "spec-package",
+      "operation": "author",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-author-spec-package-review",
+      "role": "build-brief-author",
+      "resourceKind": "spec-package",
+      "operation": "review",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-author-spec-package-approve",
+      "role": "build-brief-author",
+      "resourceKind": "spec-package",
+      "operation": "approve",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-author-spec-package-read",
+      "role": "build-brief-author",
+      "resourceKind": "spec-package",
+      "operation": "read",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-author-spec-package-export",
+      "role": "build-brief-author",
+      "resourceKind": "spec-package",
+      "operation": "export",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-author-spec-package-plan",
+      "role": "build-brief-author",
+      "resourceKind": "spec-package",
+      "operation": "plan",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-author-spec-package-execute",
+      "role": "build-brief-author",
+      "resourceKind": "spec-package",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-author-spec-package-start",
+      "role": "build-brief-author",
+      "resourceKind": "spec-package",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-author-agent-handoff-author",
+      "role": "build-brief-author",
+      "resourceKind": "agent-handoff",
+      "operation": "author",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-author-agent-handoff-review",
+      "role": "build-brief-author",
+      "resourceKind": "agent-handoff",
+      "operation": "review",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-author-agent-handoff-approve",
+      "role": "build-brief-author",
+      "resourceKind": "agent-handoff",
+      "operation": "approve",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-author-agent-handoff-read",
+      "role": "build-brief-author",
+      "resourceKind": "agent-handoff",
+      "operation": "read",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-author-agent-handoff-export",
+      "role": "build-brief-author",
+      "resourceKind": "agent-handoff",
+      "operation": "export",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-author-agent-handoff-plan",
+      "role": "build-brief-author",
+      "resourceKind": "agent-handoff",
+      "operation": "plan",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-author-agent-handoff-execute",
+      "role": "build-brief-author",
+      "resourceKind": "agent-handoff",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-author-agent-handoff-start",
+      "role": "build-brief-author",
+      "resourceKind": "agent-handoff",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-spec-workspace-author",
+      "role": "build-brief-reviewer",
+      "resourceKind": "spec-workspace",
+      "operation": "author",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-spec-workspace-review",
+      "role": "build-brief-reviewer",
+      "resourceKind": "spec-workspace",
+      "operation": "review",
+      "expected": "allow"
+    },
+    {
+      "id": "build-brief-reviewer-spec-workspace-approve",
+      "role": "build-brief-reviewer",
+      "resourceKind": "spec-workspace",
+      "operation": "approve",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-spec-workspace-read",
+      "role": "build-brief-reviewer",
+      "resourceKind": "spec-workspace",
+      "operation": "read",
+      "expected": "allow"
+    },
+    {
+      "id": "build-brief-reviewer-spec-workspace-export",
+      "role": "build-brief-reviewer",
+      "resourceKind": "spec-workspace",
+      "operation": "export",
+      "expected": "allow"
+    },
+    {
+      "id": "build-brief-reviewer-spec-workspace-plan",
+      "role": "build-brief-reviewer",
+      "resourceKind": "spec-workspace",
+      "operation": "plan",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-spec-workspace-execute",
+      "role": "build-brief-reviewer",
+      "resourceKind": "spec-workspace",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-spec-workspace-start",
+      "role": "build-brief-reviewer",
+      "resourceKind": "spec-workspace",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-spec-package-author",
+      "role": "build-brief-reviewer",
+      "resourceKind": "spec-package",
+      "operation": "author",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-spec-package-review",
+      "role": "build-brief-reviewer",
+      "resourceKind": "spec-package",
+      "operation": "review",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-spec-package-approve",
+      "role": "build-brief-reviewer",
+      "resourceKind": "spec-package",
+      "operation": "approve",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-spec-package-read",
+      "role": "build-brief-reviewer",
+      "resourceKind": "spec-package",
+      "operation": "read",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-spec-package-export",
+      "role": "build-brief-reviewer",
+      "resourceKind": "spec-package",
+      "operation": "export",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-spec-package-plan",
+      "role": "build-brief-reviewer",
+      "resourceKind": "spec-package",
+      "operation": "plan",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-spec-package-execute",
+      "role": "build-brief-reviewer",
+      "resourceKind": "spec-package",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-spec-package-start",
+      "role": "build-brief-reviewer",
+      "resourceKind": "spec-package",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-agent-handoff-author",
+      "role": "build-brief-reviewer",
+      "resourceKind": "agent-handoff",
+      "operation": "author",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-agent-handoff-review",
+      "role": "build-brief-reviewer",
+      "resourceKind": "agent-handoff",
+      "operation": "review",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-agent-handoff-approve",
+      "role": "build-brief-reviewer",
+      "resourceKind": "agent-handoff",
+      "operation": "approve",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-agent-handoff-read",
+      "role": "build-brief-reviewer",
+      "resourceKind": "agent-handoff",
+      "operation": "read",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-agent-handoff-export",
+      "role": "build-brief-reviewer",
+      "resourceKind": "agent-handoff",
+      "operation": "export",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-agent-handoff-plan",
+      "role": "build-brief-reviewer",
+      "resourceKind": "agent-handoff",
+      "operation": "plan",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-agent-handoff-execute",
+      "role": "build-brief-reviewer",
+      "resourceKind": "agent-handoff",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-reviewer-agent-handoff-start",
+      "role": "build-brief-reviewer",
+      "resourceKind": "agent-handoff",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-spec-workspace-author",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-workspace",
+      "operation": "author",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-spec-workspace-review",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-workspace",
+      "operation": "review",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-spec-workspace-approve",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-workspace",
+      "operation": "approve",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-spec-workspace-read",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-workspace",
+      "operation": "read",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-spec-workspace-export",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-workspace",
+      "operation": "export",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-spec-workspace-plan",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-workspace",
+      "operation": "plan",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-spec-workspace-execute",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-workspace",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-spec-workspace-start",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-workspace",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-spec-package-author",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-package",
+      "operation": "author",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-spec-package-review",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-package",
+      "operation": "review",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-spec-package-approve",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-package",
+      "operation": "approve",
+      "expected": "allow"
+    },
+    {
+      "id": "build-brief-approver-spec-package-read",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-package",
+      "operation": "read",
+      "expected": "allow"
+    },
+    {
+      "id": "build-brief-approver-spec-package-export",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-package",
+      "operation": "export",
+      "expected": "allow"
+    },
+    {
+      "id": "build-brief-approver-spec-package-plan",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-package",
+      "operation": "plan",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-spec-package-execute",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-package",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-spec-package-start",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-package",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-agent-handoff-author",
+      "role": "build-brief-approver",
+      "resourceKind": "agent-handoff",
+      "operation": "author",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-agent-handoff-review",
+      "role": "build-brief-approver",
+      "resourceKind": "agent-handoff",
+      "operation": "review",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-agent-handoff-approve",
+      "role": "build-brief-approver",
+      "resourceKind": "agent-handoff",
+      "operation": "approve",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-agent-handoff-read",
+      "role": "build-brief-approver",
+      "resourceKind": "agent-handoff",
+      "operation": "read",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-agent-handoff-export",
+      "role": "build-brief-approver",
+      "resourceKind": "agent-handoff",
+      "operation": "export",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-agent-handoff-plan",
+      "role": "build-brief-approver",
+      "resourceKind": "agent-handoff",
+      "operation": "plan",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-agent-handoff-execute",
+      "role": "build-brief-approver",
+      "resourceKind": "agent-handoff",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-approver-agent-handoff-start",
+      "role": "build-brief-approver",
+      "resourceKind": "agent-handoff",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-spec-workspace-author",
+      "role": "build-brief-planner",
+      "resourceKind": "spec-workspace",
+      "operation": "author",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-spec-workspace-review",
+      "role": "build-brief-planner",
+      "resourceKind": "spec-workspace",
+      "operation": "review",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-spec-workspace-approve",
+      "role": "build-brief-planner",
+      "resourceKind": "spec-workspace",
+      "operation": "approve",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-spec-workspace-read",
+      "role": "build-brief-planner",
+      "resourceKind": "spec-workspace",
+      "operation": "read",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-spec-workspace-export",
+      "role": "build-brief-planner",
+      "resourceKind": "spec-workspace",
+      "operation": "export",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-spec-workspace-plan",
+      "role": "build-brief-planner",
+      "resourceKind": "spec-workspace",
+      "operation": "plan",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-spec-workspace-execute",
+      "role": "build-brief-planner",
+      "resourceKind": "spec-workspace",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-spec-workspace-start",
+      "role": "build-brief-planner",
+      "resourceKind": "spec-workspace",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-spec-package-author",
+      "role": "build-brief-planner",
+      "resourceKind": "spec-package",
+      "operation": "author",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-spec-package-review",
+      "role": "build-brief-planner",
+      "resourceKind": "spec-package",
+      "operation": "review",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-spec-package-approve",
+      "role": "build-brief-planner",
+      "resourceKind": "spec-package",
+      "operation": "approve",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-spec-package-read",
+      "role": "build-brief-planner",
+      "resourceKind": "spec-package",
+      "operation": "read",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-spec-package-export",
+      "role": "build-brief-planner",
+      "resourceKind": "spec-package",
+      "operation": "export",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-spec-package-plan",
+      "role": "build-brief-planner",
+      "resourceKind": "spec-package",
+      "operation": "plan",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-spec-package-execute",
+      "role": "build-brief-planner",
+      "resourceKind": "spec-package",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-spec-package-start",
+      "role": "build-brief-planner",
+      "resourceKind": "spec-package",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-agent-handoff-author",
+      "role": "build-brief-planner",
+      "resourceKind": "agent-handoff",
+      "operation": "author",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-agent-handoff-review",
+      "role": "build-brief-planner",
+      "resourceKind": "agent-handoff",
+      "operation": "review",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-agent-handoff-approve",
+      "role": "build-brief-planner",
+      "resourceKind": "agent-handoff",
+      "operation": "approve",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-agent-handoff-read",
+      "role": "build-brief-planner",
+      "resourceKind": "agent-handoff",
+      "operation": "read",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-agent-handoff-export",
+      "role": "build-brief-planner",
+      "resourceKind": "agent-handoff",
+      "operation": "export",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-agent-handoff-plan",
+      "role": "build-brief-planner",
+      "resourceKind": "agent-handoff",
+      "operation": "plan",
+      "expected": "allow"
+    },
+    {
+      "id": "build-brief-planner-agent-handoff-execute",
+      "role": "build-brief-planner",
+      "resourceKind": "agent-handoff",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "build-brief-planner-agent-handoff-start",
+      "role": "build-brief-planner",
+      "resourceKind": "agent-handoff",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-spec-workspace-author",
+      "role": "approver",
+      "resourceKind": "spec-workspace",
+      "operation": "author",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-spec-workspace-review",
+      "role": "approver",
+      "resourceKind": "spec-workspace",
+      "operation": "review",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-spec-workspace-approve",
+      "role": "approver",
+      "resourceKind": "spec-workspace",
+      "operation": "approve",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-spec-workspace-read",
+      "role": "approver",
+      "resourceKind": "spec-workspace",
+      "operation": "read",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-spec-workspace-export",
+      "role": "approver",
+      "resourceKind": "spec-workspace",
+      "operation": "export",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-spec-workspace-plan",
+      "role": "approver",
+      "resourceKind": "spec-workspace",
+      "operation": "plan",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-spec-workspace-execute",
+      "role": "approver",
+      "resourceKind": "spec-workspace",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-spec-workspace-start",
+      "role": "approver",
+      "resourceKind": "spec-workspace",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-spec-package-author",
+      "role": "approver",
+      "resourceKind": "spec-package",
+      "operation": "author",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-spec-package-review",
+      "role": "approver",
+      "resourceKind": "spec-package",
+      "operation": "review",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-spec-package-approve",
+      "role": "approver",
+      "resourceKind": "spec-package",
+      "operation": "approve",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-spec-package-read",
+      "role": "approver",
+      "resourceKind": "spec-package",
+      "operation": "read",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-spec-package-export",
+      "role": "approver",
+      "resourceKind": "spec-package",
+      "operation": "export",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-spec-package-plan",
+      "role": "approver",
+      "resourceKind": "spec-package",
+      "operation": "plan",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-spec-package-execute",
+      "role": "approver",
+      "resourceKind": "spec-package",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-spec-package-start",
+      "role": "approver",
+      "resourceKind": "spec-package",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-agent-handoff-author",
+      "role": "approver",
+      "resourceKind": "agent-handoff",
+      "operation": "author",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-agent-handoff-review",
+      "role": "approver",
+      "resourceKind": "agent-handoff",
+      "operation": "review",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-agent-handoff-approve",
+      "role": "approver",
+      "resourceKind": "agent-handoff",
+      "operation": "approve",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-agent-handoff-read",
+      "role": "approver",
+      "resourceKind": "agent-handoff",
+      "operation": "read",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-agent-handoff-export",
+      "role": "approver",
+      "resourceKind": "agent-handoff",
+      "operation": "export",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-agent-handoff-plan",
+      "role": "approver",
+      "resourceKind": "agent-handoff",
+      "operation": "plan",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-agent-handoff-execute",
+      "role": "approver",
+      "resourceKind": "agent-handoff",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "approver-agent-handoff-start",
+      "role": "approver",
+      "resourceKind": "agent-handoff",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-spec-workspace-author",
+      "role": "operator",
+      "resourceKind": "spec-workspace",
+      "operation": "author",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-spec-workspace-review",
+      "role": "operator",
+      "resourceKind": "spec-workspace",
+      "operation": "review",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-spec-workspace-approve",
+      "role": "operator",
+      "resourceKind": "spec-workspace",
+      "operation": "approve",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-spec-workspace-read",
+      "role": "operator",
+      "resourceKind": "spec-workspace",
+      "operation": "read",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-spec-workspace-export",
+      "role": "operator",
+      "resourceKind": "spec-workspace",
+      "operation": "export",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-spec-workspace-plan",
+      "role": "operator",
+      "resourceKind": "spec-workspace",
+      "operation": "plan",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-spec-workspace-execute",
+      "role": "operator",
+      "resourceKind": "spec-workspace",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-spec-workspace-start",
+      "role": "operator",
+      "resourceKind": "spec-workspace",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-spec-package-author",
+      "role": "operator",
+      "resourceKind": "spec-package",
+      "operation": "author",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-spec-package-review",
+      "role": "operator",
+      "resourceKind": "spec-package",
+      "operation": "review",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-spec-package-approve",
+      "role": "operator",
+      "resourceKind": "spec-package",
+      "operation": "approve",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-spec-package-read",
+      "role": "operator",
+      "resourceKind": "spec-package",
+      "operation": "read",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-spec-package-export",
+      "role": "operator",
+      "resourceKind": "spec-package",
+      "operation": "export",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-spec-package-plan",
+      "role": "operator",
+      "resourceKind": "spec-package",
+      "operation": "plan",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-spec-package-execute",
+      "role": "operator",
+      "resourceKind": "spec-package",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-spec-package-start",
+      "role": "operator",
+      "resourceKind": "spec-package",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-agent-handoff-author",
+      "role": "operator",
+      "resourceKind": "agent-handoff",
+      "operation": "author",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-agent-handoff-review",
+      "role": "operator",
+      "resourceKind": "agent-handoff",
+      "operation": "review",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-agent-handoff-approve",
+      "role": "operator",
+      "resourceKind": "agent-handoff",
+      "operation": "approve",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-agent-handoff-read",
+      "role": "operator",
+      "resourceKind": "agent-handoff",
+      "operation": "read",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-agent-handoff-export",
+      "role": "operator",
+      "resourceKind": "agent-handoff",
+      "operation": "export",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-agent-handoff-plan",
+      "role": "operator",
+      "resourceKind": "agent-handoff",
+      "operation": "plan",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-agent-handoff-execute",
+      "role": "operator",
+      "resourceKind": "agent-handoff",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "operator-agent-handoff-start",
+      "role": "operator",
+      "resourceKind": "agent-handoff",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-spec-workspace-author",
+      "role": "orchestrator",
+      "resourceKind": "spec-workspace",
+      "operation": "author",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-spec-workspace-review",
+      "role": "orchestrator",
+      "resourceKind": "spec-workspace",
+      "operation": "review",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-spec-workspace-approve",
+      "role": "orchestrator",
+      "resourceKind": "spec-workspace",
+      "operation": "approve",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-spec-workspace-read",
+      "role": "orchestrator",
+      "resourceKind": "spec-workspace",
+      "operation": "read",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-spec-workspace-export",
+      "role": "orchestrator",
+      "resourceKind": "spec-workspace",
+      "operation": "export",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-spec-workspace-plan",
+      "role": "orchestrator",
+      "resourceKind": "spec-workspace",
+      "operation": "plan",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-spec-workspace-execute",
+      "role": "orchestrator",
+      "resourceKind": "spec-workspace",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-spec-workspace-start",
+      "role": "orchestrator",
+      "resourceKind": "spec-workspace",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-spec-package-author",
+      "role": "orchestrator",
+      "resourceKind": "spec-package",
+      "operation": "author",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-spec-package-review",
+      "role": "orchestrator",
+      "resourceKind": "spec-package",
+      "operation": "review",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-spec-package-approve",
+      "role": "orchestrator",
+      "resourceKind": "spec-package",
+      "operation": "approve",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-spec-package-read",
+      "role": "orchestrator",
+      "resourceKind": "spec-package",
+      "operation": "read",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-spec-package-export",
+      "role": "orchestrator",
+      "resourceKind": "spec-package",
+      "operation": "export",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-spec-package-plan",
+      "role": "orchestrator",
+      "resourceKind": "spec-package",
+      "operation": "plan",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-spec-package-execute",
+      "role": "orchestrator",
+      "resourceKind": "spec-package",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-spec-package-start",
+      "role": "orchestrator",
+      "resourceKind": "spec-package",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-agent-handoff-author",
+      "role": "orchestrator",
+      "resourceKind": "agent-handoff",
+      "operation": "author",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-agent-handoff-review",
+      "role": "orchestrator",
+      "resourceKind": "agent-handoff",
+      "operation": "review",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-agent-handoff-approve",
+      "role": "orchestrator",
+      "resourceKind": "agent-handoff",
+      "operation": "approve",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-agent-handoff-read",
+      "role": "orchestrator",
+      "resourceKind": "agent-handoff",
+      "operation": "read",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-agent-handoff-export",
+      "role": "orchestrator",
+      "resourceKind": "agent-handoff",
+      "operation": "export",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-agent-handoff-plan",
+      "role": "orchestrator",
+      "resourceKind": "agent-handoff",
+      "operation": "plan",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-agent-handoff-execute",
+      "role": "orchestrator",
+      "resourceKind": "agent-handoff",
+      "operation": "execute",
+      "expected": "deny"
+    },
+    {
+      "id": "orchestrator-agent-handoff-start",
+      "role": "orchestrator",
+      "resourceKind": "agent-handoff",
+      "operation": "start",
+      "expected": "deny"
+    },
+    {
+      "id": "cross-organization",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-package",
+      "operation": "approve",
+      "mutation": "cross-organization",
+      "expected": "deny"
+    },
+    {
+      "id": "other-resource",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-package",
+      "operation": "approve",
+      "mutation": "other-resource",
+      "expected": "deny"
+    },
+    {
+      "id": "stale-membership",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-package",
+      "operation": "approve",
+      "mutation": "stale-membership",
+      "expected": "deny"
+    },
+    {
+      "id": "missing-membership",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-package",
+      "operation": "approve",
+      "mutation": "missing-membership",
+      "expected": "deny"
+    },
+    {
+      "id": "missing-ownership",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-package",
+      "operation": "approve",
+      "mutation": "missing-ownership",
+      "expected": "deny"
+    },
+    {
+      "id": "expired-token",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-package",
+      "operation": "approve",
+      "mutation": "expired-token",
+      "expected": "deny"
+    },
+    {
+      "id": "contributor",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-package",
+      "operation": "approve",
+      "mutation": "contributor",
+      "expected": "deny"
+    },
+    {
+      "id": "subject-substitution",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-package",
+      "operation": "approve",
+      "mutation": "subject-substitution",
+      "expected": "deny"
+    },
+    {
+      "id": "attenuation-escalation",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-package",
+      "operation": "approve",
+      "mutation": "attenuation-escalation",
+      "expected": "deny"
+    },
+    {
+      "id": "attenuation-context",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-package",
+      "operation": "approve",
+      "mutation": "attenuation-context",
+      "expected": "deny"
+    },
+    {
+      "id": "attenuation-denial",
+      "role": "build-brief-approver",
+      "resourceKind": "spec-package",
+      "operation": "approve",
+      "mutation": "attenuation-denial",
+      "expected": "deny"
+    }
+  ]
+}

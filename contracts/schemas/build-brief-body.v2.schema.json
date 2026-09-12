@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.libre-ai.fr/schemas/build-brief-body.v2.schema.json",
+  "title": "Libre AI build-brief-body v2 candidate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "tenantId",
+    "version",
+    "problem",
+    "actors",
+    "requirements",
+    "decisions",
+    "contracts",
+    "risks",
+    "acceptanceCriteria",
+    "contributors"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "libre-ai.build-brief-body.v2"
+    },
+    "id": {
+      "$ref": "common.v1.schema.json#/$defs/urn"
+    },
+    "tenantId": {
+      "$ref": "common.v1.schema.json#/$defs/tenantId"
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "problem": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 5000
+    },
+    "actors": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "common.v1.schema.json#/$defs/identifier"
+      }
+    },
+    "requirements": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "text", "priority"],
+        "properties": {
+          "id": {
+            "$ref": "common.v1.schema.json#/$defs/identifier"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 5000
+          },
+          "priority": {
+            "enum": ["must", "should", "could"]
+          }
+        }
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "maxItems": 1000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "status", "decision"],
+        "properties": {
+          "id": {
+            "$ref": "common.v1.schema.json#/$defs/identifier"
+          },
+          "status": {
+            "const": "accepted"
+          },
+          "decision": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 5000
+          }
+        }
+      }
+    },
+    "contracts": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1000,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "common.v1.schema.json#/$defs/urn"
+      }
+    },
+    "risks": {
+      "type": "array",
+      "maxItems": 1000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "severity", "control"],
+        "properties": {
+          "id": {
+            "$ref": "common.v1.schema.json#/$defs/identifier"
+          },
+          "severity": {
+            "enum": ["low", "medium", "high", "critical"]
+          },
+          "control": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 5000
+          }
+        }
+      }
+    },
+    "acceptanceCriteria": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "observable", "evidenceRule"],
+        "properties": {
+          "id": {
+            "$ref": "common.v1.schema.json#/$defs/identifier"
+          },
+          "observable": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 5000
+          },
+          "evidenceRule": {
+            "$ref": "common.v1.schema.json#/$defs/identifier"
+          }
+        }
+      }
+    },
+    "contributors": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "common.v1.schema.json#/$defs/identifier"
+      }
+    }
+  }
+}

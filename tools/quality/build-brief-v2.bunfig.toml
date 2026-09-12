@@ -1,0 +1,9 @@
+[test]
+coverage = true
+coverageReporter = ["text", "lcov"]
+coverageDir = "./coverage/build-brief-v2"
+coverageThreshold = 0.9
+coverageSkipTestFiles = true
+# Existing dependency verifiers retain their own full-suite tests. This threshold
+# gates the new Build Brief verifier; the explicit Biscuit CLI recipe is separate.
+coveragePathIgnorePatterns = ["**/authorized-execution.ts", "**/policy-core-raw-inputs.ts"]

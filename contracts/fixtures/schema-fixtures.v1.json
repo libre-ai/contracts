@@ -4228,6 +4228,472 @@
           "value": "P1D"
         }
       ]
+    },
+    {
+      "schema": "build-brief-body.v2.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.build-brief-body.v2",
+        "id": "urn:libre-ai:spec-package:fixture-1",
+        "tenantId": "ten_1234567890abcdef",
+        "version": 1,
+        "problem": "Préparer un plan vérifiable.",
+        "actors": ["fixture_actor"],
+        "requirements": [
+          {
+            "id": "req_one",
+            "text": "Produce a plan only",
+            "priority": "must"
+          }
+        ],
+        "decisions": [
+          {
+            "id": "dec_one",
+            "status": "accepted",
+            "decision": "No execution authority"
+          }
+        ],
+        "contracts": ["urn:libre-ai:contract:fixture-1"],
+        "risks": [
+          {
+            "id": "risk_one",
+            "severity": "high",
+            "control": "Refuse execution"
+          }
+        ],
+        "acceptanceCriteria": [
+          {
+            "id": "criterion_one",
+            "observable": "Plan is inspectable",
+            "evidenceRule": "fixture_evidence"
+          }
+        ],
+        "contributors": ["fixture_author"]
+      },
+      "invalidMutations": [
+        {
+          "name": "wrong-version",
+          "path": "/schemaVersion",
+          "value": "libre-ai.invalid.v1"
+        },
+        {
+          "name": "missing-version",
+          "path": "/schemaVersion",
+          "remove": true
+        }
+      ]
+    },
+    {
+      "schema": "build-brief-acceptance.v2.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.build-brief-acceptance.v2",
+        "statement": {
+          "schemaVersion": "libre-ai.build-brief-acceptance-statement.v2",
+          "id": "urn:libre-ai:acceptance:fixture-1",
+          "tenantId": "ten_1234567890abcdef",
+          "specPackageId": "urn:libre-ai:spec-package:fixture-1",
+          "specPackageVersion": 1,
+          "subjectDigest": "8ce800b3d67a50c97f9ac97ec14706983a7bcb42c948d53254ab8cc6cd9b9dc1",
+          "approverId": "fixture_approver",
+          "role": "build-brief-approver",
+          "acceptedAt": "2026-09-12T10:00:00Z",
+          "membershipRevision": 7,
+          "policyDigest": "6a9a912e861e0210bb8701f702c7def45d8d46c10c5cf6c90cfe84980b524605",
+          "signingKeyId": "fixture_acceptance_key"
+        },
+        "signature": "AyN4mO3ufZStGkbGRl8KyBD41PaVlxzY9Zkv1Rpqy06cLtAgyTYWfUJD5LwNQ6VLDGvtHzTWSwyl3pJ8KeXOBA"
+      },
+      "invalidMutations": [
+        {
+          "name": "wrong-version",
+          "path": "/schemaVersion",
+          "value": "libre-ai.invalid.v1"
+        },
+        {
+          "name": "missing-version",
+          "path": "/schemaVersion",
+          "remove": true
+        }
+      ]
+    },
+    {
+      "schema": "spec-package.v2.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.spec-package.v2",
+        "body": {
+          "schemaVersion": "libre-ai.build-brief-body.v2",
+          "id": "urn:libre-ai:spec-package:fixture-1",
+          "tenantId": "ten_1234567890abcdef",
+          "version": 1,
+          "problem": "Préparer un plan vérifiable.",
+          "actors": ["fixture_actor"],
+          "requirements": [
+            {
+              "id": "req_one",
+              "text": "Produce a plan only",
+              "priority": "must"
+            }
+          ],
+          "decisions": [
+            {
+              "id": "dec_one",
+              "status": "accepted",
+              "decision": "No execution authority"
+            }
+          ],
+          "contracts": ["urn:libre-ai:contract:fixture-1"],
+          "risks": [
+            {
+              "id": "risk_one",
+              "severity": "high",
+              "control": "Refuse execution"
+            }
+          ],
+          "acceptanceCriteria": [
+            {
+              "id": "criterion_one",
+              "observable": "Plan is inspectable",
+              "evidenceRule": "fixture_evidence"
+            }
+          ],
+          "contributors": ["fixture_author"]
+        },
+        "bodyDigest": "8ce800b3d67a50c97f9ac97ec14706983a7bcb42c948d53254ab8cc6cd9b9dc1",
+        "acceptances": [
+          {
+            "schemaVersion": "libre-ai.build-brief-acceptance.v2",
+            "statement": {
+              "schemaVersion": "libre-ai.build-brief-acceptance-statement.v2",
+              "id": "urn:libre-ai:acceptance:fixture-1",
+              "tenantId": "ten_1234567890abcdef",
+              "specPackageId": "urn:libre-ai:spec-package:fixture-1",
+              "specPackageVersion": 1,
+              "subjectDigest": "8ce800b3d67a50c97f9ac97ec14706983a7bcb42c948d53254ab8cc6cd9b9dc1",
+              "approverId": "fixture_approver",
+              "role": "build-brief-approver",
+              "acceptedAt": "2026-09-12T10:00:00Z",
+              "membershipRevision": 7,
+              "policyDigest": "6a9a912e861e0210bb8701f702c7def45d8d46c10c5cf6c90cfe84980b524605",
+              "signingKeyId": "fixture_acceptance_key"
+            },
+            "signature": "AyN4mO3ufZStGkbGRl8KyBD41PaVlxzY9Zkv1Rpqy06cLtAgyTYWfUJD5LwNQ6VLDGvtHzTWSwyl3pJ8KeXOBA"
+          }
+        ]
+      },
+      "invalidMutations": [
+        {
+          "name": "wrong-version",
+          "path": "/schemaVersion",
+          "value": "libre-ai.invalid.v1"
+        },
+        {
+          "name": "missing-version",
+          "path": "/schemaVersion",
+          "remove": true
+        }
+      ]
+    },
+    {
+      "schema": "agent-handoff.v2.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.agent-handoff.v2",
+        "id": "urn:libre-ai:handoff:fixture-1",
+        "tenantId": "ten_1234567890abcdef",
+        "specPackageId": "urn:libre-ai:spec-package:fixture-1",
+        "specPackageVersion": 1,
+        "specPackageDigest": "8ce800b3d67a50c97f9ac97ec14706983a7bcb42c948d53254ab8cc6cd9b9dc1",
+        "acceptanceDigest": "e04768609d8794084019e671e5b2b9478447e9ada5cee935ad8dc8c4645aa1a6",
+        "capabilities": ["plan"],
+        "acceptanceCriteria": ["criterion_one"],
+        "createdAt": "2026-09-12T10:01:00Z",
+        "expiresAt": "2026-09-12T11:00:00Z"
+      },
+      "invalidMutations": [
+        {
+          "name": "wrong-version",
+          "path": "/schemaVersion",
+          "value": "libre-ai.invalid.v1"
+        },
+        {
+          "name": "missing-version",
+          "path": "/schemaVersion",
+          "remove": true
+        }
+      ]
+    },
+    {
+      "schema": "retention-policy.v3.schema.json",
+      "valid": {
+        "schemaVersion": "libre-ai.retention-policy.v3",
+        "authority": "urn:libre-ai:decision:adr-0042-auth-minimal-lookup-and-organization-rls",
+        "status": "candidate",
+        "backupExpiry": "P35D",
+        "restoreOrder": ["execution-deletion-tombstone", "orchestrator-execution-record"],
+        "authRestore": {
+          "discard": [
+            "browser-session",
+            "auth-session-locator",
+            "auth-oidc-transaction",
+            "auth-membership-projection",
+            "auth-subject-locator"
+          ],
+          "invalidateCookieAndTransactionEpochs": true,
+          "replayDeletionEvidence": true,
+          "rebuildFrom": "independently-current-sessions-authority",
+          "missingAuthority": "deny-reopening",
+          "controllerState": "absent-memory-only",
+          "preserveInheritedExecutionRestoreOrder": true
+        },
+        "rules": [
+          {
+            "id": "browser-session",
+            "owner": "auth-web",
+            "dataClass": "browser-session-and-revocation",
+            "location": "postgresql",
+            "mode": "fixed",
+            "trigger": "expiry",
+            "defaultRetention": "P1D",
+            "maximumActiveHours": 12
+          },
+          {
+            "id": "practices-progress",
+            "owner": "practices",
+            "dataClass": "learner-progress",
+            "location": "local",
+            "mode": "until-delete",
+            "trigger": "explicit-delete"
+          },
+          {
+            "id": "radar-body",
+            "owner": "radar",
+            "dataClass": "untrusted-fetch-body",
+            "location": "memory",
+            "mode": "immediate",
+            "trigger": "normalization"
+          },
+          {
+            "id": "radar-quarantine",
+            "owner": "radar",
+            "dataClass": "failed-fetch-quarantine",
+            "location": "cellar",
+            "mode": "fixed",
+            "trigger": "failure",
+            "defaultRetention": "P7D"
+          },
+          {
+            "id": "radar-normalized",
+            "owner": "radar",
+            "dataClass": "normalized-item-and-decision",
+            "location": "postgresql",
+            "mode": "fixed",
+            "trigger": "creation",
+            "defaultRetention": "P90D",
+            "configurable": {
+              "minimum": "P7D",
+              "maximum": "P365D"
+            }
+          },
+          {
+            "id": "notebook-content",
+            "owner": "notebook",
+            "dataClass": "block-link-index",
+            "location": "local",
+            "mode": "until-delete",
+            "trigger": "explicit-delete"
+          },
+          {
+            "id": "boussole-local",
+            "owner": "boussole",
+            "dataClass": "response-and-result",
+            "location": "local",
+            "mode": "until-delete",
+            "trigger": "explicit-delete"
+          },
+          {
+            "id": "sessions-presence",
+            "owner": "sessions",
+            "dataClass": "participant-presence",
+            "location": "redis",
+            "mode": "fixed",
+            "trigger": "last-seen",
+            "defaultRetention": "P1D"
+          },
+          {
+            "id": "sessions-content",
+            "owner": "sessions",
+            "dataClass": "session-content-and-outcome",
+            "location": "postgresql",
+            "mode": "fixed",
+            "trigger": "creation",
+            "defaultRetention": "P90D",
+            "configurable": {
+              "minimum": "P7D",
+              "maximum": "P365D"
+            }
+          },
+          {
+            "id": "model-snapshot",
+            "owner": "model-policy",
+            "dataClass": "accepted-model-snapshot",
+            "location": "postgresql",
+            "mode": "while-referenced",
+            "trigger": "reference-release",
+            "postReferenceRetention": "P5Y"
+          },
+          {
+            "id": "spec-package",
+            "owner": "specifications",
+            "dataClass": "accepted-spec-package",
+            "location": "postgresql",
+            "mode": "while-referenced",
+            "trigger": "reference-release",
+            "postReferenceRetention": "P5Y"
+          },
+          {
+            "id": "mission-record",
+            "owner": "missions",
+            "dataClass": "mission-event-and-evidence-reference",
+            "location": "postgresql",
+            "mode": "fixed",
+            "trigger": "creation",
+            "defaultRetention": "P1Y",
+            "configurable": {
+              "maximum": "P6Y"
+            }
+          },
+          {
+            "id": "operational-log",
+            "owner": "operations",
+            "dataClass": "content-free-operational-log",
+            "location": "logs",
+            "mode": "fixed",
+            "trigger": "creation",
+            "defaultRetention": "P30D"
+          },
+          {
+            "id": "proof-artifact",
+            "owner": "proof-artifact",
+            "dataClass": "proof-and-artifact-manifest",
+            "location": "postgresql",
+            "mode": "while-referenced",
+            "trigger": "reference-release"
+          },
+          {
+            "id": "encrypted-backup",
+            "owner": "backup",
+            "dataClass": "encrypted-disaster-recovery-snapshot",
+            "location": "backup",
+            "mode": "fixed",
+            "trigger": "creation",
+            "defaultRetention": "P35D"
+          },
+          {
+            "id": "orchestrator-execution-record",
+            "owner": "agent-orchestrator",
+            "dataClass": "content-free-authorized-execution-state",
+            "location": "postgresql",
+            "mode": "fixed",
+            "trigger": "creation",
+            "defaultRetention": "P1Y",
+            "configurable": {
+              "maximum": "P6Y"
+            },
+            "effectiveRetentionEqualsRule": "mission-record"
+          },
+          {
+            "id": "execution-deletion-tombstone",
+            "owner": "agent-orchestrator",
+            "dataClass": "content-free-execution-deletion-tombstone",
+            "location": "postgresql",
+            "mode": "fixed",
+            "trigger": "explicit-delete",
+            "defaultRetention": "P35D"
+          },
+          {
+            "id": "auth-oidc-transaction",
+            "owner": "auth-web",
+            "dataClass": "one-use-oidc-transaction",
+            "location": "postgresql",
+            "mode": "one-use",
+            "maximumActiveSeconds": 600,
+            "deleteOn": ["consume-before-provider-exchange", "expiry"],
+            "postEventRetentionSeconds": 0
+          },
+          {
+            "id": "auth-session-locator",
+            "owner": "auth-web",
+            "dataClass": "keyed-session-locator",
+            "location": "postgresql",
+            "mode": "dependent",
+            "dependsOn": "browser-session",
+            "deleteOn": ["source-deletion"],
+            "invalidateOn": ["source-digest-rotation"],
+            "coupling": "atomic",
+            "independentRetention": false
+          },
+          {
+            "id": "auth-membership-projection",
+            "owner": "auth-web",
+            "dataClass": "current-membership-projection",
+            "location": "postgresql",
+            "mode": "dependent",
+            "sourceOwner": "sessions",
+            "sourceAuthority": "sessions-current-membership",
+            "deleteOn": [
+              "source-deletion",
+              "source-revocation",
+              "projection-invalidation",
+              "freshness-unverifiable"
+            ],
+            "independentRetention": false,
+            "historicalSnapshotsAllowed": false,
+            "requires": "verified-current-source"
+          },
+          {
+            "id": "auth-subject-locator",
+            "owner": "auth-web",
+            "dataClass": "verified-subject-locator",
+            "location": "postgresql",
+            "mode": "dependent",
+            "dependsOn": "auth-membership-projection",
+            "sourceOwner": "sessions",
+            "deleteOn": [
+              "source-deletion",
+              "source-revocation",
+              "projection-invalidation",
+              "freshness-unverifiable"
+            ],
+            "coupling": "atomic-with-projection",
+            "independentRetention": false
+          }
+        ]
+      },
+      "invalidMutations": [
+        {
+          "name": "OIDC exceeds ten minutes",
+          "path": "/rules/17/maximumActiveSeconds",
+          "value": 601
+        },
+        {
+          "name": "retained consumed verifier",
+          "path": "/rules/17/postEventRetentionSeconds",
+          "value": 1
+        },
+        {
+          "name": "projection becomes source authority",
+          "path": "/rules/19/sourceOwner",
+          "value": "auth-web"
+        },
+        {
+          "name": "restore skips deletion evidence",
+          "path": "/authRestore/replayDeletionEvidence",
+          "value": false
+        },
+        {
+          "name": "inherited retention changed",
+          "path": "/rules/0/defaultRetention",
+          "value": "P2D"
+        }
+      ]
     }
   ]
 }
