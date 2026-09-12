@@ -183,6 +183,32 @@ if (await Bun.file(apiPath).exists()) {
       }
     });
   }
+  const viewCases = (
+    await Bun.file("contracts/fixtures/build-brief-api-v2/view-responses.json").json()
+  ).cases as { id: string; accepted: boolean; response: unknown }[];
+  for (const fixture of viewCases) {
+    test(`filtered view response: ${fixture.id}`, () => {
+      const ref =
+        api.paths["/v2/specifications/workspaces/{workspaceId}/views/{view}"]?.get?.responses["200"]
+          ?.content["application/json"]?.schema.$ref;
+      if (!ref) throw new Error("Missing actual view response schema");
+      expect(validator(ref)(fixture.response)).toBe(fixture.accepted);
+    });
+  }
+  test("full workspace preserves all decision states independently of its filtered view", () => {
+    const endpoint = endpoints.find((item) => item.operationId === "getSpecWorkspace");
+    if (!endpoint) throw new Error("Missing workspace fixture");
+    const ref =
+      api.paths[endpoint.path]?.get?.responses["200"]?.content["application/json"]?.schema.$ref;
+    if (!ref) throw new Error("Missing actual workspace response schema");
+    for (const status of ["open", "accepted", "rejected"]) {
+      const response = changed(endpoint.response, {
+        path: ["data", "decisions"],
+        value: [{ id: "decision_one", status, decision: "Synthetic decision" }],
+      });
+      expect(validator(ref)(response)).toBe(true);
+    }
+  });
   test("all inherited contract bytes and catalog records remain exact", async () => {
     const inventory = (await Bun.file(inventoryPath).json()) as {
       hashes: Record<string, string>;

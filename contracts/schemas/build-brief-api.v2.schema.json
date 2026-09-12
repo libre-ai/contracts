@@ -474,7 +474,7 @@
                         "$ref": "common.v1.schema.json#/$defs/identifier"
                       },
                       "status": {
-                        "enum": ["open", "accepted", "rejected"]
+                        "const": "open"
                       },
                       "decision": {
                         "type": "string",
@@ -506,8 +506,8 @@
                 },
                 "items": {
                   "type": "array",
-                  "minItems": 0,
-                  "maxItems": 100,
+                  "minItems": 1,
+                  "maxItems": 1,
                   "items": {
                     "type": "object",
                     "additionalProperties": false,
@@ -537,7 +537,19 @@
               }
             },
             "meta": {
-              "$ref": "#/$defs/pageMeta"
+              "allOf": [
+                {
+                  "$ref": "#/$defs/pageMeta"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "nextCursor": {
+                      "type": "null"
+                    }
+                  }
+                }
+              ]
             }
           }
         },
