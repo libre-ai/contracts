@@ -188,6 +188,7 @@ test("restore requires every prerequisite; old backup membership never suffices"
     sessionsDiscarded: true,
     oidcDiscarded: true,
     locatorsDiscarded: true,
+    membershipProjectionsDiscarded: true,
     epochsInvalidated: true,
     deletionEvidenceReplayed: true,
     currentSessionsAuthority: true,
@@ -197,6 +198,10 @@ test("restore requires every prerequisite; old backup membership never suffices"
   expect(evaluateAuthRetention(input)).toBe("rebuild");
   for (const key of Object.keys(input).filter((key) => key !== "kind")) {
     expect(evaluateAuthRetention({ ...input, [key]: false })).toBe("deny");
+    const absent: Record<string, unknown> = { ...input };
+    delete absent[key];
+    expect(evaluateAuthRetention(absent)).toBe("deny");
+    expect(evaluateAuthRetention({ ...input, [key]: "true" })).toBe("deny");
   }
 });
 

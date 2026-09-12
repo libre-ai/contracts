@@ -476,7 +476,8 @@
         "deletionEvidenceReplayed": true,
         "currentSessionsAuthority": true,
         "controllerStateAbsent": true,
-        "executionDeletionOrderPreserved": true
+        "executionDeletionOrderPreserved": true,
+        "membershipProjectionsDiscarded": true
       },
       "expected": "rebuild"
     },
@@ -491,7 +492,8 @@
         "deletionEvidenceReplayed": true,
         "currentSessionsAuthority": true,
         "controllerStateAbsent": true,
-        "executionDeletionOrderPreserved": true
+        "executionDeletionOrderPreserved": true,
+        "membershipProjectionsDiscarded": true
       },
       "expected": "deny"
     },
@@ -506,7 +508,8 @@
         "deletionEvidenceReplayed": true,
         "currentSessionsAuthority": true,
         "controllerStateAbsent": true,
-        "executionDeletionOrderPreserved": true
+        "executionDeletionOrderPreserved": true,
+        "membershipProjectionsDiscarded": true
       },
       "expected": "deny"
     },
@@ -521,7 +524,8 @@
         "deletionEvidenceReplayed": true,
         "currentSessionsAuthority": true,
         "controllerStateAbsent": true,
-        "executionDeletionOrderPreserved": true
+        "executionDeletionOrderPreserved": true,
+        "membershipProjectionsDiscarded": true
       },
       "expected": "deny"
     },
@@ -536,7 +540,8 @@
         "deletionEvidenceReplayed": true,
         "currentSessionsAuthority": true,
         "controllerStateAbsent": true,
-        "executionDeletionOrderPreserved": true
+        "executionDeletionOrderPreserved": true,
+        "membershipProjectionsDiscarded": true
       },
       "expected": "deny"
     },
@@ -551,7 +556,8 @@
         "deletionEvidenceReplayed": false,
         "currentSessionsAuthority": true,
         "controllerStateAbsent": true,
-        "executionDeletionOrderPreserved": true
+        "executionDeletionOrderPreserved": true,
+        "membershipProjectionsDiscarded": true
       },
       "expected": "deny"
     },
@@ -566,7 +572,8 @@
         "deletionEvidenceReplayed": true,
         "currentSessionsAuthority": false,
         "controllerStateAbsent": true,
-        "executionDeletionOrderPreserved": true
+        "executionDeletionOrderPreserved": true,
+        "membershipProjectionsDiscarded": true
       },
       "expected": "deny"
     },
@@ -581,7 +588,8 @@
         "deletionEvidenceReplayed": true,
         "currentSessionsAuthority": true,
         "controllerStateAbsent": false,
-        "executionDeletionOrderPreserved": true
+        "executionDeletionOrderPreserved": true,
+        "membershipProjectionsDiscarded": true
       },
       "expected": "deny"
     },
@@ -596,7 +604,55 @@
         "deletionEvidenceReplayed": true,
         "currentSessionsAuthority": true,
         "controllerStateAbsent": true,
-        "executionDeletionOrderPreserved": false
+        "executionDeletionOrderPreserved": false,
+        "membershipProjectionsDiscarded": true
+      },
+      "expected": "deny"
+    },
+    {
+      "id": "restore-membership-projections-false",
+      "input": {
+        "kind": "restore",
+        "sessionsDiscarded": true,
+        "oidcDiscarded": true,
+        "locatorsDiscarded": true,
+        "epochsInvalidated": true,
+        "deletionEvidenceReplayed": true,
+        "currentSessionsAuthority": true,
+        "controllerStateAbsent": true,
+        "executionDeletionOrderPreserved": true,
+        "membershipProjectionsDiscarded": false
+      },
+      "expected": "deny"
+    },
+    {
+      "id": "restore-membership-projections-nonboolean",
+      "input": {
+        "kind": "restore",
+        "sessionsDiscarded": true,
+        "oidcDiscarded": true,
+        "locatorsDiscarded": true,
+        "epochsInvalidated": true,
+        "deletionEvidenceReplayed": true,
+        "currentSessionsAuthority": true,
+        "controllerStateAbsent": true,
+        "executionDeletionOrderPreserved": true,
+        "membershipProjectionsDiscarded": "true"
+      },
+      "expected": "deny"
+    },
+    {
+      "id": "restore-membership-projections-absent",
+      "input": {
+        "kind": "restore",
+        "sessionsDiscarded": true,
+        "oidcDiscarded": true,
+        "locatorsDiscarded": true,
+        "epochsInvalidated": true,
+        "deletionEvidenceReplayed": true,
+        "currentSessionsAuthority": true,
+        "controllerStateAbsent": true,
+        "executionDeletionOrderPreserved": true
       },
       "expected": "deny"
     }

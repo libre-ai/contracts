@@ -70,6 +70,7 @@ export function evaluateAuthRetention(value: unknown): Decision {
       "sessionsDiscarded",
       "oidcDiscarded",
       "locatorsDiscarded",
+      "membershipProjectionsDiscarded",
       "epochsInvalidated",
       "deletionEvidenceReplayed",
       "currentSessionsAuthority",
