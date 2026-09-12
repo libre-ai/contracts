@@ -1,5 +1,6 @@
 // Authority-fixture verifier, not a product SDK or an implementation admission.
-import { createHash, createPublicKey, verify } from "node:crypto";
+import { createHash } from "node:crypto";
+import { ed25519 } from "@noble/curves/ed25519.js";
 import Ajv2020 from "ajv/dist/2020";
 import addFormats from "ajv-formats";
 import { canonicalJson } from "./authorized-execution";
@@ -74,6 +75,30 @@ interface Handoff {
   acceptanceCriteria: string[];
   createdAt: string;
   expiresAt: string;
+}
+/** Candidate-v2 profile only: no native verifier or permissive ZIP215 fallback. */
+export function isBuildBriefPoint(bytes: Uint8Array): boolean {
+  try {
+    const point = ed25519.Point.fromBytes(bytes, false);
+    return !point.is0() && point.isTorsionFree() && Buffer.from(point.toBytes()).equals(bytes);
+  } catch {
+    return false;
+  }
+}
+export function verifyBuildBriefSignature(
+  signature: Uint8Array,
+  message: Uint8Array,
+  publicKey: Uint8Array,
+): boolean {
+  if (
+    signature.length !== 64 ||
+    !isBuildBriefPoint(publicKey) ||
+    !isBuildBriefPoint(signature.subarray(0, 32))
+  )
+    return false;
+  // Noble checks canonical scalar range and the Ed25519 equation. Both points
+  // are prime-order here, so cofactor verification cannot admit torsion aliases.
+  return ed25519.verify(signature, message, publicKey, { zip215: false });
 }
 export function buildBriefDigest(value: unknown): string {
   return createHash("sha256").update(canonicalJson(value)).digest("hex");
@@ -163,17 +188,13 @@ export function verifyBuildBriefCandidate(
         signature.toString("base64url") !== receipt.signature
       )
         return ["build-brief.signature-invalid"];
-      const publicKey = createPublicKey({
-        key: Buffer.concat([Buffer.from("302a300506032b6570032100", "hex"), publicBytes]),
-        format: "der",
-        type: "spki",
-      });
       const message = Buffer.concat([
         Buffer.from(statement.schemaVersion, "utf8"),
         Buffer.from([0]),
         Buffer.from(buildBriefDigest(statement), "hex"),
       ]);
-      if (!verify(null, message, publicKey, signature)) return ["build-brief.signature-invalid"];
+      if (!verifyBuildBriefSignature(signature, message, publicBytes))
+        return ["build-brief.signature-invalid"];
     } catch {
       return ["build-brief.signature-invalid"];
     }

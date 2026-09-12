@@ -74,7 +74,26 @@ and the key validity interval. Unknown/ambiguous/unavailable or revoked keys fai
 closed; acceptedAt must fall inside the validity interval [from, until). The
 membership proof is authenticated historical acceptance evidence, not a claim that
 the key registry itself is the membership authority. Key possession alone is not
-approval authorization. The fixture context compresses these trusted facts solely
+approval authorization. Registry admission AND each verification must reject a key
+unless its 32-byte compressed Edwards encoding is canonical, on-curve,
+nonidentity and in the prime-order subgroup. The signature R point has exactly
+the same conditions. Canonical re-encoding must equal the supplied bytes; no
+unreduced-y, negative-zero, torsion or mixed-order encoding is accepted. The scalar
+S is the canonical little-endian integer in [0, L), where L is the Ed25519
+prime subgroup order. The identity is forbidden even though it is torsion-free.
+These conditions are stronger than generic runtime/ZIP215 signature acceptance.
+
+The candidate verifier uses pinned `@noble/curves` 2.4.0 point decoding with
+ZIP215 disabled, nonidentity and torsion-free checks, canonical roundtrip, then
+Ed25519 verify with `{ zip215: false }` (including scalar range validation).
+No native-crypto fallback, blacklist or custom field/curve arithmetic is permitted.
+Both points are prime-order, so a cofactored equation cannot admit torsion aliases.
+A separate Rust oracle applies curve25519-dalek 4.1.3 canonical point/nonidentity/
+torsion-free checks and ed25519-dalek 2.2.0 `verify_strict` to identical vectors.
+Consumers must enforce all these conditions, not just a method named strict.
+This is ordinary Ed25519 over the domain-separated message above, not Ed25519ph.
+Dependency provenance, license and audit-scope limits are recorded in
+`docs/reviews/build-brief-v2-crypto-dependencies.md`. The fixture context compresses these trusted facts solely
 for testing; it does not implement their issuance or storage.
 
 A later membership revision is not silently substituted into a historical
@@ -156,3 +175,18 @@ migration, v1 adapter or deployed authorization is delivered here. Consumer work
 must vendor a byte-exact immutable authority revision, prove Artifact cross-runtime
 vectors and raw boundaries, and test actual HTTP/storage/authorization behavior.
 Passing Contracts tests does not satisfy those consumer gates.
+
+
+## Persistence and historical-proof inheritance — consumer gate
+
+`retention.v1.json` already defines `spec-package` / `accepted-spec-package`:
+PostgreSQL authority, while-referenced, reference-release trigger and P5Y after
+reference release. Splitting an accepted package into stable body and detached
+acceptance does not grant a new retention period, independent proof class or
+unlimited key/membership history. Body, acceptance and required verification
+proofs must remain jointly verifiable for the accepted package's permitted life.
+Before consumer implementation, an explicit reviewed storage mapping must bind
+those rows/references and historical membership/provenance/key-status evidence to
+the existing class and lifecycle; distinguish current revocation from historical
+validity, and qualify deletion/restore consistency. No such storage mapping,
+privacy exception or new retention policy is approved by this candidate.

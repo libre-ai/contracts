@@ -40,3 +40,14 @@ implemented. Source fixture authorship and synthetic keys imply no real authorit
 Verification completed before authoring commit: schema/semantic/crypto tests and
 179 real Biscuit CLI vectors; exact canonical CI check recorded in private ledger.
 Role reviews and consumer conformance remain pending, not checked off by this plan.
+
+
+## Corrective increment CRYPTO-P1-01
+
+- Reproduce both identity-key forgeries as failing end-to-end package/handoff tests.
+- Use an exact audited-library-family dependency; verify npm signature/provenance
+  and licenses; qualify explicit strict point/subgroup/scalar semantics locally.
+- Retain 24 point and 51 signature vectors; run Bun and independent pinned Rust
+  dalek oracle, including all torsion/mixed-order classes and malformed encodings.
+- Amend candidate-only normative semantics and retention-mapping consumer gate;
+  preserve locked v1 authorities and submit a new immutable commit for role review.

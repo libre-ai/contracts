@@ -172,3 +172,48 @@ test("handoff carries every criterion of a schema-valid body beyond the v1 limit
     "build-brief.digest-invalid",
   ]);
 });
+
+for (const problem of ["Independent forged content one", "Independent forged content two"]) {
+  test(`CRYPTO-P1-01 refuses identity-key forgery: ${problem}`, () => {
+    const forged = structuredClone(vector.package);
+    const forgedContext = structuredClone(context);
+    required(forgedContext.keys).forEach((key) => {
+      key.publicKey = Buffer.concat([Buffer.from([1]), Buffer.alloc(31)]).toString("base64url");
+    });
+    forged.body.problem = problem;
+    forged.bodyDigest = buildBriefDigest(forged.body);
+    const acceptance = required(forged.acceptances[0]);
+    acceptance.statement.subjectDigest = forged.bodyDigest;
+    acceptance.signature = Buffer.concat([Buffer.from([1]), Buffer.alloc(63)]).toString(
+      "base64url",
+    );
+    const handoff = {
+      ...vector.handoff,
+      specPackageDigest: forged.bodyDigest,
+      acceptanceDigest: buildBriefDigest(acceptance),
+    };
+    expect(verifyBuildBriefCandidate(bytes(forged), forgedContext, bytes(handoff))).toEqual([
+      "build-brief.signature-invalid",
+    ]);
+  });
+}
+
+import strictVectors from "../../contracts/fixtures/build-brief-v2/strict-ed25519-vectors.json";
+import { isBuildBriefPoint, verifyBuildBriefSignature } from "./build-brief-v2";
+
+for (const point of strictVectors.points) {
+  test(`strict point admissibility: ${point.id}`, () => {
+    expect(isBuildBriefPoint(Buffer.from(point.point, "base64url"))).toBe(point.admissible);
+  });
+}
+for (const signature of strictVectors.signatures) {
+  test(`strict Ed25519 cross-runtime vector: ${signature.id}`, () => {
+    expect(
+      verifyBuildBriefSignature(
+        Buffer.from(signature.signature, "base64url"),
+        Buffer.from(signature.message, "base64url"),
+        Buffer.from(signature.publicKey, "base64url"),
+      ),
+    ).toBe(signature.accepted);
+  });
+}
