@@ -29,6 +29,7 @@ const authorizedExecutionIds = [
 const remainingCandidateIds = [
   "agent-handoff-v2",
   "build-brief-acceptance-v2",
+  "build-brief-api-v2",
   "build-brief-body-v2",
   "build-brief-policy-v2",
   "boussole-method-v3",
@@ -36,6 +37,7 @@ const remainingCandidateIds = [
   "local-comparison-v3",
   "public-vote-dataset-v3",
   "spec-package-v2",
+  "specifications-api-v2",
 ] as const;
 
 const reviewedAuthorityHashes = {

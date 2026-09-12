@@ -1,0 +1,83 @@
+{
+  "schemaVersion": "libre-ai.schema-fixtures.v1",
+  "cases": [
+    {
+      "schema": "build-brief-api.v2.schema.json",
+      "valid": {
+        "data": {
+          "schemaVersion": "libre-ai.spec-package.v2",
+          "body": {
+            "schemaVersion": "libre-ai.build-brief-body.v2",
+            "id": "urn:libre-ai:spec-package:fixture-1",
+            "tenantId": "ten_1234567890abcdef",
+            "version": 1,
+            "problem": "Pr\u00e9parer un plan v\u00e9rifiable.",
+            "actors": ["fixture_actor"],
+            "requirements": [
+              {
+                "id": "req_one",
+                "text": "Produce a plan only",
+                "priority": "must"
+              }
+            ],
+            "decisions": [
+              {
+                "id": "dec_one",
+                "status": "accepted",
+                "decision": "No execution authority"
+              }
+            ],
+            "contracts": ["urn:libre-ai:contract:fixture-1"],
+            "risks": [
+              {
+                "id": "risk_one",
+                "severity": "high",
+                "control": "Refuse execution"
+              }
+            ],
+            "acceptanceCriteria": [
+              {
+                "id": "criterion_one",
+                "observable": "Plan is inspectable",
+                "evidenceRule": "fixture_evidence"
+              }
+            ],
+            "contributors": ["fixture_author"]
+          },
+          "bodyDigest": "8ce800b3d67a50c97f9ac97ec14706983a7bcb42c948d53254ab8cc6cd9b9dc1",
+          "acceptances": [
+            {
+              "schemaVersion": "libre-ai.build-brief-acceptance.v2",
+              "statement": {
+                "schemaVersion": "libre-ai.build-brief-acceptance-statement.v2",
+                "id": "urn:libre-ai:acceptance:fixture-1",
+                "tenantId": "ten_1234567890abcdef",
+                "specPackageId": "urn:libre-ai:spec-package:fixture-1",
+                "specPackageVersion": 1,
+                "subjectDigest": "8ce800b3d67a50c97f9ac97ec14706983a7bcb42c948d53254ab8cc6cd9b9dc1",
+                "approverId": "fixture_approver",
+                "role": "build-brief-approver",
+                "acceptedAt": "2026-09-12T10:00:00Z",
+                "membershipRevision": 7,
+                "policyDigest": "6a9a912e861e0210bb8701f702c7def45d8d46c10c5cf6c90cfe84980b524605",
+                "signingKeyId": "fixture_acceptance_key"
+              },
+              "signature": "AyN4mO3ufZStGkbGRl8KyBD41PaVlxzY9Zkv1Rpqy06cLtAgyTYWfUJD5LwNQ6VLDGvtHzTWSwyl3pJ8KeXOBA"
+            }
+          ]
+        },
+        "meta": {
+          "requestId": "req_0123456789abcdef",
+          "revision": 1
+        }
+      },
+      "invalidMutations": [
+        {
+          "name": "unsafe-revision",
+          "path": "/meta/revision",
+          "value": 9007199254740992
+        }
+      ]
+    }
+  ]
+}

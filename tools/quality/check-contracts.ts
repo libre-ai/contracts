@@ -514,6 +514,17 @@ const fixtureCases = (
     ? rawFixtures.cases
     : []
 ) as FixtureCase[];
+const briefApiFixtures = await Bun.file(
+  "contracts/fixtures/build-brief-api-v2/schema-fixtures.json",
+).json();
+if (
+  !isRecord(briefApiFixtures) ||
+  briefApiFixtures.schemaVersion !== "libre-ai.schema-fixtures.v1" ||
+  !Array.isArray(briefApiFixtures.cases) ||
+  briefApiFixtures.cases.length !== 1
+) {
+  failures.push("build-brief-api-v2: invalid separate schema fixture inventory");
+} else fixtureCases.push(...(briefApiFixtures.cases as FixtureCase[]));
 if (fixtureCases.length === 0)
   failures.push("contracts/fixtures/schema-fixtures.v1.json: no fixtures");
 const fixtureNames = new Set<string>();
@@ -996,7 +1007,16 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/open
         const browserMutation = security.some((item) => isRecord(item) && "sessionCookie" in item);
         if (browserMutation && !parameterRefs.includes("#/components/parameters/CsrfToken"))
           failures.push(`${path}:${method}:${route}: missing CSRF token`);
-        if (!isRecord(rawOperation.responses) || !("default" in rawOperation.responses))
+        const closedBriefRefusals =
+          path === "contracts/openapi/specifications.v2.yaml" &&
+          isRecord(rawOperation.responses) &&
+          ["400", "401", "403", "404", "405", "409", "412", "413", "415", "422", "503"].every(
+            (status) => status in (rawOperation.responses as JsonRecord),
+          );
+        if (
+          !isRecord(rawOperation.responses) ||
+          (!("default" in rawOperation.responses) && !closedBriefRefusals)
+        )
           failures.push(`${path}:${method}:${route}: missing refusal response`);
       }
     }
