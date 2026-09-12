@@ -9,7 +9,7 @@ is separate and receives no acceptance or modification from this proposal.
 ## Established authority and provenance
 
 The companion JSON pins inspected committed inputs by revision and SHA-256. The
-Missions input is `58c05b184d1241f41fe44840df619080b09c91f1`. The owner selected the
+Missions input is `5f6e6acd5f888f67a908117780f42e0e0f3ee0eb`. The owner selected the
 minimal pre-authentication index followed by organization RLS. Subsequent explicit
 coordination retained Sessions as membership authority and limited maintenance scope
 to ephemeral operational capabilities without history. These instructions clarify

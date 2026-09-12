@@ -49,15 +49,15 @@
     },
     {
       "repository": "missions-big-bang-candidate",
-      "revision": "58c05b184d1241f41fe44840df619080b09c91f1",
+      "revision": "5f6e6acd5f888f67a908117780f42e0e0f3ee0eb",
       "path": "docs/auth-durable-design.md",
-      "sha256": "807fb5019e9a1bba429876282126db6a45eb80aeaddebe8403f133bf2bd131ad"
+      "sha256": "f0df941e5973abef1d25db6bf4e60d1bc9381723eeb133418b635d6f813fb644"
     },
     {
       "repository": "missions-big-bang-candidate",
-      "revision": "58c05b184d1241f41fe44840df619080b09c91f1",
+      "revision": "5f6e6acd5f888f67a908117780f42e0e0f3ee0eb",
       "path": "docs/auth-durable-plan.md",
-      "sha256": "070abc0bc1f82389c1f3233920c2094eeec975c4ef31819132d22564f0094673"
+      "sha256": "e82e5e94fbacdc769c59ff7e2cd27ef231ec8aeff1a7cd95f5e3e63e26ae1908"
     }
   ],
   "inheritedPolicy": {
