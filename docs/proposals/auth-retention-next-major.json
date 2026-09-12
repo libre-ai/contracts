@@ -1,0 +1,191 @@
+{
+  "schemaVersion": "libre-ai.auth-retention-proposal.v1",
+  "status": "scoped-proposal-not-authority",
+  "intendedPolicyMajor": 3,
+  "registeredInCatalog": false,
+  "persistenceAdmitted": false,
+  "sources": [
+    {
+      "repository": "contracts-auth-retention-next-major-candidate",
+      "revision": "8d199f2ab61e903be7e251efbdd7f48803c333dc",
+      "path": "contracts/data/retention.v1.json",
+      "sha256": "4ed6d68cabac39352636cba1afd061db61c1e4340080619b5a1f7aba5be99c47"
+    },
+    {
+      "repository": "contracts-auth-retention-next-major-candidate",
+      "revision": "8d199f2ab61e903be7e251efbdd7f48803c333dc",
+      "path": "contracts/data/retention.v2.json",
+      "sha256": "1622c32bf106160a524590db42bd0e8a0e7bbbadc2ee1bedd5dbb9bddef9db84"
+    },
+    {
+      "repository": "contracts-auth-retention-next-major-candidate",
+      "revision": "8d199f2ab61e903be7e251efbdd7f48803c333dc",
+      "path": "contracts/schemas/retention-policy.v2.schema.json",
+      "sha256": "1d6b10e39388451faf111ab96c1ab3085a2e3c3226bf469bdf27d3afa3a0208f"
+    },
+    {
+      "repository": "contracts-auth-retention-next-major-candidate",
+      "revision": "8d199f2ab61e903be7e251efbdd7f48803c333dc",
+      "path": "contracts/COMPATIBILITY.md",
+      "sha256": "0e69adb94bff044650895b47ca2fc50a649682c4334cc9095a2d9125618ebe17"
+    },
+    {
+      "repository": "governance-big-bang-brand-migration-design",
+      "revision": "fd62e4a67998c852f520bc06db291c6f21219ca8",
+      "path": "docs/specifications/DATA-LIFECYCLE.md",
+      "sha256": "97090da9649a9fc0feadc23d75c7441d48d937ba071b1d9303c878961f9575c0"
+    },
+    {
+      "repository": "governance-big-bang-brand-migration-design",
+      "revision": "fd62e4a67998c852f520bc06db291c6f21219ca8",
+      "path": "docs/specifications/IDENTITY-AUTHORIZATION.md",
+      "sha256": "0c430b49969d06ab2f05d68e8e0da80f62434540f57fda394dce0e06b8762adf"
+    },
+    {
+      "repository": "sessions",
+      "revision": "930c7d89c4e8b042d749d4b673c62bcc51a245ec",
+      "path": "docs/apps/sessions.md",
+      "sha256": "16946b8fdc3dd194b39a6398576c328128e5964412b218f6a0f069821dd4f1e6"
+    },
+    {
+      "repository": "missions-big-bang-candidate",
+      "revision": "58c05b184d1241f41fe44840df619080b09c91f1",
+      "path": "docs/auth-durable-design.md",
+      "sha256": "807fb5019e9a1bba429876282126db6a45eb80aeaddebe8403f133bf2bd131ad"
+    },
+    {
+      "repository": "missions-big-bang-candidate",
+      "revision": "58c05b184d1241f41fe44840df619080b09c91f1",
+      "path": "docs/auth-durable-plan.md",
+      "sha256": "070abc0bc1f82389c1f3233920c2094eeec975c4ef31819132d22564f0094673"
+    }
+  ],
+  "inheritedPolicy": {
+    "path": "contracts/data/retention.v2.json",
+    "sha256": "1622c32bf106160a524590db42bd0e8a0e7bbbadc2ee1bedd5dbb9bddef9db84",
+    "preserveEveryExistingRule": true,
+    "backupMaximum": "P35D"
+  },
+  "mappings": [
+    {
+      "object": "browser-session",
+      "recordOwner": "auth-web",
+      "authority": "existing-browser-session-rule",
+      "newDataClass": false,
+      "maximumActiveSeconds": 43200,
+      "maximumAfterEffectiveExpirySeconds": 86400,
+      "effectiveExpiry": "minimum of idle expiry, absolute expiry and applicable revocation time"
+    },
+    {
+      "object": "session-locator",
+      "recordOwner": "auth-web",
+      "authority": "derived-from-browser-session",
+      "newDataClass": true,
+      "fields": ["keyedCookieDigest", "organizationId", "sessionId"],
+      "independentRetention": false,
+      "deleteOn": ["parent-deletion"],
+      "invalidateOn": ["digest-rotation"],
+      "mutationCoupling": "atomic with source row"
+    },
+    {
+      "object": "oidc-transaction",
+      "recordOwner": "auth-web",
+      "authority": "prospective-adr-0042-and-reviewed-next-major",
+      "newDataClass": true,
+      "maximumActiveSeconds": 600,
+      "deleteOn": ["atomic-consume-before-provider-exchange", "expiry"],
+      "postEventRetentionSeconds": 0,
+      "restore": "discard-before-reopening"
+    },
+    {
+      "object": "membership-source",
+      "recordOwner": "sessions",
+      "authority": "DATA-LIFECYCLE ownership matrix and Sessions application protocol",
+      "newDataClass": false,
+      "lifecycle": "outside-auth-scope; preserve Sessions authority",
+      "retentionSeconds": null,
+      "projectionMayExtendSource": false,
+      "persistenceChangeProposed": false
+    },
+    {
+      "object": "current-membership-projection",
+      "recordOwner": "auth-web",
+      "sourceOwner": "sessions",
+      "authority": "disposable-current-projection-only",
+      "newDataClass": true,
+      "independentRetention": false,
+      "historicalSnapshotsAllowed": false,
+      "deleteOn": ["source-deletion", "source-revocation", "projection-invalidation"],
+      "absenceOrUnknownFreshness": "deny",
+      "crossProductTransport": "reviewed versioned contract; no direct tables"
+    },
+    {
+      "object": "subject-locator",
+      "recordOwner": "auth-web",
+      "sourceOwner": "sessions",
+      "authority": "derived-from-current-membership",
+      "newDataClass": true,
+      "fields": ["subjectDigest", "organizationId", "userId"],
+      "independentRetention": false,
+      "deleteOn": ["source-deletion", "source-revocation", "projection-invalidation"],
+      "restore": "rebuild only from independently current source after deletion replay"
+    },
+    {
+      "object": "maintenance-scope-capability",
+      "recordOwner": null,
+      "authority": "existing independently authorized controller required; this proposal appoints none",
+      "newDataClass": false,
+      "fields": [
+        "authenticatedSqlPrincipal",
+        "organizationId",
+        "closedOperationFamily",
+        "expiresAt"
+      ],
+      "maximumActiveSeconds": null,
+      "deleteOn": ["operation-completion", "revocation", "expiry"],
+      "postEventRetentionSeconds": 0,
+      "historicalSnapshotsAllowed": false,
+      "restore": "discard; reissue only under current controller authorization",
+      "storage": "memory-only-operation-capability",
+      "persistentStorageProposed": false,
+      "backupAllowed": false
+    }
+  ],
+  "unresolved": [
+    {
+      "id": "membership-projection-currentness",
+      "decision": "versioned authority transfer and deletion/revocation coupling proof; unavailable current authority denies",
+      "category": "missing-contract-and-implementation-proof-not-owner-transfer"
+    },
+    {
+      "id": "next-major-adoption",
+      "decision": "immutable architecture/security/privacy reviews and adopted Governance exception before complete catalog registration/consumer admission",
+      "category": "review-and-adoption-gate"
+    },
+    {
+      "id": "controller-confinement",
+      "decision": "qualify existing issuer and bounded operation expiry in consumer; no persistent controller metadata proposed",
+      "category": "implementation-prerequisite-not-new-retention-class"
+    }
+  ],
+  "restorePrerequisites": [
+    "discard restored sessions, session locators, OIDC transactions and controller capabilities before reopening",
+    "invalidate previous cookie and transaction HMAC epochs",
+    "replay accepted deletion evidence",
+    "rebuild membership projections and subject locators only from independently current Sessions authority",
+    "missing current authority or deletion evidence blocks reopening"
+  ],
+  "forbiddenInferences": [
+    "backup age proves current membership",
+    "hashing identity makes data non-personal",
+    "ephemeral means unbounded active lifetime",
+    "candidate passes are adoption",
+    "Auth projection owns the membership source",
+    "existing content retention defines membership retention"
+  ],
+  "outsideScope": [
+    "Sessions source membership lifecycle changes or historical proofs",
+    "persistent controller metadata",
+    "Build Brief contracts or consumers"
+  ]
+}
