@@ -1,0 +1,604 @@
+{
+  "schemaVersion": "libre-ai.auth-retention-vectors.v1",
+  "scope": "synthetic conformance; no storage or adoption proof",
+  "cases": [
+    {
+      "id": "oidc-1--1",
+      "input": {
+        "kind": "oidc",
+        "createdAtMs": 1000,
+        "expiresAtMs": 1001,
+        "nowMs": 1000,
+        "consumed": false
+      },
+      "expected": "retain"
+    },
+    {
+      "id": "oidc-1-0",
+      "input": {
+        "kind": "oidc",
+        "createdAtMs": 1000,
+        "expiresAtMs": 1001,
+        "nowMs": 1001,
+        "consumed": false
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "oidc-1-1",
+      "input": {
+        "kind": "oidc",
+        "createdAtMs": 1000,
+        "expiresAtMs": 1001,
+        "nowMs": 1002,
+        "consumed": false
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "oidc-501--1",
+      "input": {
+        "kind": "oidc",
+        "createdAtMs": 1000,
+        "expiresAtMs": 1501,
+        "nowMs": 1500,
+        "consumed": false
+      },
+      "expected": "retain"
+    },
+    {
+      "id": "oidc-501-0",
+      "input": {
+        "kind": "oidc",
+        "createdAtMs": 1000,
+        "expiresAtMs": 1501,
+        "nowMs": 1501,
+        "consumed": false
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "oidc-501-1",
+      "input": {
+        "kind": "oidc",
+        "createdAtMs": 1000,
+        "expiresAtMs": 1501,
+        "nowMs": 1502,
+        "consumed": false
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "oidc-59999--1",
+      "input": {
+        "kind": "oidc",
+        "createdAtMs": 1000,
+        "expiresAtMs": 60999,
+        "nowMs": 60998,
+        "consumed": false
+      },
+      "expected": "retain"
+    },
+    {
+      "id": "oidc-59999-0",
+      "input": {
+        "kind": "oidc",
+        "createdAtMs": 1000,
+        "expiresAtMs": 60999,
+        "nowMs": 60999,
+        "consumed": false
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "oidc-59999-1",
+      "input": {
+        "kind": "oidc",
+        "createdAtMs": 1000,
+        "expiresAtMs": 60999,
+        "nowMs": 61000,
+        "consumed": false
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "oidc-60000--1",
+      "input": {
+        "kind": "oidc",
+        "createdAtMs": 1000,
+        "expiresAtMs": 61000,
+        "nowMs": 60999,
+        "consumed": false
+      },
+      "expected": "retain"
+    },
+    {
+      "id": "oidc-60000-0",
+      "input": {
+        "kind": "oidc",
+        "createdAtMs": 1000,
+        "expiresAtMs": 61000,
+        "nowMs": 61000,
+        "consumed": false
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "oidc-60000-1",
+      "input": {
+        "kind": "oidc",
+        "createdAtMs": 1000,
+        "expiresAtMs": 61000,
+        "nowMs": 61001,
+        "consumed": false
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "oidc-600000--1",
+      "input": {
+        "kind": "oidc",
+        "createdAtMs": 1000,
+        "expiresAtMs": 601000,
+        "nowMs": 600999,
+        "consumed": false
+      },
+      "expected": "retain"
+    },
+    {
+      "id": "oidc-600000-0",
+      "input": {
+        "kind": "oidc",
+        "createdAtMs": 1000,
+        "expiresAtMs": 601000,
+        "nowMs": 601000,
+        "consumed": false
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "oidc-600000-1",
+      "input": {
+        "kind": "oidc",
+        "createdAtMs": 1000,
+        "expiresAtMs": 601000,
+        "nowMs": 601001,
+        "consumed": false
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "oidc-consumed",
+      "input": {
+        "kind": "oidc",
+        "createdAtMs": 1000,
+        "expiresAtMs": 601000,
+        "nowMs": 1001,
+        "consumed": true
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "oidc-overlong",
+      "input": {
+        "kind": "oidc",
+        "createdAtMs": 1000,
+        "expiresAtMs": 601001,
+        "nowMs": 1001,
+        "consumed": false
+      },
+      "expected": "deny"
+    },
+    {
+      "id": "locator-True-True",
+      "input": {
+        "kind": "session-locator",
+        "sourcePresent": true,
+        "digestCurrent": true
+      },
+      "expected": "retain"
+    },
+    {
+      "id": "locator-True-False",
+      "input": {
+        "kind": "session-locator",
+        "sourcePresent": true,
+        "digestCurrent": false
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "locator-False-True",
+      "input": {
+        "kind": "session-locator",
+        "sourcePresent": false,
+        "digestCurrent": true
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "locator-False-False",
+      "input": {
+        "kind": "session-locator",
+        "sourcePresent": false,
+        "digestCurrent": false
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "membership-projection-True-True-verified-current",
+      "input": {
+        "kind": "membership-projection",
+        "sourcePresent": true,
+        "sourceActive": true,
+        "freshness": "verified-current"
+      },
+      "expected": "retain"
+    },
+    {
+      "id": "membership-projection-True-True-stale",
+      "input": {
+        "kind": "membership-projection",
+        "sourcePresent": true,
+        "sourceActive": true,
+        "freshness": "stale"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "membership-projection-True-True-unknown",
+      "input": {
+        "kind": "membership-projection",
+        "sourcePresent": true,
+        "sourceActive": true,
+        "freshness": "unknown"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "membership-projection-True-False-verified-current",
+      "input": {
+        "kind": "membership-projection",
+        "sourcePresent": true,
+        "sourceActive": false,
+        "freshness": "verified-current"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "membership-projection-True-False-stale",
+      "input": {
+        "kind": "membership-projection",
+        "sourcePresent": true,
+        "sourceActive": false,
+        "freshness": "stale"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "membership-projection-True-False-unknown",
+      "input": {
+        "kind": "membership-projection",
+        "sourcePresent": true,
+        "sourceActive": false,
+        "freshness": "unknown"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "membership-projection-False-True-verified-current",
+      "input": {
+        "kind": "membership-projection",
+        "sourcePresent": false,
+        "sourceActive": true,
+        "freshness": "verified-current"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "membership-projection-False-True-stale",
+      "input": {
+        "kind": "membership-projection",
+        "sourcePresent": false,
+        "sourceActive": true,
+        "freshness": "stale"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "membership-projection-False-True-unknown",
+      "input": {
+        "kind": "membership-projection",
+        "sourcePresent": false,
+        "sourceActive": true,
+        "freshness": "unknown"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "membership-projection-False-False-verified-current",
+      "input": {
+        "kind": "membership-projection",
+        "sourcePresent": false,
+        "sourceActive": false,
+        "freshness": "verified-current"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "membership-projection-False-False-stale",
+      "input": {
+        "kind": "membership-projection",
+        "sourcePresent": false,
+        "sourceActive": false,
+        "freshness": "stale"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "membership-projection-False-False-unknown",
+      "input": {
+        "kind": "membership-projection",
+        "sourcePresent": false,
+        "sourceActive": false,
+        "freshness": "unknown"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "subject-locator-True-True-verified-current",
+      "input": {
+        "kind": "subject-locator",
+        "sourcePresent": true,
+        "sourceActive": true,
+        "freshness": "verified-current"
+      },
+      "expected": "retain"
+    },
+    {
+      "id": "subject-locator-True-True-stale",
+      "input": {
+        "kind": "subject-locator",
+        "sourcePresent": true,
+        "sourceActive": true,
+        "freshness": "stale"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "subject-locator-True-True-unknown",
+      "input": {
+        "kind": "subject-locator",
+        "sourcePresent": true,
+        "sourceActive": true,
+        "freshness": "unknown"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "subject-locator-True-False-verified-current",
+      "input": {
+        "kind": "subject-locator",
+        "sourcePresent": true,
+        "sourceActive": false,
+        "freshness": "verified-current"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "subject-locator-True-False-stale",
+      "input": {
+        "kind": "subject-locator",
+        "sourcePresent": true,
+        "sourceActive": false,
+        "freshness": "stale"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "subject-locator-True-False-unknown",
+      "input": {
+        "kind": "subject-locator",
+        "sourcePresent": true,
+        "sourceActive": false,
+        "freshness": "unknown"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "subject-locator-False-True-verified-current",
+      "input": {
+        "kind": "subject-locator",
+        "sourcePresent": false,
+        "sourceActive": true,
+        "freshness": "verified-current"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "subject-locator-False-True-stale",
+      "input": {
+        "kind": "subject-locator",
+        "sourcePresent": false,
+        "sourceActive": true,
+        "freshness": "stale"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "subject-locator-False-True-unknown",
+      "input": {
+        "kind": "subject-locator",
+        "sourcePresent": false,
+        "sourceActive": true,
+        "freshness": "unknown"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "subject-locator-False-False-verified-current",
+      "input": {
+        "kind": "subject-locator",
+        "sourcePresent": false,
+        "sourceActive": false,
+        "freshness": "verified-current"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "subject-locator-False-False-stale",
+      "input": {
+        "kind": "subject-locator",
+        "sourcePresent": false,
+        "sourceActive": false,
+        "freshness": "stale"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "subject-locator-False-False-unknown",
+      "input": {
+        "kind": "subject-locator",
+        "sourcePresent": false,
+        "sourceActive": false,
+        "freshness": "unknown"
+      },
+      "expected": "delete"
+    },
+    {
+      "id": "restore-ready",
+      "input": {
+        "kind": "restore",
+        "sessionsDiscarded": true,
+        "oidcDiscarded": true,
+        "locatorsDiscarded": true,
+        "epochsInvalidated": true,
+        "deletionEvidenceReplayed": true,
+        "currentSessionsAuthority": true,
+        "controllerStateAbsent": true,
+        "executionDeletionOrderPreserved": true
+      },
+      "expected": "rebuild"
+    },
+    {
+      "id": "restore-missing-sessionsDiscarded",
+      "input": {
+        "kind": "restore",
+        "sessionsDiscarded": false,
+        "oidcDiscarded": true,
+        "locatorsDiscarded": true,
+        "epochsInvalidated": true,
+        "deletionEvidenceReplayed": true,
+        "currentSessionsAuthority": true,
+        "controllerStateAbsent": true,
+        "executionDeletionOrderPreserved": true
+      },
+      "expected": "deny"
+    },
+    {
+      "id": "restore-missing-oidcDiscarded",
+      "input": {
+        "kind": "restore",
+        "sessionsDiscarded": true,
+        "oidcDiscarded": false,
+        "locatorsDiscarded": true,
+        "epochsInvalidated": true,
+        "deletionEvidenceReplayed": true,
+        "currentSessionsAuthority": true,
+        "controllerStateAbsent": true,
+        "executionDeletionOrderPreserved": true
+      },
+      "expected": "deny"
+    },
+    {
+      "id": "restore-missing-locatorsDiscarded",
+      "input": {
+        "kind": "restore",
+        "sessionsDiscarded": true,
+        "oidcDiscarded": true,
+        "locatorsDiscarded": false,
+        "epochsInvalidated": true,
+        "deletionEvidenceReplayed": true,
+        "currentSessionsAuthority": true,
+        "controllerStateAbsent": true,
+        "executionDeletionOrderPreserved": true
+      },
+      "expected": "deny"
+    },
+    {
+      "id": "restore-missing-epochsInvalidated",
+      "input": {
+        "kind": "restore",
+        "sessionsDiscarded": true,
+        "oidcDiscarded": true,
+        "locatorsDiscarded": true,
+        "epochsInvalidated": false,
+        "deletionEvidenceReplayed": true,
+        "currentSessionsAuthority": true,
+        "controllerStateAbsent": true,
+        "executionDeletionOrderPreserved": true
+      },
+      "expected": "deny"
+    },
+    {
+      "id": "restore-missing-deletionEvidenceReplayed",
+      "input": {
+        "kind": "restore",
+        "sessionsDiscarded": true,
+        "oidcDiscarded": true,
+        "locatorsDiscarded": true,
+        "epochsInvalidated": true,
+        "deletionEvidenceReplayed": false,
+        "currentSessionsAuthority": true,
+        "controllerStateAbsent": true,
+        "executionDeletionOrderPreserved": true
+      },
+      "expected": "deny"
+    },
+    {
+      "id": "restore-missing-currentSessionsAuthority",
+      "input": {
+        "kind": "restore",
+        "sessionsDiscarded": true,
+        "oidcDiscarded": true,
+        "locatorsDiscarded": true,
+        "epochsInvalidated": true,
+        "deletionEvidenceReplayed": true,
+        "currentSessionsAuthority": false,
+        "controllerStateAbsent": true,
+        "executionDeletionOrderPreserved": true
+      },
+      "expected": "deny"
+    },
+    {
+      "id": "restore-missing-controllerStateAbsent",
+      "input": {
+        "kind": "restore",
+        "sessionsDiscarded": true,
+        "oidcDiscarded": true,
+        "locatorsDiscarded": true,
+        "epochsInvalidated": true,
+        "deletionEvidenceReplayed": true,
+        "currentSessionsAuthority": true,
+        "controllerStateAbsent": false,
+        "executionDeletionOrderPreserved": true
+      },
+      "expected": "deny"
+    },
+    {
+      "id": "restore-missing-executionDeletionOrderPreserved",
+      "input": {
+        "kind": "restore",
+        "sessionsDiscarded": true,
+        "oidcDiscarded": true,
+        "locatorsDiscarded": true,
+        "epochsInvalidated": true,
+        "deletionEvidenceReplayed": true,
+        "currentSessionsAuthority": true,
+        "controllerStateAbsent": true,
+        "executionDeletionOrderPreserved": false
+      },
+      "expected": "deny"
+    }
+  ]
+}

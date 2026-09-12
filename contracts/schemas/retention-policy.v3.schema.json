@@ -1,0 +1,472 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.libre-ai.fr/schemas/retention-policy.v3.schema.json",
+  "title": "Libre AI Retention Policy v3 candidate",
+  "$defs": {
+    "activeSeconds": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 600
+    },
+    "postEventSeconds": {
+      "type": "integer",
+      "const": 0
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "authority",
+    "status",
+    "backupExpiry",
+    "restoreOrder",
+    "authRestore",
+    "rules"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": "libre-ai.retention-policy.v3"
+    },
+    "authority": {
+      "const": "urn:libre-ai:decision:adr-0042-auth-minimal-lookup-and-organization-rls"
+    },
+    "status": {
+      "const": "candidate"
+    },
+    "backupExpiry": {
+      "const": "P35D"
+    },
+    "restoreOrder": {
+      "const": ["execution-deletion-tombstone", "orchestrator-execution-record"]
+    },
+    "authRestore": {
+      "const": {
+        "discard": [
+          "browser-session",
+          "auth-session-locator",
+          "auth-oidc-transaction",
+          "auth-membership-projection",
+          "auth-subject-locator"
+        ],
+        "invalidateCookieAndTransactionEpochs": true,
+        "replayDeletionEvidence": true,
+        "rebuildFrom": "independently-current-sessions-authority",
+        "missingAuthority": "deny-reopening",
+        "controllerState": "absent-memory-only",
+        "preserveInheritedExecutionRestoreOrder": true
+      }
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 21,
+      "maxItems": 21,
+      "prefixItems": [
+        {
+          "const": {
+            "id": "browser-session",
+            "owner": "auth-web",
+            "dataClass": "browser-session-and-revocation",
+            "location": "postgresql",
+            "mode": "fixed",
+            "trigger": "expiry",
+            "defaultRetention": "P1D",
+            "maximumActiveHours": 12
+          }
+        },
+        {
+          "const": {
+            "id": "practices-progress",
+            "owner": "practices",
+            "dataClass": "learner-progress",
+            "location": "local",
+            "mode": "until-delete",
+            "trigger": "explicit-delete"
+          }
+        },
+        {
+          "const": {
+            "id": "radar-body",
+            "owner": "radar",
+            "dataClass": "untrusted-fetch-body",
+            "location": "memory",
+            "mode": "immediate",
+            "trigger": "normalization"
+          }
+        },
+        {
+          "const": {
+            "id": "radar-quarantine",
+            "owner": "radar",
+            "dataClass": "failed-fetch-quarantine",
+            "location": "cellar",
+            "mode": "fixed",
+            "trigger": "failure",
+            "defaultRetention": "P7D"
+          }
+        },
+        {
+          "const": {
+            "id": "radar-normalized",
+            "owner": "radar",
+            "dataClass": "normalized-item-and-decision",
+            "location": "postgresql",
+            "mode": "fixed",
+            "trigger": "creation",
+            "defaultRetention": "P90D",
+            "configurable": {
+              "minimum": "P7D",
+              "maximum": "P365D"
+            }
+          }
+        },
+        {
+          "const": {
+            "id": "notebook-content",
+            "owner": "notebook",
+            "dataClass": "block-link-index",
+            "location": "local",
+            "mode": "until-delete",
+            "trigger": "explicit-delete"
+          }
+        },
+        {
+          "const": {
+            "id": "boussole-local",
+            "owner": "boussole",
+            "dataClass": "response-and-result",
+            "location": "local",
+            "mode": "until-delete",
+            "trigger": "explicit-delete"
+          }
+        },
+        {
+          "const": {
+            "id": "sessions-presence",
+            "owner": "sessions",
+            "dataClass": "participant-presence",
+            "location": "redis",
+            "mode": "fixed",
+            "trigger": "last-seen",
+            "defaultRetention": "P1D"
+          }
+        },
+        {
+          "const": {
+            "id": "sessions-content",
+            "owner": "sessions",
+            "dataClass": "session-content-and-outcome",
+            "location": "postgresql",
+            "mode": "fixed",
+            "trigger": "creation",
+            "defaultRetention": "P90D",
+            "configurable": {
+              "minimum": "P7D",
+              "maximum": "P365D"
+            }
+          }
+        },
+        {
+          "const": {
+            "id": "model-snapshot",
+            "owner": "model-policy",
+            "dataClass": "accepted-model-snapshot",
+            "location": "postgresql",
+            "mode": "while-referenced",
+            "trigger": "reference-release",
+            "postReferenceRetention": "P5Y"
+          }
+        },
+        {
+          "const": {
+            "id": "spec-package",
+            "owner": "specifications",
+            "dataClass": "accepted-spec-package",
+            "location": "postgresql",
+            "mode": "while-referenced",
+            "trigger": "reference-release",
+            "postReferenceRetention": "P5Y"
+          }
+        },
+        {
+          "const": {
+            "id": "mission-record",
+            "owner": "missions",
+            "dataClass": "mission-event-and-evidence-reference",
+            "location": "postgresql",
+            "mode": "fixed",
+            "trigger": "creation",
+            "defaultRetention": "P1Y",
+            "configurable": {
+              "maximum": "P6Y"
+            }
+          }
+        },
+        {
+          "const": {
+            "id": "operational-log",
+            "owner": "operations",
+            "dataClass": "content-free-operational-log",
+            "location": "logs",
+            "mode": "fixed",
+            "trigger": "creation",
+            "defaultRetention": "P30D"
+          }
+        },
+        {
+          "const": {
+            "id": "proof-artifact",
+            "owner": "proof-artifact",
+            "dataClass": "proof-and-artifact-manifest",
+            "location": "postgresql",
+            "mode": "while-referenced",
+            "trigger": "reference-release"
+          }
+        },
+        {
+          "const": {
+            "id": "encrypted-backup",
+            "owner": "backup",
+            "dataClass": "encrypted-disaster-recovery-snapshot",
+            "location": "backup",
+            "mode": "fixed",
+            "trigger": "creation",
+            "defaultRetention": "P35D"
+          }
+        },
+        {
+          "const": {
+            "id": "orchestrator-execution-record",
+            "owner": "agent-orchestrator",
+            "dataClass": "content-free-authorized-execution-state",
+            "location": "postgresql",
+            "mode": "fixed",
+            "trigger": "creation",
+            "defaultRetention": "P1Y",
+            "configurable": {
+              "maximum": "P6Y"
+            },
+            "effectiveRetentionEqualsRule": "mission-record"
+          }
+        },
+        {
+          "const": {
+            "id": "execution-deletion-tombstone",
+            "owner": "agent-orchestrator",
+            "dataClass": "content-free-execution-deletion-tombstone",
+            "location": "postgresql",
+            "mode": "fixed",
+            "trigger": "explicit-delete",
+            "defaultRetention": "P35D"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "owner",
+            "dataClass",
+            "location",
+            "mode",
+            "maximumActiveSeconds",
+            "deleteOn",
+            "postEventRetentionSeconds"
+          ],
+          "properties": {
+            "id": {
+              "const": "auth-oidc-transaction"
+            },
+            "owner": {
+              "const": "auth-web"
+            },
+            "dataClass": {
+              "const": "one-use-oidc-transaction"
+            },
+            "location": {
+              "const": "postgresql"
+            },
+            "mode": {
+              "const": "one-use"
+            },
+            "maximumActiveSeconds": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/activeSeconds"
+                },
+                {
+                  "const": 600
+                }
+              ]
+            },
+            "deleteOn": {
+              "const": ["consume-before-provider-exchange", "expiry"]
+            },
+            "postEventRetentionSeconds": {
+              "$ref": "#/$defs/postEventSeconds"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "owner",
+            "dataClass",
+            "location",
+            "mode",
+            "dependsOn",
+            "deleteOn",
+            "invalidateOn",
+            "coupling",
+            "independentRetention"
+          ],
+          "properties": {
+            "id": {
+              "const": "auth-session-locator"
+            },
+            "owner": {
+              "const": "auth-web"
+            },
+            "dataClass": {
+              "const": "keyed-session-locator"
+            },
+            "location": {
+              "const": "postgresql"
+            },
+            "mode": {
+              "const": "dependent"
+            },
+            "dependsOn": {
+              "const": "browser-session"
+            },
+            "deleteOn": {
+              "const": ["source-deletion"]
+            },
+            "invalidateOn": {
+              "const": ["source-digest-rotation"]
+            },
+            "coupling": {
+              "const": "atomic"
+            },
+            "independentRetention": {
+              "const": false
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "owner",
+            "dataClass",
+            "location",
+            "mode",
+            "sourceOwner",
+            "sourceAuthority",
+            "deleteOn",
+            "independentRetention",
+            "historicalSnapshotsAllowed",
+            "requires"
+          ],
+          "properties": {
+            "id": {
+              "const": "auth-membership-projection"
+            },
+            "owner": {
+              "const": "auth-web"
+            },
+            "dataClass": {
+              "const": "current-membership-projection"
+            },
+            "location": {
+              "const": "postgresql"
+            },
+            "mode": {
+              "const": "dependent"
+            },
+            "sourceOwner": {
+              "const": "sessions"
+            },
+            "sourceAuthority": {
+              "const": "sessions-current-membership"
+            },
+            "deleteOn": {
+              "const": [
+                "source-deletion",
+                "source-revocation",
+                "projection-invalidation",
+                "freshness-unverifiable"
+              ]
+            },
+            "independentRetention": {
+              "const": false
+            },
+            "historicalSnapshotsAllowed": {
+              "const": false
+            },
+            "requires": {
+              "const": "verified-current-source"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id",
+            "owner",
+            "dataClass",
+            "location",
+            "mode",
+            "dependsOn",
+            "sourceOwner",
+            "deleteOn",
+            "coupling",
+            "independentRetention"
+          ],
+          "properties": {
+            "id": {
+              "const": "auth-subject-locator"
+            },
+            "owner": {
+              "const": "auth-web"
+            },
+            "dataClass": {
+              "const": "verified-subject-locator"
+            },
+            "location": {
+              "const": "postgresql"
+            },
+            "mode": {
+              "const": "dependent"
+            },
+            "dependsOn": {
+              "const": "auth-membership-projection"
+            },
+            "sourceOwner": {
+              "const": "sessions"
+            },
+            "deleteOn": {
+              "const": [
+                "source-deletion",
+                "source-revocation",
+                "projection-invalidation",
+                "freshness-unverifiable"
+              ]
+            },
+            "coupling": {
+              "const": "atomic-with-projection"
+            },
+            "independentRetention": {
+              "const": false
+            }
+          }
+        }
+      ],
+      "items": false
+    }
+  }
+}

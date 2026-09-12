@@ -1167,6 +1167,40 @@
         "required": ["architecture", "security", "cryptography"],
         "dossier": "docs/reviews/build-brief-v2-review.md"
       }
+    },
+    {
+      "id": "retention-policy-schema-v3",
+      "kind": "json-schema",
+      "path": "contracts/schemas/retention-policy.v3.schema.json",
+      "owners": ["contracts"],
+      "consumers": ["missions", "data"],
+      "compatibility": "major-versioned",
+      "classification": "public",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "privacy"],
+        "dossier": "docs/reviews/auth-retention-v3-review.md"
+      }
+    },
+    {
+      "id": "retention-policy-v3",
+      "kind": "data-policy",
+      "path": "contracts/data/retention.v3.json",
+      "owners": ["contracts"],
+      "consumers": ["missions", "data"],
+      "compatibility": "major-versioned",
+      "classification": "public",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "privacy"],
+        "dossier": "docs/reviews/auth-retention-v3-review.md"
+      }
     }
   ]
 }

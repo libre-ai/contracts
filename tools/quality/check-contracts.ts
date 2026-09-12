@@ -2,6 +2,7 @@ import { lstat, realpath } from "node:fs/promises";
 import { basename, dirname, join, normalize, sep } from "node:path";
 import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020";
 import addFormats from "ajv-formats";
+import { retentionV3Failures } from "./auth-retention-v3";
 import {
   authorizedExecutionVectorDocumentFailures,
   canonicalJson,
@@ -727,14 +728,17 @@ if (!(await authorizedExecutionDigestVectorFile.exists())) {
 
 const retentionV1Validator = validatorByName.get("retention-policy.v1.schema.json");
 const retentionV2Validator = validatorByName.get("retention-policy.v2.schema.json");
+const retentionV3Validator = validatorByName.get("retention-policy.v3.schema.json");
 const retentionV1Authority = await Bun.file("contracts/data/retention.v1.json").json();
 for (const path of managedPaths.filter((item) => item.startsWith("contracts/data/"))) {
   try {
     const policy = await Bun.file(path).json();
     const retentionValidator =
-      isRecord(policy) && policy.schemaVersion === "libre-ai.retention-policy.v2"
-        ? retentionV2Validator
-        : retentionV1Validator;
+      isRecord(policy) && policy.schemaVersion === "libre-ai.retention-policy.v3"
+        ? retentionV3Validator
+        : isRecord(policy) && policy.schemaVersion === "libre-ai.retention-policy.v2"
+          ? retentionV2Validator
+          : retentionV1Validator;
     if (!retentionValidator?.(policy)) {
       failures.push(`${path}: invalid retention policy: ${safeErrors(retentionValidator?.errors)}`);
       continue;
@@ -748,6 +752,10 @@ for (const path of managedPaths.filter((item) => item.startsWith("contracts/data
     const ruleIds = retentionRules.map((rule) => rule.id);
     if (new Set(ruleIds).size !== ruleIds.length)
       failures.push(`${path}: duplicate retention rule id`);
+    if (policy.schemaVersion === "libre-ai.retention-policy.v3") {
+      for (const failure of retentionV3Failures(policy)) failures.push(`${path}: ${failure}`);
+      continue;
+    }
     if (policy.schemaVersion === "libre-ai.retention-policy.v2") {
       for (const failure of retentionPolicyV2Failures(retentionV1Authority, policy)) {
         failures.push(`${path}: ${failure}`);

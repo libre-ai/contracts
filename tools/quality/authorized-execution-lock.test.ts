@@ -36,6 +36,8 @@ const remainingCandidateIds = [
   "local-comparison-v3",
   "public-vote-dataset-v3",
   "spec-package-v2",
+  "retention-policy-schema-v3",
+  "retention-policy-v3",
 ] as const;
 
 const reviewedAuthorityHashes = {
