@@ -1082,6 +1082,91 @@
       "compatibility": "major-versioned",
       "classification": "public",
       "status": "locked"
+    },
+    {
+      "id": "build-brief-body-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/build-brief-body.v2.schema.json",
+      "owners": ["contracts"],
+      "consumers": ["missions", "artifacts", "authz-biscuit"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "cryptography"],
+        "dossier": "docs/reviews/build-brief-v2-review.md"
+      }
+    },
+    {
+      "id": "build-brief-acceptance-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/build-brief-acceptance.v2.schema.json",
+      "owners": ["contracts"],
+      "consumers": ["missions", "artifacts", "authz-biscuit"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "cryptography"],
+        "dossier": "docs/reviews/build-brief-v2-review.md"
+      }
+    },
+    {
+      "id": "spec-package-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/spec-package.v2.schema.json",
+      "owners": ["contracts"],
+      "consumers": ["missions", "artifacts", "authz-biscuit"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "cryptography"],
+        "dossier": "docs/reviews/build-brief-v2-review.md"
+      }
+    },
+    {
+      "id": "agent-handoff-v2",
+      "kind": "json-schema",
+      "path": "contracts/schemas/agent-handoff.v2.schema.json",
+      "owners": ["contracts"],
+      "consumers": ["missions", "artifacts", "authz-biscuit"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "cryptography"],
+        "dossier": "docs/reviews/build-brief-v2-review.md"
+      }
+    },
+    {
+      "id": "build-brief-policy-v2",
+      "kind": "biscuit-policy",
+      "path": "contracts/authz/build-brief-v2.datalog",
+      "owners": ["contracts"],
+      "consumers": ["missions", "artifacts", "authz-biscuit"],
+      "compatibility": "major-versioned",
+      "classification": "tenant-private",
+      "status": "candidate",
+      "review": {
+        "state": "pending-independent-agent-review",
+        "reviewerKind": "agent",
+        "separation": "role-scoped-review-pass",
+        "required": ["architecture", "security", "cryptography"],
+        "dossier": "docs/reviews/build-brief-v2-review.md"
+      }
     }
   ]
 }
