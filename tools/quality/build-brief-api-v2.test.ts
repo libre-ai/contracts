@@ -3,6 +3,13 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import Ajv2020 from "ajv/dist/2020";
 import addFormats from "ajv-formats";
+import signingVector from "../../contracts/fixtures/build-brief-v2/vectors.json";
+import { canonicalJson } from "./authorized-execution";
+import {
+  buildBriefDigest,
+  type CandidateContext,
+  verifyBuildBriefCandidate,
+} from "./build-brief-v2";
 
 const apiPath = "contracts/openapi/specifications.v2.yaml";
 const fixturePath = "contracts/fixtures/build-brief-api-v2/endpoints.json";
@@ -14,6 +21,7 @@ interface Operation {
   requestBody?: { required: boolean; content: Record<string, { schema: { $ref: string } }> };
   responses: Record<string, { content: Record<string, { schema: { $ref: string } }> }>;
   "x-libre-ai-authority": Record<string, { resource: string; operation: string }>;
+  "x-libre-ai-subject-states"?: string[];
 }
 interface Api {
   openapi: string;
@@ -64,7 +72,7 @@ if (await Bun.file(apiPath).exists()) {
     parent[last] = mutation.value;
     return result;
   }
-  test("v2 has exactly the retained nine endpoint purposes and no implicit security", () => {
+  test("v2 has ten endpoints including explicit subject discovery and no implicit security", () => {
     expect(api.openapi).toBe("3.1.0");
     expect(api.info.version).toBe("2.0.0");
     expect(endpoints.map((item) => item.operationId).sort()).toEqual([
@@ -73,18 +81,77 @@ if (await Bun.file(apiPath).exists()) {
       "createSpecWorkspace",
       "executePackageCommand",
       "executeSpecCommand",
+      "getAcceptanceSubject",
       "getAcceptedPackage",
       "getHandoff",
       "getSpecView",
       "getSpecWorkspace",
     ]);
-    expect(Object.values(api.paths).flatMap(Object.keys)).toHaveLength(9);
-    expect(new Set(endpoints.map((item) => `${item.method}:${item.path}`)).size).toBe(9);
+    expect(Object.values(api.paths).flatMap(Object.keys)).toHaveLength(10);
+    expect(new Set(endpoints.map((item) => `${item.method}:${item.path}`)).size).toBe(10);
     expect(api.components.securitySchemes.sessionCookie).toEqual({
       type: "apiKey",
       in: "cookie",
       name: "__Host-libre_ai_session",
     });
+  });
+  test("signing subject uses reserved package read and only frozen workspace states", () => {
+    const operation = api.paths["/v2/specifications/workspaces/{workspaceId}/acceptance"]?.get;
+    expect(operation).toBeDefined();
+    expect(operation?.["x-libre-ai-authority"]).toEqual({
+      read: { resource: "spec-package", operation: "read" },
+    });
+    expect(operation?.["x-libre-ai-subject-states"]).toEqual(["submitted", "accepted"]);
+  });
+  test("discovered canonical subject supplies the exact signed acceptance POST body and revision", () => {
+    const discovery = endpoints.find((item) => item.operationId === "getAcceptanceSubject");
+    expect(discovery).toBeDefined();
+    if (!discovery) throw new Error("Missing discovery fixture");
+    const response = discovery.response as {
+      data: { body: typeof signingVector.package.body; bodyDigest: string };
+      meta: { revision: number };
+    };
+    expect(buildBriefDigest(response.data.body)).toBe(response.data.bodyDigest);
+    expect(canonicalJson(response.data.body)).toBe(signingVector.bodyCanonical);
+    expect(response.meta.revision).toBe(7);
+    expect(response.data.body.version).toBe(1);
+    const workspace = endpoints.find((item) => item.operationId === "getSpecWorkspace")?.response as
+      | { data: { id: string } }
+      | undefined;
+    expect(workspace).toBeDefined();
+    expect(response.data.body.id).not.toBe(workspace?.data.id);
+    expect(Object.keys(response.data).sort()).toEqual(["body", "bodyDigest"]);
+    const receipt = signingVector.package.acceptances[0];
+    if (!receipt) throw new Error("Missing signed fixture");
+    expect(receipt.statement.subjectDigest).toBe(response.data.bodyDigest);
+    const post = { body: response.data.body, acceptance: receipt };
+    const ref =
+      api.paths[discovery.path]?.post?.requestBody?.content["application/json"]?.schema.$ref;
+    if (!ref) throw new Error("Missing actual acceptance request schema");
+    expect(validator(ref)(post)).toBe(true);
+    const headers = { "If-Match": `"${response.meta.revision}"` };
+    expect(headers["If-Match"]).toBe('"7"');
+    const assembled = {
+      schemaVersion: "libre-ai.spec-package.v2",
+      body: post.body,
+      bodyDigest: response.data.bodyDigest,
+      acceptances: [post.acceptance],
+    };
+    const bytes = (value: unknown) => Buffer.from(canonicalJson(value));
+    const context = signingVector.context as CandidateContext;
+    expect(verifyBuildBriefCandidate(bytes(assembled), context)).toEqual([]);
+    const altered = structuredClone(assembled);
+    altered.body.problem = "Changed after subject discovery";
+    expect(verifyBuildBriefCandidate(bytes(altered), context)).toEqual([
+      "build-brief.digest-invalid",
+    ]);
+    altered.bodyDigest = buildBriefDigest(altered.body);
+    const acceptance = altered.acceptances[0];
+    if (!acceptance) throw new Error("Missing cloned receipt");
+    acceptance.statement.subjectDigest = altered.bodyDigest;
+    expect(verifyBuildBriefCandidate(bytes(altered), context)).toEqual([
+      "build-brief.signature-invalid",
+    ]);
   });
   test("approval views cannot use workspace read to bypass package read", () => {
     expect(
@@ -98,7 +165,7 @@ if (await Bun.file(apiPath).exists()) {
   });
   test("every command variant and cursor boundary uses real strict schema validation", () => {
     const base = "https://contracts.libre-ai.fr/schemas/build-brief-api.v2.schema.json#/$defs/";
-    const validate = validator(base + "commandRequest");
+    const validate = validator(`${base}commandRequest`);
     for (const command of [
       { command: "add-requirement", id: "req_one", text: "Observable", priority: "must" },
       { command: "record-decision", id: "decision_one", decision: "Synthetic decision" },
@@ -123,7 +190,7 @@ if (await Bun.file(apiPath).exists()) {
       expect(validate({ ...command, execute: true })).toBe(false);
       expect(validate({ ...command, command: "arbitrary" })).toBe(false);
     }
-    const cursor = validator(base + "cursor");
+    const cursor = validator(`${base}cursor`);
     expect(cursor("synthetic_cursor-01")).toBe(true);
     for (const invalid of [null, "", "a=", "a".repeat(513)]) expect(cursor(invalid)).toBe(false);
   });
@@ -138,7 +205,9 @@ if (await Bun.file(apiPath).exists()) {
       const status =
         endpoint.method === "post"
           ? ["400", "401", "403", "404", "405", "409", "412", "413", "415", "422", "503"]
-          : ["400", "401", "403", "404", "405", "503"];
+          : endpoint.operationId === "getAcceptanceSubject"
+            ? ["400", "401", "403", "404", "405", "409", "503"]
+            : ["400", "401", "403", "404", "405", "503"];
       expect(Object.keys(operation.responses).sort()).toEqual(
         [endpoint.successStatus, ...status].sort(),
       );

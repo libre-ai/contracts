@@ -27,6 +27,7 @@ x-libre-ai-domain:
   - GetAcceptedPackage
   - GetHandoff
   - GetApprovalHistory
+  - GetAcceptanceSubject
 paths:
   /v2/specifications/workspaces:
     post:
@@ -273,6 +274,72 @@ paths:
           application/json:
             schema:
               $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/acceptRequest
+    get:
+      operationId: getAcceptanceSubject
+      x-libre-ai-operations:
+      - GetAcceptanceSubject
+      x-libre-ai-authority:
+        read:
+          resource: spec-package
+          operation: read
+      security:
+      - sessionCookie: []
+      parameters:
+      - $ref: '#/components/parameters/workspaceId'
+      responses:
+        '200':
+          description: Complete frozen signing subject and current workspace revision
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/acceptanceSubjectResponse
+        '400':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem400
+        '401':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem401
+        '403':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem403
+        '404':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem404
+        '405':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem405
+        '503':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem503
+        '409':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem409
+      x-libre-ai-subject-states:
+      - submitted
+      - accepted
+      description: Resolve independently reserved package via workspace ownership; return complete frozen
+        body and digest under existing package read rights. No workspace read grant or signing service.
   /v2/specifications/packages/{packageId}:
     get:
       operationId: getAcceptedPackage

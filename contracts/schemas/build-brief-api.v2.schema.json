@@ -919,6 +919,29 @@
           }
         }
       }
+    },
+    "acceptanceSubjectResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["data", "meta"],
+      "properties": {
+        "data": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["body", "bodyDigest"],
+          "properties": {
+            "body": {
+              "$ref": "build-brief-body.v2.schema.json"
+            },
+            "bodyDigest": {
+              "$ref": "common.v1.schema.json#/$defs/sha256"
+            }
+          }
+        },
+        "meta": {
+          "$ref": "#/$defs/meta"
+        }
+      }
     }
   }
 }

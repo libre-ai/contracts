@@ -677,6 +677,78 @@
           "value": true
         }
       ]
+    },
+    {
+      "path": "/v2/specifications/workspaces/{workspaceId}/acceptance",
+      "method": "get",
+      "operationId": "getAcceptanceSubject",
+      "successStatus": "200",
+      "response": {
+        "data": {
+          "body": {
+            "schemaVersion": "libre-ai.build-brief-body.v2",
+            "id": "urn:libre-ai:spec-package:fixture-1",
+            "tenantId": "ten_1234567890abcdef",
+            "version": 1,
+            "problem": "Pr\u00e9parer un plan v\u00e9rifiable.",
+            "actors": ["fixture_actor"],
+            "requirements": [
+              {
+                "id": "req_one",
+                "text": "Produce a plan only",
+                "priority": "must"
+              }
+            ],
+            "decisions": [
+              {
+                "id": "dec_one",
+                "status": "accepted",
+                "decision": "No execution authority"
+              }
+            ],
+            "contracts": ["urn:libre-ai:contract:fixture-1"],
+            "risks": [
+              {
+                "id": "risk_one",
+                "severity": "high",
+                "control": "Refuse execution"
+              }
+            ],
+            "acceptanceCriteria": [
+              {
+                "id": "criterion_one",
+                "observable": "Plan is inspectable",
+                "evidenceRule": "fixture_evidence"
+              }
+            ],
+            "contributors": ["fixture_author"]
+          },
+          "bodyDigest": "8ce800b3d67a50c97f9ac97ec14706983a7bcb42c948d53254ab8cc6cd9b9dc1"
+        },
+        "meta": {
+          "requestId": "req_0123456789abcdef",
+          "revision": 7
+        }
+      },
+      "invalidRequests": [],
+      "invalidResponses": [
+        {
+          "path": ["data", "bodyDigest"],
+          "value": "bad"
+        },
+        {
+          "path": ["data", "body", "version"],
+          "value": 0
+        },
+        {
+          "path": ["data", "signature"],
+          "value": "unexpected"
+        },
+        {
+          "path": ["meta", "revision"],
+          "value": 0
+        }
+      ]
     }
   ]
 }

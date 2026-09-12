@@ -23,6 +23,7 @@ served as application/problem+json. Successes use application/json.
 | POST `/workspaces` | createSpecWorkspace / 201 workspace | independently allocated spec-workspace / author |
 | GET `/workspaces/{workspaceId}` | getSpecWorkspace / 200 workspace | spec-workspace / read |
 | POST `/workspaces/{workspaceId}/acceptance` | acceptSpecPackage / 201 full package | independently bound spec-package / approve on exact bodyDigest |
+| GET `/workspaces/{workspaceId}/acceptance` | getAcceptanceSubject / 200 canonical signing subject | independently bound spec-package / read; no workspace-read prerequisite |
 | GET `/packages/{packageId}?version=N` | getAcceptedPackage / 200 full package | spec-package / read |
 | POST `/packages/{packageId}/handoffs?version=N` | createPlanningHandoff / 201 handoff | spec-package / export |
 | POST `/workspaces/{workspaceId}/commands` | executeSpecCommand / 200 workspace | spec-workspace / author, except review requires review |
@@ -35,7 +36,9 @@ separate contract. No v1 OpenAPI/schema/policy changes, v1 digest reinterpretati
 automatic adapter or Missions quorum expansion are allowed. Draft authoring
 fields and command variants are closed by schema; command-specific mandatory
 fields cannot be supplied to unrelated commands. No generic patch/SQL endpoint.
-No new key, membership, retention or signing operation is exposed.
+No new key, membership, retention or signing operation is exposed. Subject
+discovery is the explicit GetAcceptanceSubject query in the owning Specifications
+v2 candidate protocol; it is not an implicit alias of a v1 operation.
 
 ## Current authority inputs
 
@@ -110,6 +113,50 @@ Unknown commit outcome requires read/reconciliation against the same binding,
 never a new key for a blind second effect. These are consumer tests, not provided
 by the authority fixture runner.
 
+## Frozen subject discovery before first acceptance
+
+GET on the acceptance path returns exactly `{data:{body,bodyDigest},meta}`.
+Meta carries requestId and the current workspace/acceptance revision for If-Match.
+The complete body includes the independently reserved package id/version; these
+are never inferred from workspace id/revision. Canonical RFC8785 body bytes and
+SHA256 must agree exactly with the authoritative frozen snapshot. This response
+does not require a prior acceptance and adds no signature or mutable field to the
+body preimage. Its transport envelope is outside the body/statement digests.
+No acceptance is required to discover the subject: it is not a spec-package
+envelope and carries no acceptances collection. Reading it is not a contribution,
+review, approval or workspace mutation and never changes the contributor set.
+
+Resolve workspace ownership and the reserved package through BriefOwnershipAuthority
+before data exposure, then require the existing spec-package/read operation on
+that exact package. A Build Brief approver has this existing right; it need not
+also have workspace/read. No package id or organization supplied by a caller may
+substitute for that mapping, and no new policy role or permission is introduced.
+
+Only submitted and accepted workspaces yield a subject. Draft, rejected-review
+return-to-draft and superseded states return 409 after current authorization.
+Unknown/outside-scope resource returns 404, denied current package read returns
+403, and absent/ambiguous/unavailable ownership or frozen snapshot returns 503.
+Incomplete/noncanonical body or mismatched computed digest is unavailable state,
+not a repairable client input: return 503 without a partial subject.
+
+Submission freezes a complete body and its reserved identity/version. A review
+that changes authenticated contributor provenance must invalidate the old subject
+and freeze the revised complete body under an advanced workspace revision before
+it is exposed. An accepted review never leaves an obsolete contributor list in
+the signing subject. Rejected review invalidates the frozen subject. Re-fetch
+after any revision change; a POST based on an older discovery uses stale If-Match
+and receives 412 with no receipt write. The reserved package-version policy is
+explicitly supplied by ownership; advancing a workspace revision never silently
+renumbers the package version.
+
+The caller derives bodyDigest from the returned canonical body, constructs the
+existing detached statement binding its exact id/version/digest and signs through
+its separately qualified signing capability. POST then sends that same body and
+detached record with If-Match from discovery. The server rechecks current resource
+authorization, historical evidence, frozen subject and revision atomically; GET
+does not reserve authority or bypass POST checks. Discovery is a projection of the
+existing authoritative snapshot, not a new retained class or signing/key service.
+
 ## Reads, views, export and handoff
 
 Package version is explicit; a route never silently chooses latest. Reads and
@@ -169,7 +216,8 @@ remain content-free classified observations, not raw logs.
 | 422 | structurally valid but invalid signed package/handoff or incomplete submit/acceptance |
 | 503 | unavailable/ambiguous trusted authority, missing historical proof or unresolved commit |
 
-GET exposes only 400/401/403/404/405/503: invalid or oversized stored package/handoff
+GET exposes only 400/401/403/404/405/503, plus 409 for subject discovery in an
+ineligible workspace state: invalid or oversized stored package/handoff
 is not returned and maps to 503, not a successful diagnostic. Mutations expose all listed
 categories. Canonical/input schema errors map to 400; signature/semantic errors
 after structural admission map to 422. Evaluate method, bounded media/transport,
@@ -183,8 +231,8 @@ each endpoint/refusal; this contract does not implement that evaluation pipeline
 ## Verification and admission
 
 The endpoint fixture suite parses OpenAPI YAML and validates actual referenced
-request/response schema definitions with strict AJV. It verifies all nine endpoint
-inventories, closed status sets, cookie/CSRF/revision/idempotency declarations and
+request/response schema definitions with strict AJV. It verifies all ten endpoint
+inventories (including subject discovery), closed status sets, cookie/CSRF/revision/idempotency declarations and
 per-endpoint positive/negative payloads. Inherited bytes/catalog entries are
 hashed and checked independently. Ordinary contract checks retain all prior
 schema, HTTP, doctrine, secret/PII and type/lint gates.
