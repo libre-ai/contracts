@@ -1,0 +1,866 @@
+openapi: 3.1.0
+info:
+  title: Libre AI Specifications API candidate
+  version: 2.0.0
+servers:
+- url: /
+x-libre-ai-status: candidate
+x-libre-ai-domain:
+  commands:
+  - CreateSpecWorkspace
+  - AddRequirement
+  - RecordDecision
+  - ResolveDecision
+  - AttachContract
+  - DefineAcceptanceCriterion
+  - SubmitSpecForReview
+  - ReviewSpec
+  - AcceptSpecPackage
+  - SupersedeSpecPackage
+  - CreatePlanningHandoff
+  - ExportSpecPackage
+  queries:
+  - GetSpecWorkspace
+  - ListOpenDecisions
+  - ValidateSpecPackage
+  - DiffSpecVersions
+  - GetAcceptedPackage
+  - GetHandoff
+  - GetApprovalHistory
+paths:
+  /v2/specifications/workspaces:
+    post:
+      operationId: createSpecWorkspace
+      x-libre-ai-operations:
+      - CreateSpecWorkspace
+      x-libre-ai-authority:
+        create:
+          resource: spec-workspace
+          operation: author
+      security:
+      - sessionCookie: []
+      parameters:
+      - $ref: '#/components/parameters/IdempotencyKey'
+      - $ref: '#/components/parameters/CsrfToken'
+      - $ref: '#/components/parameters/Revision'
+      responses:
+        '201':
+          description: Verified result; replay preserves original status and exact body
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/workspaceResponse
+        '400':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem400
+        '401':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem401
+        '403':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem403
+        '404':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem404
+        '405':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem405
+        '409':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem409
+        '412':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem412
+        '413':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem413
+        '415':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem415
+        '422':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem422
+        '503':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem503
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/createRequest
+  /v2/specifications/workspaces/{workspaceId}:
+    get:
+      operationId: getSpecWorkspace
+      x-libre-ai-operations:
+      - GetSpecWorkspace
+      x-libre-ai-authority:
+        read:
+          resource: spec-workspace
+          operation: read
+      security:
+      - sessionCookie: []
+      parameters:
+      - $ref: '#/components/parameters/workspaceId'
+      responses:
+        '200':
+          description: Verified result; replay preserves original status and exact body
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/workspaceResponse
+        '400':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem400
+        '401':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem401
+        '403':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem403
+        '404':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem404
+        '405':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem405
+        '503':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem503
+  /v2/specifications/workspaces/{workspaceId}/acceptance:
+    post:
+      operationId: acceptSpecPackage
+      x-libre-ai-operations:
+      - AcceptSpecPackage
+      x-libre-ai-authority:
+        approve:
+          resource: spec-package
+          operation: approve
+      security:
+      - sessionCookie: []
+      parameters:
+      - $ref: '#/components/parameters/workspaceId'
+      - $ref: '#/components/parameters/IdempotencyKey'
+      - $ref: '#/components/parameters/CsrfToken'
+      - $ref: '#/components/parameters/Revision'
+      responses:
+        '201':
+          description: Verified result; replay preserves original status and exact body
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/packageResponse
+        '400':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem400
+        '401':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem401
+        '403':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem403
+        '404':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem404
+        '405':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem405
+        '409':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem409
+        '412':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem412
+        '413':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem413
+        '415':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem415
+        '422':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem422
+        '503':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem503
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/acceptRequest
+  /v2/specifications/packages/{packageId}:
+    get:
+      operationId: getAcceptedPackage
+      x-libre-ai-operations:
+      - GetAcceptedPackage
+      x-libre-ai-authority:
+        read:
+          resource: spec-package
+          operation: read
+      security:
+      - sessionCookie: []
+      parameters:
+      - $ref: '#/components/parameters/packageId'
+      - $ref: '#/components/parameters/PackageVersion'
+      responses:
+        '200':
+          description: Verified result; replay preserves original status and exact body
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/packageResponse
+        '400':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem400
+        '401':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem401
+        '403':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem403
+        '404':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem404
+        '405':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem405
+        '503':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem503
+  /v2/specifications/packages/{packageId}/handoffs:
+    post:
+      operationId: createPlanningHandoff
+      x-libre-ai-operations:
+      - CreatePlanningHandoff
+      x-libre-ai-authority:
+        export:
+          resource: spec-package
+          operation: export
+      security:
+      - sessionCookie: []
+      parameters:
+      - $ref: '#/components/parameters/packageId'
+      - $ref: '#/components/parameters/PackageVersion'
+      - $ref: '#/components/parameters/IdempotencyKey'
+      - $ref: '#/components/parameters/CsrfToken'
+      - $ref: '#/components/parameters/Revision'
+      responses:
+        '201':
+          description: Verified result; replay preserves original status and exact body
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/handoffResponse
+        '400':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem400
+        '401':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem401
+        '403':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem403
+        '404':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem404
+        '405':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem405
+        '409':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem409
+        '412':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem412
+        '413':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem413
+        '415':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem415
+        '422':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem422
+        '503':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem503
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/handoffRequest
+  /v2/specifications/workspaces/{workspaceId}/commands:
+    post:
+      operationId: executeSpecCommand
+      x-libre-ai-operations:
+      - AddRequirement
+      - RecordDecision
+      - ResolveDecision
+      - AttachContract
+      - DefineAcceptanceCriterion
+      - SubmitSpecForReview
+      - ReviewSpec
+      - SupersedeSpecPackage
+      x-libre-ai-authority:
+        add-requirement:
+          resource: spec-workspace
+          operation: author
+        record-decision:
+          resource: spec-workspace
+          operation: author
+        resolve-decision:
+          resource: spec-workspace
+          operation: author
+        attach-contract:
+          resource: spec-workspace
+          operation: author
+        define-acceptance:
+          resource: spec-workspace
+          operation: author
+        submit-review:
+          resource: spec-workspace
+          operation: author
+        review:
+          resource: spec-workspace
+          operation: review
+        supersede:
+          resource: spec-workspace
+          operation: author
+      security:
+      - sessionCookie: []
+      parameters:
+      - $ref: '#/components/parameters/workspaceId'
+      - $ref: '#/components/parameters/IdempotencyKey'
+      - $ref: '#/components/parameters/CsrfToken'
+      - $ref: '#/components/parameters/Revision'
+      responses:
+        '200':
+          description: Verified result; replay preserves original status and exact body
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/workspaceResponse
+        '400':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem400
+        '401':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem401
+        '403':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem403
+        '404':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem404
+        '405':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem405
+        '409':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem409
+        '412':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem412
+        '413':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem413
+        '415':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem415
+        '422':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem422
+        '503':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem503
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/commandRequest
+  /v2/specifications/workspaces/{workspaceId}/views/{view}:
+    get:
+      operationId: getSpecView
+      x-libre-ai-operations:
+      - ListOpenDecisions
+      - ValidateSpecPackage
+      - DiffSpecVersions
+      - GetApprovalHistory
+      x-libre-ai-authority:
+        read:
+          resource: spec-workspace
+          operation: read
+        approvals:
+          resource: spec-package
+          operation: read
+      security:
+      - sessionCookie: []
+      parameters:
+      - $ref: '#/components/parameters/workspaceId'
+      - $ref: '#/components/parameters/view'
+      - $ref: '#/components/parameters/Cursor'
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/CompareVersion'
+      responses:
+        '200':
+          description: Verified result; replay preserves original status and exact body
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/viewResponse
+        '400':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem400
+        '401':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem401
+        '403':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem403
+        '404':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem404
+        '405':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem405
+        '503':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem503
+  /v2/specifications/packages/{packageId}/commands:
+    post:
+      operationId: executePackageCommand
+      x-libre-ai-operations:
+      - ExportSpecPackage
+      x-libre-ai-authority:
+        export:
+          resource: spec-package
+          operation: export
+      security:
+      - sessionCookie: []
+      parameters:
+      - $ref: '#/components/parameters/packageId'
+      - $ref: '#/components/parameters/PackageVersion'
+      - $ref: '#/components/parameters/IdempotencyKey'
+      - $ref: '#/components/parameters/CsrfToken'
+      - $ref: '#/components/parameters/Revision'
+      responses:
+        '200':
+          description: Verified result; replay preserves original status and exact body
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/packageResponse
+        '400':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem400
+        '401':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem401
+        '403':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem403
+        '404':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem404
+        '405':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem405
+        '409':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem409
+        '412':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem412
+        '413':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem413
+        '415':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem415
+        '422':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem422
+        '503':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem503
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/exportRequest
+  /v2/specifications/handoffs/{handoffId}:
+    get:
+      operationId: getHandoff
+      x-libre-ai-operations:
+      - GetHandoff
+      x-libre-ai-authority:
+        plan:
+          resource: agent-handoff
+          operation: plan
+      security:
+      - sessionCookie: []
+      parameters:
+      - $ref: '#/components/parameters/handoffId'
+      responses:
+        '200':
+          description: Verified result; replay preserves original status and exact body
+          content:
+            application/json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/handoffResponse
+        '400':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem400
+        '401':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem401
+        '403':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem403
+        '404':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem404
+        '405':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem405
+        '503':
+          description: Request refused; no sensitive context returned
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../schemas/build-brief-api.v2.schema.json#/$defs/problem503
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: __Host-libre_ai_session
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: ^idem_[a-z0-9]{16,64}$
+    CsrfToken:
+      name: X-CSRF-Token
+      in: header
+      required: true
+      schema:
+        type: string
+        minLength: 32
+        maxLength: 256
+    Revision:
+      name: If-Match
+      in: header
+      required: true
+      schema:
+        type: string
+        pattern: ^"(0|[1-9][0-9]{0,15})"$
+    workspaceId:
+      name: workspaceId
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: ^urn:libre-ai:[a-z][a-z0-9-]*:[A-Za-z0-9._~-]+$
+        maxLength: 512
+    packageId:
+      name: packageId
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: ^urn:libre-ai:[a-z][a-z0-9-]*:[A-Za-z0-9._~-]+$
+        maxLength: 512
+    handoffId:
+      name: handoffId
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: ^urn:libre-ai:[a-z][a-z0-9-]*:[A-Za-z0-9._~-]+$
+        maxLength: 512
+    view:
+      name: view
+      in: path
+      required: true
+      schema:
+        enum:
+        - open-decisions
+        - validation
+        - version-diff
+        - approvals
+    Cursor:
+      name: cursor
+      in: query
+      required: false
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 512
+        pattern: ^[A-Za-z0-9_-]+$
+    Limit:
+      name: limit
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 100
+    CompareVersion:
+      name: compareVersion
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 9007199254740991
+    PackageVersion:
+      name: version
+      in: query
+      required: true
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 9007199254740991

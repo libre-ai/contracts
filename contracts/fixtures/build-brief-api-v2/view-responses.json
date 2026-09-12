@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "libre-ai.build-brief-api-view-vectors.v2",
+  "cases": [
+    {
+      "id": "validation-single-summary",
+      "accepted": true,
+      "response": {
+        "data": { "view": "validation", "items": [{ "valid": true, "refusals": [] }] },
+        "meta": { "requestId": "req_0123456789abcdef", "revision": 1, "nextCursor": null }
+      }
+    },
+    {
+      "id": "validation-empty",
+      "accepted": false,
+      "response": {
+        "data": { "view": "validation", "items": [] },
+        "meta": { "requestId": "req_0123456789abcdef", "revision": 1, "nextCursor": null }
+      }
+    },
+    {
+      "id": "validation-two-summaries",
+      "accepted": false,
+      "response": {
+        "data": {
+          "view": "validation",
+          "items": [
+            { "valid": true, "refusals": [] },
+            { "valid": false, "refusals": ["build-brief.signature-invalid"] }
+          ]
+        },
+        "meta": { "requestId": "req_0123456789abcdef", "revision": 1, "nextCursor": null }
+      }
+    },
+    {
+      "id": "validation-next-cursor",
+      "accepted": false,
+      "response": {
+        "data": { "view": "validation", "items": [{ "valid": true, "refusals": [] }] },
+        "meta": {
+          "requestId": "req_0123456789abcdef",
+          "revision": 1,
+          "nextCursor": "synthetic_next"
+        }
+      }
+    },
+    {
+      "id": "open-decision-paginated",
+      "accepted": true,
+      "response": {
+        "data": {
+          "view": "open-decisions",
+          "items": [{ "id": "decision_one", "status": "open", "decision": "Synthetic question" }]
+        },
+        "meta": {
+          "requestId": "req_0123456789abcdef",
+          "revision": 1,
+          "nextCursor": "synthetic_next"
+        }
+      }
+    },
+    {
+      "id": "open-decisions-accepted",
+      "accepted": false,
+      "response": {
+        "data": {
+          "view": "open-decisions",
+          "items": [
+            { "id": "decision_one", "status": "accepted", "decision": "Synthetic question" }
+          ]
+        },
+        "meta": { "requestId": "req_0123456789abcdef", "revision": 1, "nextCursor": null }
+      }
+    },
+    {
+      "id": "open-decisions-rejected",
+      "accepted": false,
+      "response": {
+        "data": {
+          "view": "open-decisions",
+          "items": [
+            { "id": "decision_one", "status": "rejected", "decision": "Synthetic question" }
+          ]
+        },
+        "meta": { "requestId": "req_0123456789abcdef", "revision": 1, "nextCursor": null }
+      }
+    }
+  ]
+}
